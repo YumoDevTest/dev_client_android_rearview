@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.mapbar.newtest"
+        applicationId "com.mapbar.android.obd.rearview"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
