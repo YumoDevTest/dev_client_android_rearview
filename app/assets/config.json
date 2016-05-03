@@ -1,0 +1,109 @@
+{
+  "tester": "刘焰宇",
+  "logConfig": {
+    "isLog": "true",
+    "isLogFile": "true",
+    "isDataStoreLan": true,
+    "logRAs": [
+      {
+        "rule": {
+          "tag": "FRAMEWORK",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "UI",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "POI_DETAIL",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "false"
+        }
+      },
+      {
+        "rule": {
+          "tag": "USER_CENTER",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "false"
+        }
+      },
+      {
+        "rule": {
+          "tag": "HTTP_NET",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "TEMP",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "DATA",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "SYSTEM_ANDROID",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "OBD",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "PUSH",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      },
+      {
+        "rule": {
+          "tag": "SCRIPT",
+          "@level": ""
+        },
+        "action": {
+          "loggable": "true"
+        }
+      }
+    ]
+  }
+}

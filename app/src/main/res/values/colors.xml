@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="white">#ffffffff</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="black">#ff000000</color>
+
+    <color name="theme_title_text_color">#000000</color>
+
+
+    <color name="theme_blue">#37c7fd</color>
+    <color name="theme_gray">#E1E2E3</color>
+    <color name="theme_gray_dark">#cccccc</color>
+    <color name="transparent">#00000000</color>
+
+
+    <color name="gray_text">#888888</color>
+    <color name="black_text">#555555</color>
+    <color name="background">#eeeeee</color>
+    <color name="gray_line">#dddddd</color>
+
+    <!-- MainPage -->
+    <color name="tab_text_main_pressed">#25c1b2</color>
+    <color name="tab_text_main_normal">#353535</color>
+    <color name="bg_title">#1ebaab</color>
+    <color name="transparent_black">#80000000</color>
+    <color name="grey">#808080</color>
+
+    <!--扫描-->
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="checkUp_gray">#d2ced8</color>
+    <color name="checkUp_yello">#ff9036</color>
+    <color name="checkUp_red">#ff4f4f</color>
+
+    <!-- 轨迹颜色 -->
+    <color name="speed_0">#000000</color>
+    <color name="speed_30">#ff0000</color>
+    <color name="speed_60">#eb6100</color>
+    <color name="speed_90">#92d050</color>
+    <color name="speed_120">#01853d</color>
+    <color name="speed_120p">#5f52a0</color>
+
+    <!-- 提醒 -->
+    <color name="remind_text">#888888</color>
+    <drawable name="remind_text">#888888</drawable>
+
+    <color name="title_r_text">#1ebaab</color>
+
+    <color name="route_tab_text">#185852</color>
+
+    <color name="progress_bg">#888888</color>
+
+
+    <!--日期控件颜色值-->
+    <color name="calendar_bg_week_title">#ffffff</color>
+    <color name="calendar_tx_week_title">#ff000000</color>
+    <color name="calendar_tx_this_month_day">#aa564b4b</color>
+    <color name="calendar_tx_other_month_day">#ffcccccc</color>
+
+
+    <color name="calendar_tx_this_day">#ffFF0000</color>
+    <color name="calendar_bg_this_day">#ffFFFFFF</color>
+    <color name="calendar_bg">#3FDDEDEA</color>
+    <color name="calendar_bg_trip_data">#1ebaab</color>
+    <color name="calendar_tx_select">#5AD6D7</color>
+
+
 </resources>

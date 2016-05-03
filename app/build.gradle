@@ -1,27 +1,261 @@
 apply plugin: 'com.android.application'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.2"
 
-    defaultConfig {
-        applicationId "com.mapbar.android.obd.rearview"
-        minSdkVersion 19
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+def getBuildSDKVersion = { ->
+    def buildSDKVersion = System.getenv("Android_SDK_Version")
+    println "buildSDKVersion is ${buildSDKVersion}"
+    if (buildSDKVersion) {
+        return Integer.parseInt(buildSDKVersion)
     }
-    buildTypes {
+//    if (rootProject.ext.compileSdkVersion) {
+//        return rootProject.ext.compileSdkVersion
+//    }
+    return Integer.parseInt("22")
+}
+
+def getGitVersion = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'log', '-1', '--pretty=format:%h'
+            standardOutput = stdout
+        }
+        return stdout.toString()
+    } catch (ignored) {
+        return '0000000';
+    }
+}
+def getBuildToolVersion = { ->
+//    if (rootProject.ext.buildToolsVersion) {
+//        return rootProject.ext.buildToolsVersion
+//    }
+//    return project.ANDROID_BUILD_TOOLS_VERSION
+    return "23.0.2"
+}
+
+def getPrefixName = { ->
+    def prefixName = System.getenv("Prefix_Name")
+    println "prefixName is ${prefixName}"
+    if (prefixName) {
+        return prefixName
+    }
+    return 'OBD'
+}
+
+def getBranchName = { ->
+    def branchName = System.getenv("Branch_Name")
+    println "branchName is ${branchName}"
+    if (branchName) {
+        branchName = branchName.substring(0, branchName.indexOf("/"))
+        return branchName
+    }
+    return null
+}
+
+ext {
+    GET_VERSION = getGitVersion()
+    PREFIX_NAME = getPrefixName()
+    BRANCH_NAME = getBranchName()
+    println 'GitVersion is ' + project.GET_VERSION
+}
+
+android {
+    compileSdkVersion getBuildSDKVersion()
+    buildToolsVersion getBuildToolVersion()
+    println "getBuildToolVersion" + getBuildToolVersion()
+    defaultConfig {
+        minSdkVersion 8
+//        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
+//        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+        targetSdkVersion 15
+        applicationId "com.mapbar.android.obd.rearview"
+        versionCode 1
+        versionName "1.0.0"
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'xiaomi']
+    }
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file("../key/mapbar2009.keystore")
+            storePassword "mapbar2009"
+            keyAlias "mapbar2009.keystore"
+            keyPassword "mapbar2009"
+        }
+        debug {
+
         }
     }
+    // 配置打包的版本
+    buildTypes {
+        release {
+            // 不显示Log
+//            buildConfigField "boolean", "LOG_DEBUG", "false"
+//            minifyEnabled true// 是否混淆
+            zipAlignEnabled true
+            // 移除无用的resource文件
+//            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    // 多渠道打包
+    flavors()
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            aidl.srcDirs = ['src/main/java']
+            renderscript.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    dexOptions {    // 打开dex增量编译
+        incremental true
+//        jumboMode true
+        preDexLibraries true
+    }
+
+}
+
+def flavors() {
+    def channels = System.getenv("Channels")
+    if (channels) {
+        println "channels is ${channels}"
+        def separate1 = ':'
+        def separate2 = '@'
+        def first = "first"
+        def indexSeparate1
+        def indexSeparate2
+        def channelName
+        def channelKey
+        def channelFirst
+        channels.toString().tokenize(';').each { line ->
+            println "==================== Channel Start ====================="
+            println "line is ${line}"
+
+            indexSeparate1 = line.indexOf(separate1)
+            indexSeparate2 = line.indexOf(separate2)
+
+            // Groovy的正则匹配不上......
+            /*channelName = (line =~ /(.*):/).group()
+//            channelName = ~/(.*):/.matches(line).group()
+            println "channelName is ${channelName}"
+
+            channelName = channelNameMatcher.group()
+            println "channelName is ${channelName}"
+
+            channelKey = (line =~ /:(.*)@/).group()
+            println "channelKey is ${channelKey}"
+
+            channelFirst = (line =~ /@(.*)/).group()
+            println "channelFirst is ${channelFirst}"*/
+
+            /*channelName = line.substring(0, indexSeparate1)
+            println "channelName is ${channelName}"
+
+            channelKey = line.substring(indexSeparate1 + separate1.length(), indexSeparate2)
+            println "channelKey is ${channelKey}"
+
+            channelFirst = line.substring(indexSeparate2 + separate2.length())
+            println "channelFirst is ${channelFirst}"*/
+
+            //动态创建productFlavor
+            android.productFlavors.create(line, {
+                // 替换渠道号
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: line]
+
+                // target channel splash
+                /*if (first == channelFirst) {
+                    android.sourceSets."${channelName}".res.srcDirs = ["splash/${channelName}"]
+                }*/
+            })
+            println "==================== Channel End ====================="
+        }
+
+        def log = project.logger
+    }
+    if (System.getenv("Android_SDK_Version")) {
+        boolean debugVersion = true
+        debugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
+        println "-----" + debugVersion
+        println "debugVersion is ${debugVersion}"
+        android.variantFilter { varian ->
+            if (debugVersion) {
+                if (varian.buildType.name.equals('release')) {
+                    varian.setIgnore(true)
+                }
+            } else {
+                if (varian.buildType.name.equals('debug')) {
+                    varian.setIgnore(true)
+                }
+            }
+        }
+    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 }
+
+android.applicationVariants.all { variant ->
+    // 将打包的目录指定出去，对齐生成的apk
+    variant.outputs.each { output ->
+        if (System.getenv("Android_SDK_Version") == null) {
+            return
+        }
+        def outputFile = output.outputFile
+        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            String outPath = System.getProperty('user.dir') + File.separator + 'apk'
+//            String outPath = System.getProperty('user.dir') + File.separator + 'app'+ File.separator +"build/outputs/apk"
+            StringBuilder fileNameBuilder = new StringBuilder()
+            fileNameBuilder.append(project.PREFIX_NAME).append('_')
+            if (project.BRANCH_NAME) {
+                fileNameBuilder.append(project.BRANCH_NAME).append('_')
+            }
+            /*if (project.GET_VERSION) {
+                fileNameBuilder.append(project.GET_VERSION).append('_')
+            }*/
+            if (variant.flavorName) {
+                fileNameBuilder.append(variant.flavorName).append('_')
+            }
+            if (variant.buildType.name) {
+                fileNameBuilder.append(variant.buildType.name).append('_')
+            }
+            fileNameBuilder.append(buildTime()).append('.apk')
+            File dir = file(outPath)
+            if (!dir.exists()) {
+                dir.mkdirs();
+            } else {
+                // 如果不需要编译时删除掉历史apk，注释掉以下代码即可
+                dir.list().each { fileName ->
+                    file(outPath + File.separator + fileName).delete()
+                }
+            }
+            output.outputFile = new File(dir, fileNameBuilder.toString())
+        }
+    }
+
+}
+
+def buildTime() {
+    return new Date().format('yyyyMMdd_HHmm')
+}
+

@@ -1,4 +1,235 @@
 <resources>
-    <string name="app_name">rearview</string>
+    <string name="app_name">图吧汽车卫士</string>
     <string name="action_settings">Settings</string>
+    <string name="main_title">主界面</string>
+
+
+    <!-- 时间 -->
+    <string name="date_format_hhmm">HH:mm</string>
+    <string name="date_format_mmdd">M月d日</string>
+    <string name="date_format_mmddhhmm">M月d日 HH:mm</string>
+    <string name="date_format_MMddHHmmssSSS">MM-dd HH:mm:ss.SSS</string>
+    <string name="date_format_yyyymmdd">yyyy年M月d日</string>
+    <string name="date_format_yyyymmdd2">yyyy-MM-dd</string>
+    <string name="date_format_yyyymmdd3">yyyy.MM.dd</string>
+    <string name="date_format_yyyymmdd4">yyyyMMdd</string>
+    <string name="date_format_yyyymmdd5">yyyy-MM-dd HH:mm</string>
+    <string name="date_format_yyyymmddhhmm">yyyy-M-d  HH:mm</string>
+    <string name="date_format_yyyymmddhhmm2">yyyy年M月d日  HH:mm</string>
+    <string name="date_format_yyyymmddhhmmss">yyyy-MM-dd HH:mm:ss</string>
+    <string name="date_format_yyyymmddhhmmss2">yyyy/MM/dd  HH:mm:ss</string>
+    <string name="date_format_yyyymmddhhmmss3">yyyy.MM.dd.  HH:mm:ss</string>
+    <string name="vaild_time_format">%1$s 至 %2$s </string>
+    <string name="vaild_time_format2">%1$s - %2$s </string>
+    <string name="vaild_time_format3">%1$s \n- %2$s </string>
+    <string name="vaild_the_same_time_format">%1$s 当天有效 </string>
+    <string name="from_the_end_of_time">还有%1$d天到期</string>
+    <string name="due_today">今天到期</string>
+    <string name="use_ticket_time">于%1$s使用</string>
+    <string name="deal_surplus_time_format_dh">剩余：%1$d天%2$d小时</string>
+    <string name="deal_surplus_time_format_hm">剩余：%1$d小时%2$d分钟</string>
+    <string name="deal_surplus_time_format_m">剩余：%1$d分钟</string>
+    <string name="zero">0%1$d</string>
+    <string name="sample_activity">示列Activity</string>
+    <string name="title_activity_fram">FramActivity</string>
+
+
+    <!-- 登录注册 -->
+    <string name="login">登录</string>
+    <string name="login_account_hint">请输入手机号</string>
+    <string name="login_password_hint">请输密码</string>
+    <string name="login_register">新用户注册</string>
+    <string name="login_register_code">请输入验证码</string>
+    <string name="login_register_register">注册</string>
+    <string name="login_register_activate">激活设备</string>
+    <string name="login_register_send_code">发送验证码</string>
+    <string name="login_register_retrieve_password">找回密码</string>
+    <string name="login_register_retrieve_password_phone">请输入你注册的手机号码</string>
+    <string name="login_register_fill_in_text">您选择的车型是</string>
+    <string name="login_register_fill_in_vin">请输入车辆VIN</string>
+    <string name="login_register_fill_in_car">宝马 宝马3系 328i时尚型 2015款</string>
+    <string name="login_register_finish_register">完成注册</string>
+    <string name="login_add_car_info_text">设置车型后更能精准计算油耗,提醒保养</string>
+    <string name="login_add_car_info_chose_car">车型选择</string>
+    <string name="login_add_car_info_car_code">填写车牌</string>
+    <string name="login_phone_is_null">手机号为空</string>
+    <string name="login_phone_invalid">手机不合法</string>
+    <string name="login_password_is_null">密码为空</string>
+    <string name="login_succ">登录成功</string>
+    <string name="login_failed">登录失败</string>
+    <string name="register_succ">注册成功</string>
+    <string name="register_failed">注册失败</string>
+    <string name="activate_failed">激活失败</string>
+    <string name="activate_succ">激活成功</string>
+    <string name="event_userlogin_fail_account_not_exits">账号不存在</string>
+    <string name="event_userlogin_fail_account_password_wrong">密码错误</string>
+    <string name="event_userlogin_fail_account_not_activated">账号未被激活</string>
+    <string name="event_userlogin_fail">登录失败！(%1$s-%2$s)</string>
+    <string name="event_usergetactivatecode_fail_not_exits">索要验证码用户不存在</string>
+    <string name="event_usergetactivatecode_fail_not_email">索要激活邮件的用户，没有设置邮箱地址！</string>
+    <string name="event_usergetactivatecode_fail_sms_verify">短信发送次数超限</string>
+    <string name="event_usergetactivatecode_fail">获取验证码失败！(%1$s-%2$s)</string>
+    <string name="event_useractivate_fail_verify">用户名或验证码不正确！</string>
+    <string name="event_useractivate_fail">帐号激活失败！(%1$s-%2$s)</string>
+    <string name="event_userregiste_fail_password_format_verify">注册失败！\n(密码格式不对,请输入字母或数字并在6~20个字符长度之间)</string>
+    <string name="event_userregiste_fail_tonken_expire">网络错误！请再次尝试</string>
+    <string name="event_userregiste_fail_exists">该账户已存在！</string>
+    <string name="event_userregiste_fail_account_format_verify_fail">手机号码格式不正确</string>
+    <string name="event_userregiste_fail_tonken_alreadybind">网络错误！请再次尝试</string>
+    <string name="event_tonken_expire_error">当前登录已过期请重新登录！</string>
+    <string name="event_userpwdmdfy_fail_not_exits">密码修改失败！用户不存在</string>
+    <string name="event_userpwdmdfy_fail_oldpwd">密码修改失败！旧密码验证错误</string>
+    <string name="event_userpwdmdfy_fail_2pwd">密码修改失败！两次新密码不一致</string>
+    <string name="event_userpwdmdfy_fail">密码修改失败！(%1$s-%2$s)</string>
+    <string name="event_retrieve_fail_not_exits">找回密码失败，账号不存在！</string>
+    <string name="event_retrieve_fail_format_verify">找回密码失败，手机号格式不对！</string>
+    <string name="event_retrieve_fail_sms_limit">找回密码次数过多！</string>
+    <string name="event_retrieve_fail">找回密码失败！(%1$s-%2$s)</string>
+    <string name="event_setuserphoto_fail2">设置头像失败！</string>
+    <string name="event_setuserphoto_fail3">图片超过100K</string>
+    <string name="event_setuserphoto_fail4">上传的文件类型不是图像格式</string>
+    <string name="event_setuserphoto_fail6">设置头像失败！请您先登录！</string>
+    <string name="event_setuserphoto_fail">下载头像失败！(%1$s-%2$s)</string>
+    <string name="userregist_note_err">短信发送超限或不合法</string>
+    <string name="event_network_is_unavialable">网络连接错误！请稍候再试</string>
+    <string name="login_fetch_auth_code_resendsms">再次获取</string>
+    <string name="login_fetch_auth_code_timeleft">已发送(%1$d)</string>
+    <string name="userregiste_code">请输入验证码</string>
+    <string name="get_vehiclefile_failed">获取车辆信息失败</string>
+    <string name="user_longin_out">退出登录</string>
+
+
+    <!--绑定设备-->
+    <string name="bind_device_fill_in_sn">请输入sn码</string>
+    <string name="bind_device_step1">您还没有连接到图吧汽车卫士</string>
+    <string name="bind_device_step2">1.插入盒子,启动车辆怠速</string>
+    <string name="bind_device_step3">2.扫描盒子上的sn码</string>
+    <string name="bind_device_step4">3.绑定盒子</string>
+    <string name="bind_device_bing">立即绑定</string>
+    <string name="bind_device_relieve_bing">解除绑定</string>
+
+    <string name="car_info_content">正确填写以上信息,有助于准确查看车辆数据</string>
+
+    <!--设备信息-->
+    <string name="car_bind_device_info_state">当前状态</string>
+    <string name="car_bind_device_info_sn">设备SN码</string>
+    <string name="car_bind_device_info_bing_time">绑定时间</string>
+    <string name="car_bind_device_info_last_time">最后使用时间</string>
+    <string name="car_bind_device_info_phone">绑定手机</string>
+    <string name="car_bind_device_info_sim">Sim卡</string>
+    <string name="car_bind_device_info_save">保存</string>
+    <string name="car_bind_device_info_engine_number">发动机编号</string>
+    <string name="car_bind_device_bing_sn_null">请填写sn</string>
+
+    <!-- 首界面 -->
+    <string name="main_text_route">行程</string>
+    <string name="main_text_vehicle_condition">车况</string>
+    <string name="main_text_examination">体检</string>
+    <string name="main_text_mine">我</string>
+
+    <!--关于我们-->
+    <string name="text_app_version">软件版本</string>
+    <string name="txt_str_sdk_version">引擎版本</string>
+    <string name="txt_str_navcore_version">NAVCORE</string>
+    <string name="text_app_develop">开发商</string>
+    <string name="text_app_develop_last">北京图为先科技有限公司</string>
+    <string name="text_app_weibo">微信公众号</string>
+    <string name="text_app_weibo_last">mapbarOBD</string>
+    <string name="text_app_bbs">客服QQ群</string>
+    <string name="text_app_bbs_last">211366226</string>
+    <string name="text_app_tel">客服电话</string>
+    <string name="text_app_tel_last">4006616677</string>
+    <!-- 个人中心 -->
+    <string name="title_mine">个人中心</string>
+    <string-array name="mine_gotos">
+        <item>消息</item>
+        <item>提醒</item>
+        <item>车辆</item>
+        <item>设置</item>
+    </string-array>
+    <string name="toast_picutil_error">没有找到SD卡或者正在使用请关闭usb连接模式</string>
+    <string name="label_make_new_photo">拍摄新照片</string>
+    <string name="label_choose_in_datas">从照片库选取</string>
+    <!--设置-->
+    <string name="title_setting">设置</string>
+    <string-array name="setting_gotos">
+        <item>账户设置</item>
+        <item>通知提醒</item>
+        <item>清除缓存</item>
+        <item>关于我们</item>
+    </string-array>
+    <string-array name="user_my_car">
+        <item>设备绑定</item>
+        <item>车辆档案</item>
+    </string-array>
+    <string-array name="setting_account">
+        <item>头像</item>
+        <item>手机号</item>
+        <item>修改密码</item>
+    </string-array>
+    <string name="car_setting_account">账户设置</string>
+    <string name="car_account_quit">退出登录</string>
+    <!-- common -->
+    <string name="tips">提示</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+
+    <!--vin校验-->
+    <string name="vin_checkout_null">vin不能为空</string>
+    <string name="vin_checkout_length">请输入17位vin</string>
+    <string name="vin_checkout_illegality">车架号格式不正确，请检查重新输入</string>
+    <string name="scan_text">请将汽车卫士硬件上的条码放到方框以内,便于快速扫描</string>
+    <!-- 提醒 -->
+    <string name="remind">提醒</string>
+    <!-- 消息 -->
+    <string name="message">消息</string>
+    <!--title-->
+    <string name="title_car_info">车辆档案</string>
+    <string name="title_city_list">城市列表</string>
+    <string name="title_gaso_cost_setting">油价设置</string>
+    <string name="title_register">注册</string>
+    <string name="title_my_car">我的车辆</string>
+    <string name="title_device_info">设备信息</string>
+    <string name="title_engine_number">发动机编号</string>
+    <string name="title_car_number">车牌号</string>
+    <string name="title_choose_car">车型选择</string>
+    <string name="title_retrieve_password">找回密码</string>
+    <string name="title_updata_password">修改密码</string>
+    <string name="title_bind_device">绑定设备</string>
+    <string name="title_activate">激活设备</string>
+    <string name="title_fill_in_vin">填写VIN</string>
+    <string name="title_add_car_info">添加车辆</string>
+    <string name="title_app_about">关于我们</string>
+    <!-- 提醒开关 -->
+    <string name="remind_onoff_offline">离线提醒</string>
+    <string name="remind_onoff_ignition">点火提醒</string>
+    <string name="remind_onoff_shake">震动提醒</string>
+    <string name="remind_onoff_low_voltage">低电压提醒</string>
+    <!--<string-array name="remind_onoff">
+        <item>离线提醒</item>
+        <item>点火提醒</item>
+        <item>震动提醒</item>
+        <item>低电压提醒</item>
+    </string-array>-->
+    <string name="des_image">图吧汽车卫士</string>
+    <string name="remindE">报警电压值：</string>
+    <!-- 行程 -->
+    <string name="title_route">行程详情</string>
+    <string name="route_data">行程数据</string>
+    <string name="foot_mark">我的足迹</string>
+    <!-- 车况 -->
+    <string name="voltage">当前电压</string>
+    <string name="safe_area">安全区域</string>
+    <string name="impact_remind">碰撞提醒</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_safearea">安全区域</string>
+
+    <!-- 无数据 -->
+    <string name="exam_null_info1">请保持盒子通电状态</string>
+    <string name="exam_null_info2">暂未收到车辆体检信息</string>
+    <string name="trip_null_info1">请保持盒子通电状态</string>
+    <string name="trip_null_info2">跑一段行程后再来查看吧</string>
+    <string name="condition_null_info1">请保持盒子通电状态</string>
+    <string name="condition_null_info2">暂未收到车辆定位信息</string>
+
 </resources>

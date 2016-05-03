@@ -1,53 +1,118 @@
 package com.mapbar.android.obd.rearview;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.widget.RelativeLayout;
+
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.control.activity.BaseActivity;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogManager;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.model.AppPage;
+import com.mapbar.android.obd.rearview.obd.page.LoginPage;
+import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+
+import java.util.ArrayList;
+
+import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    private static MainActivity instance;
+    private boolean isFinishInitView = false;
+    private RelativeLayout contentView;
+
+
+    private boolean isPushSkip = false;
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        instance = this;
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
+        setContentView(contentView);
+        LogManager.getInstance().init(MainActivity.this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
+//        SDKManager.getInstance().init();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_view, new SplashPage());
+        transaction.commit();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        onFinishedInit();
+        // 日志
+        if (Log.isLoggable(LogTag.FRAMEWORK, Log.DEBUG)) {
+            Log.d(LogTag.FRAMEWORK, "active -->> " + "1111");
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+            boolean flag = false;
+            if (pages.size() > 0) {
+                flag = pages.get(pages.size() - 1).onKeyDown(keyCode, event);
+            }
+
+            if (flag) {
+                return flag;
+            }
+
+            if (LayoutUtils.getPopupWindow() != null && LayoutUtils.getPopupWindow().isShowing()) {
+                LayoutUtils.getPopupWindow().dismiss();
+                return true;
+            }
+            boolean isBack = pageManager.goBack();
+            if (!isBack) {
+                LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        finish();
+                        System.exit(0);
+                    }
+                });
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public void onFinishedInit() {
+        if (!isFinishInitView) {
+            isFinishInitView = true;
+            isPushSkip = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    isPushSkip = false;
+
+                    pageManager.goPage(LoginPage.class);
+
+                }
+            }, 2000);
+
+        }
+    }
+
+
+    public RelativeLayout getContentView() {
+        return contentView;
     }
 }
