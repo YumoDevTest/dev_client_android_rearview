@@ -5,7 +5,7 @@ import android.os.Environment;
 public class Configs {
 
     //
-    public final static String FILE_PATH = "/mapbar/obd_gsm";
+    public final static String FILE_PATH = "/mapbar/obd";
     public final static String SHARE_PATH = Environment.getExternalStorageDirectory() + Configs.FILE_PATH;
 
 

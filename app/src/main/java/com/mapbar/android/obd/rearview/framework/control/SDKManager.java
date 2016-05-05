@@ -1,13 +1,15 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
+import android.os.Environment;
+
+import com.mapbar.android.obd.rearview.framework.Configs;
+import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.obd.Manager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-//import com.mapbar.obd.Manager;
-//import com.mapbar.obd.ObdSDKResult;
 
 /**
  * Created by liuyy on 2016/1/22.
@@ -15,8 +17,8 @@ import java.util.ArrayList;
 public class SDKManager {
 
     private static SDKManager sdkManager;
-    //    private Manager manager;
-//    private Manager.Listener listener;
+    private Manager manager;
+    private Manager.Listener listener;
     private ArrayList<WeakReference<SDKListener>> regListeners;
     private boolean flag_token = false;//token失效标记，防止同时多次触发注销到登录页
 
@@ -30,33 +32,33 @@ public class SDKManager {
         return sdkManager;
     }
 
-//    public void init() {
-//        manager = Manager.getInstance();
-//        regListeners = new ArrayList<>();
-//        listener = new Manager.Listener() {
-//            @Override
-//            public void onEvent(int event, Object o) {
-//                // 日志
-//                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-//                    Log.v(LogTag.FRAMEWORK, "sdk -->> event:" + event);
-//                    Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
-//                }
-//                if (regListeners.size() > 0) {
-//                    for (int i = regListeners.size() - 1; i >= 0 && i < regListeners.size(); i--) {
-//                        if (regListeners.get(i) == null || regListeners.get(i).get() == null) {
-//                            regListeners.remove(i);
-//                        } else {
-//                            if (regListeners.get(i).get().isActive()) {
-//                                regListeners.get(i).get().onEvent(event, o);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//        String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
-////        manager.init(Global.getAppContext(), listener, sdPath, null);
-//    }
+    public void init() {
+        manager = Manager.getInstance();
+        regListeners = new ArrayList<>();
+        listener = new Manager.Listener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                // 日志
+                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                    Log.v(LogTag.FRAMEWORK, "sdk -->> event:" + event);
+                    Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
+                }
+                if (regListeners.size() > 0) {
+                    for (int i = regListeners.size() - 1; i >= 0 && i < regListeners.size(); i--) {
+                        if (regListeners.get(i) == null || regListeners.get(i).get() == null) {
+                            regListeners.remove(i);
+                        } else {
+                            if (regListeners.get(i).get().isActive()) {
+                                regListeners.get(i).get().onEvent(event, o);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
+        manager.init(Global.getAppContext(), listener, sdPath, null);
+    }
 
     /**
      * 设置一个监听SDK回调的listener
@@ -125,8 +127,8 @@ public class SDKManager {
          */
         boolean active = true;
 
-//        public void onEvent(int event, Object o) {
-//            //每次响应事件都要判断是否返回code=29，token失效
+        public void onEvent(int event, Object o) {
+            //每次响应事件都要判断是否返回code=29，token失效
 //            if (o != null && o instanceof ObdSDKResult) {
 //                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
 //                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
@@ -137,7 +139,7 @@ public class SDKManager {
 //                    return;
 //                }
 //            }
-//        }
+        }
 
         protected boolean isReged() {
             return isReged;

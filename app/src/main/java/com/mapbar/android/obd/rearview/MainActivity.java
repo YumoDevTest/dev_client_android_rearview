@@ -10,10 +10,9 @@ import android.widget.RelativeLayout;
 
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.control.SDKManager;
 import com.mapbar.android.obd.rearview.framework.control.activity.BaseActivity;
-import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
-import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.obd.page.LoginPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
@@ -45,17 +44,14 @@ public class MainActivity extends BaseActivity {
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
 
-//        SDKManager.getInstance().init();
+        SDKManager.getInstance().init();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_view, new SplashPage());
         transaction.commit();
 
         onFinishedInit();
-        // 日志
-        if (Log.isLoggable(LogTag.FRAMEWORK, Log.DEBUG)) {
-            Log.d(LogTag.FRAMEWORK, "active -->> " + "1111");
-        }
+
     }
 
     @Override
