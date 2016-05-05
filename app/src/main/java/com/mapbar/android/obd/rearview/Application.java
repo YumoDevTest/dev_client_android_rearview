@@ -1,22 +1,20 @@
 package com.mapbar.android.obd.rearview;
 
-import android.app.Application;
-
 import com.mapbar.android.obd.rearview.framework.common.Global;
 
 
 /**
  * Created by yun on 16/1/7.
  */
-public class OBDApplication extends Application {
-    private static OBDApplication instance;
+public class Application extends android.app.Application {
+    private static Application instance;
 
-    public OBDApplication() {
+    public Application() {
         instance = this;
     }
 
-    public static OBDApplication getInstance() {
-        return OBDApplication.instance;
+    public static Application getInstance() {
+        return Application.instance;
     }
 
     @Override
