@@ -21,6 +21,7 @@ public class VoiceManager {
         return voiceManager;
     }
 
+
     public void sendBroadcastTTS(String msg) {
         Intent mIntent = new Intent("ime.service.intent.action.TTS_SPEACK");
         String[] result = new String[2];
@@ -31,6 +32,9 @@ public class VoiceManager {
     }
 
 
+    /***
+     * 单例持有类
+     */
     public static class VoiceManagerHolder {
         public static VoiceManager voiceManager = getInstance();
     }

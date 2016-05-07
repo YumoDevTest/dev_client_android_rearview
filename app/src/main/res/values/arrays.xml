@@ -63,17 +63,29 @@
         <item>星期五</item>
         <item>星期六</item>
     </string-array>
-    <string-array name="exams_code">
-        <item>故障码</item>
-        <item>发动机冷却"</item>
-        <item>短期燃油调整</item>
-        <item>长期燃油调整</item>
-        <item>氧传感器电压</item>
-        <item>进气管绝对压力</item>
-        <item>点计算发动机负荷值</item>
-        <item>点火正时提前角</item>
-        <item>进气温度</item>
-        <item>节气门相对位置</item>
+    <string-array name="command_string">
+        <item>AT@STS010102</item>
+        <item>AT@STS010102"</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
+        <item>AT@STS010102</item>
     </string-array>
 
+    <integer-array name="command">
+        <item>201000</item>
+        <item>201001</item>
+        <item>202001</item>
+        <item>202000</item>
+        <item>203001</item>
+        <item>203000</item>
+        <item>204001</item>
+        <item>204000</item>
+        <item>205001</item>
+        <item>205000</item>
+    </integer-array>
 </resources>

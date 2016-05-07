@@ -1,4 +1,4 @@
-package com.mapbar.obd.net.android.framework.control.activity;
+package com.mapbar.android.obd.rearview.framework.control.activity;
 
 public class CConfigs {
     public final static int VIEW_POSITION_NONE = -1;

@@ -10,6 +10,7 @@
 
 /gradlew
 /gradlew.bat
+/.idea
 /gradle
 /gradle.properties
 /apk
