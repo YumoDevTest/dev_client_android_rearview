@@ -232,4 +232,10 @@
     <string name="condition_null_info1">请保持盒子通电状态</string>
     <string name="condition_null_info2">暂未收到车辆定位信息</string>
 
+    <!--车辆当前数据-->
+    <string name="string_current_gasConsum">瞬时油耗</string>
+    <string name="string_current_tripTime">本次行程时间</string>
+    <string name="string_current_tripLength">本次已行驶里程</string>
+    <string name="string_current_driveCost">本次行程话费</string>
+    <string name="string_physical">体检功能可为您的爱车提供\n8大系统\n150项数据监控</string>
 </resources>
