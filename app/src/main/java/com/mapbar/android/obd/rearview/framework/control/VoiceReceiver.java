@@ -16,7 +16,9 @@ public class VoiceReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (VOICE_ACTION.equals(action)) {
             int command = intent.getIntExtra("command", DEFAULT_COMMAND);
-            CommandControl.getInstance().executeCommand(command);
+            if (command != DEFAULT_COMMAND) {
+                CommandControl.getInstance().executeCommand(command);
+            }
 
         }
     }

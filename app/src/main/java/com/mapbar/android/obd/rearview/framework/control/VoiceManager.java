@@ -9,7 +9,7 @@ import com.mapbar.android.obd.rearview.MainActivity;
  */
 public class VoiceManager {
     private static VoiceManager voiceManager;
-
+    private final String ACTION_TTS = "ime.service.intent.action.TTS_SPEACK";
     private VoiceManager() {
 
     }
@@ -23,7 +23,7 @@ public class VoiceManager {
 
 
     public void sendBroadcastTTS(String msg) {
-        Intent mIntent = new Intent("ime.service.intent.action.TTS_SPEACK");
+        Intent mIntent = new Intent(ACTION_TTS);
         String[] result = new String[2];
         result[0] = "navigate";
         result[1] = msg;

@@ -2,8 +2,8 @@ package com.mapbar.android.obd.rearview.framework.control;
 
 import android.content.res.Resources;
 
-import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -33,22 +33,45 @@ public class CommandControl {
      * @param command
      */
     public void executeCommand(final int command) {
-        if (command != 000000) {//有效指令
-            if (command >= 2000000) {//控制类指令
-                executeCommand2(command);
-            } else {//非控制类指令
-                RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
-                switch (command) {
-                    case 102000://车速
-                        voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.speed));
-                        break;
-                    case 102001://转速
-                        voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.averageSpeed));
-                        break;
-                }
+        if (command >= 2000000) {//控制类指令
+            executeCommand2(command);
+        } else {//非控制类指令
+            final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
+            switch (command) {
+                case 102000://车速
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.speed));
+                    break;
+                case 102001://转速
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.rpm));
+                    break;
+                case 102002://电压
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.voltage));
+                    break;
+                case 102003://水温
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.engineCoolantTemperature));
+                    break;
+                case 102004://瞬时油耗
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.gasConsum));
+                    break;
+                case 102005://平均油耗
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.averageGasConsum));
+                    break;
+                case 102006://本次时间
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.tripTime));
+                    break;
+                case 102007://本次行程
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.tripLength));
+                    break;
+                case 102008://本次花费
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.driveCost));
+                    break;
+                case 103000://开始体检
+                    break;
+                case 104000://播报保养
+                    break;
+
             }
         }
-
     }
 
     /**
@@ -58,7 +81,7 @@ public class CommandControl {
      * @param command
      */
     public void executeCommand2(final int command) {
-        Resources res = MainActivity.getInstance().getResources();
+        Resources res = Global.getAppContext().getResources();
         int[] commands = res.getIntArray(R.array.command);
         ArrayList<Integer> commandList = new ArrayList<>();
         for (int command1 : commands) {
