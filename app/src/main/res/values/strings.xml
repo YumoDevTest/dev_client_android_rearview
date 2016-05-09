@@ -242,6 +242,9 @@
     <string name="vehicle_checkup_item_count">共%1$s项</string>
     <string name="vehicle_checkup_item_waiting">待检测</string>
     <string name="vehicle_checkup">一键体检</string>
+    <string name="vehicle_checkup_last_score">上次体检得分</string>
+    <string name="vehicle_checkup_last_time">上次体检时间</string>
+    <string name="vehicle_checkup_score">体检得分</string>
 
     <array name="page_titles">
         <item>爱车体检</item>

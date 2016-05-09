@@ -25,7 +25,8 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/iv_item_checkUp_icon"
         android:gravity="center_vertical"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
         />
     <!--#35bdb2-->
     <TextView

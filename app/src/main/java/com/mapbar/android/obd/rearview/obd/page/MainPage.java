@@ -29,6 +29,7 @@ public class MainPage extends AppPage {
     private CarDataPage carDataPage;
     private CarStatePage carStatePage;
     private CarMaintenancePage carMaintenancePage;
+    private VehicleCheckupPage vehicleCheckupPage;
     private ArrayList<View> views;
     private PagerAdapter adapter = new PagerAdapter() {
 
@@ -67,13 +68,15 @@ public class MainPage extends AppPage {
         views = new ArrayList<>();
         carExaminationPage = (CarExaminationPage) pageManager.createPage(CarExaminationPage.class);
         carExaminationPage.initByCustom(R.layout.page_car_exam);
+        vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
+        vehicleCheckupPage.initByCustom(R.layout.layout_physicaling);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carDataPage.initByCustom(R.layout.page_car_data);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
         carStatePage.initByCustom(R.layout.page_car_state);
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
         carMaintenancePage.initByCustom(R.layout.page_car_maintenance);
-        views.add(carExaminationPage.getContentView());
+        views.add(vehicleCheckupPage.getContentView());
         views.add(carDataPage.getContentView());
         views.add(carStatePage.getContentView());
         views.add(carMaintenancePage.getContentView());

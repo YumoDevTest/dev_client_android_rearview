@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
 import com.mapbar.obd.Physical;
@@ -40,8 +41,10 @@ public class VehicleCheckupPage extends AppPage {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_view.setLayoutManager(layoutManager);
         physicalList = Physical.getInstance().getPhysicalSystem();
+        Log.e("zc", physicalList.size() + "");
         recyclerAdapter = new VehicleCheckupAdapter(MainActivity.getInstance(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
+
     }
 
     @Override

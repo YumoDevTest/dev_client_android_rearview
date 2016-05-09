@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#1a1a1a"
+    >
+
+    <LinearLayout
+        android:id="@+id/line"
+        android:layout_width="85dp"
+        android:layout_height="190dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="89dp"
+        android:background="@drawable/img_physical_result_normal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/vehicle_checkup_score"
+            android:textColor="#35bdb2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="36"
+            android:textColor="#35bdb2"
+            android:textSize="50sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="健康"
+            android:textColor="#35bdb2"
+            android:textSize="25sp"/>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="74dp"
+        android:layout_toRightOf="@+id/line">
+
+    </GridView>
+</RelativeLayout>

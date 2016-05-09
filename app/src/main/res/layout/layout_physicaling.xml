@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="77dp"
-        android:layout_height="172dp"
+        android:layout_width="85dp"
+        android:layout_height="190dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="89dp"
         android:src="@drawable/img_physicaling"
@@ -19,9 +19,9 @@
         android:id="@+id/test_rl"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/iv"
         android:layout_marginLeft="89dp"
         android:layout_marginRight="60dp"
+        android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/iv"
         />
 </RelativeLayout>
