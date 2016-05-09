@@ -24,6 +24,7 @@ public class MainPage extends AppPage {
     @ViewInject(R.id.rg_tabs)
     private RadioGroup rg_tabs;
 
+    private String[] titles;
     private CarExaminationPage carExaminationPage;
     private CarDataPage carDataPage;
     private CarStatePage carStatePage;
@@ -61,7 +62,8 @@ public class MainPage extends AppPage {
 
     @Override
     public void initView() {
-
+        titles = getResources().getStringArray(R.array.page_titles);
+        titleBar = new TitleBar(this, R.id.title_main);
         views = new ArrayList<>();
         carExaminationPage = (CarExaminationPage) pageManager.createPage(CarExaminationPage.class);
         carExaminationPage.initByCustom(R.layout.page_car_exam);
@@ -92,15 +94,19 @@ public class MainPage extends AppPage {
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
+                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
+                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
+                        titleBar.setText(titles[2], TitleBar.TitleArea.MID);
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);
+                        titleBar.setText(titles[3], TitleBar.TitleArea.MID);
                         break;
                 }
             }
