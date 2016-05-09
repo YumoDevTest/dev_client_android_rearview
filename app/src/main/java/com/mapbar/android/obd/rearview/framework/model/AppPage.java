@@ -85,4 +85,12 @@ public abstract class AppPage extends Fragment {
     public Context getContext() {
         return context;
     }
+
+    public void initByCustom(int layoutId) {
+        View view = View.inflate(MainActivity.getInstance(), layoutId, null);
+        contentView = new WeakReference<>(view);
+        ViewInjectTool.inject(this, this.contentView.get());
+        initView();
+        setListener();
+    }
 }

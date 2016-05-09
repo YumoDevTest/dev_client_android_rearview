@@ -23,7 +23,7 @@
     <!-- MainPage -->
     <color name="tab_text_main_pressed">#25c1b2</color>
     <color name="tab_text_main_normal">#353535</color>
-    <color name="bg_title">#1ebaab</color>
+    <color name="bg_title">#313131</color>
     <color name="transparent_black">#80000000</color>
     <color name="grey">#808080</color>
 
@@ -31,7 +31,7 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
-    <color name="checkUp_gray">#d2ced8</color>
+    <color name="checkUp_gray">#535353</color>
     <color name="checkUp_yello">#ff9036</color>
     <color name="checkUp_red">#ff4f4f</color>
 
@@ -66,6 +66,8 @@
     <color name="calendar_bg">#3FDDEDEA</color>
     <color name="calendar_bg_trip_data">#1ebaab</color>
     <color name="calendar_tx_select">#5AD6D7</color>
+
+    <color name="bg_page">#1a1a1a</color>
 
 
 </resources>

@@ -8,12 +8,12 @@ import com.mapbar.android.obd.rearview.framework.model.AppPage;
 /**
  * Created by liuyy on 2016/5/7.
  */
-public class ExaminationPage extends AppPage {
+public class CarExaminationPage extends AppPage {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_examination);
+        setContentView(R.layout.page_car_exam);
     }
 
     @Override
