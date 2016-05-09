@@ -238,4 +238,8 @@
     <string name="string_current_tripLength">本次已行驶里程</string>
     <string name="string_current_driveCost">本次行程话费</string>
     <string name="string_physical">体检功能可为您的爱车提供\n8大系统\n150项数据监控</string>
+    <!--车辆体检-->
+    <string name="vehicle_checkup_item_count">共%1$s项</string>
+    <string name="vehicle_checkup_item_waiting">待检测</string>
+    <string name="vehicle_checkup">一键体检</string>
 </resources>

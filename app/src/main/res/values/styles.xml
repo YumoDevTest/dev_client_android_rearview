@@ -20,4 +20,9 @@
     <style name="AppTheme.NoActionBar">
 
     </style>
+
+    <style name="textAppearanceMedium">
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

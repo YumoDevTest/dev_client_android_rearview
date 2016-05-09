@@ -28,7 +28,12 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
+        android:layout_alignLeft="@+id/textView"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_physical"/>
+        android:layout_marginTop="15dp"
+        android:background="@drawable/btn_checkup"
+        android:text="@string/vehicle_checkup"
+        android:textSize="18sp"
+        />
 </RelativeLayout>
