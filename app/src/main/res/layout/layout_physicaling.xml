@@ -2,6 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:background="#1a1a1a"
+              android:orientation="horizontal">
 
+
+    <ImageView
+        android:layout_width="77dp"
+        android:layout_height="172dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="89dp"
+        android:src="@drawable/img_physicaling"
+
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/test_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="89dp"
+        android:padding="13dp"
+        />
 </LinearLayout>
