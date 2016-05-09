@@ -14,7 +14,7 @@ import com.mapbar.android.obd.rearview.framework.control.SDKManager;
 import com.mapbar.android.obd.rearview.framework.control.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.model.AppPage;
-import com.mapbar.android.obd.rearview.obd.page.LoginPage;
+import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    pageManager.goPage(LoginPage.class);
+                    pageManager.goPage(MainPage.class);
                 }
             }, 2000);
 
