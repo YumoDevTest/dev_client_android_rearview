@@ -28,9 +28,6 @@ public class MainActivity extends BaseActivity {
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
 
-
-    private boolean isPushSkip = false;
-
     public static MainActivity getInstance() {
         return instance;
     }
@@ -47,10 +44,17 @@ public class MainActivity extends BaseActivity {
         SDKManager.getInstance().init();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_view, new SplashPage());
+        final AppPage page = pageManager.createPage(SplashPage.class, null);
+        transaction.replace(R.id.content_view, page);
         transaction.commit();
 
         onFinishedInit();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -76,7 +80,6 @@ public class MainActivity extends BaseActivity {
                 LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         finish();
                         System.exit(0);
                     }
@@ -92,15 +95,10 @@ public class MainActivity extends BaseActivity {
     public void onFinishedInit() {
         if (!isFinishInitView) {
             isFinishInitView = true;
-            isPushSkip = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-                    isPushSkip = false;
-
                     pageManager.goPage(LoginPage.class);
-
                 }
             }, 2000);
 

@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/black"
+              android:orientation="vertical">
 
-    <TextView
+    <include
+        android:id="@+id/title_main"
+        layout="@layout/layout_title"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="主界面" />
+        android:layout_weight="1"/>
+
+    <RadioGroup
+        android:id="@+id/rg_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/page_tab1"
+            android:layout_width="25dp"
+            android:layout_height="4dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/sl_page_check"
+            android:button="@null"
+            android:checked="true"
+            android:text="@null"/>
 
 
-</RelativeLayout>
+        <RadioButton
+            android:id="@+id/page_tab2"
+            android:layout_width="25dp"
+            android:layout_height="4dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/sl_page_check"
+            android:button="@null"
+            android:text="@null"/>
+
+        <RadioButton
+            android:id="@+id/page_tab3"
+            android:layout_width="25dp"
+            android:layout_height="4dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/sl_page_check"
+            android:button="@null"
+            android:text="@null"/>
+
+        <RadioButton
+            android:id="@+id/page_tab4"
+            android:layout_width="25dp"
+            android:layout_height="4dp"
+            android:background="@drawable/sl_page_check"
+            android:button="@null"
+            android:text="@null"/>
+
+    </RadioGroup>
+
+</LinearLayout>
