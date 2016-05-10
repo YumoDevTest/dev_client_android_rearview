@@ -3,8 +3,11 @@ package com.mapbar.android.obd.rearview.framework.common;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -15,11 +18,13 @@ import java.text.DecimalFormat;
  * Created by THINKPAD on 2016/3/22.
  */
 public class Utils {
+    public static final String DEFAULT_CHANNEL_NAME = "unkonwn";
     private static final String format3dot2 = "##0.00";
     private static final String format2dot1 = "#0.0";
     private static final String format2dot2 = "#0.00";
     private static final String format00dot1 = "00.0";
     private static final String format000 = "000";
+    private static String channel;
 
     public static String format3dot2(float paramFloat) {
         return new DecimalFormat(format3dot2).format(paramFloat);
@@ -72,5 +77,45 @@ public class Utils {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 获取渠道号
+     *
+     * @param context
+     * @return
+     */
+    public static String getChannel(Context context) {
+        ApplicationInfo appInfo;
+        try {
+            appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            channel = String.valueOf(appInfo.metaData.get("UMENG_CHANNEL").toString());
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (TextUtils.isEmpty(channel)) {
+            channel = DEFAULT_CHANNEL_NAME;
+        }
+        return channel;
+    }
+
+
+    /**
+     * 获取版本号
+     *
+     * @return
+     */
+    public static int getVersion(Context mContext) {
+
+        int versionCode = 0;
+        String packageName = mContext.getPackageName();
+        try {
+            versionCode = mContext.getPackageManager().getPackageInfo(packageName, 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return versionCode;
     }
 }
