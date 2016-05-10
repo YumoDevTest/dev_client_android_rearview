@@ -45,7 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="74dp"
-        android:layout_toRightOf="@+id/line">
+        android:layout_toRightOf="@+id/line"
+        android:horizontalSpacing="45dp"
+        android:numColumns="3"
+        android:verticalSpacing="5dp">
 
     </GridView>
 </RelativeLayout>
