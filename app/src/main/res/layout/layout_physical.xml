@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/rela_no_physical"
+        layout="@layout/layout_car_physical_page"
+        android:visibility="visible"
+        />
+
+    <include
+        android:id="@+id/line_last_result"
+        layout="@layout/layout_physical_last_result"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/rela_result"
+        layout="@layout/layout_physical_result"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/rela_physicaling"
+        layout="@layout/layout_physicaling"
+        android:visibility="gone"
+        />
+</LinearLayout>

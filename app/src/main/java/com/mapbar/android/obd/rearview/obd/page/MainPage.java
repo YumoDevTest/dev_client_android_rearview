@@ -69,7 +69,7 @@ public class MainPage extends AppPage {
         carExaminationPage = (CarExaminationPage) pageManager.createPage(CarExaminationPage.class);
         carExaminationPage.initByCustom(R.layout.page_car_exam);
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
-        vehicleCheckupPage.initByCustom(R.layout.layout_physicaling);
+        vehicleCheckupPage.initByCustom(R.layout.layout_physical);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carDataPage.initByCustom(R.layout.page_car_data);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);

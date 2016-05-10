@@ -24,7 +24,7 @@ public class VehicleCheckupPage extends AppPage {
     @ViewInject(R.id.test_rl)
     private RecyclerView rl_view;
 
-    @ViewInject(R.id.grid)
+    @ViewInject(R.id.gridv)
     private GridView grid;
 
     private List<PhysicalData> physicalList = new ArrayList<PhysicalData>();
@@ -35,8 +35,6 @@ public class VehicleCheckupPage extends AppPage {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.layout_physicaling);
-        setContentView(R.layout.layout_physical_result);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class VehicleCheckupPage extends AppPage {
         physicalList = Physical.getInstance().getPhysicalSystem();
         recyclerAdapter = new VehicleCheckupAdapter(MainActivity.getInstance(), physicalList);
         rl_view.setAdapter(recyclerAdapter);*/
-
+        String recentReportResult = Physical.getInstance().getRecentReportResult();
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
         grid.setAdapter(checkupGridAdapter);
