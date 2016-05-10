@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     package="com.mapbar.android.obd.rearview"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:installLocation="auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY"/>
@@ -24,7 +21,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -41,14 +37,14 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
 
     <!-- 读取短信 -->
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
@@ -73,8 +69,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="HardcodedDebugMode">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
@@ -84,7 +79,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
@@ -105,11 +100,11 @@
         <receiver android:name=".framework.ixintui.AixintuiBroadcastReceiver">
             <intent-filter>
                 <!-- 接收透传消息 -->
-                <action android:name="com.ixintui.action.MESSAGE" />
+                <action android:name="com.ixintui.action.MESSAGE"/>
                 <!-- 接收register, add tag等反馈消息 -->
-                <action android:name="com.ixintui.action.RESULT" />
+                <action android:name="com.ixintui.action.RESULT"/>
                 <!-- 接收notification click消息 -->
-                <action android:name="com.ixintui.action.notification.CLICK" />
+                <action android:name="com.ixintui.action.notification.CLICK"/>
             </intent-filter>
         </receiver>
 
@@ -119,37 +114,37 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="com.ixintui.push.PushActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.ixintui.push.PushActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <service
             android:name="com.ixintui.push.PushService"
             android:exported="true"
-            android:process=":ixintui_service_v1" />
+            android:process=":ixintui_service_v1"/>
 
         <service
             android:name="com.ixintui.push.MediateService"
-            android:exported="true" />
+            android:exported="true"/>
 
         <provider
             android:name="com.ixintui.push.Provider"
             android:authorities="com.mapbar.android.obd.rearview.ixintui.push.provider"
             android:exported="false"
-            android:multiprocess="true" />
+            android:multiprocess="true"/>
 
         <receiver android:name="com.ixintui.push.Receiver">
             <intent-filter>
-                <action android:name="com.ixintui.action.BROADCAST" />
+                <action android:name="com.ixintui.action.BROADCAST"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
         <!--爱心推end-->
@@ -157,7 +152,7 @@
         <!--umeng APPKEY和渠道-->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <!-- <meta-data/>
              android:name="UMENG_APPKEY"
              android:value="5694f60ce0f55a23d30017d0" />-->
