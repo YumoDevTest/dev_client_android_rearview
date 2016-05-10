@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.control.activity.BaseActivity;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 
 import java.util.ArrayList;
 

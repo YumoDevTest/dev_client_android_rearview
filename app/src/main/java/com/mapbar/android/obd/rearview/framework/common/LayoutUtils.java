@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.framework.widget.hud.ProgressView;
 
 import java.io.FileNotFoundException;

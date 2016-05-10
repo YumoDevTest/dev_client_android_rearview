@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 
 public class LoginPage extends AppPage {
     @ViewInject(R.id.tv_login_goPage)

@@ -1,11 +1,10 @@
-package com.mapbar.android.obd.rearview.framework.control.activity;
+package com.mapbar.android.obd.rearview.framework.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 
 import java.util.ArrayList;
 

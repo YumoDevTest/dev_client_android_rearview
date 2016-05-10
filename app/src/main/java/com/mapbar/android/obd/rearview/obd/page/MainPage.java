@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 
 import java.util.ArrayList;

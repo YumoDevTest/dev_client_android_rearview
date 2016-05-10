@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.framework.model;
+package com.mapbar.android.obd.rearview.framework.activity;
 
 import android.content.Context;
 import android.content.Intent;

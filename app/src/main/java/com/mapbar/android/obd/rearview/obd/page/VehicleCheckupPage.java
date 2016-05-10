@@ -6,8 +6,8 @@ import android.widget.GridView;
 
 import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
 import com.mapbar.obd.Physical;

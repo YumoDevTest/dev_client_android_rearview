@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.control.SDKManager;
-import com.mapbar.android.obd.rearview.framework.control.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 
