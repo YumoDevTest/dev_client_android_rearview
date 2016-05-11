@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.framework.model;
+package com.mapbar.android.obd.rearview.framework.manager;
 
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
@@ -16,7 +16,7 @@ import java.util.List;
  * event4：EVENT_OBD_PHYSICAL_CHECK_END,体检完成的回调
  * event5：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
  */
-public class PhysicalModel extends BaseModel {
+public class PhysicalManager extends BaseManager {
     public static final int EVENT_OBD_PHYSICAL_CONDITION_FAILED = 0xF00001;
     public static final int EVENT_OBD_PHYSICAL_CHECK_START = 0xF00002;
     public static final int EVENT_OBD_PHYSICAL_CHECK_RESULT = 0xF00003;
@@ -58,27 +58,27 @@ public class PhysicalModel extends BaseModel {
      */
     @Override
     public void onEvent(int event, Object o) {
-        if (obdListener != null) {
+        if (baseObdListener != null) {
             switch (event) {
                 case Manager.Event.obdPhysicalConditionFailed:
-                    obdListener.onEvent(EVENT_OBD_PHYSICAL_CONDITION_FAILED, o);
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CONDITION_FAILED, o);
                     break;
                 case Manager.Event.obdPhysicalCheckStart:
-                    obdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_START, o);
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_START, o);
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    obdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_RESULT, o);
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_RESULT, o);
                     for (PhysicalData itemData : physicalList) {
                         if (itemData.getId() == ((PhysicalData) o).getId()) {
                             progress = getProgress(itemData.getId());
-                            obdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
+                            baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                         }
                     }
                     break;
                 case Manager.Event.obdPhysicalCheckEnd:
                     progress = 100;
-                    obdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_END, o);
-                    obdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_END, o);
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     break;
             }
         }
@@ -91,8 +91,7 @@ public class PhysicalModel extends BaseModel {
      * @return 分类列表
      */
     public List<PhysicalData> getPhysicalSystem() {
-        Physical physical = Physical.getInstance();
-        return physical.getPhysicalSystem();
+        return Physical.getInstance().getPhysicalSystem();
     }
 
     /**

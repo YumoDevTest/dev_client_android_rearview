@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.ixintui.pushsdk.SdkConstants;
-import com.mapbar.android.obd.rearview.framework.control.SDKManager;
+import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 
@@ -15,7 +15,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
  */
 public class AixintuiBroadcastReceiver extends BroadcastReceiver {
 
-    private SDKManager.SDKListener sdkListener;
+    private SDKListenerManager.SDKListener sdkListener;
     private String token;
 
 

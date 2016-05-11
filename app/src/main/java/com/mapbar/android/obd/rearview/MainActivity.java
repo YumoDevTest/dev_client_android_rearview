@@ -12,7 +12,7 @@ import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
-import com.mapbar.android.obd.rearview.framework.control.SDKManager;
+import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity {
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
 
-        SDKManager.getInstance().init();
+        SDKListenerManager.getInstance().init();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);
