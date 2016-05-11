@@ -16,12 +16,16 @@ public abstract class BaseModel {
     }
 
     public static BaseModel getModel(Class<? extends BaseModel> clazz) {
-        if (model == null) {
-            try {
+        try {
+            if (model == null) {
+
                 model = clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            } else if (!model.getClass().equals(clazz)) {
+                model = clazz.newInstance();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return model;
     }
