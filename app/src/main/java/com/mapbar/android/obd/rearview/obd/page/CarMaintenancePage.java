@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
-import com.mapbar.android.obd.rearview.framework.model.AppPage;
+
+import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 
 /**
  * Created by liuyy on 2016/5/7.
