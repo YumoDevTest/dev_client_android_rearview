@@ -68,7 +68,6 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @Override
     public void setListener() {
-
         btn_start_physical.setOnClickListener(this);
     }
 

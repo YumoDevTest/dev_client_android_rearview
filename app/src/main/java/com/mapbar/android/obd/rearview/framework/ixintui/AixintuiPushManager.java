@@ -124,7 +124,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                 public void onResponse(int httpCode, String str, byte[] responseData) {
                     // 日志
                     if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
-                        Log.e(LogTag.TEMP, " 推送绑定httpCode-->> " + httpCode + "-->responseData-->" + responseData.toString() + "--str-->" + str);
+                        Log.d(LogTag.TEMP, " 推送绑定httpCode-->> " + httpCode + "-->responseData-->" + responseData.toString() + "--str-->" + str);
                     }
                     if (httpCode == HttpStatus.SC_OK)
                         ;
@@ -134,7 +134,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                             object = new JSONObject(new String(responseData));
                             // 日志
                             if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
-                                Log.e(LogTag.TEMP, " JSONObject-->> " + object);
+                                Log.d(LogTag.TEMP, " JSONObject-->> " + object);
                             }
                             int code = object.getInt("code");
                             switch (code) {
