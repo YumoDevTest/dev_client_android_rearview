@@ -1,28 +1,131 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
+import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.obd.CarStatusData;
 
 /**
  * Created by liuyy on 2016/5/7.
  */
 public class CarStatePage extends AppPage {
 
+    private CarStateView carStateView;
+    private CarStatusData data;
+    @ViewInject(R.id.gv_state)
+    private GridView gvState;
+    private String[] stateNames;
+    private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
+    private int[] stateResOpenIds = {R.drawable.car_light_open, R.drawable.car_window_open, R.drawable.car_lock_open, R.drawable.car_door_open, R.drawable.car_trunk_open, R.drawable.car_sunroof_open};
+    private int[] stateResNoneIds = {R.drawable.car_light_none, R.drawable.car_window_none, R.drawable.car_lock_none, R.drawable.car_door_none, R.drawable.car_trunk_none, R.drawable.car_sunroof_none};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_car_state);
     }
 
     @Override
     public void initView() {
-
+        carStateView = new CarStateView(getContentView(), R.id.v_carstate);
+        data = CarStateManager.getData();
+        carStateView.setData(data);
+        stateNames = getContext().getResources().getStringArray(R.array.state_names);
     }
 
     @Override
     public void setListener() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    class StateAdapter extends BaseAdapter {
+        private int[] dataStates;
+
+        public StateAdapter() {
+            if (data != null) {
+                dataStates = new int[]{data.lights, data.windows, data.lock, data.doors, data.trunk, data.sunroof};
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return stateNames.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = View.inflate(getContext(), R.layout.item_grid_state, null);
+                holder.iv = (ImageView) convertView.findViewById(R.id.iv_item_state);
+                holder.tv = (TextView) convertView.findViewById(R.id.tv_item_state);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            if (data == null) {
+                holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResNoneIds[position]));
+            } else {
+                switch (dataStates[position]) {
+                    case -1:
+                    case 0:
+                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResNoneIds[position]));
+                        break;
+                    case 1:
+                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResOpenIds[position]));
+                        break;
+                    case 2:
+                        if (position == 3 || position == 4) {
+                            holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResCloseIds[position]));
+                        } else {
+                            holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResOpenIds[position]));
+                        }
+                        break;
+                    case 3:
+                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResCloseIds[position]));
+                        break;
+                }
+            }
+            holder.tv.setText(stateNames[position]);
+            return convertView;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            if (data != null) {
+                dataStates = new int[]{data.lights, data.windows, data.lock, data.doors, data.trunk, data.sunroof};
+            }
+            super.notifyDataSetChanged();
+        }
+
+        class ViewHolder {
+            ImageView iv;
+            TextView tv;
+        }
     }
 }

@@ -14,12 +14,10 @@ import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
 
-import java.lang.ref.WeakReference;
-
 
 public abstract class AppPage extends Fragment {
     protected SDKListenerManager.SDKListener sdkListener;
-    protected WeakReference<View> contentView;
+    protected View contentView;
     private Bundle data;
     private Context context;
     private int contentViewResource;
@@ -31,22 +29,21 @@ public abstract class AppPage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (contentView == null || contentView.get() == null) {
-            View view = inflater.inflate(contentViewResource, container, false);
-            contentView = new WeakReference<>(view);
-            ViewInjectTool.inject(this, this.contentView.get());
+        if (contentView == null || contentView == null) {
+            contentView = inflater.inflate(contentViewResource, container, false);
+            ViewInjectTool.inject(this, this.contentView);
             initView();
             setListener();
         } else {
-            ViewGroup parent = (ViewGroup) contentView.get().getParent();
+            ViewGroup parent = (ViewGroup) contentView.getParent();
             if (parent != null) {
-                parent.removeView(contentView.get());
+                parent.removeView(contentView);
             }
             if (sdkListener != null) {
                 SDKListenerManager.getInstance().registSdkListener(sdkListener);
             }
         }
-        return contentView.get();
+        return contentView;
     }
 
 
@@ -54,7 +51,7 @@ public abstract class AppPage extends Fragment {
     }
 
     public View getContentView() {
-        return contentView.get();
+        return contentView;
     }
 
     public void setContentView(int contentViewResource) {
@@ -87,9 +84,8 @@ public abstract class AppPage extends Fragment {
     }
 
     public void initByCustom(int layoutId) {
-        View view = View.inflate(MainActivity.getInstance(), layoutId, null);
-        contentView = new WeakReference<>(view);
-        ViewInjectTool.inject(this, this.contentView.get());
+        contentView = View.inflate(MainActivity.getInstance(), layoutId, null);
+        ViewInjectTool.inject(this, this.contentView);
         initView();
         setListener();
     }
