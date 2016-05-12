@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
+import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
@@ -49,6 +53,11 @@ public class MainActivity extends BaseActivity {
         transaction.commit();
 
         onFinishedInit();
+
+        //注册爱心推
+        PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
+        // 绑定爱心推token
+        AixintuiPushManager.getInstance().bindPush();
 
     }
 

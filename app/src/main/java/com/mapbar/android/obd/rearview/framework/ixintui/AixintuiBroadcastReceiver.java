@@ -10,6 +10,7 @@ import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 
+
 /**
  * Created by THINKPAD on 2016/3/8.
  */
@@ -41,8 +42,9 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
                 Log.d(LogTag.PUSH, "透传 message received, extra is: " + extra);
             }
             // 处理透传内容
-            // ...
+
             AixintuiPushManager.getInstance().onAppearMsg(context, msg, extra);
+
         }
         // SDK API的异步返回结果
         else if (action.equals(SdkConstants.RESULT_ACTION)) {
@@ -78,13 +80,16 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
                     if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                         Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);
                     }
-                    //// TODO: tianff 2016/5/10 AixintuiBroadcastReceiver onReceive 绑定token
+                    //绑定token
+                    AixintuiPushManager.getInstance().setAixintui_token(token);
 //                    AixintuiPushManager.getInstance().onNofificationClick(context, "{\"content\":\"测试提醒第一条\",\"title\":\"测试提醒第一条\",\"notif_style\":{\"sound\":true,\"vibrate\":false,\"unremovable\":false,\"auto_cancel\":true},\"extra\":\"{\\\"page\\\":\\\"NetRemindBox\\\",\\\"sevTime\\\":\\\"1459321671841\\\"}\",\"click_action\":{\"open_app\":true},\"is_progress\":false}");
                 }
             }
         }
+
         // 通知点击事件
         else if (action.equals(SdkConstants.NOTIFICATION_CLICK_ACTION)) {
+
             String msg = intent.getStringExtra(SdkConstants.MESSAGE);
             // 日志
             if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {

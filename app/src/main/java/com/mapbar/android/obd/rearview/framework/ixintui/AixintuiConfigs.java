@@ -9,9 +9,9 @@ public class AixintuiConfigs {
 
     /**
      * 爱心推的appkey
-     * <p/>
+     * <p/>2062762211
      * 测试 :
-     * 正式 :1196129778
+     * 正式 :1822600920
      */
-    public static final int AIXINTUI_APPKEY = Config.DEBUG ? 1196129778 : 1196129778;
+    public static final int AIXINTUI_APPKEY = Config.DEBUG ? 1822600920 : 1822600920;
 }

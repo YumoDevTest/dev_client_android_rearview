@@ -59,6 +59,7 @@ public class MainPage extends AppPage {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_main);
+
     }
 
     @Override
