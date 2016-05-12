@@ -26,6 +26,7 @@
         android:textColor="@color/grey"/>
 
     <Button
+        android:id="@+id/btn_start_physical"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/textView"

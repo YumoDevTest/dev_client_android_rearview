@@ -245,7 +245,9 @@
     <string name="vehicle_checkup_last_score">上次体检得分</string>
     <string name="vehicle_checkup_last_time">上次体检时间</string>
     <string name="vehicle_checkup_score">体检得分</string>
-
+    <!--保养-->
+    <string name="upkeep_next_upkeep_mileage">距离下次保养里程</string>
+    <string name="upkeep_next_upkeep_time">距离下次保养时间</string>
     <array name="page_titles">
         <item>爱车体检</item>
         <item>当前车辆数据</item>

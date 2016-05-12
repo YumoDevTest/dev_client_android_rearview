@@ -25,4 +25,10 @@
         <item name="android:textSize">16dip</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="upkeep">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:background">@drawable/upkeep_src</item>
+    </style>
 </resources>

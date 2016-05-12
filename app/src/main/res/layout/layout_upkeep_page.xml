@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#1a1a1a"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/view_upkeep"
+                style="@style/upkeep"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                />
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/upkeep_next_upkeep_mileage"
+                android:textColor="#00d4b9"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/tv_next_mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="5000"
+                android:textColor="#00d4b9"
+                android:textSize="45sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_next_mileage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="公里"
+                android:textColor="#00d4b9"
+                android:textSize="10sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="27dp">
+
+            <ImageView
+                android:id="@+id/view_upkeep_time"
+                style="@style/upkeep"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/upkeep_next_upkeep_time"
+                android:textColor="#00d4b9"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/tv_next_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="75"
+                android:textColor="#00d4b9"
+                android:textSize="45sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_next_time"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="天"
+                android:textColor="#00d4b9"
+                android:textSize="10sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_upkeep_totle_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下次保养项目 共 4 项"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_upkeep_totle_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="预计费用 3683.00 元"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            />
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_al_upkeep"
+            android:text="已保养"/>
+    </LinearLayout>
+</LinearLayout>

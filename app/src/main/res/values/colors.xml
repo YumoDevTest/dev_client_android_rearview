@@ -69,5 +69,7 @@
 
     <color name="bg_page">#1a1a1a</color>
 
+    <color name="upkeep_progress">#00d4b9</color>
+
 
 </resources>
