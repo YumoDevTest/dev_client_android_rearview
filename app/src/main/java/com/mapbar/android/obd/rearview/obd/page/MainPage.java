@@ -25,7 +25,6 @@ public class MainPage extends AppPage {
     private RadioGroup rg_tabs;
 
     private String[] titles;
-    private CarExaminationPage carExaminationPage;
     private CarDataPage carDataPage;
     private CarStatePage carStatePage;
     private CarMaintenancePage carMaintenancePage;
@@ -67,10 +66,8 @@ public class MainPage extends AppPage {
         titles = getResources().getStringArray(R.array.page_titles);
         titleBar = new TitleBar(this, R.id.title_main);
         views = new ArrayList<>();
-        carExaminationPage = (CarExaminationPage) pageManager.createPage(CarExaminationPage.class);
-        carExaminationPage.initByCustom(R.layout.page_car_exam);
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
-        vehicleCheckupPage.initByCustom(R.layout.layout_physical_result);
+        vehicleCheckupPage.initByCustom(R.layout.layout_physical);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carDataPage.initByCustom(R.layout.page_car_data);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);

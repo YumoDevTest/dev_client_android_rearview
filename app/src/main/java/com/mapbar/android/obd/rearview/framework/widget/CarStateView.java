@@ -1,7 +1,10 @@
 package com.mapbar.android.obd.rearview.framework.widget;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -18,13 +21,13 @@ public class CarStateView {
     private View view;
     private CarStatusData data;
     private StateDrawable drawable;
-    private Drawable drawableCar;
+    private Bitmap bmCar;
 
     public CarStateView(View parent, int id) {
         view = parent.findViewById(id);
         drawable = new StateDrawable();
+        bmCar = BitmapFactory.decodeResource(context.getResources(), R.drawable.car_normal);
         view.setBackgroundDrawable(drawable);
-        drawableCar = context.getResources().getDrawable(R.drawable.car_normal);
     }
 
     public void setData(CarStatusData data) {
@@ -43,11 +46,13 @@ public class CarStateView {
     }
 
     private class StateDrawable extends Drawable {
+        Paint paint = new Paint();
+        private Rect bounds;
 
         @Override
         public void draw(Canvas canvas) {
-            Rect rect = getBounds();
-            drawableCar.draw(canvas);
+            bounds = getBounds();
+            canvas.drawBitmap(bmCar, null, bounds, paint);
             if (data != null) {
                 switch (data.lights) {
                     case 0:
@@ -55,8 +60,8 @@ public class CarStateView {
                         break;
                     case 1:
                     case 2:
-                        Drawable drawableLights = context.getResources().getDrawable(R.drawable.state_light);
-                        drawableLights.draw(canvas);
+                        Bitmap bmLights = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_light);
+                        canvas.drawBitmap(bmLights, null, bounds, paint);
                         break;
                     case 3:
                         break;
@@ -67,8 +72,8 @@ public class CarStateView {
                         break;
                     case 1:
                     case 2:
-                        Drawable drawableSunroof = context.getResources().getDrawable(R.drawable.state_sunroof);
-                        drawableSunroof.draw(canvas);
+                        Bitmap bmSunroof = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_sunroof);
+                        canvas.drawBitmap(bmSunroof, null, bounds, paint);
                         break;
                     case 3:
                         break;
@@ -79,8 +84,8 @@ public class CarStateView {
                         break;
                     case 1:
                     case 2:
-                        Drawable drawableWindow = context.getResources().getDrawable(R.drawable.state_window);
-                        drawableWindow.draw(canvas);
+                        Bitmap bmWindow = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_window);
+                        canvas.drawBitmap(bmWindow, null, bounds, paint);
                         break;
                     case 3:
                         break;
@@ -90,14 +95,14 @@ public class CarStateView {
                     case -1:
                         break;
                     case 1:
-                        Drawable drawableDoorLF = context.getResources().getDrawable(R.drawable.state_door_lf);
-                        drawableDoorLF.draw(canvas);
-                        Drawable drawableDoorLB = context.getResources().getDrawable(R.drawable.state_door_lb);
-                        drawableDoorLB.draw(canvas);
-                        Drawable drawableDoorRF = context.getResources().getDrawable(R.drawable.state_door_rf);
-                        drawableDoorRF.draw(canvas);
-                        Drawable drawableDoorRB = context.getResources().getDrawable(R.drawable.state_door_rb);
-                        drawableDoorRB.draw(canvas);
+                        Bitmap bmDoorLBDoorLF = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_door_lf);
+                        canvas.drawBitmap(bmDoorLBDoorLF, null, bounds, paint);
+                        Bitmap bmDoorLBDoorLB = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_door_lb);
+                        canvas.drawBitmap(bmDoorLBDoorLB, null, bounds, paint);
+                        Bitmap bmDoorLBDoorRF = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_door_rf);
+                        canvas.drawBitmap(bmDoorLBDoorRF, null, bounds, paint);
+                        Bitmap bmDoorLBDoorRB = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_door_rb);
+                        canvas.drawBitmap(bmDoorLBDoorRB, null, bounds, paint);
                         break;
                     case 2:
                         break;
@@ -107,12 +112,12 @@ public class CarStateView {
                     case -1:
                         break;
                     case 1:
-                        Drawable drawableLock = context.getResources().getDrawable(R.drawable.state_locked);
-                        drawableLock.draw(canvas);
+                        Bitmap bmLock = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_locked);
+                        canvas.drawBitmap(bmLock, null, bounds, paint);
                         break;
                     case 2:
-                        Drawable drawableLockN = context.getResources().getDrawable(R.drawable.state_nonlock);
-                        drawableLockN.draw(canvas);
+                        Bitmap bmLockN = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_nonlock);
+                        canvas.drawBitmap(bmLockN, null, bounds, paint);
                         break;
                 }
                 switch (data.trunk) {
@@ -120,6 +125,8 @@ public class CarStateView {
                     case -1:
                         break;
                     case 1:
+                        Bitmap bmTrunk = BitmapFactory.decodeResource(context.getResources(), R.drawable.state_trunk);
+                        canvas.drawBitmap(bmTrunk, null, bounds, paint);
                         break;
                     case 2:
                         break;

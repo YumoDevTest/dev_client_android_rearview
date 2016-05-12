@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,8 @@ public class CarStatePage extends AppPage {
         data = CarStateManager.getData();
         carStateView.setData(data);
         stateNames = getContext().getResources().getStringArray(R.array.state_names);
+        gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        gvState.setAdapter(new StateAdapter());
     }
 
     @Override

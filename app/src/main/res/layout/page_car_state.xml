@@ -7,22 +7,23 @@
               android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="195dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_state_"
+            android:id="@+id/tv_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="当前车型支持宝马车辆控制功能"
             android:textColor="@color/white"
-            android:textSize="9sp"/>
+            android:textSize="15sp"/>
 
         <GridView
             android:id="@+id/gv_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:numColumns="3"/>
 
         <LinearLayout
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="车辆无不良状态"
                 android:textColor="@color/white"
-                android:textSize="9sp"/>
+                android:textSize="15sp"/>
         </LinearLayout>
     </RelativeLayout>
 
