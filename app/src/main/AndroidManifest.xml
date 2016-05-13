@@ -91,12 +91,15 @@
             </intent-filter>
         </receiver>
 
-        <!-- 隐式开启该service -->
         <service
-            android:name="com.mapbar.obd.OBDService"
-            android:process=":com_mapbar_obd_service">
+            android:name="com.mapbar.obd.CompactObdService"
+            android:process="obd.service.compact">
             <intent-filter>
-                <action android:name="com.mapbar.obdservice" />
+                <!-- 启动精简版后台服务进程 -->
+                <action android:name="com.mapbar.obd.COMPACT_SERVICE"/>
+                <!-- 戴总的服务所发送的广播 -->
+                <action android:name="android.intent.action.mapbar.activity.BLUETOOTH_TRIGGER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
 
