@@ -5,6 +5,7 @@
               android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/ll_car_data_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -16,6 +17,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_car_data_1"
             android:layout_width="140dp"
             android:layout_height="100dp"
             android:layout_marginTop="26dp"
@@ -24,6 +26,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_carData_name_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -34,6 +37,7 @@
 
 
             <TextView
+                android:id="@+id/tv_carData_value_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="16.8"
@@ -41,6 +45,7 @@
                 android:textSize="50sp"/>
 
             <TextView
+                android:id="@+id/tv_carData_unit_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
@@ -49,6 +54,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_car_data_3"
             android:layout_width="140dp"
             android:layout_height="100dp"
             android:layout_marginTop="26dp"
@@ -57,6 +63,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_carData_name_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -67,6 +74,7 @@
 
 
             <TextView
+                android:id="@+id/tv_carData_value_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="16.8"
@@ -74,6 +82,7 @@
                 android:textSize="50sp"/>
 
             <TextView
+                android:id="@+id/tv_carData_unit_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
@@ -98,6 +107,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_car_data_2"
             android:layout_width="140dp"
             android:layout_height="100dp"
             android:layout_marginTop="26dp"
@@ -106,6 +116,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_carData_name_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -116,6 +127,7 @@
 
 
             <TextView
+                android:id="@+id/tv_carData_value_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="16.8"
@@ -123,6 +135,7 @@
                 android:textSize="50sp"/>
 
             <TextView
+                android:id="@+id/tv_carData_unit_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
@@ -131,6 +144,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_car_data_4"
             android:layout_width="140dp"
             android:layout_height="100dp"
             android:layout_marginTop="26dp"
@@ -139,6 +153,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_carData_name_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -149,6 +164,7 @@
 
 
             <TextView
+                android:id="@+id/tv_carData_value_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="16.8"
@@ -156,6 +172,7 @@
                 android:textSize="50sp"/>
 
             <TextView
+                android:id="@+id/tv_carData_unit_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="L/100KM"

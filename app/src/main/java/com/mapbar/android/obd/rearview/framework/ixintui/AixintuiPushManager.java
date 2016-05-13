@@ -85,16 +85,16 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
     @Override
     public void onNofificationClick(Context context, String msg) {
-        if (!TextUtils.isEmpty(msg)) {
-            try {
-                JSONObject jObj1 = new JSONObject(msg);
-                JSONObject jObj2 = new JSONObject(new String(jObj1.getString("extra")));
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (!TextUtils.isEmpty(msg)) {
+//            try {
+//                JSONObject jObj1 = new JSONObject(msg);
+//                JSONObject jObj2 = new JSONObject(new String(jObj1.getString("extra")));
+//
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 

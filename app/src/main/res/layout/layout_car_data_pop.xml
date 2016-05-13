@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="50dp"
+    android:layout_marginLeft="100dp"
+    android:layout_marginRight="100dp"
+    android:layout_marginTop="50dp"
+    android:background="@drawable/bg_alert">
+
+
+    <GridView
+        android:id="@+id/gv_data_pop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="3" />
+
+    <ImageView
+        android:id="@+id/iv_pop_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:src="@drawable/btn_car_data_pop_close" />
+</RelativeLayout>
