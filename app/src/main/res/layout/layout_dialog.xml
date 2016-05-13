@@ -1,14 +1,14 @@
 <!-- 提高定位精确度提示 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
         android:background="@drawable/bg_alert"
         android:orientation="vertical">
 
@@ -21,8 +21,8 @@
             android:layout_marginTop="35dp"
             android:gravity="center_horizontal"
             android:text="@string/tips"
-            android:textColor="#555555"
-            android:textSize="18sp" />
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
 
 
         <TextView
@@ -33,8 +33,8 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="15dp"
-            android:textColor="#aaaaaa"
-            android:textSize="14sp" />
+            android:textColor="@color/white"
+            android:textSize="14sp"/>
 
         <View
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="35dp"
-            android:background="#dddddd" />
+            android:background="#dddddd"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -59,8 +59,8 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="@string/cancel"
-                android:textColor="#bbbbbb"
-                android:textSize="15sp" />
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
 
             <View
                 android:id="@+id/v_tips_mid"
@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="#dddddd" />
+                android:background="#dddddd"/>
 
             <TextView
                 android:id="@+id/tv_tips_confirm"
@@ -78,8 +78,8 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="@string/ok"
-                android:textColor="#3d78ff"
-                android:textSize="15sp" />
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

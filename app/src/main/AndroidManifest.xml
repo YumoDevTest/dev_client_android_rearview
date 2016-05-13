@@ -91,9 +91,14 @@
             </intent-filter>
         </receiver>
 
+        <!-- 隐式开启该service -->
         <service
-            android:name=".framework.control.OBDService"
-            android:process=":com_mapbar_obd_service"/>
+            android:name="com.mapbar.obd.OBDService"
+            android:process=":com_mapbar_obd_service">
+            <intent-filter>
+                <action android:name="com.mapbar.obdservice" />
+            </intent-filter>
+        </service>
 
         <!--爱心推start-->
         <!-- 定义接收器，用来接收透传、api结果以及点击事件 -->
