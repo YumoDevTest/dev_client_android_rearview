@@ -115,6 +115,8 @@ android {
             res.srcDirs = ['src/main/res']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
+//            java.srcDirs = ['src']
+//            java.srcDirs +=['D:/workspace/dev_sdk/java/core']
         }
 
         // Move the tests to tests/java, tests/res, etc...
