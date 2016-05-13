@@ -61,13 +61,10 @@ public class PhysicalManager extends OBDManager {
         if (baseObdListener != null) {
             switch (event) {
                 case Manager.Event.obdPhysicalConditionFailed:
-                    baseObdListener.onEvent(Manager.Event.obdPhysicalConditionFailed, o);
                     break;
                 case Manager.Event.obdPhysicalCheckStart:
-                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckStart, o);
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckResult, o);
                     for (PhysicalData itemData : physicalList) {
                         if (itemData.getId() == ((PhysicalData) o).getId()) {
                             progress = getProgress(itemData.getId());
@@ -77,11 +74,11 @@ public class PhysicalManager extends OBDManager {
                     break;
                 case Manager.Event.obdPhysicalCheckEnd:
                     progress = 100;
-                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckEnd, o);
                     baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     break;
             }
         }
+        super.onEvent(event, o);
     }
 
 

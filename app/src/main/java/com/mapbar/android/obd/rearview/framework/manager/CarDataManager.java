@@ -11,8 +11,7 @@ import com.mapbar.obd.RealTimeData;
 public class CarDataManager extends OBDManager {
     public static final int EVENT_OBD_CAR_DATA_UPDATA = 0xF10001;
 
-    private static RealTimeData realTimeData;
-
+    private RealTimeData realTimeData;
 
     /**
      * 数据更新的SDK事件回调
@@ -25,9 +24,8 @@ public class CarDataManager extends OBDManager {
         switch (event) {
             case Manager.Event.dataUpdate:
                 realTimeData = (RealTimeData) o;
-                baseObdListener.onEvent(EVENT_OBD_CAR_DATA_UPDATA, o);
         }
-
+        super.onEvent(event, o);
     }
 
     /**
@@ -35,7 +33,6 @@ public class CarDataManager extends OBDManager {
      * return 单次行程OBD实时数据信息
      */
     public RealTimeData getRealTimeData() {
-        realTimeData = Manager.getInstance().getRealTimeData();
         return realTimeData;
     }
 

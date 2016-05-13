@@ -8,26 +8,30 @@ import com.mapbar.obd.Manager;
  */
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
-    private static CarStatusData data;
+    private CarStatusData data;
 
-    public static void tryToGetData() {
+
+    public void tryToGetData() {
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
 
-    public static CarStatusData getData() {
+    public CarStatusData getCarStatusData() {
         return data;
     }
 
     @Override
     public void onEvent(int event, Object o) {
-        super.onEvent(event, o);
         switch (event) {
             case Manager.Event.obdCarStatusgetSucc:
                 data = (CarStatusData) o;
-                baseObdListener.onEvent(event, o);
                 break;
             case Manager.Event.obdCarStatusgetFailed:
                 break;
         }
+        super.onEvent(event, o);
+    }
+
+    public void startRefreshCarState() {
+
     }
 }
