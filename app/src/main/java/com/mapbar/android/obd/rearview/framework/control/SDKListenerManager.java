@@ -7,6 +7,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.RealTimeData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -43,6 +44,23 @@ public class SDKListenerManager {
                     Log.v(LogTag.FRAMEWORK, "sdk -->> event:" + event);
                     Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
                 }
+
+                if(event == Manager.Event.loginSucc){
+                    Manager.getInstance().queryRemoteUserCar();
+                }
+
+                if(event == Manager.Event.queryCarSucc){
+                    Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+                }
+
+                if(event==Manager.Event.dataUpdate){
+                    RealTimeData data=(RealTimeData)o;
+                    Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.speed);
+                    Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.gasConsumInLPerHour);
+                    Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.driveCost);
+                    Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.rpm);
+                }
+                Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size() ==:" + regListeners.size());
                 if (regListeners.size() > 0) {
                     for (int i = regListeners.size() - 1; i >= 0 && i < regListeners.size(); i--) {
                         if (regListeners.get(i) == null || regListeners.get(i).get() == null) {
