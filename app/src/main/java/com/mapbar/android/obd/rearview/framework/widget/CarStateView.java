@@ -9,8 +9,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.obd.CarStatusData;
 
 /**

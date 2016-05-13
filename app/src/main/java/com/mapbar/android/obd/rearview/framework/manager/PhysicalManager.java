@@ -16,7 +16,7 @@ import java.util.List;
  * event4：EVENT_OBD_PHYSICAL_CHECK_END,体检完成的回调
  * event5：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
  */
-public class PhysicalManager extends BaseManager {
+public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CONDITION_FAILED = 0xF00001;
     public static final int EVENT_OBD_PHYSICAL_CHECK_START = 0xF00002;
     public static final int EVENT_OBD_PHYSICAL_CHECK_RESULT = 0xF00003;
@@ -61,24 +61,24 @@ public class PhysicalManager extends BaseManager {
         if (baseObdListener != null) {
             switch (event) {
                 case Manager.Event.obdPhysicalConditionFailed:
-                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CONDITION_FAILED, o);
+                    baseObdListener.onEvent(Manager.Event.obdPhysicalConditionFailed, o);
                     break;
                 case Manager.Event.obdPhysicalCheckStart:
-                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_START, o);
+                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckStart, o);
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_RESULT, o);
-                    for (PhysicalData itemData : physicalList) {
+                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckResult, o);
+                    /*for (PhysicalData itemData : physicalList) {
                         if (itemData.getId() == ((PhysicalData) o).getId()) {
                             progress = getProgress(itemData.getId());
                             baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                         }
-                    }
+                    }*/
                     break;
                 case Manager.Event.obdPhysicalCheckEnd:
-                    progress = 100;
-                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_END, o);
-                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
+//                    progress = 100;
+                    baseObdListener.onEvent(Manager.Event.obdPhysicalCheckEnd, o);
+//                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     break;
             }
         }

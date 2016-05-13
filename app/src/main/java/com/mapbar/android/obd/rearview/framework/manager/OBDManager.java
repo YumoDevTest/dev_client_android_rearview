@@ -1,22 +1,21 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
-import android.content.Context;
-
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 
 /**
  * Created by liuyy on 2016/5/10.
  */
-public class BaseManager {
+public class OBDManager {
     protected static OBDListener baseObdListener;
     protected SDKListenerManager.SDKListener sdkListener;
 
-    protected BaseManager() {
+    protected OBDManager() {
         initListener();
     }
 
-    public static void init(Context context) {
+    public static void init(OBDListener obdListener) {
         SDKListenerManager.getInstance().init();
+        baseObdListener = obdListener;
     }
 
     public static void setObdListener(OBDListener obdListener) {
@@ -27,7 +26,7 @@ public class BaseManager {
         sdkListener = new SDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
-                BaseManager.this.onEvent(event, o);
+                OBDManager.this.onEvent(event, o);
             }
         };
         SDKListenerManager.getInstance().setSdkListener(sdkListener);

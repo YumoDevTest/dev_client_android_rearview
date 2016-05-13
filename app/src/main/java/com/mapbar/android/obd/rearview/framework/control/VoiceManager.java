@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.framework.control;
 
 import android.content.Intent;
 
-import com.mapbar.android.obd.rearview.MainActivity;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 /**
  * Created by tianff on 2016/5/5.

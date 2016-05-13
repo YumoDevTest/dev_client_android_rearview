@@ -64,14 +64,14 @@
         android:targetSdkVersion="15"/>
 
     <application
-        android:name=".Application"
+        android:name=".obd.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".obd.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/app_name"
             android:launchMode="singleTask"

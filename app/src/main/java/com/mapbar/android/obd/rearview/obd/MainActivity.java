@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview;
+package com.mapbar.android.obd.rearview.obd;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 
 import com.ixintui.pushsdk.PushSdkApi;
+import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;

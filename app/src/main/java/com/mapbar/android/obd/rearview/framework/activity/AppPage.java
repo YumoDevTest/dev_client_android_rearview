@@ -10,13 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapbar.android.obd.rearview.MainActivity;
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 
 
 public abstract class AppPage extends Fragment {
-    protected SDKListenerManager.SDKListener sdkListener;
+    protected OBDSDKListenerManager.SDKListener sdkListener;
     protected View contentView;
     private Bundle data;
     private Context context;
@@ -40,7 +40,7 @@ public abstract class AppPage extends Fragment {
                 parent.removeView(contentView);
             }
             if (sdkListener != null) {
-                SDKListenerManager.getInstance().registSdkListener(sdkListener);
+                OBDSDKListenerManager.getInstance().registSdkListener(sdkListener);
             }
         }
         return contentView;
@@ -71,7 +71,7 @@ public abstract class AppPage extends Fragment {
     public abstract void setListener();
 
 
-    public SDKListenerManager.SDKListener getSdkListener() {
+    public OBDSDKListenerManager.SDKListener getSdkListener() {
         return sdkListener;
     }
 

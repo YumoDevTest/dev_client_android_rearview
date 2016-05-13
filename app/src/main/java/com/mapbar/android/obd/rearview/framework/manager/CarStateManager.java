@@ -6,7 +6,7 @@ import com.mapbar.obd.Manager;
 /**
  * Created by liuyy on 2016/5/11.
  */
-public class CarStateManager extends BaseManager {
+public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
     private static CarStatusData data;
 

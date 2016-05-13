@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview;
+package com.mapbar.android.obd.rearview.obd;
 
 import com.mapbar.android.obd.rearview.framework.common.Global;
 
