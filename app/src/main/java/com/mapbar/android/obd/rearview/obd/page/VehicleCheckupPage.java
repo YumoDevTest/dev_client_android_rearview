@@ -40,6 +40,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @ViewInject(R.id.gridv)
     private GridView grid;
 
+    @ViewInject(R.id.tv_score)
+    private TextView tv_score;
+
     //体检中
     @ViewInject(R.id.rela_physicaling)
     private RelativeLayout rela_physicaling;
@@ -170,6 +173,27 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "obdPhysicalCheckEnd -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
+                        rela_physicaling.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rela_physicaling.setVisibility(View.GONE);
+                                rela_no_physical.setVisibility(View.GONE);
+                                line_last_result.setVisibility(View.GONE);
+                                rela_result.setVisibility(View.VISIBLE);
+                                ArrayList<ReportHead> physicalReportByMonth = Physical
+                                        .getInstance().getPhysicalReportByMonth(1970, 01);
+                                if (physicalReportByMonth != null) {
+                                    int score = physicalReportByMonth.get(0).getScore();
+                                    tv_score.setText(String.valueOf(score));
+                                    // 日志
+                                    if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                                        Log.v(LogTag.TEMP, "score -->>" + score);
+                                        Log.v(LogTag.TEMP, "size -->>" + physicalReportByMonth.size());
+                                    }
+                                }
+                            }
+                        });
+
                         break;
                     case PhysicalManager.EVENT_OBD_PHYSICAL_CHECK_PROGRESS:
                         // 日志
