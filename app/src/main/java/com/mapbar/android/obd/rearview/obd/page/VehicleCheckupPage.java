@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
@@ -34,6 +36,22 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @ViewInject(R.id.gridv)
     private GridView grid;
+
+    //体检中
+    @ViewInject(R.id.rela_physicaling)
+    private RelativeLayout rela_physicaling;
+
+    //未体检过
+    @ViewInject(R.id.rela_no_physical)
+    private RelativeLayout rela_no_physical;
+
+    //上次体检结果
+    @ViewInject(R.id.line_last_result)
+    private LinearLayout line_last_result;
+
+    //本次体检结果
+    @ViewInject(R.id.rela_result)
+    private RelativeLayout rela_result;
 
 //    @ViewInject(R.id.view_upkeep)
 //    private ImageView view_upkeep;
@@ -86,18 +104,27 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                         }
                         break;
                     case Manager.Event.obdPhysicalCheckStart:
+
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalCheckStart -->>");
-                            Log.v(LogTag.TEMP, "Object -->>" + o);
+                            Log.v(LogTag.TEMP, "o -->>" + o);
                         }
+                        rela_physicaling.setVisibility(View.VISIBLE);
+                        rela_no_physical.setVisibility(View.GONE);
+                        line_last_result.setVisibility(View.GONE);
+                        rela_result.setVisibility(View.GONE);
+
                         break;
                     case Manager.Event.obdPhysicalCheckResult:
+                        PhysicalData physicalData = (PhysicalData) o;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalCheckResult -->>");
-                            Log.v(LogTag.TEMP, "Object -->>" + o);
+                            Log.v(LogTag.TEMP, "physicalData -->>" + physicalData);
                         }
+                        recyclerAdapter.setPhysicalData((PhysicalData) o);
+                        recyclerAdapter.notifyDataSetChanged();
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
                         // 日志
@@ -116,6 +143,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                 }
             }
         };
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         btn_start_physical.setOnClickListener(this);
     }
 
@@ -123,7 +151,12 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_start_physical:
+                Manager.getInstance().stopTrip(false);
                 PhysicalManager.getInstance().startExam();
+                // 日志
+                if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                    Log.v(LogTag.TEMP, "btn_start_physical -->>");
+                }
                 break;
         }
     }

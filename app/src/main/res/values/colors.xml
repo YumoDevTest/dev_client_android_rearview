@@ -70,6 +70,8 @@
     <color name="bg_page">#1a1a1a</color>
 
     <color name="upkeep_progress">#00d4b9</color>
+    <color name="linechart">#35BDB2</color>
+    <color name="check_red">#FFFF5777</color>
 
 
 </resources>
