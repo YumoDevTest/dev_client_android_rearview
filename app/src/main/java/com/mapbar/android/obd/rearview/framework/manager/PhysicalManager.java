@@ -4,6 +4,7 @@ import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
+import com.mapbar.obd.ReportHead;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,5 +144,14 @@ public class PhysicalManager extends OBDManager {
 
     public ArrayList<PhysicalData.Status> getStatuses() {
         return statuses;
+    }
+
+    public ReportHead getReportHead() {
+        ArrayList<ReportHead> heads = Physical.getInstance().getPhysicalReportByMonth(1970, 1);
+        if (heads != null && heads.size() > 0) {
+            return heads.get(0);
+        } else {
+            return null;
+        }
     }
 }

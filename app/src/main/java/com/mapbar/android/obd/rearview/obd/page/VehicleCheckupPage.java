@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
@@ -22,6 +24,7 @@ import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
+import com.mapbar.obd.ReportHead;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,12 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     //上次体检结果
     @ViewInject(R.id.line_last_result)
     private LinearLayout line_last_result;
+    @ViewInject(R.id.tv_last_check_score)
+    private TextView tvLastScore;
+    @ViewInject(R.id.tv_last_check_level)
+    private TextView tvLastLevel;
+    @ViewInject(R.id.btn_last_check)
+    private Button btnLastCheck;
 
     //本次体检结果
     @ViewInject(R.id.rela_result)
@@ -87,6 +96,35 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 //        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
 //        circleDrawable.setCircleWidth(15);
 //        view_upkeep.setImageDrawable(circleDrawable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ReportHead head = PhysicalManager.getInstance().getReportHead();
+        if (head != null) {
+            rela_physicaling.setVisibility(View.GONE);
+            rela_no_physical.setVisibility(View.GONE);
+            line_last_result.setVisibility(View.VISIBLE);
+            rela_result.setVisibility(View.GONE);
+            int score = head.getScore();
+            tvLastScore.setText("" + score);
+            if (score >= 0 && score <= 50) {
+                tvLastLevel.setText("高危级别");
+                tvLastScore.setTextColor(Color.RED);
+            } else if (score > 50 && score <= 70) {
+                tvLastLevel.setText("亚健康级别");
+                tvLastScore.setTextColor(Color.YELLOW);
+            } else {
+                tvLastLevel.setText("健康级别");
+                tvLastScore.setTextColor(Color.GREEN);
+            }
+        } else {
+            rela_physicaling.setVisibility(View.GONE);
+            rela_no_physical.setVisibility(View.VISIBLE);
+            line_last_result.setVisibility(View.GONE);
+            rela_result.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -145,12 +183,14 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         btn_start_physical.setOnClickListener(this);
+        btnLastCheck.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_start_physical:
+            case R.id.btn_last_check:
                 Manager.getInstance().stopTrip(false);
                 PhysicalManager.getInstance().startExam();
                 // 日志
