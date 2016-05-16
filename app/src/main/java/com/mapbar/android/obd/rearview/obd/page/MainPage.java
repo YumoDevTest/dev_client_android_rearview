@@ -29,7 +29,9 @@ public class MainPage extends AppPage {
     private CarStatePage carStatePage;
     private CarMaintenancePage carMaintenancePage;
     private VehicleCheckupPage vehicleCheckupPage;
+    private ControlTestPage controlTestPage;
     private ArrayList<View> views;
+    private AppPage currentPage;
     private PagerAdapter adapter = new PagerAdapter() {
 
         @Override
@@ -74,12 +76,15 @@ public class MainPage extends AppPage {
         carStatePage.initByCustom(R.layout.page_car_state);
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
         carMaintenancePage.initByCustom(R.layout.layout_upkeep_page);
+        controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
+        controlTestPage.initByCustom(R.layout.page_control_test);
         views.add(vehicleCheckupPage.getContentView());
         views.add(carDataPage.getContentView());
         views.add(carStatePage.getContentView());
         views.add(carMaintenancePage.getContentView());
+        views.add(controlTestPage.getContentView());
         pager.setAdapter(adapter);
-
+        currentPage = vehicleCheckupPage;
     }
 
     @Override
@@ -92,24 +97,30 @@ public class MainPage extends AppPage {
 
             @Override
             public void onPageSelected(int position) {
+                currentPage.onPause();
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
                         titleBar.setText(titles[0], TitleBar.TitleArea.MID);
+                        currentPage = vehicleCheckupPage;
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
                         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+                        currentPage = carDataPage;
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
                         titleBar.setText(titles[2], TitleBar.TitleArea.MID);
+                        currentPage = carStatePage;
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);
                         titleBar.setText(titles[3], TitleBar.TitleArea.MID);
+                        currentPage = carMaintenancePage;
                         break;
                 }
+                currentPage.onResume();
             }
 
             @Override

@@ -63,30 +63,32 @@
         <item>星期五</item>
         <item>星期六</item>
     </string-array>
+
     <string-array name="command_string">
-        <item>AT@STS010102</item>
-        <item>AT@STS010102"</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
-        <item>AT@STS010102</item>
+        <item>AT@STS020101</item>//开锁
+        <item>AT@STS020102</item>//落锁
+        <item>AT@STS010101</item>//降窗
+        <item>AT@STS010102</item>//升窗
+        <item>AT@STS010501</item>//开天窗
+        <item>AT@STS010502</item>//关天窗
     </string-array>
 
-    <integer-array name="command">
-        <item>201000</item>
+    <string-array name="command_name">
+        <item>开锁</item>//开锁
+        <item>落锁</item>//落锁
+        <item>降窗</item>//降窗
+        <item>升窗</item>//升窗
+        <item>开天窗</item>//开天窗
+        <item>关天窗</item>//关天窗
+    </string-array>
+
+    <integer-array name="control_command">
         <item>201001</item>
-        <item>202001</item>
+        <item>201000</item>
         <item>202000</item>
-        <item>203001</item>
-        <item>203000</item>
-        <item>204001</item>
-        <item>204000</item>
-        <item>205001</item>
-        <item>205000</item>
+        <item>202001</item>
+        <item>207000</item>
+        <item>207001</item>
     </integer-array>
 
     <string-array name="state_names">
@@ -97,7 +99,6 @@
         <item>后备箱</item>
         <item>天窗</item>
     </string-array>
-
     <!--carDataPage-->
     <string-array name="data_names">
         <item>瞬时油耗</item>

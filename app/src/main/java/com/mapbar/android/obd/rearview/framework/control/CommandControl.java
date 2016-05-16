@@ -16,8 +16,15 @@ import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.Voi
  */
 public class CommandControl {
     private static CommandControl mCommandControl;
+    private int[] commands;
+    private String[] commadStrs;
+    private String[] commadNames;
 
     private CommandControl() {
+        Resources res = Global.getAppContext().getResources();
+        commands = res.getIntArray(R.array.control_command);
+        commadStrs = res.getStringArray(R.array.command_string);
+        commadNames = res.getStringArray(R.array.command_name);
     }
 
     public static CommandControl getInstance() {
@@ -81,19 +88,26 @@ public class CommandControl {
      * @param command
      */
     public void executeCommand2(final int command) {
-        Resources res = Global.getAppContext().getResources();
-        int[] commands = res.getIntArray(R.array.command);
         ArrayList<Integer> commandList = new ArrayList<>();
         for (int command1 : commands) {
             commandList.add(command1);
         }
         int index = commandList.indexOf(command);//对应的可执行指令数组索引
-        String[] commadStrs = res.getStringArray(R.array.command_string);
         if (index != -1) {
             String commandStr = commadStrs[index];
             Manager.getInstance().exuSpecialCarAction(commandStr);
         }
     }
 
+    public int[] getCommands() {
+        return commands;
+    }
 
+    public String[] getCommadStrs() {
+        return commadStrs;
+    }
+
+    public String[] getCommadNames() {
+        return commadNames;
+    }
 }
