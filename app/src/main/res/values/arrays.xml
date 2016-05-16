@@ -98,4 +98,28 @@
         <item>天窗</item>
     </string-array>
 
+    <!--carDataPage-->
+    <string-array name="data_names">
+        <item>瞬时油耗</item>
+        <item>本次行程时间</item>
+        <item>本次已行驶里程</item>
+        <item>本次行程花费</item>
+        <item>车速</item>
+        <item>转速</item>
+        <item>电压</item>
+        <item>水温</item>
+        <item>平均油耗</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>L/100KM</item>
+        <item>H</item>
+        <item>KM</item>
+        <item>元</item>
+        <item>KM/H</item>
+        <item>R/MIN</item>
+        <item>V</item>
+        <item>℃</item>
+        <item>L/100KM</item>
+    </string-array>
 </resources>

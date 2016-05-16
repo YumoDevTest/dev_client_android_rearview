@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
@@ -42,28 +43,63 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private LinearLayout ll_car_data_4;
     @ViewInject(R.id.ll_car_data_pop)
     private LinearLayout ll_car_data_pop;
+    /**
+     * ------------------------------------------------------
+     */
+    @ViewInject(R.id.tv_carData_name_1)
+    private TextView tv_carData_name_1;
+    @ViewInject(R.id.tv_carData_name_2)
+    private TextView tv_carData_name_2;
+    @ViewInject(R.id.tv_carData_name_3)
+    private TextView tv_carData_name_3;
+    @ViewInject(R.id.tv_carData_name_4)
+    private TextView tv_carData_name_4;
 
-    private SharedPreferences sharedPreferences = MainActivity.getInstance().getSharedPreferences("data", Context.MODE_PRIVATE);
+    @ViewInject(R.id.tv_carData_unit_1)
+    private TextView tv_carData_unit_1;
+    @ViewInject(R.id.tv_carData_unit_2)
+    private TextView tv_carData_unit_2;
+    @ViewInject(R.id.tv_carData_unit_3)
+    private TextView tv_carData_unit_3;
+    @ViewInject(R.id.tv_carData_unit_4)
+    private TextView tv_carData_unit_4;
 
-    private SimpleAdapter simpleAdapter;
+    @ViewInject(R.id.tv_carData_value_1)
+    private TextView tv_carData_value_1;
+    @ViewInject(R.id.tv_carData_value_2)
+    private TextView tv_carData_value_2;
+    @ViewInject(R.id.tv_carData_value_3)
+    private TextView tv_carData_value_3;
+    @ViewInject(R.id.tv_carData_value_4)
+    private TextView tv_carData_value_4;
 
-    private String[] dataNames = {"瞬时油耗", "本次行程时间", "本次已行驶里程", "本次行程花费", "车速", "转速", "电压", "水温", "平均油耗"};
-    private String[] units = {"L/100KM", "H", "KM", "元", "KM/H", "R/MIN", "V", "℃", "L/100KM"};
+    private SharedPreferences sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
+    private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
+    private int number = -1;//显示数据空间的编号
+    private PopupWindow popupWindow;
+    private RealTimeData realTimeData;
+
+    //    private String[] dataNames = {"瞬时油耗", "本次行程时间", "本次已行驶里程", "本次行程花费", "车速", "转速", "电压", "水温", "平均油耗"};
+    private String[] dataNames = getContext().getResources().getStringArray(R.array.data_names);
+    //    private String[] units = {"L/100KM", "H", "KM", "元", "KM/H", "R/MIN", "V", "℃", "L/100KM"};
+    private String[] units = getContext().getResources().getStringArray(R.array.units);
     private int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
-
-    private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
+    private boolean isFirst = true;
 
     @Override
     public void initView() {
-
-        //初始化pop数据
-        for (int i = 4; i < 9; i++) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("name", dataNames[sharedPreferences.getInt(i + "", i)]);
-            map.put("icon", icons[sharedPreferences.getInt(i + "", i)]);
-            datas.add(map);
+        isFirst = sharedPreferences.getBoolean("isFirst", true);
+        if (isFirst) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            for (int i = 0; i < icons.length; i++) {
+                editor.putInt(i + "", i);
+            }
+            editor.putBoolean("isFirst", false);
+            editor.commit();
         }
+        getPopData();
+        upDataView();
     }
 
     @Override
@@ -72,6 +108,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         ll_car_data_2.setOnClickListener(this);
         ll_car_data_3.setOnClickListener(this);
         ll_car_data_4.setOnClickListener(this);
+
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
@@ -80,7 +117,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                     case Manager.Event.dataUpdate:
                         RealTimeData data = CarDataManager.getInstance().getRealTimeData();
                         if (data != null) {
-
+                            upData();
                         }
                         break;
                 }
@@ -92,35 +129,128 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_car_data_1:
+                number = 0;
                 showPopupWindow();
+                break;
+            case R.id.ll_car_data_2:
+                number = 1;
+                showPopupWindow();
+                break;
+            case R.id.ll_car_data_3:
+                number = 2;
+                showPopupWindow();
+                break;
+            case R.id.ll_car_data_4:
+                number = 3;
+                showPopupWindow();
+                break;
+            case R.id.iv_pop_close://关闭popupWindow
+                popupWindow.dismiss();
                 break;
         }
     }
 
+    /**
+     * 更新View数据
+     */
+    public void upDataView() {
+        tv_carData_name_1.setText(dataNames[sharedPreferences.getInt("0", 0)]);
+        tv_carData_name_2.setText(dataNames[sharedPreferences.getInt("1", 1)]);
+        tv_carData_name_3.setText(dataNames[sharedPreferences.getInt("2", 2)]);
+        tv_carData_name_4.setText(dataNames[sharedPreferences.getInt("3", 3)]);
+        tv_carData_unit_1.setText(units[sharedPreferences.getInt("0", 0)]);
+        tv_carData_unit_2.setText(units[sharedPreferences.getInt("1", 1)]);
+        tv_carData_unit_3.setText(units[sharedPreferences.getInt("2", 2)]);
+        tv_carData_unit_4.setText(units[sharedPreferences.getInt("3", 3)]);
+    }
+
+    /**
+     * 设置时实数据
+     */
+    public void upData() {
+        tv_carData_value_1.setText(transform(sharedPreferences.getInt("0", 0)));
+        tv_carData_value_2.setText(transform(sharedPreferences.getInt("1", 1)));
+        tv_carData_value_3.setText(transform(sharedPreferences.getInt("2", 2)));
+        tv_carData_value_4.setText(transform(sharedPreferences.getInt("3", 3)));
+    }
+
+    /**
+     * 通过数组索引获取时实数据
+     *
+     * @param index {@link #dataNames} 数组索引
+     * @return 时实数据
+     */
+    public String transform(int index) {
+        switch (index) {
+            case 0:
+                return String.valueOf(realTimeData.gasConsum);
+            case 1:
+                return String.valueOf(realTimeData.tripTime);
+            case 2:
+                return String.valueOf(realTimeData.tripLength);
+            case 3:
+                return String.valueOf(realTimeData.driveCost);
+            case 4:
+                return String.valueOf(realTimeData.speed);
+            case 5:
+                return String.valueOf(realTimeData.rpm);
+            case 6:
+                return String.valueOf(realTimeData.voltage);
+            case 7:
+                return String.valueOf(realTimeData.engineCoolantTemperature);
+            case 8:
+                return String.valueOf(realTimeData.averageGasConsum);
+        }
+        return null;
+    }
+
+    /**
+     * 初始化pop中gridView数据
+     */
+    public void getPopData() {
+        datas.clear();
+        for (int i = 4; i < 9; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("name", dataNames[sharedPreferences.getInt(i + "", i)]);
+            map.put("icon", icons[sharedPreferences.getInt(i + "", i)]);
+            datas.add(map);
+        }
+    }
+
+
     public void showPopupWindow() {
-        View popupView = View.inflate(Global.getAppContext(), R.layout.layout_car_data_pop, null);
+        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_car_data_pop, null);
+        popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //设置点击PopupWindow以外的区域取消PopupWindow的显示
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
         GridView gridView = (GridView) popupView.findViewById(R.id.gv_data_pop);
-        gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));//使gridView点击每个item没有颜色变化；进而可以自定义点击变化颜色；
         ImageView tv_pop_close = (ImageView) popupView.findViewById(R.id.iv_pop_close);
-
-
-        simpleAdapter = new SimpleAdapter(MainActivity.getInstance(), datas, R.layout.item_grid_state, new String[]{"name", "icon"}, new int[]{R.id.tv_item_state, R.id.iv_item_state});
+        tv_pop_close.setOnClickListener(this);
+        SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.getInstance(), datas, R.layout.item_grid_car_data, new String[]{"name", "icon"}, new int[]{R.id.tv_item_state, R.id.iv_item_state});
         gridView.setAdapter(simpleAdapter);
-
+        //gridView监听点击事件
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.findViewById(R.id.iv_item_state).setEnabled(false);
-                simpleAdapter.notifyDataSetChanged();
+                int value1 = sharedPreferences.getInt((4 + position) + "", -1);
+                int value2 = sharedPreferences.getInt(number + "", -1);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (!(value1 == -1 || value2 == -1)) {
+                    editor.putInt(number + "", value1);
+                    editor.putInt((4 + position) + "", value2).commit();
+                }
+
+                //更新数据
+                getPopData();
+                upDataView();
+                popupWindow.dismiss();
             }
         });
-        PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //第一种方式：设置点击PopupWindow以外的区域取消PopupWindow的显示
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        //第二种方式 调用dismiss()方法让popupWindow自动消失
-        //popupWindow.dismiss();
-        popupWindow.showAtLocation(ll_car_data_pop, Gravity.BOTTOM, 0, 0);
+
+        popupWindow.showAtLocation(ll_car_data_pop, Gravity.CENTER, 0, 0);
     }
 
 }
