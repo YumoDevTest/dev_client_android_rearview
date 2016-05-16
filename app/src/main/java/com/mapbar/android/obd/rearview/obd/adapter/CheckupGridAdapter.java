@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,8 @@ public class CheckupGridAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
     private List<PhysicalData> physicalList;
+    private int[] ids = {R.drawable.ic_1, R.drawable.ic_2, R.drawable.ic_3, R.drawable.ic_4, R.drawable
+            .ic_5, R.drawable.ic_6, R.drawable.ic_7};
 
     public CheckupGridAdapter(Context context, List<PhysicalData> physicalList) {
         this.inflater = LayoutInflater.from(context);
@@ -57,7 +63,13 @@ public class CheckupGridAdapter extends BaseAdapter {
             holder.tv_itemCheckup_name = (TextView) view.findViewById(R.id.tv_itemCheckup_name);
             view.setTag(holder);
         }
-        holder.iv_item_checkUp_icon.setImageBitmap(physicalList.get(position).getIcon());
+        ArrayList<Integer> statuses = PhysicalManager.getInstance().getStatuses();
+        if (statuses.get(position) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
+            holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(Global
+                    .getAppContext().getResources(), ids[position]));
+        } else {
+            holder.iv_item_checkUp_icon.setImageBitmap(physicalList.get(position).getIcon());
+        }
         holder.tv_itemCheckup_name.setText(physicalList.get(position).getName());
         return view;
     }

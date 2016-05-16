@@ -96,7 +96,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-        grid.setAdapter(checkupGridAdapter);
+
 //        CircleDrawable circleDrawable = new CircleDrawable(getContext());
 //        circleDrawable.setProgress(75);
 //        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
@@ -186,6 +186,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                 rela_no_physical.setVisibility(View.GONE);
                                 line_last_result.setVisibility(View.GONE);
                                 rela_result.setVisibility(View.VISIBLE);
+                                grid.setAdapter(checkupGridAdapter);
                                 ArrayList<ReportHead> physicalReportByMonth = Physical
                                         .getInstance().getPhysicalReportByMonth(1970, 01);
                                 if (physicalReportByMonth != null) {

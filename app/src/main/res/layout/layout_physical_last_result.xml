@@ -28,9 +28,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="36"
+                android:text="25"
                 android:textColor="#ff4444"
-                android:textSize="80sp"/>
+                android:textSize="60sp"/>
 
             <TextView
                 android:layout_width="fill_parent"
