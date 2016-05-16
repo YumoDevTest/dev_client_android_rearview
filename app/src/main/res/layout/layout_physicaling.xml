@@ -5,16 +5,65 @@
               android:background="#1a1a1a"
     >
 
-
+    <RelativeLayout
+        android:id="@+id/rela"
+        android:layout_width="100dp"
+        android:layout_height="210dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="89dp">
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="85dp"
-        android:layout_height="190dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="89dp"
         android:src="@drawable/img_physicaling"
         />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+
+            <ImageView
+                android:id="@+id/view_upkeep_time"
+                style="@style/upkeep"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="体检中"
+                android:textColor="#ffffff"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/tv_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="75"
+                android:textColor="#ffffff"
+                android:textSize="45sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tv_progress"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/tv_progress"
+                android:text="%"
+                android:textColor="#ffffff"/>
+        </RelativeLayout>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/test_rl"
         android:layout_width="wrap_content"
@@ -22,6 +71,6 @@
         android:layout_marginLeft="89dp"
         android:layout_marginRight="60dp"
         android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/iv"
+        android:layout_toRightOf="@+id/rela"
         />
 </RelativeLayout>

@@ -13,6 +13,7 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
 import com.mapbar.obd.Manager;
@@ -96,6 +97,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_start_physical:
+                PhysicalManager physicalManager = new PhysicalManager();
+                physicalManager.startExam();
                 PhysicalManager.getInstance().startExam();
                 break;
         }
