@@ -22,6 +22,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
 
     private PhysicalData physicalData;
 
+
     public VehicleCheckupAdapter(Context mContext, List<PhysicalData> physicalList) {
         this.physicalList = physicalList;
         this.mContext = mContext;

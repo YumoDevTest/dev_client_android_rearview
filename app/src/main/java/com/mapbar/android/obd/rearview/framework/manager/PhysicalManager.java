@@ -26,6 +26,7 @@ public class PhysicalManager extends OBDManager {
 
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
+    private ArrayList<PhysicalData.Status> statuses;
 
     public PhysicalManager() {
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -47,6 +48,7 @@ public class PhysicalManager extends OBDManager {
      * @return false:不满足体检条件，请保持OBD设备在非行程被手动终止状态;true:体检开始进行
      */
     public boolean startExam() {
+        statuses = new ArrayList<>();
         int state = Manager.getInstance().getState();
         if (state != Manager.State.tripStoppedManually) {
             return false;
@@ -137,5 +139,9 @@ public class PhysicalManager extends OBDManager {
                 break;
         }
         return progress;
+    }
+
+    public ArrayList<PhysicalData.Status> getStatuses() {
+        return statuses;
     }
 }
