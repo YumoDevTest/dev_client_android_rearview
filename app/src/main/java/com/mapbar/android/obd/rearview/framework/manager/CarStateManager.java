@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
@@ -9,6 +10,16 @@ import com.mapbar.obd.Manager;
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
     private CarStatusData data;
+
+    public CarStateManager() {
+        sdkListener = new SDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                onSDKEvent(event, o);
+            }
+        };
+        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+    }
 
     public static CarStateManager getInstance() {
         return (CarStateManager) OBDManager.getInstance(CarStateManager.class);
@@ -23,7 +34,7 @@ public class CarStateManager extends OBDManager {
     }
 
     @Override
-    public void onEvent(int event, Object o) {
+    public void onSDKEvent(int event, Object o) {
         switch (event) {
             case Manager.Event.obdCarStatusgetSucc:
                 data = (CarStatusData) o;
@@ -31,7 +42,7 @@ public class CarStateManager extends OBDManager {
             case Manager.Event.obdCarStatusgetFailed:
                 break;
         }
-        super.onEvent(event, o);
+        super.onSDKEvent(event, o);
     }
 
     public void startRefreshCarState() {

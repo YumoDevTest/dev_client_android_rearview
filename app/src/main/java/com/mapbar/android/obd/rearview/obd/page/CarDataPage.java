@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -115,6 +116,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                 super.onEvent(event, o);
                 switch (event) {
                     case Manager.Event.dataUpdate:
+                        Log.d("dataUpdate", "" + ((RealTimeData) o).speed);
                         RealTimeData data = CarDataManager.getInstance().getRealTimeData();
                         if (data != null) {
                             upData();

@@ -4,23 +4,9 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <Button
+    <ListView
+        android:id="@+id/lv_test"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="落锁"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="升窗"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="落锁"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="落锁"/>
+        android:layout_height="match_parent"
+        />
 </LinearLayout>

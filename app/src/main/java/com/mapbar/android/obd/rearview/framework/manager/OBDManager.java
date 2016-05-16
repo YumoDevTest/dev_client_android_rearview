@@ -9,15 +9,13 @@ import java.util.HashMap;
  */
 public class OBDManager {
     protected static OBDListener baseObdListener;
+    protected static SDKListenerManager.SDKListener sdkListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
-    protected SDKListenerManager.SDKListener sdkListener;
-
-    protected OBDManager() {
-        initListener();
-        map = new HashMap<>();
-    }
 
     public static OBDManager getInstance(Class<? extends OBDManager> clazz) {
+        if (map == null) {
+            map = new HashMap<>();
+        }
         if (map.get(clazz) == null) {
             try {
                 map.put(clazz, clazz.newInstance());
@@ -37,23 +35,13 @@ public class OBDManager {
         baseObdListener = obdListener;
     }
 
-    public void initListener() {
-        sdkListener = new SDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                OBDManager.this.onEvent(event, o);
-            }
-        };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
-    }
-
     /**
      * SDK事件回调
      *
      * @param event 事件的id
      * @param o     事件携带的数据
      */
-    public void onEvent(int event, Object o) {
+    public void onSDKEvent(int event, Object o) {
         if (baseObdListener != null) {
             baseObdListener.onEvent(event, o);
         }

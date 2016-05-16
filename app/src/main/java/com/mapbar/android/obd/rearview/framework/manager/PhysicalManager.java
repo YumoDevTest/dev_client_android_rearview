@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
@@ -25,6 +26,16 @@ public class PhysicalManager extends OBDManager {
 
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
+
+    public PhysicalManager() {
+        sdkListener = new SDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                onSDKEvent(event, o);
+            }
+        };
+        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+    }
 
     public static PhysicalManager getInstance() {
         return (PhysicalManager) OBDManager.getInstance(PhysicalManager.class);
@@ -60,7 +71,7 @@ public class PhysicalManager extends OBDManager {
      * @param o     事件携带的数据
      */
     @Override
-    public void onEvent(int event, Object o) {
+    public void onSDKEvent(int event, Object o) {
         if (baseObdListener != null) {
             switch (event) {
                 case Manager.Event.obdPhysicalConditionFailed:
@@ -81,7 +92,7 @@ public class PhysicalManager extends OBDManager {
                     break;
             }
         }
-        super.onEvent(event, o);
+        super.onSDKEvent(event, o);
     }
 
     /**
