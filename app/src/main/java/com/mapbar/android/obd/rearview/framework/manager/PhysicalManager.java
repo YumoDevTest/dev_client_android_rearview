@@ -26,6 +26,9 @@ public class PhysicalManager extends OBDManager {
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
 
+    public static PhysicalManager getInstance() {
+        return (PhysicalManager) OBDManager.getInstance(PhysicalManager.class);
+    }
 
     /**
      * 开始一键体检
@@ -80,7 +83,6 @@ public class PhysicalManager extends OBDManager {
         }
         super.onEvent(event, o);
     }
-
 
     /**
      * 体检页，返回所有分类列表

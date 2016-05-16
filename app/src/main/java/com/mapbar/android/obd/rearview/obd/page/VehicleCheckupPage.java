@@ -10,7 +10,9 @@ import android.widget.GridView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
 import com.mapbar.obd.Manager;
@@ -42,6 +44,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     private VehicleCheckupAdapter recyclerAdapter;
 
     private CheckupGridAdapter checkupGridAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,24 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @Override
     public void setListener() {
+        sdkListener = new OBDSDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                super.onEvent(event, o);
+                switch (event) {
+                    case Manager.Event.obdPhysicalConditionFailed:
+                        break;
+                    case Manager.Event.obdPhysicalCheckStart:
+                        break;
+                    case Manager.Event.obdPhysicalCheckResult:
+                        break;
+                    case Manager.Event.obdPhysicalCheckEnd:
+                        break;
+                    case PhysicalManager.EVENT_OBD_PHYSICAL_CHECK_PROGRESS:
+                        break;
+                }
+            }
+        };
         btn_start_physical.setOnClickListener(this);
     }
 
@@ -75,11 +96,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_start_physical:
-                int state = Manager.getInstance().getState();
-                //手动停止行程时满足体检条件
-                if (state != Manager.State.tripStoppedManually) {// FIXME: 2015/9/23
-                    return;
-                }
+                PhysicalManager.getInstance().startExam();
                 break;
         }
     }

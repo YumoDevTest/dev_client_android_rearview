@@ -15,7 +15,9 @@ import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.obd.CarStatusData;
+import com.mapbar.obd.Manager;
 
 /**
  * Created by liuyy on 2016/5/7.
@@ -30,6 +32,7 @@ public class CarStatePage extends AppPage {
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
     private int[] stateResOpenIds = {R.drawable.car_light_open, R.drawable.car_window_open, R.drawable.car_lock_open, R.drawable.car_door_open, R.drawable.car_trunk_open, R.drawable.car_sunroof_open};
     private int[] stateResNoneIds = {R.drawable.car_light_none, R.drawable.car_window_none, R.drawable.car_lock_none, R.drawable.car_door_none, R.drawable.car_trunk_none, R.drawable.car_sunroof_none};
+    private StateAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +42,31 @@ public class CarStatePage extends AppPage {
     @Override
     public void initView() {
         carStateView = new CarStateView(getContentView(), R.id.v_carstate);
-        data = CarStateManager.getData();
+        data = CarStateManager.getInstance().getCarStatusData();
         carStateView.setData(data);
         stateNames = getContext().getResources().getStringArray(R.array.state_names);
         gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        gvState.setAdapter(new StateAdapter());
+        adapter = new StateAdapter();
+        gvState.setAdapter(adapter);
     }
 
     @Override
     public void setListener() {
-
+        sdkListener = new OBDSDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                super.onEvent(event, o);
+                switch (event) {
+                    case Manager.Event.obdCarStatusgetSucc:
+                        data = CarStateManager.getInstance().getCarStatusData();
+                        carStateView.setData(data);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case Manager.Event.obdCarStatusgetFailed:
+                        break;
+                }
+            }
+        };
     }
 
     @Override

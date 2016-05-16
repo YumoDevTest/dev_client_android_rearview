@@ -13,6 +13,10 @@ public class CarDataManager extends OBDManager {
 
     private RealTimeData realTimeData;
 
+    public static CarDataManager getInstance() {
+        return (CarDataManager) OBDManager.getInstance(CarDataManager.class);
+    }
+
     /**
      * 数据更新的SDK事件回调
      *
@@ -35,6 +39,4 @@ public class CarDataManager extends OBDManager {
     public RealTimeData getRealTimeData() {
         return realTimeData;
     }
-
-
 }

@@ -15,12 +15,9 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
-import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
-import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.obd.UserCenter;
@@ -50,7 +47,7 @@ public class MainActivity extends BaseActivity {
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
 
-        SDKListenerManager.getInstance().init();
+        OBDSDKListenerManager.getInstance().init();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);

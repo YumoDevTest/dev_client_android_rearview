@@ -15,11 +15,15 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
-import com.mapbar.android.obd.rearview.MainActivity;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.obd.Manager;
+import com.mapbar.obd.RealTimeData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +53,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
 
     private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
+
     @Override
     public void initView() {
 
@@ -67,6 +72,20 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         ll_car_data_2.setOnClickListener(this);
         ll_car_data_3.setOnClickListener(this);
         ll_car_data_4.setOnClickListener(this);
+        sdkListener = new OBDSDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                super.onEvent(event, o);
+                switch (event) {
+                    case Manager.Event.dataUpdate:
+                        RealTimeData data = CarDataManager.getInstance().getRealTimeData();
+                        if (data != null) {
+
+                        }
+                        break;
+                }
+            }
+        };
     }
 
     @Override

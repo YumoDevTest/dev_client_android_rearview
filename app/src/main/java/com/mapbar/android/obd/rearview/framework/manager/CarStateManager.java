@@ -10,6 +10,9 @@ public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
     private CarStatusData data;
 
+    public static CarStateManager getInstance() {
+        return (CarStateManager) OBDManager.getInstance(CarStateManager.class);
+    }
 
     public void tryToGetData() {
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
