@@ -4,11 +4,15 @@ import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by liuyy on 2016/5/11.
  */
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
+    public Timer m_timer;
     private CarStatusData data;
 
     public CarStateManager() {
@@ -46,6 +50,15 @@ public class CarStateManager extends OBDManager {
     }
 
     public void startRefreshCarState() {
+        m_timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                tryToGetData();
+            }
+        }, 1000, 1000);
+    }
 
+    public void stopRefreshCarState() {
+        m_timer.cancel();
     }
 }

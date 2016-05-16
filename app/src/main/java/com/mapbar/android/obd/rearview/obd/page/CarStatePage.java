@@ -67,11 +67,20 @@ public class CarStatePage extends AppPage {
                 }
             }
         };
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        CarStateManager.getInstance().startRefreshCarState();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CarStateManager.getInstance().stopRefreshCarState();
     }
 
     class StateAdapter extends BaseAdapter {

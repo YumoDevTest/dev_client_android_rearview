@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -80,13 +81,13 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private PopupWindow popupWindow;
     private RealTimeData realTimeData;
 
-    //    private String[] dataNames = {"瞬时油耗", "本次行程时间", "本次已行驶里程", "本次行程花费", "车速", "转速", "电压", "水温", "平均油耗"};
     private String[] dataNames = getContext().getResources().getStringArray(R.array.data_names);
-    //    private String[] units = {"L/100KM", "H", "KM", "元", "KM/H", "R/MIN", "V", "℃", "L/100KM"};
     private String[] units = getContext().getResources().getStringArray(R.array.units);
     private int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
     private boolean isFirst = true;
+
+    private Handler mHandler = new Handler();
 
     @Override
     public void initView() {
@@ -116,15 +117,22 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                 super.onEvent(event, o);
                 switch (event) {
                     case Manager.Event.dataUpdate:
-                        Log.d("dataUpdate", "" + ((RealTimeData) o).speed);
-                        RealTimeData data = CarDataManager.getInstance().getRealTimeData();
-                        if (data != null) {
-                            upData();
+                        Log.d("dataUpdate", "" + ((RealTimeData) o).gasConsum);
+                        realTimeData = CarDataManager.getInstance().getRealTimeData();
+                        if (realTimeData != null) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    upData();
+                                }
+                            });
                         }
                         break;
                 }
             }
         };
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+
     }
 
     @Override
