@@ -12,7 +12,7 @@ import java.util.TimerTask;
  */
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
-    public Timer m_timer;
+    public Timer mTimer;
     private CarStatusData data;
 
     public CarStateManager() {
@@ -50,7 +50,8 @@ public class CarStateManager extends OBDManager {
     }
 
     public void startRefreshCarState() {
-        m_timer.schedule(new TimerTask() {
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 tryToGetData();
@@ -59,6 +60,9 @@ public class CarStateManager extends OBDManager {
     }
 
     public void stopRefreshCarState() {
-        m_timer.cancel();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+
     }
 }

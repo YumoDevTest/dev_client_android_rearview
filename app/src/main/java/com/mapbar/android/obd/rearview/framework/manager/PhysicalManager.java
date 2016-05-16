@@ -27,7 +27,7 @@ public class PhysicalManager extends OBDManager {
 
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
-    private ArrayList<PhysicalData.Status> statuses;
+    private ArrayList<Integer> statuses;
 
     public PhysicalManager() {
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -142,7 +142,7 @@ public class PhysicalManager extends OBDManager {
         return progress;
     }
 
-    public ArrayList<PhysicalData.Status> getStatuses() {
+    public ArrayList<Integer> getStatuses() {
         return statuses;
     }
 
