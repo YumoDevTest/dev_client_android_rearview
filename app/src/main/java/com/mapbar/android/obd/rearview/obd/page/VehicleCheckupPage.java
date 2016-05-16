@@ -43,6 +43,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @ViewInject(R.id.tv_score)
     private TextView tv_score;
 
+    @ViewInject(R.id.tv_level)
+    private TextView tv_level;
+
     //体检中
     @ViewInject(R.id.rela_physicaling)
     private RelativeLayout rela_physicaling;
@@ -162,7 +165,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalCheckResult -->>");
-                            Log.v(LogTag.TEMP, "physicalData -->>" + physicalData);
+                            Log.v(LogTag.TEMP, "getId -->>" + physicalData.getId());
+                            Log.v(LogTag.TEMP, "getStatus -->>" + physicalData.getStatus());
+                            Log.v(LogTag.TEMP, "getProcessed -->>" + physicalData.getProcessed());
+                            Log.v(LogTag.TEMP, "getName -->>" + physicalData.getName());
                         }
                         recyclerAdapter.setPhysicalData((PhysicalData) o);
                         recyclerAdapter.notifyDataSetChanged();
@@ -185,6 +191,17 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                 if (physicalReportByMonth != null) {
                                     int score = physicalReportByMonth.get(0).getScore();
                                     tv_score.setText(String.valueOf(score));
+
+                                    if (score >= 0 && score <= 50) {
+                                        tv_level.setText("高危级别");
+                                        tv_level.setTextColor(Color.RED);
+                                    } else if (score > 50 && score <= 70) {
+                                        tv_level.setText("亚健康级别");
+                                        tv_level.setTextColor(Color.YELLOW);
+                                    } else {
+                                        tv_level.setText("健康级别");
+                                        tv_level.setTextColor(Color.GREEN);
+                                    }
                                     // 日志
                                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                                         Log.v(LogTag.TEMP, "score -->>" + score);
