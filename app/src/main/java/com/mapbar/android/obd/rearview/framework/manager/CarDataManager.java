@@ -28,6 +28,10 @@ public class CarDataManager extends OBDManager {
         return (CarDataManager) OBDManager.getInstance(CarDataManager.class);
     }
 
+    public void restartTrip() {
+        Manager.getInstance().restoreTrip();
+    }
+
     /**
      * 数据更新的SDK事件回调
      *

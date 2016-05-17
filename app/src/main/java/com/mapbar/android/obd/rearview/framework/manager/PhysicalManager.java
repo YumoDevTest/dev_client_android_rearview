@@ -82,12 +82,8 @@ public class PhysicalManager extends OBDManager {
                 case Manager.Event.obdPhysicalCheckStart:
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    for (PhysicalData itemData : physicalList) {
-                        if (itemData.getId() == ((PhysicalData) o).getId()) {
-                            progress = getProgress(itemData.getId());
-                            baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
-                        }
-                    }
+                    progress = getProgress(((PhysicalData) o).getId());
+                    baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     break;
                 case Manager.Event.obdPhysicalCheckEnd:
                     progress = 100;

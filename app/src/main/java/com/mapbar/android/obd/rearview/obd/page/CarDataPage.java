@@ -20,7 +20,9 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
 import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -43,8 +45,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private LinearLayout ll_car_data_3;
     @ViewInject(R.id.ll_car_data_4)
     private LinearLayout ll_car_data_4;
-    @ViewInject(R.id.ll_car_data_pop)
-    private LinearLayout ll_car_data_pop;
     /**
      * ------------------------------------------------------
      */
@@ -193,26 +193,27 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     public String transform(int index) {
         switch (index) {
             case 0:
-                return String.valueOf(realTimeData.gasConsum);
+                return DecFormatUtil.format2dot1(realTimeData.gasConsum);
             case 1:
-                return String.valueOf(realTimeData.tripTime);
+                return "" + TimeUtils.parseHours(realTimeData.tripTime);
             case 2:
-                return String.valueOf(realTimeData.tripLength);
+                return DecFormatUtil.format2dot1(realTimeData.tripLength);
             case 3:
-                return String.valueOf(realTimeData.driveCost);
+                return DecFormatUtil.format2dot1(realTimeData.driveCost);
             case 4:
-                return String.valueOf(realTimeData.speed);
+                return DecFormatUtil.format2dot1(realTimeData.speed);
             case 5:
-                return String.valueOf(realTimeData.rpm);
+                return DecFormatUtil.format2dot1(realTimeData.rpm);
             case 6:
-                return String.valueOf(realTimeData.voltage);
+                return DecFormatUtil.format2dot1(realTimeData.voltage);
             case 7:
-                return String.valueOf(realTimeData.engineCoolantTemperature);
+                return DecFormatUtil.format2dot1(realTimeData.engineCoolantTemperature);
             case 8:
-                return String.valueOf(realTimeData.averageGasConsum);
+                return DecFormatUtil.format2dot1(realTimeData.averageGasConsum);
         }
         return null;
     }
+
 
     /**
      * 初始化pop中gridView数据
@@ -260,7 +261,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             }
         });
 
-        popupWindow.showAtLocation(ll_car_data_pop, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
 
 }

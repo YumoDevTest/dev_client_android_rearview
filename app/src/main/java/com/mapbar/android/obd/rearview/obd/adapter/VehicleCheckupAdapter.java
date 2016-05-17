@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;
 
@@ -22,6 +24,9 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
     private List<PhysicalData> physicalList;
 
     private PhysicalData physicalData;
+    private int[] ids = {R.drawable.ic_1, R.drawable.ic_2, R.drawable.ic_3, R.drawable.ic_4, R.drawable.ic_5, R.drawable.ic_6, R.drawable.ic_7};
+    private int[] idss = {R.drawable.ic_11, R.drawable.ic_22, R.drawable.ic_33, R.drawable.ic_44, R
+            .drawable.ic_55, R.drawable.ic_66, R.drawable.ic_77};
 
 
     public VehicleCheckupAdapter(Context mContext, List<PhysicalData> physicalList) {
@@ -49,22 +54,22 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
                     if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal() || status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal() || status == PhysicalData.Status.OBDCHECK_OK.ordinal())
                         PhysicalManager.getInstance().getStatuses().add(physicalData.getStatus());
                 }
-            int status = physicalData.getStatus();
-            if (status == PhysicalData.Status.OBDCHECK_CHECKING.ordinal()) {
-                holder.tv_checkResult.setText("检测中");
-                holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.linechart));
-            } else if (status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal()) {
-                holder.tv_checkResult.setText("无法判定");
-                holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_yello));
-            } else if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
-                holder.tv_checkResult.setText("异常");
-                holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.check_red));
+                int status = physicalData.getStatus();
+                if (status == PhysicalData.Status.OBDCHECK_CHECKING.ordinal()) {
+                    holder.tv_checkResult.setText("检测中");
+                    holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.linechart));
+                } else if (status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal()) {
+                    holder.tv_checkResult.setText("无法判定");
+                    holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_yello));
+                } else if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
+                    holder.tv_checkResult.setText("异常");
+                    holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.check_red));
 
-            } else if (status == PhysicalData.Status.OBDCHECK_OK.ordinal()) {
-                holder.tv_checkResult.setText("正常");
-                holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_gray));
+                } else if (status == PhysicalData.Status.OBDCHECK_OK.ordinal()) {
+                    holder.tv_checkResult.setText("正常");
+                    holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_gray));
 
-            }
+                }
             } else if (physicalList.get(position).getId() > physicalData.getId()) {
                 holder.tv_checkResult.setText("待检测");
                 holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_gray));
@@ -87,7 +92,11 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
             }
         }
         holder.tv_checkName.setText(physicalList.get(position).getName());
-        holder.iv_checkIcon.setImageBitmap(physicalList.get(position).getIcon());
+        if (PhysicalManager.getInstance().getStatuses().get(position) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
+            holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), ids[position]));
+        } else {
+            holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), idss[position]));
+        }
         holder.tv_checkResult.setVisibility(View.VISIBLE);
     }
 

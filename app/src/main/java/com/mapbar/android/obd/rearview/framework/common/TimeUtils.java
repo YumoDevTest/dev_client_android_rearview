@@ -219,4 +219,8 @@ public class TimeUtils {
         return 0;
     }
 
+    public static int parseHours(long time) {
+        return (int) (time / 1000 / 3600);
+    }
+
 }

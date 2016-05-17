@@ -31,10 +31,6 @@ public class OBDManager {
         baseObdListener = obdListener;
     }
 
-    public static void setObdListener(OBDListener obdListener) {
-        baseObdListener = obdListener;
-    }
-
     /**
      * SDK事件回调
      *

@@ -17,6 +17,7 @@ import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -97,7 +98,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-
+        initPage();
 //        CircleDrawable circleDrawable = new CircleDrawable(getContext());
 //        circleDrawable.setProgress(75);
 //        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
@@ -108,6 +109,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
+        initPage();
+    }
+
+    private void initPage() {
         ReportHead head = PhysicalManager.getInstance().getReportHead();
         if (head != null) {
             rela_physicaling.setVisibility(View.GONE);
@@ -211,6 +216,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                         Log.v(LogTag.TEMP, "size -->>" + physicalReportByMonth.size());
                                     }
                                 }
+                                CarDataManager.getInstance().restartTrip();
                             }
                         });
 

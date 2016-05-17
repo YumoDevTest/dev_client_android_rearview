@@ -1,120 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="horizontal">
-
-    <LinearLayout
-        android:id="@+id/ll_car_data_pop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        >
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal">
 
 
         <LinearLayout
-            android:id="@+id/ll_car_data_1"
-            android:layout_width="140dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="26dp"
-            android:background="@drawable/img_base"
-            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_carData_name_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/string_current_gasConsum"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                />
+
+            <LinearLayout
+                android:id="@+id/ll_car_data_1"
+                android:layout_width="240dp"
+                android:layout_height="160dp"
+                android:background="@drawable/img_base"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_carData_name_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/string_current_gasConsum"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
 
 
-            <TextView
-                android:id="@+id/tv_carData_value_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="16.8"
-                android:textColor="#ffffff"
-                android:textSize="50sp"/>
+                <TextView
+                    android:id="@+id/tv_carData_value_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:textSize="50sp" />
 
-            <TextView
-                android:id="@+id/tv_carData_unit_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="L/100KM"
-                android:textColor="#ffffff"
-                android:textSize="10sp"/>
+                <TextView
+                    android:id="@+id/tv_carData_unit_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="L/100KM"
+                    android:textColor="#ffffff"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_car_data_3"
+                android:layout_width="240dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/img_base"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_carData_name_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/string_current_tripLength"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_carData_value_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/tv_carData_unit_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="L/100KM"
+                    android:textColor="#ffffff"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_car_data_3"
-            android:layout_width="140dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="26dp"
-            android:background="@drawable/img_base"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_carData_name_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/string_current_tripLength"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                />
-
-
-            <TextView
-                android:id="@+id/tv_carData_value_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="16.8"
-                android:textColor="#ffffff"
-                android:textSize="50sp"/>
-
-            <TextView
-                android:id="@+id/tv_carData_unit_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="L/100KM"
-                android:textColor="#ffffff"
-                android:textSize="10sp"/>
-        </LinearLayout>
-    </LinearLayout>
 
     <ImageView
         android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:src="@drawable/img_car"
-        />
+        android:src="@drawable/img_car" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
 
         <LinearLayout
             android:id="@+id/ll_car_data_2"
-            android:layout_width="140dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="26dp"
+            android:layout_width="240dp"
+            android:layout_height="160dp"
             android:background="@drawable/img_base"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -124,8 +114,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/string_current_tripTime"
                 android:textColor="#ffffff"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
 
             <TextView
@@ -133,9 +122,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="16.8"
+                android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="50sp"/>
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/tv_carData_unit_2"
@@ -143,16 +132,16 @@
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
                 android:textColor="#ffffff"
-                android:textSize="10sp"/>
+                android:textSize="10sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_car_data_4"
-            android:layout_width="140dp"
-            android:layout_height="100dp"
+            android:layout_width="240dp"
+            android:layout_height="160dp"
             android:layout_marginTop="26dp"
             android:background="@drawable/img_base"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -162,8 +151,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/string_current_driveCost"
                 android:textColor="#ffffff"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
 
             <TextView
@@ -171,9 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="16.8"
+                android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="50sp"/>
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/tv_carData_unit_4"
@@ -181,8 +169,7 @@
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
                 android:textColor="#ffffff"
-                android:textSize="10sp"/>
+                android:textSize="10sp" />
         </LinearLayout>
-    </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
 </LinearLayout>
