@@ -24,6 +24,11 @@ public class CarDataManager extends OBDManager {
         SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
+    /**
+     * 获取CarDataManager单例
+     *
+     * @return CarDataManager实例
+     */
     public static CarDataManager getInstance() {
         return (CarDataManager) OBDManager.getInstance(CarDataManager.class);
     }

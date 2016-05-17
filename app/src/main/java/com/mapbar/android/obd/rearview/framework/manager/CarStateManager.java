@@ -25,14 +25,25 @@ public class CarStateManager extends OBDManager {
         SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
+    /**
+     * 获取CarStateManager单例
+     *
+     * @return CarStateManager实例
+     */
     public static CarStateManager getInstance() {
         return (CarStateManager) OBDManager.getInstance(CarStateManager.class);
     }
+
+
 
     public void tryToGetData() {
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
 
+    /**
+     * 获取车辆状态信息
+     * @return {@link CarStatusData}车辆状态信息
+     */
     public CarStatusData getCarStatusData() {
         return data;
     }
@@ -49,6 +60,9 @@ public class CarStateManager extends OBDManager {
         super.onSDKEvent(event, o);
     }
 
+    /**
+     * 开始刷新车辆状态
+     */
     public void startRefreshCarState() {
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
@@ -59,6 +73,9 @@ public class CarStateManager extends OBDManager {
         }, 1000, 1000);
     }
 
+    /**
+     * 停止刷新车辆状态
+     */
     public void stopRefreshCarState() {
         if (mTimer != null) {
             mTimer.cancel();

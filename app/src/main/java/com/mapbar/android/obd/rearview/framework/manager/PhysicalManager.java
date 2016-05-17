@@ -41,6 +41,11 @@ public class PhysicalManager extends OBDManager {
         SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
+    /**
+     * 获取PhysicalManager单例
+     *
+     * @return PhysicalManager实例
+     */
     public static PhysicalManager getInstance() {
         return (PhysicalManager) OBDManager.getInstance(PhysicalManager.class);
     }
@@ -149,6 +154,10 @@ public class PhysicalManager extends OBDManager {
         return statuses;
     }
 
+    /**
+     * 获取报告列表显示用的信息
+     * @return 报告列表
+     */
     public ReportHead getReportHead() {
         ArrayList<ReportHead> heads = Physical.getInstance().getPhysicalReportByMonth(1970, 1);
         if (heads != null && heads.size() > 0) {
