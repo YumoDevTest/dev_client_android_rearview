@@ -195,7 +195,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             case 0:
                 return DecFormatUtil.format2dot1(realTimeData.gasConsum);
             case 1:
-                return "" + TimeUtils.parseHours(realTimeData.tripTime);
+                return TimeUtils.parseTime(realTimeData.tripTime);
             case 2:
                 return DecFormatUtil.format2dot1(realTimeData.tripLength);
             case 3:

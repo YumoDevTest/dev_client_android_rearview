@@ -219,8 +219,31 @@ public class TimeUtils {
         return 0;
     }
 
-    public static int parseHours(long time) {
-        return (int) (time / 1000 / 3600);
-    }
+    public static String parseTime(long time) {
+        long temphour = time / (60 * 60 * 1000);
 
+        String hour;
+        if (temphour < 10) {
+            hour = "0" + String.valueOf(temphour);
+        } else {
+            hour = String.valueOf(temphour);
+        }
+        long tempminute = (time - (temphour * 60 * 60 * 1000)) / (60 * 1000);
+        String minute;
+        if (tempminute < 10) {
+            minute = "0" + String.valueOf(tempminute);
+        } else {
+            minute = String.valueOf(tempminute);
+        }
+
+        long tempsecond = (time - (temphour * 60 * 60 * 1000) - (tempminute * 60 * 1000)) / 1000;
+        String second;
+        if (tempsecond < 10) {
+            second = "0" + String.valueOf(tempsecond);
+        } else {
+            second = String.valueOf(tempsecond);
+        }
+        //TimeFormatUtil.formatHHmmss(time)
+        return hour + ":" + minute;
+    }
 }

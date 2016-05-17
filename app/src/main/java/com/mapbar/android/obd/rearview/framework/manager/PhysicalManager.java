@@ -1,6 +1,8 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
@@ -84,6 +86,11 @@ public class PhysicalManager extends OBDManager {
                 case Manager.Event.obdPhysicalCheckResult:
                     progress = getProgress(((PhysicalData) o).getId());
                     baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
+                    // 日志
+                    if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                        Log.v(LogTag.TEMP, "obdPhysicalCheckResult -->>");
+                        Log.v(LogTag.TEMP, "progress -->>" + progress);
+                    }
                     break;
                 case Manager.Event.obdPhysicalCheckEnd:
                     progress = 100;

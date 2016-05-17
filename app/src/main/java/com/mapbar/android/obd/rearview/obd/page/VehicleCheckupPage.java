@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
+import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
@@ -47,6 +49,12 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @ViewInject(R.id.tv_level)
     private TextView tv_level;
+
+    @ViewInject(R.id.tv_progress)
+    private TextView tv_progress;
+
+    @ViewInject(R.id.view_upkeep_time)
+    private ImageView view_upkeep_time;
 
     //体检中
     @ViewInject(R.id.rela_physicaling)
@@ -81,6 +89,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     private VehicleCheckupAdapter recyclerAdapter;
 
     private CheckupGridAdapter checkupGridAdapter;
+    private CircleDrawable circleDrawable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,11 +108,11 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
         initPage();
-//        CircleDrawable circleDrawable = new CircleDrawable(getContext());
-//        circleDrawable.setProgress(75);
-//        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
-//        circleDrawable.setCircleWidth(15);
-//        view_upkeep.setImageDrawable(circleDrawable);
+        circleDrawable = new CircleDrawable(getContext());
+        circleDrawable.setProgress(75);
+        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable.setCircleWidth(15);
+        view_upkeep_time.setImageDrawable(circleDrawable);
     }
 
     @Override
@@ -227,6 +236,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "EVENT_OBD_PHYSICAL_CHECK_PROGRESS -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
+                        int o1 = (int) o;
+                        tv_progress.setText("" + o1);
+                        circleDrawable.setProgress(o1);
                         break;
                 }
             }

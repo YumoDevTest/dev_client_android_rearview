@@ -49,7 +49,7 @@
                 android:layout_below="@+id/tv2"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="75"
+                android:text="0"
                 android:textColor="#ffffff"
                 android:textSize="45sp"
                 />
