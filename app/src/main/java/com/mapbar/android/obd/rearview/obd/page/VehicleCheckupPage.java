@@ -107,7 +107,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-        initPage();
+//        initPage();
         circleDrawable = new CircleDrawable(getContext());
         circleDrawable.setProgress(75);
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));

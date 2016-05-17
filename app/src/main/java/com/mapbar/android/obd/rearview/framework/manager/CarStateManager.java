@@ -1,6 +1,8 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
@@ -37,6 +39,10 @@ public class CarStateManager extends OBDManager {
 
 
     public void tryToGetData() {
+        // 日志
+        if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
+            Log.d(LogTag.TEMP, "tryToGetData -->> ");
+        }
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
 
