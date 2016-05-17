@@ -21,8 +21,8 @@
             <ImageView
                 android:id="@+id/view_upkeep"
                 style="@style/upkeep"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 />
 
             <TextView
@@ -66,8 +66,8 @@
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 />
 
             <TextView

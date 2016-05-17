@@ -7,8 +7,8 @@
 
     <RelativeLayout
         android:id="@+id/rela"
-        android:layout_width="100dp"
-        android:layout_height="210dp"
+        android:layout_width="130dp"
+        android:layout_height="266dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="89dp">
     <ImageView
@@ -28,8 +28,8 @@
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 />
 
             <TextView

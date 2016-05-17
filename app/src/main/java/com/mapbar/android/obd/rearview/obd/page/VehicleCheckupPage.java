@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -146,6 +147,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "obdPhysicalConditionFailed -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
+                        StringUtil.toastStringShort("体检失败!");
                         break;
                     case Manager.Event.obdPhysicalCheckStart:
 

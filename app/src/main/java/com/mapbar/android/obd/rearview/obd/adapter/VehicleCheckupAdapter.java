@@ -89,16 +89,6 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
         holder.tv_checkName.setText(physicalList.get(position).getName());
         holder.iv_checkIcon.setImageBitmap(physicalList.get(position).getIcon());
         holder.tv_checkResult.setVisibility(View.VISIBLE);
-//        int status = physicalList.get(position).getStatus();
-//        if (status == PhysicalData.Status.OBDCHECK_WILLCHECK.ordinal()) {
-//            holder.tv_checkResult.setText(mContext.getResources().getText(R.string.vehicle_checkup_item_waiting));
-//            holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_gray));
-//        }
-//        else
-        {//if (status == PhysicalData.Status.OBDCHECK_INITVALUE.ordinal()) {
-//            holder.tv_checkCount.setVisibility(View.INVISIBLE);
-//            holder.tv_checkResult.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override
