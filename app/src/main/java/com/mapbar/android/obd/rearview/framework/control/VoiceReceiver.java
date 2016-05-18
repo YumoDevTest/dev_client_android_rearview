@@ -3,6 +3,9 @@ package com.mapbar.android.obd.rearview.framework.control;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
+
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 /**
  * Created by tianff on 2016/5/7.
@@ -16,6 +19,7 @@ public class VoiceReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (VOICE_ACTION.equals(action)) {
             int command = intent.getIntExtra("command", DEFAULT_COMMAND);
+            Toast.makeText(MainActivity.getInstance(), "接收器" + command, Toast.LENGTH_SHORT).show();
             if (command != DEFAULT_COMMAND) {
                 CommandControl.getInstance().executeCommand(command);
             }

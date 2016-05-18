@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
@@ -39,6 +40,7 @@ public class ControlTestPage extends AppPage {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                CommandControl.getInstance().executeCommand(controlCmds[position]);
+                Toast.makeText(getContext(), "点击" + position + "  " + controlCmds[position], Toast.LENGTH_SHORT).show();
                 final Intent intent = new Intent();
                 intent.setAction(VoiceReceiver.VOICE_ACTION);
                 intent.putExtra("command", controlCmds[position]);
