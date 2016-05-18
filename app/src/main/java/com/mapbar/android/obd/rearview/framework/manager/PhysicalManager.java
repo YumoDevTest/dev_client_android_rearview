@@ -17,10 +17,7 @@ import java.util.List;
  * event1：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
  */
 public class PhysicalManager extends OBDManager {
-    public static final int EVENT_OBD_PHYSICAL_CONDITION_FAILED = 0xF00001;
-    public static final int EVENT_OBD_PHYSICAL_CHECK_START = 0xF00002;
-    public static final int EVENT_OBD_PHYSICAL_CHECK_RESULT = 0xF00003;
-    public static final int EVENT_OBD_PHYSICAL_CHECK_END = 0xF00004;
+
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
 
     private List<PhysicalData> physicalList = new ArrayList<>();
@@ -48,6 +45,12 @@ public class PhysicalManager extends OBDManager {
 
     /**
      * 开始一键体检
+     *可以接收sdk回调事件：
+     *        Manager.Event.obdPhysicalConditionFailed//体检失败
+     *        Manager.Event.obdPhysicalCheckStart//体检开始事件；o=NULL
+     *        Manager.Event.obdPhysicalCheckResult//体检结果此时 o参数是Physical.SystemInfo，存储着体检系统ID和检测结果的信息
+     *        Manager.Event.obdPhysicalCheckEnd//体检结束
+     *        PhysicalManager.EVENT_OBD_PHYSICAL_CHECK_PROGRESS//体检进度 o参数为进度（int型）
      *
      * @return false:不满足体检条件，请保持OBD设备在非行程被手动终止状态;true:体检开始进行
      */
@@ -146,6 +149,11 @@ public class PhysicalManager extends OBDManager {
         return progress;
     }
 
+    /**
+     * 获取体检每大项的体检结果（正常、异常、正在体检、无法判定）集合
+     *
+     * @return ArrayList 每大项体检结果集合
+     */
     public ArrayList<Integer> getStatuses() {
         return statuses;
     }

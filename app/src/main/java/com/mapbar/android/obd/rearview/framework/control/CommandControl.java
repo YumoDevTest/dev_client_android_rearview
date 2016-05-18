@@ -1,9 +1,5 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
-import android.content.res.Resources;
-
-import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -16,15 +12,11 @@ import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.Voi
  */
 public class CommandControl {
     private static CommandControl mCommandControl;
-    private int[] commands;
-    private String[] commadStrs;
-    private String[] commadNames;
+    private int[] commands = new int[]{201001, 201000, 202000, 202001, 207000, 207001};
+    private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502"};
+    private String[] commadNames = new String[]{"开锁", "落锁", "降窗", "升窗", "开天窗", "关天窗"};
 
     private CommandControl() {
-        Resources res = Global.getAppContext().getResources();
-        commands = res.getIntArray(R.array.control_command);
-        commadStrs = res.getStringArray(R.array.command_string);
-        commadNames = res.getStringArray(R.array.command_name);
     }
 
     public static CommandControl getInstance() {
@@ -37,7 +29,7 @@ public class CommandControl {
     /**
      * 执行指令
      *
-     * @param command
+     * @param command 指令
      */
     public void executeCommand(final int command) {
         if (command >= 2000000) {//控制类指令

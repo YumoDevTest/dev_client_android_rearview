@@ -14,6 +14,11 @@ public class VoiceManager {
 
     }
 
+    /**
+     * 获取单例
+     *
+     * @return VoiceManager单例
+     */
     public static VoiceManager getInstance() {
         if (voiceManager == null) {
             voiceManager = new VoiceManager();
