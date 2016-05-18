@@ -109,9 +109,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
 //        initPage();
         circleDrawable = new CircleDrawable(getContext());
-        circleDrawable.setProgress(75);
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
-        circleDrawable.setCircleWidth(15);
+        circleDrawable.setCircleWidth(9);
         view_upkeep_time.setImageDrawable(circleDrawable);
     }
 

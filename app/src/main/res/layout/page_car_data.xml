@@ -27,7 +27,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/string_current_gasConsum"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="12dp"/>
 
 
                 <TextView
@@ -37,7 +37,7 @@
                     android:maxLines="1"
                     android:text="0"
                     android:textColor="#ffffff"
-                    android:textSize="50sp" />
+                    android:textSize="50dp"/>
 
                 <TextView
                     android:id="@+id/tv_carData_unit_1"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="L/100KM"
                     android:textColor="#ffffff"
-                    android:textSize="10sp" />
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -64,7 +64,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/string_current_tripLength"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="12dp"/>
 
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:maxLines="1"
                     android:text="0"
                     android:textColor="#ffffff"
-                    android:textSize="50sp" />
+                    android:textSize="50dp"/>
 
                 <TextView
                     android:id="@+id/tv_carData_unit_3"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="L/100KM"
                     android:textColor="#ffffff"
-                    android:textSize="10sp" />
+                    android:textSize="10dp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -114,7 +114,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/string_current_tripTime"
                 android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:textSize="12dp"/>
 
 
             <TextView
@@ -124,7 +124,7 @@
                 android:maxLines="1"
                 android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="50sp" />
+                android:textSize="50dp"/>
 
             <TextView
                 android:id="@+id/tv_carData_unit_2"
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
                 android:textColor="#ffffff"
-                android:textSize="10sp" />
+                android:textSize="10dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -151,7 +151,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/string_current_driveCost"
                 android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:textSize="12dp"/>
 
 
             <TextView
@@ -161,7 +161,7 @@
                 android:maxLines="1"
                 android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="50sp" />
+                android:textSize="50dp"/>
 
             <TextView
                 android:id="@+id/tv_carData_unit_4"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:text="L/100KM"
                 android:textColor="#ffffff"
-                android:textSize="10sp" />
+                android:textSize="10dp"/>
         </LinearLayout>
         </LinearLayout>
 </LinearLayout>

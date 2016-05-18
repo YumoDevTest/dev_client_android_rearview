@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mapbar.android.obd.rearview">
+<manifest
+    package="com.mapbar.android.obd.rearview"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY"/>
@@ -194,6 +195,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".framework.control.VoiceReceiver">
+            <intent-filter>
+                <action android:name="mapbar.obd.intent.action.VOICE_CONTROL"/>
             </intent-filter>
         </receiver>
         <!--爱心推end-->

@@ -8,7 +8,7 @@ import android.content.Intent;
  * Created by tianff on 2016/5/7.
  */
 public class VoiceReceiver extends BroadcastReceiver {
-    private final String VOICE_ACTION = "mapbar.obd.intent.action.VOICE_CONTROL";
+    public static final String VOICE_ACTION = "mapbar.obd.intent.action.VOICE_CONTROL";
     private final int DEFAULT_COMMAND = 000000;
 
     @Override

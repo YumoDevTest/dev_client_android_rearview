@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.CommandControl;
+import com.mapbar.android.obd.rearview.framework.control.VoiceReceiver;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 
 /**
@@ -36,7 +38,11 @@ public class ControlTestPage extends AppPage {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CommandControl.getInstance().executeCommand(controlCmds[position]);
+//                CommandControl.getInstance().executeCommand(controlCmds[position]);
+                final Intent intent = new Intent();
+                intent.setAction(VoiceReceiver.VOICE_ACTION);
+                intent.putExtra("command", controlCmds[position]);
+                getContext().sendBroadcast(intent);
             }
         });
 
