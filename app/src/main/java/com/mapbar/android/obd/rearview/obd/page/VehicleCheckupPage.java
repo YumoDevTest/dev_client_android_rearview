@@ -2,6 +2,8 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -90,6 +92,12 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     private CheckupGridAdapter checkupGridAdapter;
     private CircleDrawable circleDrawable;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            circleDrawable.setProgress(msg.what);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -235,9 +243,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "EVENT_OBD_PHYSICAL_CHECK_PROGRESS -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
-                        int o1 = (int) o;
-                        tv_progress.setText("" + o1);
-                        circleDrawable.setProgress(o1);
+//                        int o1 = (int) o;
+//                        tv_progress.setText("" + o1);
+//                        circleDrawable.setProgress(o1);
+                        handler.sendEmptyMessage((int) o);
                         break;
                 }
             }
