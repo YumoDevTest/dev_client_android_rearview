@@ -5,7 +5,7 @@ import android.content.Intent;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 /**
- * Created by tianff on 2016/5/5.
+ * 文本转语音TTS功能
  */
 public class VoiceManager {
     private static VoiceManager voiceManager;
@@ -22,6 +22,9 @@ public class VoiceManager {
     }
 
 
+    /**
+     * @param msg 待转为语音的文本
+     */
     public void sendBroadcastTTS(String msg) {
         Intent mIntent = new Intent(ACTION_TTS);
         String[] result = new String[2];

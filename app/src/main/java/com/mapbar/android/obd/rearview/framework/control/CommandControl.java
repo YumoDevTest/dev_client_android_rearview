@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.VoiceManagerHolder.voiceManager;
 
 /**
- * Created by tianff on 2016/5/7.
+ * 指令控制执行类
  */
 public class CommandControl {
     private static CommandControl mCommandControl;

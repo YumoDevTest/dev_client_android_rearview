@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by liuyy on 2016/5/11.
+ * 类获取车辆状态（车灯、车窗、车锁、车门、后备箱、天窗）
  */
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
@@ -37,7 +37,9 @@ public class CarStateManager extends OBDManager {
     }
 
 
-
+    /**
+     * 请求获取最新车辆信息；调用次此方法后，再调用getCarStatusData()方法可以获取最新的车辆状态信息
+     */
     public void tryToGetData() {
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
@@ -67,7 +69,8 @@ public class CarStateManager extends OBDManager {
     }
 
     /**
-     * 开始刷新车辆状态
+     * 开始刷新车辆状态;
+     *
      */
     public void startRefreshCarState() {
         mTimer = new Timer();

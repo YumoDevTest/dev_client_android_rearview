@@ -12,13 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 功能：一键体检
+ * 功能：车辆体检功能
  * 抛出事件
- * event1：EVENT_OBD_PHYSICAL_CONDITION_FAILED,体检不满足条件 ;o=不满足类型  int型,0是速度  1是转速
- * event2：EVENT_OBD_PHYSICAL_CHECK_START； o=NULL
- * event3：EVENT_OBD_PHYSICAL_CHECK_RESULT,体检结果事件；此时 o 参数是Physical.SystemInfo，存储着体检系统ID和检测结果的信息
- * event4：EVENT_OBD_PHYSICAL_CHECK_END,体检完成的回调
- * event5：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
+ * event1：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
  */
 public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CONDITION_FAILED = 0xF00001;

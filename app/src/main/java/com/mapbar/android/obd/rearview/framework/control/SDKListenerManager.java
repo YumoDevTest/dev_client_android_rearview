@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
- * Created by liuyy on 2016/1/22.
+ * 处理底层sdk事件
  */
 public class SDKListenerManager {
 
