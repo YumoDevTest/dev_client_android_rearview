@@ -7,8 +7,8 @@
               android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="350dp"
-        android:layout_height="195dp"
+        android:layout_width="420dp"
+        android:layout_height="240dp"
         android:orientation="vertical">
 
         <TextView
@@ -50,7 +50,7 @@
 
     <View
         android:id="@+id/v_carstate"
-        android:layout_width="125dp"
-        android:layout_height="195dp"/>
+        android:layout_width="150dp"
+        android:layout_height="240dp"/>
 
 </LinearLayout>
