@@ -201,13 +201,13 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             case 3:
                 return DecFormatUtil.format2dot1(realTimeData.driveCost);
             case 4:
-                return DecFormatUtil.format2dot1(realTimeData.speed);
+                return "" + realTimeData.speed;
             case 5:
-                return DecFormatUtil.format2dot1(realTimeData.rpm);
+                return "" + realTimeData.rpm;
             case 6:
                 return DecFormatUtil.format2dot1(realTimeData.voltage);
             case 7:
-                return DecFormatUtil.format2dot1(realTimeData.engineCoolantTemperature);
+                return "" + realTimeData.engineCoolantTemperature;
             case 8:
                 return DecFormatUtil.format2dot1(realTimeData.averageGasConsum);
         }

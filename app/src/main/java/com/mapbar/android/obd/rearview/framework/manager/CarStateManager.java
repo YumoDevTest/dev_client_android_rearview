@@ -10,7 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 类获取车辆状态（车灯、车窗、车锁、车门、后备箱、天窗）
+ * Created by liuyy on 2016/5/11.
  */
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
@@ -79,7 +79,7 @@ public class CarStateManager extends OBDManager {
             public void run() {
                 tryToGetData();
             }
-        }, 1000, 1000);
+        }, 1000, 3000);
     }
 
     /**

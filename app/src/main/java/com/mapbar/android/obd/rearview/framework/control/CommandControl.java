@@ -32,7 +32,7 @@ public class CommandControl {
      * @param command 指令
      */
     public void executeCommand(final int command) {
-        if (command >= 2000000) {//控制类指令
+        if (command >= 200000) {//控制类指令
             executeCommand2(command);
         } else {//非控制类指令
             final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();

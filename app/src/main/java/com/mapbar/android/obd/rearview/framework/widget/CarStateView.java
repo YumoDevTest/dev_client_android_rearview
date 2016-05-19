@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.obd.CarStatusData;
 
@@ -28,6 +29,12 @@ public class CarStateView {
         drawable = new StateDrawable();
         bmCar = BitmapFactory.decodeResource(context.getResources(), R.drawable.car_normal);
         view.setBackgroundDrawable(drawable);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CarStateManager.getInstance().tryToGetData();
+            }
+        });
     }
 
     public void setData(CarStatusData data) {

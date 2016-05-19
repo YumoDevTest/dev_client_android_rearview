@@ -96,6 +96,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         @Override
         public void handleMessage(Message msg) {
             circleDrawable.setProgress(msg.what);
+            tv_progress.setText("" + msg.what);
         }
     };
 

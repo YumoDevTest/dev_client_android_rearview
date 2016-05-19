@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -48,6 +50,7 @@ public class CarStatePage extends AppPage {
         gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
+
     }
 
     @Override
@@ -55,11 +58,15 @@ public class CarStatePage extends AppPage {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
-                super.onEvent(event, o);
+                // 日志
+                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                    Log.v(LogTag.FRAMEWORK, "CarStatePage -->> event:" + event);
+                }
                 switch (event) {
                     case Manager.Event.obdCarStatusgetSucc:
-                        data = CarStateManager.getInstance().getCarStatusData();
+                        data = (CarStatusData) o;
                         carStateView.setData(data);
+                        adapter.updateData();
                         adapter.notifyDataSetChanged();
                         break;
                     case Manager.Event.obdCarStatusgetFailed:
@@ -146,12 +153,16 @@ public class CarStatePage extends AppPage {
             return convertView;
         }
 
-        @Override
-        public void notifyDataSetChanged() {
+        public void updateData() {
             if (data != null) {
                 dataStates = new int[]{data.lights, data.windows, data.lock, data.doors, data.trunk, data.sunroof};
+                // 日志
+                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                    for (int i = 0; i < dataStates.length; i++) {
+                        Log.v(LogTag.FRAMEWORK, "CarStatePage carState==" + dataStates[i]);
+                    }
+                }
             }
-            super.notifyDataSetChanged();
         }
 
         class ViewHolder {
