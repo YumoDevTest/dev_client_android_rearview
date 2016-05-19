@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#1a1a1a"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#1a1a1a"
+    >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/line1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
         android:gravity="center"
         android:orientation="horizontal">
@@ -18,13 +19,16 @@
             android:layout_height="wrap_content"
             android:text="已行驶总里程"
             android:textColor="#ffffff"
-            android:textSize="15sp"/>
+            android:textSize="30sp"/>
 
         <EditText
-            android:layout_width="118dp"
-            android:layout_height="30dp"
+            android:id="@+id/et_totalMileage"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
             />
 
         <TextView
@@ -32,12 +36,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:text="公里"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:textSize="30sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/line2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/line1"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
         android:gravity="center"
         android:orientation="horizontal">
@@ -47,13 +55,16 @@
             android:layout_height="wrap_content"
             android:text="上次保养里程"
             android:textColor="#ffffff"
-            android:textSize="15sp"/>
+            android:textSize="30sp"/>
 
         <EditText
-            android:layout_width="118dp"
-            android:layout_height="30dp"
+            android:id="@+id/et_lastMaintenanceMileage"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
             />
 
         <TextView
@@ -61,12 +72,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:text="公里"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:textSize="30sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/line3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/line2"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
         android:gravity="center"
         android:orientation="horizontal">
@@ -76,21 +91,26 @@
             android:layout_height="wrap_content"
             android:text="购车日期"
             android:textColor="#ffffff"
-            android:textSize="15sp"/>
+            android:textSize="30sp"/>
 
-        <EditText
-            android:layout_width="118dp"
-            android:layout_height="30dp"
+        <TextView
+            android:id="@+id/et_purchaseDate"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
             />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/line4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:gravity="center"
+        android:layout_alignLeft="@+id/line3"
+        android:layout_below="@+id/line3"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -98,13 +118,27 @@
             android:layout_height="wrap_content"
             android:text="上次保养"
             android:textColor="#ffffff"
-            android:textSize="15sp"/>
+            android:textSize="30sp"/>
 
-        <EditText
-            android:layout_width="118dp"
-            android:layout_height="30dp"
+        <TextView
+            android:id="@+id/et_lastMaintenanceDate"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/btn_checkup"
+            android:text="保存"
+            android:textSize="30sp"
             />
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>
