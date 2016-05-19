@@ -45,16 +45,17 @@ public class PhysicalManager extends OBDManager {
 
     /**
      * 开始一键体检
-     *可以接收sdk回调事件：
-     *        Manager.Event.obdPhysicalConditionFailed//体检失败
-     *        Manager.Event.obdPhysicalCheckStart//体检开始事件；o=NULL
-     *        Manager.Event.obdPhysicalCheckResult//体检结果此时 o参数是Physical.SystemInfo，存储着体检系统ID和检测结果的信息
-     *        Manager.Event.obdPhysicalCheckEnd//体检结束
-     *        PhysicalManager.EVENT_OBD_PHYSICAL_CHECK_PROGRESS//体检进度 o参数为进度（int型）
+     * 可以接收sdk回调事件：
+     * Manager.Event.obdPhysicalConditionFailed//体检失败
+     * Manager.Event.obdPhysicalCheckStart//体检开始事件；o=NULL
+     * Manager.Event.obdPhysicalCheckResult//体检结果此时 o参数是Physical.SystemInfo，存储着体检系统ID和检测结果的信息
+     * Manager.Event.obdPhysicalCheckEnd//体检结束
+     * PhysicalManager.EVENT_OBD_PHYSICAL_CHECK_PROGRESS//体检进度 o参数为进度（int型）
      *
      * @return false:不满足体检条件，请保持OBD设备在非行程被手动终止状态;true:体检开始进行
      */
     public boolean startExam() {
+        Manager.getInstance().stopTrip(false);
         statuses = new ArrayList<>();
         int state = Manager.getInstance().getState();
         if (state != Manager.State.tripStoppedManually) {
@@ -160,6 +161,7 @@ public class PhysicalManager extends OBDManager {
 
     /**
      * 获取报告列表显示用的信息
+     *
      * @return 报告列表
      */
     public ReportHead getReportHead() {

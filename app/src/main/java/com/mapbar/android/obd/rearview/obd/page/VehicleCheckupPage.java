@@ -262,7 +262,6 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_start_physical:
             case R.id.btn_last_check:
-                Manager.getInstance().stopTrip(false);
                 PhysicalManager.getInstance().startExam();
                 // 日志
                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {

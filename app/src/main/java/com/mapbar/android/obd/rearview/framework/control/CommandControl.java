@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
+import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -65,6 +66,7 @@ public class CommandControl {
                     voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.driveCost));
                     break;
                 case 103000://开始体检
+                    PhysicalManager.getInstance().startExam();
                     break;
                 case 104000://播报保养
                     break;
@@ -79,7 +81,7 @@ public class CommandControl {
      *
      * @param command
      */
-    public void executeCommand2(final int command) {
+    private void executeCommand2(final int command) {
         ArrayList<Integer> commandList = new ArrayList<>();
         for (int command1 : commands) {
             commandList.add(command1);
