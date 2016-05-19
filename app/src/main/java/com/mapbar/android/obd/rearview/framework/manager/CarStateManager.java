@@ -3,7 +3,6 @@ package com.mapbar.android.obd.rearview.framework.manager;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
 import java.util.Timer;
@@ -15,7 +14,6 @@ import java.util.TimerTask;
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
     public Timer mTimer;
-    private CarStatusData data;
 
     public CarStateManager() {
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -48,19 +46,10 @@ public class CarStateManager extends OBDManager {
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
 
-    /**
-     * 获取车辆状态信息
-     * @return {@link CarStatusData}车辆状态信息
-     */
-    public CarStatusData getCarStatusData() {
-        return data;
-    }
-
     @Override
     public void onSDKEvent(int event, Object o) {
         switch (event) {
             case Manager.Event.obdCarStatusgetSucc:
-                data = (CarStatusData) o;
                 break;
             case Manager.Event.obdCarStatusgetFailed:
                 break;

@@ -44,7 +44,6 @@ public class CarStatePage extends AppPage {
     @Override
     public void initView() {
         carStateView = new CarStateView(getContentView(), R.id.v_carstate);
-        data = CarStateManager.getInstance().getCarStatusData();
         carStateView.setData(data);
         stateNames = getContext().getResources().getStringArray(R.array.state_names);
         gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -60,7 +59,7 @@ public class CarStatePage extends AppPage {
             public void onEvent(int event, Object o) {
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                    Log.v(LogTag.FRAMEWORK, "CarStatePage -->> event:" + event);
+                    Log.v(LogTag.FRAMEWORK, "event:" + event);
                 }
                 switch (event) {
                     case Manager.Event.obdCarStatusgetSucc:
@@ -156,12 +155,6 @@ public class CarStatePage extends AppPage {
         public void updateData() {
             if (data != null) {
                 dataStates = new int[]{data.lights, data.windows, data.lock, data.doors, data.trunk, data.sunroof};
-                // 日志
-                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                    for (int i = 0; i < dataStates.length; i++) {
-                        Log.v(LogTag.FRAMEWORK, "CarStatePage carState==" + dataStates[i]);
-                    }
-                }
             }
         }
 

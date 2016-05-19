@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
@@ -13,10 +13,10 @@
         <GridView
             android:id="@+id/gv_data_pop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="30dp"
             android:numColumns="3"
-            android:smoothScrollbar="false" />
+            android:smoothScrollbar="false"/>
 
         <ImageView
             android:id="@+id/iv_pop_close"
@@ -25,7 +25,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/btn_car_data_pop_close" />
+            android:src="@drawable/btn_car_data_pop_close"/>
     </RelativeLayout>
 
 

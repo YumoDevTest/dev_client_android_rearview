@@ -51,12 +51,4 @@ public class CarDataManager extends OBDManager {
         }
         super.onSDKEvent(event, o);
     }
-
-    /**
-     * 获取单次行程OBD实时数据信息
-     * return 单次行程OBD实时数据信息
-     */
-    public RealTimeData getRealTimeData() {
-        return realTimeData;
-    }
 }
