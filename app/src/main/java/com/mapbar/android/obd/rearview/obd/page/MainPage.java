@@ -10,7 +10,10 @@ import android.widget.RadioGroup;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.widget.MyViewPage;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.obd.Manager;
 
 import java.util.ArrayList;
 
@@ -20,7 +23,7 @@ public class MainPage extends AppPage {
 
     private TitleBar titleBar;
     @ViewInject(R.id.pager_main)
-    private ViewPager pager;
+    private MyViewPage pager;
     @ViewInject(R.id.rg_tabs)
     private RadioGroup rg_tabs;
 
@@ -83,6 +86,7 @@ public class MainPage extends AppPage {
         views.add(carStatePage.getContentView());
         views.add(carMaintenancePage.getContentView());
 //        views.add(controlTestPage.getContentView());
+        pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
         currentPage = vehicleCheckupPage;
     }
@@ -128,6 +132,26 @@ public class MainPage extends AppPage {
 
             }
         });
+        sdkListener = new OBDSDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                super.onEvent(event, o);
+                switch (event) {
+                    case Manager.Event.obdPhysicalCheckStart:
+                        pager.setNoScroll(true);
+                        break;
+                    case Manager.Event.obdPhysicalConditionFailed:
+                        pager.setNoScroll(false);
+                        break;
+                    case Manager.Event.obdPhysicalCheckEnd:
+                        pager.setNoScroll(false);
+                        break;
+                }
+
+
+            }
+        };
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
 
     }
 

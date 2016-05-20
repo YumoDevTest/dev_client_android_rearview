@@ -116,7 +116,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-//        initPage();
+        initPage();
         circleDrawable = new CircleDrawable(getContext());
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
@@ -170,6 +170,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
                         StringUtil.toastStringShort("体检失败!");
+                        CarDataManager.getInstance().restartTrip();
                         break;
                     case Manager.Event.obdPhysicalCheckStart:
 
@@ -200,7 +201,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                     case Manager.Event.obdPhysicalCheckEnd:
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
-                            Log.v(LogTag.TEMP, "obdPhysicalCheckEnd -->>");
+                            Log.v(LogTag.TEMP, "obdPhysicalCheckEnd1 -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
                         rela_physicaling.post(new Runnable() {

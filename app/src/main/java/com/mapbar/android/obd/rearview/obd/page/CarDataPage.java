@@ -24,6 +24,7 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.obd.Manager;
@@ -134,6 +135,12 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        PhysicalManager.getInstance();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_car_data_1:
@@ -182,15 +189,11 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             Log.v(LogTag.FRAMEWORK, "ThreadId:" + Thread.currentThread().getId());
             Log.v(LogTag.FRAMEWORK, "speed:" + realTimeData.rpm);
         }
-        tv_carData_value_1.post(new Runnable() {
-            @Override
-            public void run() {
-                tv_carData_value_1.setText(transform(spv0));
+
+        tv_carData_value_1.setText(transform(spv0));
                 tv_carData_value_2.setText(transform(spv1));
                 tv_carData_value_3.setText(transform(spv2));
                 tv_carData_value_4.setText(transform(spv3));
-            }
-        });
 
     }
 

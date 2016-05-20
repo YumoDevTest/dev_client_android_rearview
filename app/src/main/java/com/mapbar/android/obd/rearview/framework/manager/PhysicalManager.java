@@ -17,9 +17,8 @@ import java.util.List;
  * event1：EVENT_OBD_PHYSICAL_CHECK_PROGRESS,体检完成的进度 ;o 是体检进度 int型
  */
 public class PhysicalManager extends OBDManager {
-
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
-
+    private SDKListenerManager.SDKListener sdkListener;
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
     private ArrayList<Integer> statuses;
@@ -40,6 +39,7 @@ public class PhysicalManager extends OBDManager {
      * @return PhysicalManager实例
      */
     public static PhysicalManager getInstance() {
+
         return (PhysicalManager) OBDManager.getInstance(PhysicalManager.class);
     }
 
@@ -166,6 +166,10 @@ public class PhysicalManager extends OBDManager {
      */
     public ReportHead getReportHead() {
         ArrayList<ReportHead> heads = Physical.getInstance().getPhysicalReportByMonth(1970, 1);
+        // 日志
+        if (Log.isLoggable(LogTag.FRAMEWORK, Log.DEBUG)) {
+            Log.d(LogTag.FRAMEWORK, "heads -->> " + heads.get(0).getScore());
+        }
         if (heads != null && heads.size() > 0) {
             return heads.get(0);
         } else {

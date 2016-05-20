@@ -73,4 +73,14 @@
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/rela"
         />
+    <!--遮挡RecycleView,使其失去焦点，不可滚动，避免调用notifyDataChange时，同时滚动RecycleView崩溃-->
+    <TextView
+        android:layout_width="800dp"
+        android:layout_height="500dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/rela"
+        android:clickable="true"
+        android:enabled="true" />
 </RelativeLayout>
