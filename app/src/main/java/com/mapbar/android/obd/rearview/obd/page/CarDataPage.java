@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +38,8 @@ import java.util.HashMap;
  * Created by THINKPAD on 2016/5/6.
  */
 public class CarDataPage extends AppPage implements View.OnClickListener {
+    private final int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
+            R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
     @ViewInject(R.id.ll_car_data_1)
     private LinearLayout ll_car_data_1;
     @ViewInject(R.id.ll_car_data_2)
@@ -56,7 +59,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private TextView tv_carData_name_3;
     @ViewInject(R.id.tv_carData_name_4)
     private TextView tv_carData_name_4;
-
     @ViewInject(R.id.tv_carData_unit_1)
     private TextView tv_carData_unit_1;
     @ViewInject(R.id.tv_carData_unit_2)
@@ -65,7 +67,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private TextView tv_carData_unit_3;
     @ViewInject(R.id.tv_carData_unit_4)
     private TextView tv_carData_unit_4;
-
     @ViewInject(R.id.tv_carData_value_1)
     private TextView tv_carData_value_1;
     @ViewInject(R.id.tv_carData_value_2)
@@ -74,19 +75,21 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private TextView tv_carData_value_3;
     @ViewInject(R.id.tv_carData_value_4)
     private TextView tv_carData_value_4;
-
     private SharedPreferences sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
     private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
     private int number = -1;//显示数据空间的编号
     private PopupWindow popupWindow;
     private RealTimeData realTimeData;
-
     private String[] dataNames = getContext().getResources().getStringArray(R.array.data_names);
     private String[] units = getContext().getResources().getStringArray(R.array.units);
-    private int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
-            R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.page_car_data);
+    }
 
     @Override
     public void initView() {
@@ -127,11 +130,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                         break;
                 }
             }
-        }
-
-        ;
+        };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-
     }
 
     @Override

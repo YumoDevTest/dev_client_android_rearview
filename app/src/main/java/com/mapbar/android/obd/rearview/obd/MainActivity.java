@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         instance = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);

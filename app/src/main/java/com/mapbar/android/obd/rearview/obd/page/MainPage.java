@@ -1,19 +1,16 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.widget.MyViewPage;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
-import com.mapbar.obd.Manager;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 import java.util.ArrayList;
 
@@ -23,7 +20,7 @@ public class MainPage extends AppPage {
 
     private TitleBar titleBar;
     @ViewInject(R.id.pager_main)
-    private MyViewPage pager;
+    private ViewPager pager;
     @ViewInject(R.id.rg_tabs)
     private RadioGroup rg_tabs;
 
@@ -33,29 +30,24 @@ public class MainPage extends AppPage {
     private CarMaintenancePage carMaintenancePage;
     private VehicleCheckupPage vehicleCheckupPage;
     private ControlTestPage controlTestPage;
-    private ArrayList<View> views;
+    private ArrayList<Fragment> fragments;
     private AppPage currentPage;
-    private PagerAdapter adapter = new PagerAdapter() {
+
+    private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
 
         @Override
         public int getCount() {
-            return views.size();
+            return fragments.size();
         }
 
         @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            ((ViewPager) container).addView(views.get(position), 0);
-            return views.get(position);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
         }
     };
 
@@ -70,27 +62,18 @@ public class MainPage extends AppPage {
     public void initView() {
         titles = getResources().getStringArray(R.array.page_titles);
         titleBar = new TitleBar(this, R.id.title_main);
-        views = new ArrayList<>();
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
-        vehicleCheckupPage.initByCustom(R.layout.layout_physical);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
-        carDataPage.initByCustom(R.layout.page_car_data);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
-        carStatePage.initByCustom(R.layout.page_car_state);
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
-        carMaintenancePage.initByCustom(R.layout.page_upkeep);
-//        controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
-//        controlTestPage.initByCustom(R.layout.page_control_test);
         controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
-        controlTestPage.initByCustom(R.layout.page_control_test);
-        views.add(vehicleCheckupPage.getContentView());
-        views.add(carDataPage.getContentView());
-        views.add(carStatePage.getContentView());
-        views.add(carMaintenancePage.getContentView());
-//        views.add(controlTestPage.getContentView());
-        pager.setOffscreenPageLimit(3);
-        views.add(controlTestPage.getContentView());
-        pager.setAdapter(adapter);
+        fragments = new ArrayList<>();
+        fragments.add(vehicleCheckupPage);
+        fragments.add(carDataPage);
+        fragments.add(carStatePage);
+        fragments.add(carMaintenancePage);
+        fragments.add(controlTestPage);
+        pager.setAdapter(fragmentPagerAdapter);
         currentPage = vehicleCheckupPage;
     }
 
@@ -126,8 +109,17 @@ public class MainPage extends AppPage {
                         titleBar.setText(titles[3], TitleBar.TitleArea.MID);
                         currentPage = carMaintenancePage;
                         break;
+                    case 4:
+                        rg_tabs.check(R.id.page_tab4);
+                        titleBar.setText(titles[3], TitleBar.TitleArea.MID);
+                        currentPage = controlTestPage;
+                        break;
                 }
-                currentPage.onResume();
+                if (!currentPage.isInited()) {
+                    currentPage.setIsInited(true);
+                } else {
+                    currentPage.onResume();
+                }
             }
 
             @Override
@@ -136,7 +128,7 @@ public class MainPage extends AppPage {
             }
         });
         //监听禁止ViewPager切换页面
-        sdkListener = new OBDSDKListenerManager.SDKListener() {
+        /*sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
                 super.onEvent(event, o);
@@ -154,15 +146,11 @@ public class MainPage extends AppPage {
                                 pager.setNoScroll(false);
                             }
                         });
-
                         break;
                 }
-
-
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);*/
     }
 
 }

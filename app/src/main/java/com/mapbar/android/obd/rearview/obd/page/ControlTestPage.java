@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,6 +26,12 @@ public class ControlTestPage extends AppPage {
 
     private int[] controlCmds;
     private String[] cmdStrs, cmdNames;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.page_control_test);
+    }
 
     @Override
     public void initView() {

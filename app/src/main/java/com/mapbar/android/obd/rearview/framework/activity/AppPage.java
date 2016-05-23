@@ -21,6 +21,7 @@ public abstract class AppPage extends Fragment {
     private Bundle data;
     private Context context;
     private int contentViewResource;
+    private boolean isInited;
 
     public AppPage() {
         context = MainActivity.getInstance();
@@ -45,7 +46,6 @@ public abstract class AppPage extends Fragment {
         }
         return contentView;
     }
-
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
@@ -88,5 +88,13 @@ public abstract class AppPage extends Fragment {
         ViewInjectTool.inject(this, this.contentView);
         initView();
         setListener();
+    }
+
+    public boolean isInited() {
+        return isInited;
+    }
+
+    public void setIsInited(boolean isInited) {
+        this.isInited = isInited;
     }
 }

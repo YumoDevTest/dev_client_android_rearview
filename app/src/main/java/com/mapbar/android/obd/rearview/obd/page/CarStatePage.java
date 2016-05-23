@@ -39,6 +39,7 @@ public class CarStatePage extends AppPage {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.page_car_state);
     }
 
     @Override

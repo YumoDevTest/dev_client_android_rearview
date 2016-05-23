@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.mapdal.DateTime;
@@ -120,6 +123,12 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
             userCar.lastMaintenanceDate = time_buy;
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.page_upkeep);
+    }
 
     @Override
     public void initView() {
@@ -242,6 +251,13 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     }
     @Override
     public void onResume() {
+        super.onResume();
+        Manager.getInstance().queryRemoteMaintenanceInfo();
+        // 日志
+        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+            Log.v(LogTag.TEMP, "queryRemoteMaintenanceInfo -->>");
+            Log.v(LogTag.TEMP, "onResume -->>");
+        }
         getLocalSchemeCache();
         super.onResume();
     }

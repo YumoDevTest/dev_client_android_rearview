@@ -103,6 +103,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_physical);
     }
 
     @Override
