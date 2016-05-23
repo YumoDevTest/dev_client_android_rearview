@@ -78,10 +78,9 @@ public class MainPage extends AppPage {
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
         carStatePage.initByCustom(R.layout.page_car_state);
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
-        carMaintenancePage.initByCustom(R.layout.layout_upkeep_page);
+        carMaintenancePage.initByCustom(R.layout.page_upkeep);
 //        controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
 //        controlTestPage.initByCustom(R.layout.page_control_test);
-        carMaintenancePage.initByCustom(R.layout.page_upkeep);
         controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
         controlTestPage.initByCustom(R.layout.page_control_test);
         views.add(vehicleCheckupPage.getContentView());

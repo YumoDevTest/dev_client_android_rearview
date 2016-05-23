@@ -24,7 +24,7 @@
         <EditText
             android:id="@+id/et_totalMileage"
             android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
             android:textColor="#ffffff"
@@ -60,7 +60,7 @@
         <EditText
             android:id="@+id/et_lastMaintenanceMileage"
             android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
             android:textColor="#ffffff"
@@ -96,7 +96,7 @@
         <TextView
             android:id="@+id/et_purchaseDate"
             android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
             android:textColor="#ffffff"
@@ -123,7 +123,7 @@
         <TextView
             android:id="@+id/et_lastMaintenanceDate"
             android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
             android:textColor="#ffffff"

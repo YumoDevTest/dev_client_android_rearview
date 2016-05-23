@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.LocalUserCarResult;
@@ -26,7 +28,10 @@ import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by liuyy on 2016/5/7.
@@ -36,26 +41,63 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     UserCar userCar;
     @ViewInject(R.id.line_upkeep)
     private LinearLayout line_upkeep;
+
     @ViewInject(R.id.line_upkeep_revise)
     private RelativeLayout line_upkeep_revise;
+
     @ViewInject(R.id.et_totalMileage)
     private EditText et_totalMileage;
+
     @ViewInject(R.id.et_lastMaintenanceMileage)
     private EditText et_lastMaintenanceMileage;
+
     @ViewInject(R.id.et_purchaseDate)
     private TextView et_purchaseDate;
+
     @ViewInject(R.id.et_lastMaintenanceDate)
     private TextView et_lastMaintenanceDate;
+
     @ViewInject(R.id.btn_save)
     private Button btn_save;
+
+    @ViewInject(R.id.btn_alreadyUpkeep)
+    private Button btn_alreadyUpkeep;
+
     @ViewInject(R.id.tv_next_mileage)
     private TextView tv_next_mileage;
+
     @ViewInject(R.id.tv_next_time)
     private TextView tv_next_time;
+
+    @ViewInject(R.id.tv_upkeep_totle_item)
+    private TextView tv_upkeep_totle_item;
+
+    @ViewInject(R.id.view_upkeep)
+    private ImageView view_upkeep;
+
+    @ViewInject(R.id.view_upkeep_time)
+    private ImageView view_upkeep_time;
+
+    @ViewInject(R.id.tv_upkeep_totle_cost)
+    private TextView tv_upkeep_totle_cost;
+
+    @ViewInject(R.id.tv)
+    private TextView tv;
+
+    @ViewInject(R.id.tv2)
+    private TextView tv2;
     private Calendar mCalendar;
     private MaintenanceState maintenanceState;
     private boolean boolPurchaseDate = false;
     private boolean boolLastMaintenanceDate = false;
+
+    private CircleDrawable circleDrawable;
+    private short year;
+    private short month;
+    private short day;
+    private long overdueTime;
+    private long nextDay;
+    private long nextUpkeepDate;
     private DatePickerDialog.OnDateSetListener mBuyDateListener = new DatePickerDialog.OnDateSetListener() {
 
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -83,6 +125,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     public void initView() {
         mCalendar = Calendar.getInstance();
         LocalUserCarResult localUserCar = Manager.getInstance().queryLocalUserCar();
+//        Manager.getInstance().queryRemoteMaintenanceInfo();
         UserCar[] userCars = localUserCar.userCars;
         if (userCars.length > 0) {
             userCar = localUserCar.userCars[0];
@@ -107,6 +150,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         } else {
         }
 
+
     }
 
     @Override
@@ -115,6 +159,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
             Log.v(LogTag.TEMP, "queryRemoteMaintenanceInfo -->>");
+            Log.v(LogTag.TEMP, "onResume -->>");
         }
         super.onResume();
     }
@@ -122,6 +167,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     @Override
     public void setListener() {
         et_purchaseDate.setOnClickListener(this);
+        btn_alreadyUpkeep.setOnClickListener(this);
         et_lastMaintenanceDate.setOnClickListener(this);
         btn_save.setOnClickListener(this);
 
@@ -136,86 +182,56 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "queryRemoteMaintenanceInfoSucc -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
+                        line_upkeep_revise.setVisibility(View.GONE);
+                        line_upkeep.setVisibility(View.VISIBLE);
                         maintenanceState = (MaintenanceState) o;
+                        DateTime mDate = maintenanceState.getNextMaintenanceDate();
+                        year = mDate.year;
+                        month = mDate.month;
+                        day = mDate.day;
+                        String.valueOf(year);
+                        String data2 = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date d = null;
+                        try {
+                            d = sdf.parse(data2);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(d);
+                        nextUpkeepDate = c.getTimeInMillis();
+                        Date nowDate = new Date();
+                        long time = nowDate.getTime();
+                        if (time < nextUpkeepDate) {
+                            nextDay = (nextUpkeepDate - time) / 86400000;
+                        }
                         int tag = maintenanceState.getTag();
                         switch (tag) {
                             case MaintenanceState.Tag.invalid:
+                                // 日志
+                                if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                                    Log.v(LogTag.TEMP, "invalid -->>");
+                                }
                                 // MaintenanceState对象无效
                                 break;
                             case MaintenanceState.Tag.nextMaintenanceDateEstimatedByMileage:
                                 // 表示未过保，并且下次保养日期是用里程估算得到的
-                                double progressPercentage = maintenanceState.getProgressPercentage();
-                                tv_next_mileage.setText(maintenanceState.getMileageToMaintenance() / 1000 + "");
+                                steData(maintenanceState);
+
                                 break;
                             case MaintenanceState.Tag.nextMaintenanceDateEstimatedByTime:
-                                // 表示未过保，并且下次保养日期是用时间估算得到的
-                                /*rb_byMileage.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        mAif.showAlert(R.string.bytime);
-                                    }
-                                });
-                                if (nextDay < 20) {
-                                    tv_kilometer.setTextColor(mContext.getResources().getColor(R.color.dark_yellow));
-                                    tv_unit.setTextColor(mContext.getResources().getColor(R.color.dark_yellow));
-                                } else {
-                                    tv_kilometer.setTextColor(mContext.getResources().getColor(R.color.dark_green));
-                                    tv_unit.setTextColor(mContext.getResources().getColor(R.color.dark_green));
-                                }
-                                tv_time.setText(mContext.getResources().getString(R.string.nextupkeep_date) + year + "-" + month + "-" + day);
-                                tv_kilometer.setText(nextDay + "");
-                                tv_unit.setText(R.string.tian);
-                                rb_byTime.setChecked(true);
+                                steData(maintenanceState);
                                 break;
                             case MaintenanceState.Tag.overdue:
-                                // 表示过保了
-                                tv_time.setVisibility(View.GONE);
-                                if (state.getOverdueTime() > 0) {
-                                    // 时间过保
-                                    mHandler.sendEmptyMessage(1);
+                                if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                                    Log.v(LogTag.TEMP, "overdue -->>");
                                 }
-                                if (state.getOverdueMileage() > 0) {
-                                    // 里程超过保养
-                                    mHandler.sendEmptyMessage(2);
-                                }
-                                rg_tab.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                        switch (checkedId) {
-                                            case R.id.rb_byMileage:
-                                                com.mapbar.android.log.Log.i("zc", "guobaorb_byMileage");
-//							rb_byMileage.setTextColor(mContext.getResources().getColor(R.color.calendar_active_month_bg));
-//							rb_byTime.setTextColor(mContext.getResources().getColor(R.color.dark_green));
-                                                tv_last.setText(R.string.OverdueMileage);
-                                                tv_kilometer.setText(state.getOverdueMileage() / 1000 + "");
-                                                tv_unit.setText("km");
-                                                break;
-                                            case R.id.rb_byTime:
-                                                com.mapbar.android.log.Log.i("zc", "guobaorb_byTime");
-//							rb_byTime.setTextColor(mContext.getResources().getColor(R.color.calendar_active_month_bg));
-//							rb_byMileage.setTextColor(mContext.getResources().getColor(R.color.dark_green));
-                                                tv_last.setText(R.string.OverdueTime);
-                                                tv_kilometer.setText(overdueTime + "");
-                                                tv_unit.setText(mContext.getResources().getString(R.string.tian));
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-                                });
-
-                                btu_alreadyupkeep.setVisibility(View.VISIBLE);
-                                int count = state.getOverduePeriodCount();
-                                String str1 = mContext.getString(R.string.noinfo);
-                                String str2 = mContext.getResources().getString(R.string.noinfo2);
-                                tv_noinfo.setText(Html.fromHtml(str1 + "<font color=\"#ff5777\">" + count + "</font>" + str2));*/
+                                setOverdueData(maintenanceState);
                                 break;
                             default:
                                 break;
                         }
-                        tv_next_mileage.setText(String.valueOf(maintenanceState
-                                .getMileageToMaintenance() / 1000));
-//                        tv_next_time.setText();
                         break;
                     case Manager.Event.queryRemoteMaintenanceInfoFailed:
                         // 日志
@@ -228,11 +244,26 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                             //未填信息
                             line_upkeep_revise.setVisibility(View.VISIBLE);
                             line_upkeep.setVisibility(View.GONE);
+                        } else {
+                            StringUtil.toastStringShort(error.errMsg);
                         }
                         break;
                     case Manager.Event.carInfoUploadSucc:
+                        // 日志
+                        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                            Log.v(LogTag.TEMP, "carInfoUploadSucc -->>");
+                        }
+                        StringUtil.toastStringShort("设置成功");
+
+
                         break;
                     case Manager.Event.carInfoUploadFailed:
+                        // 日志
+                        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                            Log.v(LogTag.TEMP, "carInfoUploadFailed -->>");
+                            Log.v(LogTag.TEMP, "O -->>" + o);
+                        }
+                        StringUtil.toastStringShort("设置失败");
                         break;
                     case Manager.Event.carInfoWriteDatabaseSucc:
                         break;
@@ -281,22 +312,53 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
                 } else {
-                    // 日志
-                    if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
-                        Log.v(LogTag.TEMP, "btn_save -->>");
-                    }
                     userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString()) * 1000;
                     userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString()) * 1000;
                     Manager.getInstance().setUserCar(userCar);
+                    Manager.getInstance().queryRemoteMaintenanceInfo();
+                    // 日志
+                    if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                        Log.v(LogTag.TEMP, "setUserCar -->>");
+                    }
                 }
-
+                break;
+            case R.id.btn_alreadyUpkeep:
+                line_upkeep_revise.setVisibility(View.VISIBLE);
+                line_upkeep.setVisibility(View.GONE);
                 break;
 
         }
 
     }
 
+    private void steData(MaintenanceState maintenanceState) {
+        tv_next_mileage.setText(String.valueOf(maintenanceState.getMileageToMaintenance() / 1000));
+        tv_next_time.setText(String.valueOf(nextDay));
+        tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
+        tv_upkeep_totle_cost.setText("预计费用 " + maintenanceState.getTotalPrice() + " 元");
+        circleDrawable = new CircleDrawable(getContext());
+        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable.setCircleWidth(9);
+        circleDrawable.setProgress((int) maintenanceState.getProgressPercentage());
+        view_upkeep_time.setImageDrawable(circleDrawable);
+        view_upkeep.setImageDrawable(circleDrawable);
+    }
 
+    private void setOverdueData(MaintenanceState maintenanceState) {
+        tv.setText("超过保养里程");
+        tv_next_mileage.setText(maintenanceState.getOverdueMileage() / 1000 + "");
+        tv2.setText("超过保养期限");
+        overdueTime = maintenanceState.getOverdueTime() / 86400000;
+        tv_next_time.setText(String.valueOf(overdueTime));
+        tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
+        tv_upkeep_totle_cost.setText("预计费用 " + maintenanceState.getTotalPrice() + " 元");
+        circleDrawable = new CircleDrawable(getContext());
+        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable.setCircleWidth(9);
+        circleDrawable.setProgress((int) maintenanceState.getProgressPercentage());
+        view_upkeep_time.setImageDrawable(circleDrawable);
+        view_upkeep.setImageDrawable(circleDrawable);
+    }
 }
 
 class MyDatePickerDialog extends DatePickerDialog {
