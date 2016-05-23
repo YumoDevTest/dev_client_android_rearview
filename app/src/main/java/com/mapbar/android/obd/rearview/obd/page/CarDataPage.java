@@ -168,7 +168,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     /**
      * 更新View数据
      */
-
     public void upDataView() {
         tv_carData_name_1.setText(dataNames[spv0]);
         tv_carData_name_2.setText(dataNames[spv1]);
@@ -178,6 +177,18 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         tv_carData_unit_2.setText(units[spv1]);
         tv_carData_unit_3.setText(units[spv2]);
         tv_carData_unit_4.setText(units[spv3]);
+        //当车速低于10时,更改单位
+        if (realTimeData != null && realTimeData.speed <= 10) {
+            if (spv0 == 1) tv_carData_unit_1.setText("L/H");
+            else if (spv1 == 1) tv_carData_unit_2.setText("L/H");
+            else if (spv2 == 1) tv_carData_unit_3.setText("L/H");
+            else if (spv3 == 1) tv_carData_unit_4.setText("L/H");
+        } else if (realTimeData != null && realTimeData.speed > 10) {
+            if (spv0 == 1) tv_carData_unit_1.setText("L/100KM");
+            else if (spv1 == 1) tv_carData_unit_2.setText("L/100KM");
+            else if (spv2 == 1) tv_carData_unit_3.setText("L/100KM");
+            else if (spv3 == 1) tv_carData_unit_4.setText("L/100KM");
+        }
     }
 
     /**
@@ -191,9 +202,9 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         }
 
         tv_carData_value_1.setText(transform(spv0));
-                tv_carData_value_2.setText(transform(spv1));
-                tv_carData_value_3.setText(transform(spv2));
-                tv_carData_value_4.setText(transform(spv3));
+        tv_carData_value_2.setText(transform(spv1));
+        tv_carData_value_3.setText(transform(spv2));
+        tv_carData_value_4.setText(transform(spv3));
 
     }
 
@@ -210,7 +221,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             case 1:
                 return TimeUtils.parseTime(realTimeData.tripTime);
             case 2:
-                return DecFormatUtil.format2dot1(realTimeData.tripLength);
+                return DecFormatUtil.format2dot1(realTimeData.tripLength / 1000);
             case 3:
                 return DecFormatUtil.format2dot1(realTimeData.driveCost);
             case 4:
