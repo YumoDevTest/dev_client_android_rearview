@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
-    private SDKListenerManager.SDKListener sdkListener;
     private List<PhysicalData> physicalList = new ArrayList<>();
     private int progress = 0;
     private ArrayList<Integer> statuses;
@@ -39,7 +38,6 @@ public class PhysicalManager extends OBDManager {
      * @return PhysicalManager实例
      */
     public static PhysicalManager getInstance() {
-
         return (PhysicalManager) OBDManager.getInstance(PhysicalManager.class);
     }
 

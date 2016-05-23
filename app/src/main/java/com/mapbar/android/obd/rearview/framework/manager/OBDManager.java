@@ -9,8 +9,8 @@ import java.util.HashMap;
  */
 public class OBDManager {
     protected static OBDListener baseObdListener;
-    protected static SDKListenerManager.SDKListener sdkListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
+    protected SDKListenerManager.SDKListener sdkListener;
 
     public static OBDManager getInstance(Class<? extends OBDManager> clazz) {
         if (map == null) {
@@ -37,7 +37,8 @@ public class OBDManager {
     }
 
     /**
-     *sdk内部回调事件
+     * sdk内部回调事件
+     *
      * @param event 事件的id
      * @param o     事件携带的数据
      */
@@ -48,7 +49,7 @@ public class OBDManager {
     }
 
     /**
-     *  SDK回调给用户的事件
+     * SDK回调给用户的事件
      */
     public interface OBDListener {
         void onEvent(int event, Object o);
