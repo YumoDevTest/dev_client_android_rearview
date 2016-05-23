@@ -164,10 +164,6 @@ public class PhysicalManager extends OBDManager {
      */
     public ReportHead getReportHead() {
         ArrayList<ReportHead> heads = Physical.getInstance().getPhysicalReportByMonth(1970, 1);
-        // 日志
-        if (Log.isLoggable(LogTag.FRAMEWORK, Log.DEBUG)) {
-            Log.d(LogTag.FRAMEWORK, "heads -->> " + heads.get(0).getScore());
-        }
         if (heads != null && heads.size() > 0) {
             return heads.get(0);
         } else {

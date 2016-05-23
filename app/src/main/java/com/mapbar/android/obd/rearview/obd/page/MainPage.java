@@ -135,6 +135,7 @@ public class MainPage extends AppPage {
 
             }
         });
+        //监听禁止ViewPager切换页面
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
@@ -147,7 +148,13 @@ public class MainPage extends AppPage {
                         pager.setNoScroll(false);
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
-                        pager.setNoScroll(false);
+                        pager.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pager.setNoScroll(false);
+                            }
+                        });
+
                         break;
                 }
 
