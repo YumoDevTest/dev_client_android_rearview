@@ -24,6 +24,8 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.MaintenanceError;
+import com.mapbar.obd.MaintenanceInfo;
+import com.mapbar.obd.MaintenanceResult;
 import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
@@ -125,7 +127,6 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     public void initView() {
         mCalendar = Calendar.getInstance();
         LocalUserCarResult localUserCar = Manager.getInstance().queryLocalUserCar();
-//        Manager.getInstance().queryRemoteMaintenanceInfo();
         UserCar[] userCars = localUserCar.userCars;
         if (userCars.length > 0) {
             userCar = localUserCar.userCars[0];
@@ -153,9 +154,111 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
 
     }
 
+    /**
+     * 获取本地保养信息
+     */
+    private void getLocalSchemeCache() {
+        // 获取本地缓存保养数据
+        MaintenanceInfo localSchemeCache = Manager.getInstance().queryMaintenanceInfoByLocalSchemeCache();
+        switch (localSchemeCache.errCode) {
+            case MaintenanceResult.noSchemeFound:
+                // 本地没有保养信息,网络获取保养信息
+                Manager.getInstance().queryRemoteMaintenanceInfo();
+                break;
+            case MaintenanceResult.ok:
+                // 7天的判断
+                // 日志
+                if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                    Log.v(LogTag.TEMP, "MaintenanceResult.ok -->>");
+                    Log.v(LogTag.TEMP, "Object -->>" + localSchemeCache.state);
+                }
+                DateTime mDate = localSchemeCache.state.getNextMaintenanceDate();
+                year = mDate.year;
+                month = mDate.month;
+                day = mDate.day;
+                String.valueOf(year);
+                String data2 = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = null;
+                try {
+                    d = sdf.parse(data2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                nextUpkeepDate = c.getTimeInMillis();
+                Date nowDate = new Date();
+                long time = nowDate.getTime();
+                if (time < nextUpkeepDate) {
+                    nextDay = (nextUpkeepDate - time) / 86400000;
+                }
+                int tag = localSchemeCache.state.getTag();
+                switch (tag) {
+                    case MaintenanceState.Tag.invalid:
+                        // 日志
+                        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                            Log.v(LogTag.TEMP, "invalid -->>");
+                        }
+                        break;
+                    case MaintenanceState.Tag.nextMaintenanceDateEstimatedByMileage:
+                        // 表示未过保，并且下次保养日期是用里程估算得到的
+                        steData(localSchemeCache.state);
+                        break;
+                    case MaintenanceState.Tag.nextMaintenanceDateEstimatedByTime:
+                        steData(localSchemeCache.state);
+                        break;
+                    case MaintenanceState.Tag.overdue:
+                        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                            Log.v(LogTag.TEMP, "overdue -->>");
+                        }
+                        setOverdueData(localSchemeCache.state);
+                        break;
+                    default:
+                        break;
+                }
+                steData(localSchemeCache.state);
+                break;
+            case MaintenanceResult.carGenerationNotSpecified:
+                StringUtil.toastStringShort("尚未指定车型");
+                break;
+            case MaintenanceResult.networkRequestCancelled:
+                StringUtil.toastStringShort("网络请求被取消了");
+                break;
+            case MaintenanceResult.networkRequestFailed:
+                StringUtil.toastStringShort("网络请求失败");
+                break;
+            case MaintenanceResult.networkResponseEmpty:
+                StringUtil.toastStringShort("网络请求得到的响应为空");
+                break;
+            case MaintenanceResult.networkResponseError:
+                StringUtil.toastStringShort("网络请求得到的响应有误");
+                break;
+            case MaintenanceResult.notLoggedIn:
+                StringUtil.toastStringShort("当前未登录");
+                break;
+            case MaintenanceResult.outOfData:
+                StringUtil.toastStringShort("行驶里程超出了该车保养范围");
+                break;
+            case MaintenanceResult.parameterError:
+                line_upkeep_revise.setVisibility(View.VISIBLE);
+                line_upkeep.setVisibility(View.GONE);
+                StringUtil.toastStringShort("保养参数有误");
+                break;
+            case MaintenanceResult.parameterIncomplete:
+                line_upkeep_revise.setVisibility(View.VISIBLE);
+                line_upkeep.setVisibility(View.GONE);
+                StringUtil.toastStringShort("保养参数不完整");
+                break;
+            default:
+                break;
+        }
+
+    }
     @Override
     public void onResume() {
-        Manager.getInstance().queryRemoteMaintenanceInfo();
+//        Manager.getInstance().queryRemoteMaintenanceInfo();
+        getLocalSchemeCache();
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
             Log.v(LogTag.TEMP, "queryRemoteMaintenanceInfo -->>");
@@ -213,12 +316,10 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                                     Log.v(LogTag.TEMP, "invalid -->>");
                                 }
-                                // MaintenanceState对象无效
                                 break;
                             case MaintenanceState.Tag.nextMaintenanceDateEstimatedByMileage:
                                 // 表示未过保，并且下次保养日期是用里程估算得到的
                                 steData(maintenanceState);
-
                                 break;
                             case MaintenanceState.Tag.nextMaintenanceDateEstimatedByTime:
                                 steData(maintenanceState);
@@ -253,9 +354,6 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "carInfoUploadSucc -->>");
                         }
-                        StringUtil.toastStringShort("设置成功");
-
-
                         break;
                     case Manager.Event.carInfoUploadFailed:
                         // 日志
@@ -266,6 +364,12 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         StringUtil.toastStringShort("设置失败");
                         break;
                     case Manager.Event.carInfoWriteDatabaseSucc:
+                        // 日志
+                        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+                            Log.v(LogTag.TEMP, "carInfoWriteDatabaseSucc -->>");
+                        }
+                        getLocalSchemeCache();
+                        StringUtil.toastStringShort("设置成功");
                         break;
                     case Manager.Event.carInfoWriteDatabaseFailed:
                         break;
@@ -306,20 +410,22 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 }
                 break;
             case R.id.btn_save:
-                if (et_purchaseDate.getText().equals(getContext().getResources().getString(R.string.isnotset)) ||
-                        et_lastMaintenanceDate.getText().equals(getContext().getResources().getString(R.string.isnotset))
+                if (et_purchaseDate.getText().toString().trim().equals(getContext().getResources().getString(R.string.isnotset)) ||
+                        et_lastMaintenanceDate.getText().toString().trim().equals(getContext().getResources().getString(R.string.isnotset))
                         || TextUtils.isEmpty(et_totalMileage.getText().toString()) || TextUtils
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
                 } else {
                     userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString()) * 1000;
                     userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString()) * 1000;
-                    Manager.getInstance().setUserCar(userCar);
-                    Manager.getInstance().queryRemoteMaintenanceInfo();
                     // 日志
                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                         Log.v(LogTag.TEMP, "setUserCar -->>");
+                        Log.v(LogTag.TEMP, "totalMileage -->>" + userCar.totalMileage);
+                        Log.v(LogTag.TEMP, "lastMaintenanceMileage -->>" + userCar.lastMaintenanceMileage);
                     }
+                    Manager.getInstance().setUserCar(userCar);
+
                 }
                 break;
             case R.id.btn_alreadyUpkeep:
@@ -332,6 +438,12 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     }
 
     private void steData(MaintenanceState maintenanceState) {
+        // 日志
+        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
+            Log.v(LogTag.TEMP, "getMileageToMaintenance -->>" + maintenanceState.getMileageToMaintenance() / 1000);
+        }
+        line_upkeep_revise.setVisibility(View.GONE);
+        line_upkeep.setVisibility(View.VISIBLE);
         tv_next_mileage.setText(String.valueOf(maintenanceState.getMileageToMaintenance() / 1000));
         tv_next_time.setText(String.valueOf(nextDay));
         tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
