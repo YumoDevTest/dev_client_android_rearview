@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
 
 //        UserCenter.getInstance().login("18600425206", "111111");
         UserCenter.getInstance().login("13673096611", "888888");
+        UserCenter.getInstance().login("18610857365", "111111");
 
     }
 
