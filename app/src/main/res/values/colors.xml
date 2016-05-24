@@ -74,5 +74,5 @@
     <color name="check_red">#FFFF5777</color>
 
     <color name="pink">#ff5777</color>
-
+    <color name="dashboard_red_text">#ed331a</color>
 </resources>

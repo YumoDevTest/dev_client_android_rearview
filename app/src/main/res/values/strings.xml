@@ -255,4 +255,17 @@
         <item>当前车辆状态</item>
         <item>保养提醒</item>
     </array>
+    <!--预警信息-->
+    <string name="bca_instantGasConsume">瞬时油耗%1$s，请注意。</string>
+    <string name="dlg_instantGasConsume">瞬时油耗达到%1$sL/100km</string>
+    <string name="bca_errCode">检测到故障码: %1$s</string>
+    <string name="dlg_errCode">故障码:%1$s</string>
+    <string name="bca_temperature">当前水温%1$s度，请注意。</string>
+    <string name="dlg_temperature">当前水温%1$s℃</string>
+    <string name="bca_voltage">控制模块电压异常，电压%1$s伏</string>
+    <string name="dlg_voltage">当前电压%1$sV</string>
+    <string name="bca_speed">您已超速，车速%1$s，请注意。</string>
+    <string name="dlg_speed">您已超速%1$skm/h</string>
+    <string name="bca_tired">您已驾驶%1$s小时，处于疲劳驾驶。</string>
+    <string name="dlg_tired">您已驾驶%1$s小时</string>
 </resources>
