@@ -189,11 +189,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".framework.control.VoiceReceiver">
-            <intent-filter>
-                <action android:name="mapbar.obd.intent.action.VOICE_CONTROL"/>
-            </intent-filter>
-        </receiver>
+
         <!--爱心推end-->
 
         <!--umeng APPKEY和渠道-->
