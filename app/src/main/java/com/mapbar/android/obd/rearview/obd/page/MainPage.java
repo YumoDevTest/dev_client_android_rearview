@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
@@ -179,7 +180,6 @@ public class MainPage extends AppPage {
                                 showNextTimerDialog();
                             } else {
                                 Runnable r = new Runnable() {
-
                                     @Override
                                     public void run() {
                                         setAlarmOn(true);
@@ -228,9 +228,6 @@ public class MainPage extends AppPage {
             sAlarmDataList.remove(0);
             mAlarmTimerDialog.setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
 
-
-            // RingUtil.startRing(mContext, R.raw.alarm, SoundUtil.MODE_ONCE);
-
             String content = "";
             int type = data.getType();
             switch (type) {
@@ -247,21 +244,21 @@ public class MainPage extends AppPage {
                         }
                         content = contentEn.toString();
                     }
-                    Manager.getInstance().speak(mContext.getResources().getString(R.string.bca_errCode, content));
+                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_errCode, content));
                 }
                 break;
                 case Manager.AlarmType.temperature: {
                     // 水温预警
                     content = String.format(Locale.getDefault(), "%d", data.getInt());
                     mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_temperature, content));
-                    Manager.getInstance().speak(mContext.getResources().getString(R.string.bca_temperature, content));
+                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_temperature, content));
                 }
                 break;
                 case Manager.AlarmType.voltage: {
                     // 电压预警
                     content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
                     mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_voltage, content));
-                    Manager.getInstance().speak(mContext.getResources().getString(R.string.bca_voltage, content));
+                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_voltage, content));
                 }
                 break;
 
@@ -269,7 +266,7 @@ public class MainPage extends AppPage {
                     // 疲劳驾驶预警
                     content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
                     mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_tired, content));
-                    Manager.getInstance().speak(mContext.getResources().getString(R.string.bca_tired, content));
+                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_tired, content));
                 }
                 break;
                 default: {
