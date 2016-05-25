@@ -3,9 +3,11 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -16,18 +18,20 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.log.Log;
-import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.MaintenanceError;
 import com.mapbar.obd.MaintenanceInfo;
 import com.mapbar.obd.MaintenanceResult;
 import com.mapbar.obd.MaintenanceState;
+import com.mapbar.obd.MaintenanceTask;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 
@@ -89,6 +93,10 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
 
     @ViewInject(R.id.tv2)
     private TextView tv2;
+
+    @ViewInject(R.id.rl_view)
+    private RecyclerView rl_view;
+
     private Calendar mCalendar;
     private MaintenanceState maintenanceState;
     private boolean boolPurchaseDate = false;
@@ -101,6 +109,9 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     private long overdueTime;
     private long nextDay;
     private long nextUpkeepDate;
+    private UpkeepItemAdapter upkeepItemAdapter;
+
+
     private DatePickerDialog.OnDateSetListener mBuyDateListener = new DatePickerDialog.OnDateSetListener() {
 
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -121,17 +132,17 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
             time_buy.month = (short) (monthOfYear + 1);
             time_buy.day = (short) dayOfMonth;
             userCar.lastMaintenanceDate = time_buy;
+
         }
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_upkeep);
-    }
-
-    @Override
     public void initView() {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rl_view.setLayoutManager(layoutManager);
+
         mCalendar = Calendar.getInstance();
         LocalUserCarResult localUserCar = Manager.getInstance().queryLocalUserCar();
         UserCar[] userCars = localUserCar.userCars;
@@ -152,13 +163,10 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 boolLastMaintenanceDate = false;
                 et_lastMaintenanceDate.setText("未设置");
             }
-
             et_totalMileage.setText(userCar.totalMileage / 1000 + "");
             et_lastMaintenanceMileage.setText(userCar.lastMaintenanceMileage / 1000 + "");
         } else {
         }
-
-
     }
 
     /**
@@ -173,7 +181,6 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 Manager.getInstance().queryRemoteMaintenanceInfo();
                 break;
             case MaintenanceResult.ok:
-                // 7天的判断
                 DateTime mDate = localSchemeCache.state.getNextMaintenanceDate();
                 year = mDate.year;
                 month = mDate.month;
@@ -249,15 +256,9 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         }
 
     }
+
     @Override
     public void onResume() {
-        super.onResume();
-        Manager.getInstance().queryRemoteMaintenanceInfo();
-        // 日志
-        if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
-            Log.v(LogTag.TEMP, "queryRemoteMaintenanceInfo -->>");
-            Log.v(LogTag.TEMP, "onResume -->>");
-        }
         getLocalSchemeCache();
         super.onResume();
     }
@@ -404,6 +405,19 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
      */
     private void steData(MaintenanceState maintenanceState) {
 
+        final MaintenanceTask[] tasks = maintenanceState.getTasks();
+        if (0 < tasks.length) {
+            upkeepItemAdapter = new UpkeepItemAdapter(getContext(), tasks);
+            rl_view.setAdapter(upkeepItemAdapter);
+            rl_view.post(new Runnable() {
+                @Override
+                public void run() {
+                    rl_view.setLayoutParams(new LinearLayout.LayoutParams((int) (tasks.length
+                            * 80 *
+                            (LayoutUtils.getDensity() + 0.5)), ViewGroup.LayoutParams.WRAP_CONTENT));
+                }
+            });
+        }
         tv.setText("距离下次保养里程");
         tv2.setText("距离下次保养时间");
         line_upkeep_revise.setVisibility(View.GONE);
@@ -422,11 +436,25 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
 
     /**
      * 设置过保数据
+     *
      * @param maintenanceState
      */
     private void setOverdueData(MaintenanceState maintenanceState) {
         line_upkeep_revise.setVisibility(View.GONE);
         line_upkeep.setVisibility(View.VISIBLE);
+        final MaintenanceTask[] tasks = maintenanceState.getTasks();
+        if (0 < tasks.length) {
+            upkeepItemAdapter = new UpkeepItemAdapter(getContext(), tasks);
+            rl_view.setAdapter(upkeepItemAdapter);
+            rl_view.post(new Runnable() {
+                @Override
+                public void run() {
+                    rl_view.setLayoutParams(new LinearLayout.LayoutParams((int) (tasks.length
+                            * 80 *
+                            (LayoutUtils.getDensity() + 0.5)), ViewGroup.LayoutParams.WRAP_CONTENT));
+                }
+            });
+        }
         tv.setText("超过保养里程");
         tv_next_mileage.setText(maintenanceState.getOverdueMileage() / 1000 + "");
         tv2.setText("超过保养期限");
@@ -440,7 +468,9 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         circleDrawable.setProgress((int) maintenanceState.getProgressPercentage());
         view_upkeep_time.setImageDrawable(circleDrawable);
         view_upkeep.setImageDrawable(circleDrawable);
+
     }
+
 }
 
 class MyDatePickerDialog extends DatePickerDialog {

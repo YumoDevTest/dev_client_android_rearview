@@ -99,6 +99,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
         }*/
         holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), idss[position]));
         holder.tv_checkResult.setVisibility(View.VISIBLE);
+
     }
 
     @Override

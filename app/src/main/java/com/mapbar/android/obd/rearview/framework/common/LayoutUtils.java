@@ -60,6 +60,16 @@ public class LayoutUtils {
         return dm.densityDpi;
     }
 
+    public static float getDensity() {
+        Resources resources = MainActivity.getInstance().getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        // 日志
+        if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+            Log.v(LogTag.FRAMEWORK, "dpi -->> " + dm.densityDpi);
+        }
+        return dm.density;
+    }
+
     public static int getDimenPx(int id) {
         return (int) Global.getAppContext().getResources().getDimension(id);
     }
