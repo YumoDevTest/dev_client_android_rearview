@@ -3,12 +3,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#1a1a1a"
+                android:gravity="center_vertical"
     >
 
     <LinearLayout
         android:id="@+id/line"
-        android:layout_width="130dp"
-        android:layout_height="250dp"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="89dp"
         android:background="@drawable/img_physical_result_normal"
@@ -21,7 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="@string/vehicle_checkup_score"
-            android:textColor="#35bdb2"/>
+            android:textColor="#35bdb2"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/tv_score"
@@ -30,7 +32,7 @@
             android:layout_marginTop="15dp"
             android:text="36"
             android:textColor="#35bdb2"
-            android:textSize="50sp"/>
+            android:textSize="60sp"/>
 
         <TextView
             android:id="@+id/tv_level"
@@ -39,18 +41,18 @@
             android:layout_marginTop="25dp"
             android:text="健康"
             android:textColor="#35bdb2"
-            android:textSize="25sp"/>
+            android:textSize="35sp"/>
     </LinearLayout>
 
     <GridView
         android:id="@+id/gridv"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="74dp"
         android:layout_toRightOf="@+id/line"
-        android:horizontalSpacing="45dp"
-        android:numColumns="3"
-        android:verticalSpacing="5dp">
-
+        android:numColumns="4"
+        android:verticalSpacing="5dp"
+        >
     </GridView>
 </RelativeLayout>

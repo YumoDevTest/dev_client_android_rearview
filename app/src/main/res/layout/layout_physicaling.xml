@@ -7,8 +7,8 @@
 
     <RelativeLayout
         android:id="@+id/rela"
-        android:layout_width="130dp"
-        android:layout_height="266dp"
+        android:layout_width="160dp"
+        android:layout_height="300dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="89dp">
     <ImageView
@@ -28,8 +28,8 @@
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
                 />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_marginTop="20dp"
                 android:text="体检中"
                 android:textColor="#ffffff"
-                android:textSize="10sp"/>
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_progress"

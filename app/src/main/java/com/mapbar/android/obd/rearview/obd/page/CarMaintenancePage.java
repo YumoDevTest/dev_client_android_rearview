@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
+import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
@@ -137,7 +139,22 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     };
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.page_upkeep);
+    }
+
+    @Override
     public void initView() {
+        MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
+        MainPage.title.setListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                line_upkeep_revise.setVisibility(View.VISIBLE);
+                line_upkeep.setVisibility(View.GONE);
+                MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
+            }
+        }, TitleBar.TitleArea.RIGHT);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -244,11 +261,13 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
             case MaintenanceResult.parameterError:
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
+                MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
                 StringUtil.toastStringShort("保养参数有误");
                 break;
             case MaintenanceResult.parameterIncomplete:
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
+                MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
                 StringUtil.toastStringShort("保养参数不完整");
                 break;
             default:
@@ -278,6 +297,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                     case Manager.Event.queryRemoteMaintenanceInfoSucc:
                         line_upkeep_revise.setVisibility(View.GONE);
                         line_upkeep.setVisibility(View.VISIBLE);
+                        MainPage.title.setVisibility(View.VISIBLE, TitleBar.TitleArea.RIGHT);
                         maintenanceState = (MaintenanceState) o;
                         DateTime mDate = maintenanceState.getNextMaintenanceDate();
                         year = mDate.year;
@@ -324,6 +344,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                             //未填信息
                             line_upkeep_revise.setVisibility(View.VISIBLE);
                             line_upkeep.setVisibility(View.GONE);
+                            MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
                         } else {
                             StringUtil.toastStringShort(error.errMsg);
                         }
@@ -392,6 +413,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
             case R.id.btn_alreadyUpkeep:
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
+                MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
                 break;
 
         }
@@ -422,6 +444,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         tv2.setText("距离下次保养时间");
         line_upkeep_revise.setVisibility(View.GONE);
         line_upkeep.setVisibility(View.VISIBLE);
+        MainPage.title.setVisibility(View.VISIBLE, TitleBar.TitleArea.RIGHT);
         tv_next_mileage.setText(String.valueOf(maintenanceState.getMileageToMaintenance() / 1000));
         tv_next_time.setText(String.valueOf(nextDay));
         tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
@@ -442,6 +465,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     private void setOverdueData(MaintenanceState maintenanceState) {
         line_upkeep_revise.setVisibility(View.GONE);
         line_upkeep.setVisibility(View.VISIBLE);
+        MainPage.title.setVisibility(View.VISIBLE, TitleBar.TitleArea.RIGHT);
         final MaintenanceTask[] tasks = maintenanceState.getTasks();
         if (0 < tasks.length) {
             upkeepItemAdapter = new UpkeepItemAdapter(getContext(), tasks);

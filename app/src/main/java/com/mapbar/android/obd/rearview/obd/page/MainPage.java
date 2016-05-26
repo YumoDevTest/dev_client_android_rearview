@@ -31,6 +31,7 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
 
 public class MainPage extends AppPage {
 
+    public static TitleBar title;
     protected static ArrayList<Object> sAlarmDataList = new ArrayList<Object>();
     private TitleBar titleBar;
     @ViewInject(R.id.pager_main)
@@ -99,7 +100,7 @@ public class MainPage extends AppPage {
 
         mContext = MainActivity.getInstance();
         initDialog();
-
+        title = titleBar;
     }
 
 
