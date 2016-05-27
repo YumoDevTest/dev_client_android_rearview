@@ -20,7 +20,6 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
-import com.mapbar.obd.UserCenter;
 
 import java.util.ArrayList;
 
@@ -124,4 +123,5 @@ public class MainActivity extends BaseActivity {
     public RelativeLayout getContentView() {
         return contentView;
     }
+
 }

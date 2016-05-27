@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -187,6 +188,21 @@ public class LayoutUtils {
             tv_confirm.setOnClickListener(confirmListener);
         }
     }
+
+    public static void showQrPop(String content, String info) {
+        View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
+        ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
+        Bitmap bmQR = QRUtils.createQR(content, iv.getWidth());
+        iv.setImageBitmap(bmQR);
+        TextView tv = (TextView) view.findViewById(R.id.tv_qr_info);
+        tv.setText(info);
+        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+        if (pages.size() > 0) {
+            popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+        }
+    }
+
 
     /**
      * 对齐顶部绘制文字时拿 top 加上此距离，得出便是绘制文字所需的 baseline 的 y 值

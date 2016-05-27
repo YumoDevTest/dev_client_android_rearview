@@ -22,6 +22,7 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCenter;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -77,7 +78,6 @@ public class MainPage extends AppPage {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_main);
-
     }
 
     @Override
@@ -197,10 +197,18 @@ public class MainPage extends AppPage {
 //                            }
                         }
                         break;
+                    case Manager.Event.loginSucc:
+                        Manager.getInstance().queryRemoteUserCar();
+                        break;
+
+                    case Manager.Event.queryCarSucc:
+                        Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+                        break;
                 }
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        login();
     }
 
 
@@ -316,20 +324,12 @@ public class MainPage extends AppPage {
     }
 
 
-//    private static class MyHandler extends Handler {
-//
-//        WeakReference<MainPage> mMainPage = null;
-//
-//        public MyHandler(MainPage baseAlarmPage) {
-//            mMainPage = new WeakReference<MainPage>(baseAlarmPage);
-//        }
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            MainPage maP = mMainPage.get();
-//            if (maP != null) {
-//                maP.showBuyDialog();
-//            }
-//        }
-//    }
+    private void login() {
+//        UserCenter.getInstance().login("18610857365", "111111");
+        if (UserCenter.getInstance().loginAutomatically()) {
+        } else {
+            UserCenter.getInstance().DeviceLoginlogin("");
+        }
+
+    }
 }

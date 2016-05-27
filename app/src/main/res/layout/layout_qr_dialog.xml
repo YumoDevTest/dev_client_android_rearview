@@ -2,11 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/bg_page"
+              android:gravity="center"
               android:orientation="vertical">
 
 
-    <ImageView
+    <LinearLayout
         android:layout_width="150dp"
-        android:layout_height="150dp"/>
+        android:layout_height="150dp"
+        android:background="@drawable/qr_bg"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_qr"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:scaleType="fitXY"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_qr_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
+
 
 </LinearLayout>
