@@ -61,7 +61,8 @@ public class MainActivity extends BaseActivity {
         AixintuiPushManager.getInstance().bindPush();
 
 
-        UserCenter.getInstance().login("18600425206", "111111");
+//        UserCenter.getInstance().login("18600425206", "111111");
+        UserCenter.getInstance().login("13673096611", "888888");
 
     }
 
