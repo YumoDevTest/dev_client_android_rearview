@@ -40,6 +40,7 @@
                 android:src="@drawable/car_state_safe"/>
 
             <TextView
+                android:id="@+id/tv_state_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="车辆无不良状态"

@@ -1,17 +1,22 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -21,20 +26,26 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
+import java.util.ArrayList;
+
 /**
  * Created by liuyy on 2016/5/7.
  */
-public class CarStatePage extends AppPage {
+public class CarStatePage extends AppPage implements View.OnClickListener {
 
     private CarStateView carStateView;
     private CarStatusData data;
     @ViewInject(R.id.gv_state)
     private GridView gvState;
+    @ViewInject(R.id.tv_state_record)
+    private TextView tv_state_record;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
     private int[] stateResOpenIds = {R.drawable.car_light_open, R.drawable.car_window_open, R.drawable.car_lock_open, R.drawable.car_door_open, R.drawable.car_trunk_open, R.drawable.car_sunroof_open};
     private int[] stateResNoneIds = {R.drawable.car_light_none, R.drawable.car_window_none, R.drawable.car_lock_none, R.drawable.car_door_none, R.drawable.car_trunk_none, R.drawable.car_sunroof_none};
     private StateAdapter adapter;
+    private PopupWindow popupWindow;
+    private StringBuilder sb = new StringBuilder();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +86,16 @@ public class CarStatePage extends AppPage {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        tv_state_record.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_state_record://查看不良状态记录
+                showPopupWindow();
+                break;
+        }
     }
 
     @Override
@@ -88,6 +108,43 @@ public class CarStatePage extends AppPage {
     public void onPause() {
         super.onPause();
         CarStateManager.getInstance().stopRefreshCarState();
+    }
+
+
+    public void showPopupWindow() {
+        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
+        TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
+        tv_state_pop_content.setText(getPopContent());
+        popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //设置点击PopupWindow以外的区域取消PopupWindow的显示
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+    }
+
+    public String getPopContent() {
+        sb.setLength(0);
+        ArrayList<String> alarmDatas = CarStateManager.getInstance().alarmDatas;
+        if (alarmDatas.size() > 3) {
+            sb.append("故障码:");
+            for (int i = 3; i < alarmDatas.size(); i++) {
+                if (i == alarmDatas.size() - 1) {
+                    sb.append(alarmDatas.get(i) + "；\n");
+                } else {
+                    sb.append(alarmDatas.get(i) + "、");
+                }
+            }
+        }
+        if (!"水温".equals(alarmDatas.get(0))) {
+            sb.append("当前水温:" + alarmDatas.get(0) + "℃；\n");
+        }
+        if (!"电压".equals(alarmDatas.get(1))) {
+            sb.append("当前电压:" + alarmDatas.get(1) + "v；\n");
+        }
+        if (!"疲劳".equals(alarmDatas.get(2))) {
+            sb.append("您已驾驶:" + alarmDatas.get(2) + "小时。");
+        }
+        return sb.toString();
     }
 
     class StateAdapter extends BaseAdapter {

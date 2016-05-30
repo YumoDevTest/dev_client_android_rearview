@@ -1,10 +1,17 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import android.os.Handler;
+
+import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.RealTimeData;
 
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,6 +21,11 @@ import java.util.TimerTask;
 public class CarStateManager extends OBDManager {
     private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
     public Timer mTimer;
+    //存储预警纪录
+    public ArrayList<String> alarmDatas = new ArrayList<>();
+    //临时存储故障码
+    private ArrayList<String> errorCode = new ArrayList<>();
+    private Handler mHander = new Handler();
 
     public CarStateManager() {
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -23,6 +35,16 @@ public class CarStateManager extends OBDManager {
             }
         };
         SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        //初始化预警纪录数据
+        alarmDatas.add("水温");
+        alarmDatas.add("电压");
+        alarmDatas.add("疲劳");
+//        alarmDatas.add("98");
+//        alarmDatas.add("16");
+//        alarmDatas.add("9");
+//        alarmDatas.add("p110");
+//        alarmDatas.add("p111");
+//        alarmDatas.add("p112");
     }
 
     /**
@@ -53,14 +75,89 @@ public class CarStateManager extends OBDManager {
                 break;
             case Manager.Event.obdCarStatusgetFailed:
                 break;
+            case Manager.Event.dataUpdate:
+                final RealTimeData realTimeData = (RealTimeData) o;
+                if (realTimeData.voltage < 10 && realTimeData.voltage > 15) {
+                    String votage = DecFormatUtil.format2dot1(realTimeData.voltage);
+                    alarmDatas.set(1, votage);
+                }
+//                if (realTimeData.engineCoolantTemperature > 98) {
+//                    final String temperature = String.valueOf(realTimeData.engineCoolantTemperature);
+//                    alarmDatas.set(0, temperature);
+//                    mHander.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (realTimeData.engineCoolantTemperature < 80) {
+//                                alarmDatas.set(0, "水温");
+//                            }
+//                        }
+//                    }, 10 * 60 * 1000);
+//                }else if (realTimeData.engineCoolantTemperature<80){
+//                    alarmDatas.set(0,"水温");
+//                }
+                break;
+
+            case Manager.Event.alarm:
+                if (o instanceof AlarmData) {
+                    AlarmData data = (AlarmData) o;
+                    String content = "";
+                    int type = data.getType();
+                    switch (type) {
+                        case Manager.AlarmType.errCode: {
+                            // 故障预警
+                            content = data.getString();
+                            errorCode.add(content);
+                            mHander.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!alarmDatas.containsAll(errorCode)) {
+                                        alarmDatas.addAll(3, errorCode);
+                                    }
+                                    errorCode.clear();
+                                }
+                            }, 1000);
+                        }
+                        break;
+                        case Manager.AlarmType.temperature: {
+                            // 水温预警
+                            content = String.format(Locale.getDefault(), "%d", data.getInt());
+                            alarmDatas.set(0, content);
+                            mHander.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    alarmDatas.set(0, "水温");
+                                }
+                            }, 9 * 60 * 1000 + 500);
+                        }
+                        break;
+                        case Manager.AlarmType.voltage: {
+                            // 电压预警
+                            content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
+                            alarmDatas.set(1, content);
+                        }
+                        break;
+
+                        case Manager.AlarmType.tired: {
+                            // 疲劳驾驶预警
+                            content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
+                            alarmDatas.set(2, content);
+                        }
+                        break;
+                    }
+                }
+                break;
         }
-        super.onSDKEvent(event, o);
+
+        super.
+
+                onSDKEvent(event, o);
+
     }
 
     /**
      * 开始刷新车辆状态;
-     *
      */
+
     public void startRefreshCarState() {
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
