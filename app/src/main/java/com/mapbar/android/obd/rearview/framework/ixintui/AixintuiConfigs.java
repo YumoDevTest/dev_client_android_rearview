@@ -14,4 +14,5 @@ public class AixintuiConfigs {
      * 正式 :1822600920
      */
     public static final int AIXINTUI_APPKEY = Config.DEBUG ? 1822600920 : 1822600920;
+    public static String push_token;
 }

@@ -76,6 +76,7 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
             if (SdkConstants.REGISTER.equals(cmd)) {
                 token = intent.getStringExtra(SdkConstants.ADDITION);
                 if (!TextUtils.isEmpty(token)) {
+                    AixintuiConfigs.push_token = token;
                     // 日志
                     if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                         Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);

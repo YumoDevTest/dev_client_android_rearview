@@ -15,9 +15,9 @@ import java.util.Hashtable;
  */
 public class QRUtils {
 
-    public static Bitmap createQR(String content, int size) {
-        int width = size; // 图像宽度
-        int height = size; // 图像高度
+    public static Bitmap createQR(String content) {
+        int width = 300; // 图像宽度
+        int height = 300; // 图像高度
         Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
         BitMatrix bitMatrix = null;// 生成矩阵

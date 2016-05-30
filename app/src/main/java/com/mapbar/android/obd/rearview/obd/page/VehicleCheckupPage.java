@@ -117,7 +117,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = Physical.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-        initPage();
+//        initPage();
         circleDrawable = new CircleDrawable(getContext());
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
@@ -127,7 +127,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
-        initPage();
+//        initPage();
     }
 
     private void initPage() {

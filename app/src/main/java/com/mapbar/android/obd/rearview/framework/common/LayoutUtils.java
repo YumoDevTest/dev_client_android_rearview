@@ -43,6 +43,7 @@ import java.util.ArrayList;
 public class LayoutUtils {
     private static ProgressView pView;
     private static PopupWindow popupWindow;
+    private static PopupWindow popupQR;
 
     public static Rect getScreenArea() {
         WindowManager wm = (WindowManager) MainActivity.getInstance().getSystemService(Context.WINDOW_SERVICE);
@@ -192,14 +193,14 @@ public class LayoutUtils {
     public static void showQrPop(String content, String info) {
         View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
         ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
-        Bitmap bmQR = QRUtils.createQR(content, iv.getWidth());
+        Bitmap bmQR = QRUtils.createQR(content);
         iv.setImageBitmap(bmQR);
         TextView tv = (TextView) view.findViewById(R.id.tv_qr_info);
         tv.setText(info);
-        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         ArrayList<AppPage> pages = PageManager.getInstance().getPages();
         if (pages.size() > 0) {
-            popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+            popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
         }
     }
 

@@ -1,17 +1,21 @@
 package com.mapbar.android.obd.rearview.framework;
 
-import android.os.Environment;
-
 public class Configs {
 
     // OBD产品标识
     public final static String OBD_ANDROID = "obd_android";
     public final static String FILE_PATH = "/mapbar/obd";
-    public final static String SHARE_PATH = Environment.getExternalStorageDirectory() + Configs.FILE_PATH;
 
 
     /**
-     * 在com.mapbar.obd.Config.DEBUG = false时，此开关无效。只用于专项测试全数据
+     * imei
+     * pushToken
+     * token
      */
-    public static boolean AlwaysOBDDetailMode = false;
+    //URL
+    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
+    /**
+     * redirect_uri
+     */
+    public static final String URL_REG = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb2636e5fc129b42c&response_type=code&scope=snsapi_userinfo&state=obdWechat#wechat_redirect";
 }

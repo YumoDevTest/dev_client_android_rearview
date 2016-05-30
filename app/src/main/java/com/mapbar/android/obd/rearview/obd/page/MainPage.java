@@ -2,6 +2,7 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,16 +13,25 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
 import com.mapbar.obd.AlarmData;
+import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 
 import java.util.ArrayList;
@@ -197,18 +207,65 @@ public class MainPage extends AppPage {
 //                            }
                         }
                         break;
-                    case Manager.Event.loginSucc:
+                    /*case Manager.Event.loginSucc:
                         Manager.getInstance().queryRemoteUserCar();
-                        break;
-
+                        break;*/
                     case Manager.Event.queryCarSucc:
-                        Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+                        UserCar[] cars = (UserCar[]) o;
+                        // 日志
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
+                        }
+                        if (cars != null && cars.length > 0) {
+                            if (TextUtils.isEmpty(cars[0].carGenerationId)) {
+                                // 日志
+                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                    Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                                }
+                                showRegQr();
+                            } else {
+                                // 日志
+                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                    Log.d(LogTag.OBD, " -->> 已注册，数据有效");
+                                    Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
+                                }
+                                startServer();
+                            }
+                        } else {
+                            // 日志
+                            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                            }
+                            showRegQr();
+                        }
+                        break;
+                    case Manager.Event.queryCarFailed:
+                        // 日志
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
+                        }
+                        //显示二维码
+                        LayoutUtils.showQrPop("", "");
+                        break;
+                    case Manager.Event.DeviceloginSucc:
+                        // 日志
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 设备登录成功");
+                        }
+                        login2();
+                        break;
+                    case Manager.Event.DeviceloginFailed:
+                        // 日志
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 设备登录失败");
+                        }
+                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
                         break;
                 }
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-        login();
+        login1();
     }
 
 
@@ -275,7 +332,6 @@ public class MainPage extends AppPage {
                     VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_voltage, content));
                 }
                 break;
-
                 case Manager.AlarmType.tired: {
                     // 疲劳驾驶预警
                     content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
@@ -324,12 +380,74 @@ public class MainPage extends AppPage {
     }
 
 
-    private void login() {
+    /**
+     * 自动登录、设备登录
+     */
+    private void login1() {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, " -->> 登录开始");
+        }
 //        UserCenter.getInstance().login("18610857365", "111111");
         if (UserCenter.getInstance().loginAutomatically()) {
+            // 日志
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 自动登录成功");
+            }
+            login2();
         } else {
-            UserCenter.getInstance().DeviceLoginlogin("");
+            // 日志
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 自动登录失败");
+            }
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
         }
+    }
 
+    /**
+     * 查询本地车辆信息
+     */
+    private void login2() {
+        LocalUserCarResult result = Manager.getInstance().queryLocalUserCar();
+        if (result != null) {
+            UserCar car = result.userCars == null || result.userCars.length == 0 ? null : result.userCars[0];
+            if (car != null && !TextUtils.isEmpty(car.carGenerationId)) {
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> 查询本地车辆成功");
+                }
+                //启动业务
+                startServer();
+                return;
+            }
+        }
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, " -->> 查询本地车辆失败");
+        }
+        //查询远程车辆信息
+        Manager.getInstance().queryRemoteUserCar();
+    }
+
+    public void startServer() {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, " -->> 启动业务");
+        }
+        Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+    }
+
+    public void showRegQr() {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, " -->> 弹出二维码");
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
+        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
+        sb.append("token=").append("");
+
+        String url = Configs.URL_REG + "&redirect_uri=" + Uri.encode(sb.toString());
+        LayoutUtils.showQrPop(url, Global.getAppContext().getResources().getString(R.string.reg_info));
     }
 }

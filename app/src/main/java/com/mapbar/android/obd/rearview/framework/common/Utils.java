@@ -7,10 +7,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 import java.text.DecimalFormat;
 
@@ -117,5 +119,15 @@ public class Utils {
         }
 
         return versionCode;
+    }
+
+    public static String getImei() {
+        TelephonyManager tm = (TelephonyManager) MainActivity.getInstance().getSystemService(Context.TELEPHONY_SERVICE);
+        final String deviceId = tm.getDeviceId();
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
+        }
+        return deviceId;
     }
 }
