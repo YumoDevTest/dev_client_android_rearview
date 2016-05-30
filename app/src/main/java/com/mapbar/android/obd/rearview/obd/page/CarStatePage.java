@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +115,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
         TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
-        tv_state_pop_content.setText(getPopContent());
+        String popContent = getPopContent();
+        if (!TextUtils.isEmpty(popContent)) {
+            tv_state_pop_content.setText(popContent);
+        }
         popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
         popupWindow.setOutsideTouchable(true);

@@ -51,6 +51,7 @@ public class SDKListenerManager {
 
                 if(event == Manager.Event.queryCarSucc){
                     Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+//                    Manager.getInstance().openDevice("88:1B:99:DE:B8:D2");
                 }
 
                 if(event==Manager.Event.dataUpdate){
