@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -40,6 +41,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private GridView gvState;
     @ViewInject(R.id.tv_state_record)
     private TextView tv_state_record;
+    private Button btn_state_pop_close;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
     private int[] stateResOpenIds = {R.drawable.car_light_open, R.drawable.car_window_open, R.drawable.car_lock_open, R.drawable.car_door_open, R.drawable.car_trunk_open, R.drawable.car_sunroof_open};
@@ -88,6 +90,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
+
     }
 
     @Override
@@ -96,6 +99,12 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
             case R.id.tv_state_record://查看不良状态记录
                 showPopupWindow();
                 break;
+            case R.id.btn_state_pop_close://关闭不良状态记录
+                if (popupWindow != null) {
+                    popupWindow.dismiss();
+                }
+                break;
+
         }
     }
 
@@ -115,6 +124,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
         TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
+        btn_state_pop_close = (Button) popupView.findViewById(R.id.btn_state_pop_close);
+        btn_state_pop_close.setOnClickListener(this);
         String popContent = getPopContent();
         if (!TextUtils.isEmpty(popContent)) {
             tv_state_pop_content.setText(popContent);

@@ -3,11 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginRight="200dp"
+        android:layout_marginTop="30dp"
         android:background="#fff"
         android:scrollbars="none">
 
@@ -18,9 +23,17 @@
             android:gravity="center"
             android:padding="20dp"
             android:text="暂无不良状态"
-            android:textColor="@android:color/black"
+            android:textColor="@color/checkUp_red"
             android:textSize="18sp" />
 
     </ScrollView>
 
+    <Button
+        android:id="@+id/btn_state_pop_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignTop="@+id/scrollView"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/btn_car_data_pop_close_pressed" />
 </RelativeLayout>

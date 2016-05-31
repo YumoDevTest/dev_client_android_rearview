@@ -39,12 +39,7 @@ public class CarStateManager extends OBDManager {
         alarmDatas.add("水温");
         alarmDatas.add("电压");
         alarmDatas.add("疲劳");
-//        alarmDatas.add("98");
-//        alarmDatas.add("16");
-//        alarmDatas.add("9");
-//        alarmDatas.add("p110");
-//        alarmDatas.add("p111");
-//        alarmDatas.add("p112");
+
     }
 
     /**
@@ -81,20 +76,9 @@ public class CarStateManager extends OBDManager {
                     String votage = DecFormatUtil.format2dot1(realTimeData.voltage);
                     alarmDatas.set(1, votage);
                 }
-//                if (realTimeData.engineCoolantTemperature > 98) {
-//                    final String temperature = String.valueOf(realTimeData.engineCoolantTemperature);
-//                    alarmDatas.set(0, temperature);
-//                    mHander.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (realTimeData.engineCoolantTemperature < 80) {
-//                                alarmDatas.set(0, "水温");
-//                            }
-//                        }
-//                    }, 10 * 60 * 1000);
-//                }else if (realTimeData.engineCoolantTemperature<80){
-//                    alarmDatas.set(0,"水温");
-//                }
+                if (realTimeData.engineCoolantTemperature < 80) {
+                    alarmDatas.set(0, "水温");
+                }
                 break;
 
             case Manager.Event.alarm:
@@ -112,7 +96,6 @@ public class CarStateManager extends OBDManager {
                                 public void run() {
                                     if (!alarmDatas.containsAll(errorCode)) {
                                         alarmDatas.addAll(3, errorCode);
-                                        android.util.Log.e("qqqq", errorCode.toString());
                                     }
                                     errorCode.clear();
                                 }
@@ -123,12 +106,6 @@ public class CarStateManager extends OBDManager {
                             // 水温预警
                             content = String.format(Locale.getDefault(), "%d", data.getInt());
                             alarmDatas.set(0, content);
-                            mHander.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    alarmDatas.set(0, "水温");
-                                }
-                            }, 9 * 60 * 1000 + 500);
                         }
                         break;
                         case Manager.AlarmType.voltage: {

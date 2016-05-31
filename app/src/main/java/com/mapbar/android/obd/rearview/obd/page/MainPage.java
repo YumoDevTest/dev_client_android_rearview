@@ -184,15 +184,15 @@ public class MainPage extends AppPage {
 //                            if (isAlarmOn()) {
 //                                showNextTimerDialog();
 //                            } else {
-                                Runnable r = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        setAlarmOn(true);
-                                        if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
-                                            showNextTimerDialog();
-                                        }
+                            Runnable r = new Runnable() {
+                                @Override
+                                public void run() {
+                                    setAlarmOn(true);
+                                    if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
+                                        showNextTimerDialog();
                                     }
-                                };
+                                }
+                            };
                             mHandlerBuy.postDelayed(r, 500);
 //                            }
                         }
@@ -225,6 +225,7 @@ public class MainPage extends AppPage {
         }, true, 5);
 
         mAlarmTimerDialog.setCancelable(false);
+
     }
 
     private void showNextTimerDialog() {
