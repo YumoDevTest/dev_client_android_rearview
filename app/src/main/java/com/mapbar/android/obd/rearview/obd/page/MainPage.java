@@ -98,6 +98,7 @@ public class MainPage extends AppPage {
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = vehicleCheckupPage;
 
+        pager.setOffscreenPageLimit(3);
         mContext = MainActivity.getInstance();
         initDialog();
         title = titleBar;
@@ -175,11 +176,14 @@ public class MainPage extends AppPage {
                         });
                         break;*/
                     case Manager.Event.alarm:
-                        sAlarmDataList.add(o);
+                        if (!sAlarmDataList.contains(o)) {
+                            sAlarmDataList.add(o);
+                        }
+
                         if (!mAlarmTimerDialog.isShowing()) {
-                            if (isAlarmOn()) {
-                                showNextTimerDialog();
-                            } else {
+//                            if (isAlarmOn()) {
+//                                showNextTimerDialog();
+//                            } else {
                                 Runnable r = new Runnable() {
                                     @Override
                                     public void run() {
@@ -189,8 +193,8 @@ public class MainPage extends AppPage {
                                         }
                                     }
                                 };
-                                mHandlerBuy.postDelayed(r, 3000);
-                            }
+                            mHandlerBuy.postDelayed(r, 500);
+//                            }
                         }
                         break;
                 }
@@ -224,7 +228,7 @@ public class MainPage extends AppPage {
     }
 
     private void showNextTimerDialog() {
-        if (!sAlarmDataList.isEmpty() && sAlarmDataList.get(0) instanceof AlarmData) {
+        if (sAlarmDataList.size() > 0 && sAlarmDataList.get(0) instanceof AlarmData) {
             AlarmData data = (AlarmData) sAlarmDataList.get(0);
             sAlarmDataList.remove(0);
             mAlarmTimerDialog.setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
@@ -270,11 +274,13 @@ public class MainPage extends AppPage {
                     VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_tired, content));
                 }
                 break;
-                default: {
-                    throw new RuntimeException("Unknown type: " + type);
-                }
+
             }
-            mAlarmTimerDialog.getContentTextView().setTextColor(mContext.getResources().getColor(R.color.dashboard_red_text));
+            //// FIXME: tianff 2016/5/30 MainPage showNextTimerDialog 空指针
+            if (mAlarmTimerDialog.getContentTextView() != null) {
+                mAlarmTimerDialog.getContentTextView().setTextColor(mContext.getResources().getColor(R.color.dashboard_red_text));
+            }
+
         }
     }
 

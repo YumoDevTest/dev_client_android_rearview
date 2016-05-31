@@ -112,6 +112,7 @@ public class CarStateManager extends OBDManager {
                                 public void run() {
                                     if (!alarmDatas.containsAll(errorCode)) {
                                         alarmDatas.addAll(3, errorCode);
+                                        android.util.Log.e("qqqq", errorCode.toString());
                                     }
                                     errorCode.clear();
                                 }
