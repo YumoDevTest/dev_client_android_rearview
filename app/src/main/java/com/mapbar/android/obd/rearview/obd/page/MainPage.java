@@ -245,7 +245,7 @@ public class MainPage extends AppPage {
                             Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
                         }
                         //显示二维码
-                        LayoutUtils.showQrPop("", "");
+                        showRegQr();
                         break;
                     case Manager.Event.DeviceloginSucc:
                         // 日志
@@ -259,6 +259,7 @@ public class MainPage extends AppPage {
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                             Log.d(LogTag.OBD, " -->> 设备登录失败");
                         }
+                        //延迟，最大重试次数
                         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
                         break;
                 }
@@ -434,7 +435,7 @@ public class MainPage extends AppPage {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
+        Manager.getInstance().openDevice(Utils.getImei());
     }
 
     public void showRegQr() {
@@ -445,9 +446,16 @@ public class MainPage extends AppPage {
         StringBuilder sb = new StringBuilder();
         sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
         sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-        sb.append("token=").append("");
-
-        String url = Configs.URL_REG + "&redirect_uri=" + Uri.encode(sb.toString());
+        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "url_info -->> " + sb.toString());
+        }
+        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "url -->> " + url);
+        }
         LayoutUtils.showQrPop(url, Global.getAppContext().getResources().getString(R.string.reg_info));
     }
 }

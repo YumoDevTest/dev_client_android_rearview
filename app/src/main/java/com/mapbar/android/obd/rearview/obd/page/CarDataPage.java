@@ -75,7 +75,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private TextView tv_carData_value_3;
     @ViewInject(R.id.tv_carData_value_4)
     private TextView tv_carData_value_4;
-    private SharedPreferences sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
+    private SharedPreferences sharedPreferences;
     private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
     private int number = -1;//显示数据空间的编号
     private PopupWindow popupWindow;
@@ -93,6 +93,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
+        sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
         if (isFirst) {
             SharedPreferences.Editor editor = sharedPreferences.edit();

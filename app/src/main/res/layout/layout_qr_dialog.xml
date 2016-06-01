@@ -8,15 +8,15 @@
 
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:background="@drawable/qr_bg"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/iv_qr"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="fitXY"/>
 
     </LinearLayout>
@@ -28,7 +28,8 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        />
 
 
 </LinearLayout>
