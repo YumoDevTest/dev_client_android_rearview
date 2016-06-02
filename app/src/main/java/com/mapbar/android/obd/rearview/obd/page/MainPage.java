@@ -2,7 +2,6 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,15 +11,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
@@ -40,6 +41,9 @@ import java.util.Locale;
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
 
+/**
+ *
+ */
 public class MainPage extends AppPage {
 
     public static TitleBar title;
@@ -64,6 +68,7 @@ public class MainPage extends AppPage {
     private boolean mAlarmOn = false;
     private Context mContext;
     private Handler mHandlerBuy = new Handler();
+    private boolean isPush = true;
 
     private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
 
@@ -191,9 +196,6 @@ public class MainPage extends AppPage {
                         }
 
                         if (!mAlarmTimerDialog.isShowing()) {
-//                            if (isAlarmOn()) {
-//                                showNextTimerDialog();
-//                            } else {
                             Runnable r = new Runnable() {
                                 @Override
                                 public void run() {
@@ -222,13 +224,16 @@ public class MainPage extends AppPage {
                                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                                     Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                                 }
-                                showRegQr();
+                                showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                                outTime();
                             } else {
                                 // 日志
                                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                                     Log.d(LogTag.OBD, " -->> 已注册，数据有效");
                                     Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
                                 }
+                                //关闭二维码
+                                LayoutUtils.disQrPop();
                                 startServer();
                             }
                         } else {
@@ -236,7 +241,8 @@ public class MainPage extends AppPage {
                             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                                 Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                             }
-                            showRegQr();
+                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                            outTime();
                         }
                         break;
                     case Manager.Event.queryCarFailed:
@@ -245,7 +251,8 @@ public class MainPage extends AppPage {
                             Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
                         }
                         //显示二维码
-                        showRegQr();
+                        showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                        outTime();
                         break;
                     case Manager.Event.DeviceloginSucc:
                         // 日志
@@ -260,13 +267,64 @@ public class MainPage extends AppPage {
                             Log.d(LogTag.OBD, " -->> 设备登录失败");
                         }
                         //延迟，最大重试次数
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+                        mHandlerBuy.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+                            }
+                        }, 5 * 1000);
                         break;
                 }
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         login1();
+        //监听推送消息
+        AixintuiPushManager.getInstance().setPushCallBack(new AixintuiPushManager.PushCallBack() {
+            @Override
+            public void pushData(int type, int state, String userId, String token) {
+                // 日志
+                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+                    Log.d(LogTag.PUSH, " -->> MainPag回调");
+                }
+                switch (type) {
+                    case 0:
+                        if (state == 1)
+                            showRegQr(Global.getAppContext().getResources().getString(R.string.scan_succ));
+                        break;
+                    case 1:
+                        if (state == 1 || state == 3) { //注册成功
+
+                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_succ));
+                            isPush = false;//推送成功
+                            // 更新本地用户信息
+                            if (userId != null && token != null) {
+                                // 日志
+                                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+                                    Log.d(LogTag.PUSH, "userId -->> " + userId + "    token--->" + token);
+                                    Log.d(LogTag.PUSH, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
+                                }
+                                boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
+                                if (isUpdata) {
+                                    //远程查询车辆信息
+                                    Manager.getInstance().queryRemoteUserCar();
+                                } else {
+                                    //显示二维码
+                                    showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                                    // 日志
+                                    if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+                                        Log.d(LogTag.PUSH, " -->>更新本地用户信息失败 ");
+                                    }
+                                }
+                            }
+
+                        } else if (state == 2) {
+                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                        }
+
+                }
+            }
+        });
     }
 
 
@@ -342,7 +400,6 @@ public class MainPage extends AppPage {
                 break;
 
             }
-            //// FIXME: tianff 2016/5/30 MainPage showNextTimerDialog 空指针
             if (mAlarmTimerDialog.getContentTextView() != null) {
                 mAlarmTimerDialog.getContentTextView().setTextColor(mContext.getResources().getColor(R.color.dashboard_red_text));
             }
@@ -350,21 +407,6 @@ public class MainPage extends AppPage {
         }
     }
 
-    public void alarm(long delayMillis) {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                if (!mAlarmTimerDialog.isShowing() && sAlarmDataList.size() > 0) {
-                    showNextTimerDialog();
-                }
-            }
-        };
-        if (isAlarmOn()) {
-            r.run();
-        } else {
-            mHandlerBuy.postDelayed(r, delayMillis);
-        }
-    }
 
     /**
      * @return the mAlarmOn
@@ -402,6 +444,7 @@ public class MainPage extends AppPage {
                 Log.d(LogTag.OBD, " -->> 自动登录失败");
             }
             UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+
         }
     }
 
@@ -438,24 +481,28 @@ public class MainPage extends AppPage {
         Manager.getInstance().openDevice(Utils.getImei());
     }
 
-    public void showRegQr() {
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->> 弹出二维码");
+    /**
+     * 弹出二维码
+     */
+    private void showRegQr(String info) {
+
+        if (AixintuiConfigs.push_token != null) {
+            QRUtils.showRegQr(info);
+        } else {
+            //注册爱心推
+            PushSdkApi.register(MainActivity.getInstance(), AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(MainActivity.getInstance()), Utils.getVersion(MainActivity.getInstance()) + "");
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
-        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "url_info -->> " + sb.toString());
-        }
-        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "url -->> " + url);
-        }
-        LayoutUtils.showQrPop(url, Global.getAppContext().getResources().getString(R.string.reg_info));
+    }
+
+
+    public void outTime() {
+        mHandlerBuy.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isPush) {//推送失败
+                    login1();//设备登录
+                }
+            }
+        }, 1000 * 30);
     }
 }

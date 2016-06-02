@@ -191,6 +191,7 @@ public class LayoutUtils {
     }
 
     public static void showQrPop(String content, String info) {
+
         View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
         ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
         Bitmap bmQR = QRUtils.createQR(content);
@@ -204,6 +205,12 @@ public class LayoutUtils {
         }
     }
 
+    public static void disQrPop() {
+        if (popupQR != null) {
+            popupQR.dismiss();
+        }
+
+    }
 
     /**
      * 对齐顶部绘制文字时拿 top 加上此距离，得出便是绘制文字所需的 baseline 的 y 值

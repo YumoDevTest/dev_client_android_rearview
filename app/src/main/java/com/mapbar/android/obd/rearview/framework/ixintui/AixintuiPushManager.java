@@ -46,7 +46,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
     String title;
     private Context mContext;
     private boolean isClickFromNotification = false;// 是否通过通知栏点击进入
-
+    private PushCallBack pushCallBack;
 
     /**
      * 禁止构造
@@ -75,6 +75,23 @@ public class AixintuiPushManager implements AixintuiCallBack {
      */
     @Override
     public void onAppearMsg(Context context, String msg, String extra) {
+        if (!TextUtils.isEmpty(msg)) {
+            String userId = null;
+            String token = null;
+            try {
+                JSONObject jObj1 = new JSONObject(msg);
+                int type = jObj1.getInt("type");
+                int state = jObj1.getInt("state");
+                if (type == 1 && (state == 1 || state == 3)) {
+                    userId = jObj1.getString("userId");
+                    token = jObj1.getString("token");
+                }
+
+                pushCallBack.pushData(type, state, userId, token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -85,23 +102,12 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
     @Override
     public void onNofificationClick(Context context, String msg) {
-//        if (!TextUtils.isEmpty(msg)) {
-//            try {
-//                JSONObject jObj1 = new JSONObject(msg);
-//                JSONObject jObj2 = new JSONObject(new String(jObj1.getString("extra")));
-//
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
     }
 
 
     public void bindPush() {
         String token = PreferencesConfig.IXINTUI_TOKEN.get();
-        if (TextUtils.isEmpty(token) || !token.equals(aixintui_token)) {
+        if (!TextUtils.isEmpty(token) || !token.equals(aixintui_token)) {
 
             PreferencesConfig.IXINTUI_TOKEN.set(aixintui_token);
             String userId = SessionInfo.getCurrent().userId;
@@ -159,6 +165,15 @@ public class AixintuiPushManager implements AixintuiCallBack {
         }
 
     }
+
+    public void setPushCallBack(PushCallBack pushCallBack) {
+        this.pushCallBack = pushCallBack;
+    }
+
+    public interface PushCallBack {
+        public void pushData(int type, int state, String userId, String token);
+    }
+
     /**
      * 单例持有器
      */
