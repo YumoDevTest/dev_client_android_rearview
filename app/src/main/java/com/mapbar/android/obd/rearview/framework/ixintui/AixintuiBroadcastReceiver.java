@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.ixintui.pushsdk.SdkConstants;
-import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.Global;
-import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -43,7 +40,10 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
             if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                 Log.d(LogTag.PUSH, "透传 message received, msg is: " + msg);
                 Log.d(LogTag.PUSH, "透传 message received, extra is: " + extra);
+
+
             }
+
             // 处理透传内容
             AixintuiPushManager.getInstance().onAppearMsg(context, msg, extra);
 
@@ -87,8 +87,7 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
                     // 绑定爱心推token
 //                    AixintuiPushManager.getInstance().bindPush();
                     //弹出二维码
-                    QRUtils.showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                    AixintuiPushManager.getInstance().onNofificationClick(context, "{\"content\":\"测试提醒第一条\",\"title\":\"测试提醒第一条\",\"notif_style\":{\"sound\":true,\"vibrate\":false,\"unremovable\":false,\"auto_cancel\":true},\"extra\":\"{\\\"page\\\":\\\"NetRemindBox\\\",\\\"sevTime\\\":\\\"1459321671841\\\"}\",\"click_action\":{\"open_app\":true},\"is_progress\":false}");
+//                    QRUtils.showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
                 }
             }
         }

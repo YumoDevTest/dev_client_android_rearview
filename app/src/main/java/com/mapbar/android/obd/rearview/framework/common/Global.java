@@ -9,7 +9,6 @@ import android.content.Context;
 public class Global {
 
     private static Context appContext;
-
     public static Context getAppContext() {
         return appContext;
     }

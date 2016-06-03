@@ -1,7 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.common;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -108,7 +107,8 @@ public class QRUtils {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "url_info -->> " + sb.toString());
         }
-        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
+//        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
+        String url = sb.toString();
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "url -->> " + url);

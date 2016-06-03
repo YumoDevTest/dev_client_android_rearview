@@ -44,6 +44,8 @@ public class LayoutUtils {
     private static ProgressView pView;
     private static PopupWindow popupWindow;
     private static PopupWindow popupQR;
+    private static String url;
+    private static TextView tv;
 
     public static Rect getScreenArea() {
         WindowManager wm = (WindowManager) MainActivity.getInstance().getSystemService(Context.WINDOW_SERVICE);
@@ -191,18 +193,27 @@ public class LayoutUtils {
     }
 
     public static void showQrPop(String content, String info) {
-
-        View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
-        ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
-        Bitmap bmQR = QRUtils.createQR(content);
-        iv.setImageBitmap(bmQR);
-        TextView tv = (TextView) view.findViewById(R.id.tv_qr_info);
-        tv.setText(info);
-        popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        ArrayList<AppPage> pages = PageManager.getInstance().getPages();
-        if (pages.size() > 0) {
-            popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+        if (!TextUtils.isEmpty(url) && url.equals(content)) {
+            tv.setText(info);
+        } else {
+            url = content;
+            if (popupQR != null) {
+                popupQR.dismiss();
+                popupQR = null;
+            }
+            View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
+            ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
+            Bitmap bmQR = QRUtils.createQR(content);
+            iv.setImageBitmap(bmQR);
+            tv = (TextView) view.findViewById(R.id.tv_qr_info);
+            tv.setText(info);
+            popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+            ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+            if (pages.size() > 0) {
+                popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+            }
         }
+
     }
 
     public static void disQrPop() {

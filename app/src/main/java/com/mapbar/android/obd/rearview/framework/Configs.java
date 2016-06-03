@@ -13,7 +13,8 @@ public class Configs {
      * token
      */
     //URL
-    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
+//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
+    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
     /**
      * redirect_uri
      */
