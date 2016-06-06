@@ -15,7 +15,6 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -270,7 +269,8 @@ public class MainPage extends AppPage {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
 //        login1();
-        UserCenterManager.getInstance().login();
+        //// FIXME: tianff 2016/6/6 MainPage setListener 暂时闭调
+//        UserCenterManager.getInstance().login();
 //        //监听推送消息
 //        AixintuiPushManager.getInstance().setPushCallBack(new AixintuiPushManager.PushCallBack() {
 //            @Override

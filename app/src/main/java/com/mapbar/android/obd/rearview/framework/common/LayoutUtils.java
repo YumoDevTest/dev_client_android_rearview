@@ -193,7 +193,7 @@ public class LayoutUtils {
     }
 
     public static void showQrPop(String content, String info) {
-        if (!TextUtils.isEmpty(url) && url.equals(content)) {
+        if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null) {
             tv.setText(info);
         } else {
             url = content;
@@ -209,9 +209,9 @@ public class LayoutUtils {
             tv.setText(info);
             popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
             ArrayList<AppPage> pages = PageManager.getInstance().getPages();
-            if (pages.size() > 0) {
+//            if (pages.size() > 0) {
                 popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
-            }
+//            }
         }
 
     }

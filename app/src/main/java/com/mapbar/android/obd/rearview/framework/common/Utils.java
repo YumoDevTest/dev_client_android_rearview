@@ -129,6 +129,6 @@ public class Utils {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
         return deviceId;
-//        return "999296017352638";
+//        return "777296%%%95559991eeeeeeee7";
     }
 }

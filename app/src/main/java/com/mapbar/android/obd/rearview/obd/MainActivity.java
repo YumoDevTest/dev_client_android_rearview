@@ -14,6 +14,7 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
+import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity {
         transaction.commit();
 
         onFinishedInit();
+
 
         //注册爱心推
 //        PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
@@ -105,7 +107,17 @@ public class MainActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    pageManager.goPage(MainPage.class);
+                    //监听登录结果
+                    UserCenterManager.getInstance().setLoginListener(new UserCenterManager.LoginListener() {
+                        @Override
+                        public void isLogin(boolean isLogin) {
+                            if (isLogin) {
+                                pageManager.goPage(MainPage.class);
+                            }
+                        }
+                    });
+                    //登录
+                    UserCenterManager.getInstance().login();
                 }
             }, 2000);
 

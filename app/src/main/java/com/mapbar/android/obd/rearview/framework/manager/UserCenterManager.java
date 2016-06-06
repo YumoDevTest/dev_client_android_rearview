@@ -24,7 +24,7 @@ import com.mapbar.obd.UserCenter;
 public class UserCenterManager extends OBDManager {
     private Handler mHandler = new Handler();
     private boolean isPush = true;
-    private boolean isOutTime = true;
+    private LoginListener loginListener;
 
     public UserCenterManager() {
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -56,11 +56,11 @@ public class UserCenterManager extends OBDManager {
                             // 更新本地用户信息
                             if (userId != null && token != null) {
                                 // 日志
-                                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                                    Log.d(LogTag.PUSH, "userId -->> " + userId + " token--->" + token);
-                                    Log.d(LogTag.PUSH, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
-                                    Log.d(LogTag.PUSH, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-                                    Log.d(LogTag.PUSH, "当前imei -->>" + Utils.getImei());
+                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                    Log.d(LogTag.OBD, "userId -->> " + userId + " token--->" + token);
+                                    Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
+                                    Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
+                                    Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei());
                                 }
                                 boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
                                 if (isUpdata) {
@@ -101,6 +101,15 @@ public class UserCenterManager extends OBDManager {
     public void login() {
         //自动登录和设备登录
         login1();
+    }
+
+    /**
+     * 设置登录监听器
+     *
+     * @param loginListener
+     */
+    public void setLoginListener(LoginListener loginListener) {
+        this.loginListener = loginListener;
     }
 
     @Override
@@ -223,7 +232,8 @@ public class UserCenterManager extends OBDManager {
         Manager.getInstance().queryRemoteUserCar();
     }
 
-    public void startServer() {
+    private void startServer() {
+        loginListener.isLogin(true);
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
@@ -236,10 +246,7 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码
      */
     private void showRegQr(String info) {
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->>二维码应该弹出");
-        }
+
         if (AixintuiConfigs.push_token != null) {
             QRUtils.showRegQr(info);
         } else {
@@ -250,20 +257,25 @@ public class UserCenterManager extends OBDManager {
     }
 
 
-    public void outTime() {
-        if (isOutTime) {
+    private void outTime() {
+
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (isPush) {//推送失败
-                        isOutTime = false;
                         login1();//设备登录
                     }
                 }
             }, 1000 * 60);
-        }
+
 
     }
 
+    /**
+     * 登录回调接口
+     */
+    public interface LoginListener {
+        void isLogin(boolean isLogin);
+    }
 }
 

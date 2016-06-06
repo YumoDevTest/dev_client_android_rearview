@@ -39,6 +39,7 @@ public class SDKListenerManager {
         listener = new Manager.Listener() {
             @Override
             public void onEvent(int event, Object o) {
+                android.util.Log.e("event", event + "");
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
                     Log.v(LogTag.FRAMEWORK, "sdk -->> event:" + event);
@@ -51,7 +52,7 @@ public class SDKListenerManager {
 
                 if(event == Manager.Event.queryCarSucc){
 //                    Manager.getInstance().openDevice("8C:DE:52:D4:40:F2");
-                    Manager.getInstance().openDevice("88:1B:99:DE:B8:D2");
+//                    Manager.getInstance().openDevice("88:1B:99:DE:B8:D2");
                 }
 
                 if(event==Manager.Event.dataUpdate){
