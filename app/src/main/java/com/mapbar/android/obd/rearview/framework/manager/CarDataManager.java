@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -15,13 +14,14 @@ public class CarDataManager extends OBDManager {
     private RealTimeData realTimeData;
 
     public CarDataManager() {
-        sdkListener = new SDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                onSDKEvent(event, o);
-            }
-        };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        super();
+//        sdkListener = new SDKListenerManager.SDKListener() {
+//            @Override
+//            public void onEvent(int event, Object o) {
+//                onSDKEvent(event, o);
+//            }
+//        };
+//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
     /**
@@ -49,6 +49,6 @@ public class CarDataManager extends OBDManager {
             case Manager.Event.dataUpdate:
                 realTimeData = (RealTimeData) o;
         }
-        super.onSDKEvent(event, o);
+//        super.onSDKEvent(event, o);
     }
 }

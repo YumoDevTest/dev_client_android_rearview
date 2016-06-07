@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import android.util.Log;
+
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 
 import java.util.HashMap;
@@ -10,9 +12,17 @@ import java.util.HashMap;
 public class OBDManager {
     protected static OBDListener baseObdListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
+    private static OBDManager obdManager;
     protected SDKListenerManager.SDKListener sdkListener;
 
+    protected OBDManager() {
+        Log.e("event", "构造了");
+        initListener();
+    }
     public static OBDManager getInstance(Class<? extends OBDManager> clazz) {
+        if (obdManager == null) {
+            obdManager = new OBDManager();
+        }
         if (map == null) {
             map = new HashMap<>();
         }
@@ -34,6 +44,17 @@ public class OBDManager {
     public static void init(OBDListener obdListener) {
         SDKListenerManager.getInstance().init();
         baseObdListener = obdListener;
+    }
+
+    public void initListener() {
+        sdkListener = new SDKListenerManager.SDKListener() {
+            @Override
+            public void onEvent(int event, Object o) {
+                onSDKEvent(event, o);
+            }
+        };
+        Log.e("event", "放进去了");
+        SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
     /**

@@ -8,7 +8,6 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -27,13 +26,14 @@ public class UserCenterManager extends OBDManager {
     private LoginListener loginListener;
 
     public UserCenterManager() {
-        sdkListener = new SDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                onSDKEvent(event, o);
-            }
-        };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        super();
+//        sdkListener = new SDKListenerManager.SDKListener() {
+//            @Override
+//            public void onEvent(int event, Object o) {
+//                onSDKEvent(event, o);
+//            }
+//        };
+//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
 
         //监听推送消息
         AixintuiPushManager.getInstance().setPushCallBack(new AixintuiPushManager.PushCallBack() {
@@ -178,7 +178,7 @@ public class UserCenterManager extends OBDManager {
                 }, 5 * 1000);
                 break;
         }
-        super.onSDKEvent(event, o);
+//        super.onSDKEvent(event, o);
     }
 
 
@@ -257,6 +257,9 @@ public class UserCenterManager extends OBDManager {
     }
 
 
+    /**
+     * 弹出二维码后超时，重新设备登录
+     */
     private void outTime() {
 
             mHandler.postDelayed(new Runnable() {

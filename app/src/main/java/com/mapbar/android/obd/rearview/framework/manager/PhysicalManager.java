@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.Manager;
@@ -23,13 +22,14 @@ public class PhysicalManager extends OBDManager {
     private ArrayList<Integer> statuses;
 
     public PhysicalManager() {
-        sdkListener = new SDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                onSDKEvent(event, o);
-            }
-        };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        super();
+//        sdkListener = new SDKListenerManager.SDKListener() {
+//            @Override
+//            public void onEvent(int event, Object o) {
+//                onSDKEvent(event, o);
+//            }
+//        };
+//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
     /**
@@ -101,7 +101,7 @@ public class PhysicalManager extends OBDManager {
                     break;
             }
         }
-        super.onSDKEvent(event, o);
+//        super.onSDKEvent(event, o);
     }
 
     /**

@@ -3,7 +3,6 @@ package com.mapbar.android.obd.rearview.framework.manager;
 import android.os.Handler;
 
 import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.AlarmData;
@@ -28,13 +27,14 @@ public class CarStateManager extends OBDManager {
     private Handler mHander = new Handler();
 
     public CarStateManager() {
-        sdkListener = new SDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                onSDKEvent(event, o);
-            }
-        };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        super();
+//        sdkListener = new SDKListenerManager.SDKListener() {
+//            @Override
+//            public void onEvent(int event, Object o) {
+//                onSDKEvent(event, o);
+//            }
+//        };
+//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
         //初始化预警纪录数据
         alarmDatas.add("水温");
         alarmDatas.add("电压");
@@ -126,9 +126,7 @@ public class CarStateManager extends OBDManager {
                 break;
         }
 
-        super.
-
-                onSDKEvent(event, o);
+//        super.onSDKEvent(event, o);
 
     }
 
