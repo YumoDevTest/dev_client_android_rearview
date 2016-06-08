@@ -208,7 +208,7 @@ public class LayoutUtils {
             tv = (TextView) view.findViewById(R.id.tv_qr_info);
             tv.setText(info);
             popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-            ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+//            ArrayList<AppPage> pages = PageManager.getInstance().getPages();
 //            if (pages.size() > 0) {
                 popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
 //            }

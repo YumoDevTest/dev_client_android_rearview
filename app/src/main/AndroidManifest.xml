@@ -1,59 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.mapbar.android.obd.rearview"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mapbar.android.obd.rearview">
 
-    <uses-permission android:name="android.permission.NFC"/>
-    <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY"/>
-    <uses-permission android:name="android.permission.BATTERY_STATS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <!-- 呼入电话权限 -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Push service 运行需要的权限 -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <!-- 读取短信 -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true"/>
+        android:smallScreens="true" />
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="15"/>
+        android:targetSdkVersion="15" />
 
     <application
         android:name=".obd.Application"
@@ -71,15 +70,16 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
-                <action android:name="mapbar.obd.intent.action.VOICE_CONTROL"/>
+                <action android:name="mapbar.obd.intent.action.VOICE_CONTROL" />
+                <action android:name="mapbar.obd.intent.action.login" />
             </intent-filter>
         </receiver>
 
@@ -88,52 +88,50 @@
             android:process="obd.service.compact">
             <intent-filter>
                 <!-- 启动精简版后台服务进程 -->
-                <action android:name="com.mapbar.obd.COMPACT_SERVICE"/>
+                <action android:name="com.mapbar.obd.COMPACT_SERVICE" />
                 <!-- 戴总的服务所发送的广播 -->
-                <action android:name="android.intent.action.mapbar.activity.BLUETOOTH_TRIGGER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.mapbar.activity.BLUETOOTH_TRIGGER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
         <service
             android:name="com.mapbar.obd.SyncService"
-            android:process="obd.service.process">
-        </service>
-        <service android:name="com.mapbar.obd.TripSyncService">
-        </service>
+            android:process="obd.service.process"></service>
+        <service android:name="com.mapbar.obd.TripSyncService"></service>
         <!-- 后台上传进程自动唤醒广播接收器注册 -->
         <receiver android:name="com.mapbar.obd.WakeupSyncServiceReceiver">
             <intent-filter>
-                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"/>
-                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED"/>
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED"/>
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
-                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
-                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
-                <action android:name="android.bluetooth.device.action.FOUND"/>
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
-                <action android:name="android.intent.action.AIRPLANE_MODE"/>
-                <action android:name="android.intent.action.BATTERY_LOW"/>
-                <action android:name="android.intent.action.BATTERY_OKAY"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.DOCK_EVENT"/>
-                <action android:name="android.intent.action.HEADSET_PLUG"/>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.net.wifi.SCAN_RESULTS"/>
-                <action android:name="android.net.wifi.STATE_CHANGE"/>
-                <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE"/>
-                <action android:name="android.intent.action.TIME_TICK"/>
-                <action android:name="android.intent.action.mapbar.activity.WAKE_UP"/>
-                <action android:name="android.intent.action.mapbar.activity.CELL_UPDATE"/>
-                <action android:name="android.intent.action.DATE_CHANGED"/>
-                <action android:name="android.intent.action.TIME_SET"/>
-                <action android:name="android.intent.action.TIME_CHANGED"/>
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+                <action android:name="android.bluetooth.device.action.FOUND" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.DOCK_EVENT" />
+                <action android:name="android.intent.action.HEADSET_PLUG" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.net.wifi.SCAN_RESULTS" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
+                <action android:name="android.intent.action.TIME_TICK" />
+                <action android:name="android.intent.action.mapbar.activity.WAKE_UP" />
+                <action android:name="android.intent.action.mapbar.activity.CELL_UPDATE" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIME_CHANGED" />
 
-                <category android:name="android.intent.category.CAR_DOCK"/>
-                <category android:name="android.intent.category.CAR_MODE"/>
+                <category android:name="android.intent.category.CAR_DOCK" />
+                <category android:name="android.intent.category.CAR_MODE" />
 
                 <!-- 网络状态变化 -->
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
@@ -142,11 +140,11 @@
         <receiver android:name=".framework.ixintui.AixintuiBroadcastReceiver">
             <intent-filter>
                 <!-- 接收透传消息 -->
-                <action android:name="com.ixintui.action.MESSAGE"/>
+                <action android:name="com.ixintui.action.MESSAGE" />
                 <!-- 接收register, add tag等反馈消息 -->
-                <action android:name="com.ixintui.action.RESULT"/>
+                <action android:name="com.ixintui.action.RESULT" />
                 <!-- 接收notification click消息 -->
-                <action android:name="com.ixintui.action.notification.CLICK"/>
+                <action android:name="com.ixintui.action.notification.CLICK" />
             </intent-filter>
         </receiver>
 
@@ -156,37 +154,37 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="com.ixintui.push.PushActivity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.ixintui.push.PushActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service
             android:name="com.ixintui.push.PushService"
             android:exported="true"
-            android:process=":ixintui_service_v1"/>
+            android:process=":ixintui_service_v1" />
 
         <service
             android:name="com.ixintui.push.MediateService"
-            android:exported="true"/>
+            android:exported="true" />
 
         <provider
             android:name="com.ixintui.push.Provider"
             android:authorities="com.mapbar.android.obd.rearview.ixintui.push.provider"
             android:exported="false"
-            android:multiprocess="true"/>
+            android:multiprocess="true" />
 
         <receiver android:name="com.ixintui.push.Receiver">
             <intent-filter>
-                <action android:name="com.ixintui.action.BROADCAST"/>
+                <action android:name="com.ixintui.action.BROADCAST" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
@@ -196,10 +194,21 @@
         <!--umeng APPKEY和渠道-->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}"/>
+            android:value="${UMENG_CHANNEL_VALUE}" />
         <!-- <meta-data/>
              android:name="UMENG_APPKEY"
              android:value="5694f60ce0f55a23d30017d0" />-->
+
+
+        <!--后台登录service-->
+        <service
+            android:name=".framework.control.OBDV3HService"
+            android:process="obd.service.login">
+            <intent-filter>
+                <action android:name="com.mapbar.obd.LOGIN_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

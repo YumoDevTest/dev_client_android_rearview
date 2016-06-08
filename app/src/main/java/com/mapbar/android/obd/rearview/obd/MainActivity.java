@@ -1,18 +1,20 @@
 package com.mapbar.android.obd.rearview.obd;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
@@ -51,13 +53,18 @@ public class MainActivity extends BaseActivity {
 
         onFinishedInit();
 
-
         //注册爱心推
-//        PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
+        PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
 
-//        UserCenter.getInstance().login("18600425206", "111111");
-//        UserCenter.getInstance().login("13673096611", "888888");
-//        UserCenter.getInstance().login("18610857365", "111111");
+        //监听登录结果
+        UserCenterManager.getInstance().setLoginListener(new UserCenterManager.LoginListener() {
+            @Override
+            public void isLogin(boolean isLogin) {
+                if (isLogin) {
+                    pageManager.goPage(MainPage.class);
+                }
+            }
+        });
 
     }
 
@@ -102,26 +109,17 @@ public class MainActivity extends BaseActivity {
 
 
     public void onFinishedInit() {
-        if (!isFinishInitView) {
-            isFinishInitView = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //监听登录结果
-                    UserCenterManager.getInstance().setLoginListener(new UserCenterManager.LoginListener() {
-                        @Override
-                        public void isLogin(boolean isLogin) {
-                            if (isLogin) {
-                                pageManager.goPage(MainPage.class);
-                            }
-                        }
-                    });
-                    //登录
-                    UserCenterManager.getInstance().login();
-                }
-            }, 2000);
-
-        }
+//        if (!isFinishInitView) {
+//            isFinishInitView = true;
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//
+//                }
+//            }, 2000);
+//
+//        }
     }
 
 

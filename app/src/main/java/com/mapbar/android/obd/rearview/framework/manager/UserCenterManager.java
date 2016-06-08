@@ -12,6 +12,7 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiPushManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
@@ -21,9 +22,15 @@ import com.mapbar.obd.UserCenter;
  * Created by tianff on 2016/6/2.
  */
 public class UserCenterManager extends OBDManager {
+    public final int SERVIE_LOGIN = 1;//服务登录类型
+    public final int APP_LOGIN = 0;//应用登录类型
     private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LoginListener loginListener;
+    private LocalCarModelInfoResult localCarModelInfoResult;
+    private int loginType = 0;//登录类型
+
+
 
     public UserCenterManager() {
         super();
@@ -50,7 +57,6 @@ public class UserCenterManager extends OBDManager {
                         break;
                     case 1:
                         if (state == 1 || state == 3) { //注册成功
-
                             showRegQr(Global.getAppContext().getResources().getString(R.string.reg_succ));
                             isPush = false;//推送成功
                             // 更新本地用户信息
@@ -98,7 +104,8 @@ public class UserCenterManager extends OBDManager {
     /**
      * 登录流程启动
      */
-    public void login() {
+    public void login(int type) {
+        loginType = type;
         //自动登录和设备登录
         login1();
     }
@@ -127,25 +134,32 @@ public class UserCenterManager extends OBDManager {
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                             Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                         }
-                        showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-                        outTime();
+                        if (loginType == 0) {
+                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                            outTime();
+                        } else {
+                            loginListener.isLogin(false);
+                        }
+
                     } else {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                             Log.d(LogTag.OBD, " -->> 已注册，数据有效");
                             Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
                         }
-                        //关闭二维码
-                        LayoutUtils.disQrPop();
-                        startServer();
+                        queryLocalCarModelInfo(cars[0].carGenerationId);
                     }
                 } else {
                     // 日志
                     if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                         Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                     }
-                    showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-                    outTime();
+                    if (loginType == 0) {
+                        showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                        outTime();
+                    } else {
+                        loginListener.isLogin(false);
+                    }
                 }
                 break;
             case Manager.Event.queryCarFailed:
@@ -154,8 +168,12 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
                 }
                 //显示二维码
-                showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-                outTime();
+                if (loginType == 0) {
+                    showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
+                    outTime();
+                } else {
+                    loginListener.isLogin(false);
+                }
                 break;
             case Manager.Event.DeviceloginSucc:
                 // 日志
@@ -169,13 +187,28 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, " -->> 设备登录失败");
                 }
-                //延迟，
+                //延迟，设备登录
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
                     }
                 }, 5 * 1000);
+                break;
+            case Manager.Event.queryRemoteCarModelInfoSucc:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> 查询远程车型信息成功");
+                }
+                //关闭二维码
+                LayoutUtils.disQrPop();
+                startServer();
+                break;
+            case Manager.Event.queryRemoteCarModelInfoFailed:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> 查询远程车型信息失败");
+                }
                 break;
         }
 //        super.onSDKEvent(event, o);
@@ -232,6 +265,28 @@ public class UserCenterManager extends OBDManager {
         Manager.getInstance().queryRemoteUserCar();
     }
 
+    /**
+     * 从本地缓存中查询单个车型参数
+     *
+     * @param carGenerationId 指定车型的车辆年款id.
+     */
+    private void queryLocalCarModelInfo(String carGenerationId) {
+        localCarModelInfoResult = Manager.getInstance().queryLocalCarModelInfo(carGenerationId, 1);
+        if (localCarModelInfoResult.errCode == LocalCarModelInfoResult.Error.none) {
+            // 日志
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
+            }
+        } else {
+            //日志
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
+            }
+            //查询车辆基本信息失败,开始远程查询车型信息
+            Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
+        }
+    }
+
     private void startServer() {
         loginListener.isLogin(true);
         // 日志
@@ -262,17 +317,18 @@ public class UserCenterManager extends OBDManager {
      */
     private void outTime() {
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isPush) {//推送失败
-                        login1();//设备登录
-                    }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isPush) {//推送失败
+                    login1();//设备登录
                 }
-            }, 1000 * 60);
+            }
+        }, 1000 * 60);
 
 
     }
+
 
     /**
      * 登录回调接口
@@ -280,5 +336,6 @@ public class UserCenterManager extends OBDManager {
     public interface LoginListener {
         void isLogin(boolean isLogin);
     }
+
 }
 
