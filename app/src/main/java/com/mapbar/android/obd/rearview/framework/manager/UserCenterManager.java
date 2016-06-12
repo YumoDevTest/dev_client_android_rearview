@@ -35,7 +35,7 @@ public class UserCenterManager extends OBDManager {
 //    private int loginType = 0;//登录类型
 
 
-    public UserCenterManager() {
+    private UserCenterManager() {
         super();
     }
 
@@ -186,9 +186,10 @@ public class UserCenterManager extends OBDManager {
                 startServer();
                 break;
             case Manager.Event.queryRemoteCarModelInfoFailed:
+                String s = (String) o;
                 // 日志
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                    Log.d(LogTag.OBD, " -->> 查询远程车型信息失败");
+                    Log.d(LogTag.OBD, " -->> 查询远程车型信息失败" + s);
                 }
                 break;
         }
@@ -235,8 +236,8 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, " -->> 查询本地车辆成功");
                 }
-                //启动业务
-                startServer();
+                queryLocalCarModelInfo(car.carGenerationId);
+
                 return;
             }
         }

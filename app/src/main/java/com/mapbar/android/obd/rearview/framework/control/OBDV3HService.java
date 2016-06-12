@@ -190,7 +190,7 @@ public class OBDV3HService extends Service {
                     com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 查询本地车辆成功");
                 }
                 //启动业务
-                startServer();
+                queryLocalCarModelInfo(car.carGenerationId);
                 return;
             }
         }

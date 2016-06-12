@@ -26,7 +26,7 @@ public class CarStateManager extends OBDManager {
     private ArrayList<String> errorCode = new ArrayList<>();
     private Handler mHander = new Handler();
 
-    public CarStateManager() {
+    private CarStateManager() {
         super();
 //        sdkListener = new SDKListenerManager.SDKListener() {
 //            @Override

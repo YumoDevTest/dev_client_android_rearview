@@ -21,7 +21,7 @@ public class PhysicalManager extends OBDManager {
     private int progress = 0;
     private ArrayList<Integer> statuses;
 
-    public PhysicalManager() {
+    private PhysicalManager() {
         super();
 //        sdkListener = new SDKListenerManager.SDKListener() {
 //            @Override
