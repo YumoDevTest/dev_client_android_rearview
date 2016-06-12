@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.obd.SessionInfo;
@@ -46,7 +47,6 @@ public class AixintuiPushManager implements AixintuiCallBack {
     String title;
     private Context mContext;
     private boolean isClickFromNotification = false;// 是否通过通知栏点击进入
-    private PushCallBack pushCallBack;
 
     /**
      * 禁止构造
@@ -63,6 +63,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
 
     public void setAixintui_token(String aixintui_token) {
+        AixintuiConfigs.push_token = aixintui_token;
         this.aixintui_token = aixintui_token;
     }
 
@@ -86,8 +87,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     userId = jObj1.getString("userId");
                     token = jObj1.getString("token");
                 }
-
-                pushCallBack.pushData(type, state, userId, token);
+                UserCenterManager.getInstance().setPushData(type, state, userId, token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -166,13 +166,6 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
     }
 
-    public void setPushCallBack(PushCallBack pushCallBack) {
-        this.pushCallBack = pushCallBack;
-    }
-
-    public interface PushCallBack {
-        public void pushData(int type, int state, String userId, String token);
-    }
 
     /**
      * 单例持有器

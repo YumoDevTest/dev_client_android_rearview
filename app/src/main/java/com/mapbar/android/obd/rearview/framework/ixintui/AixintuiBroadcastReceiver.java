@@ -3,14 +3,12 @@ package com.mapbar.android.obd.rearview.framework.ixintui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.text.TextUtils;
 
 import com.ixintui.pushsdk.SdkConstants;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 
 
 /**
@@ -80,21 +78,12 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
             if (SdkConstants.REGISTER.equals(cmd)) {
                 token = intent.getStringExtra(SdkConstants.ADDITION);
                 if (!TextUtils.isEmpty(token)) {
-                    AixintuiConfigs.push_token = token;
+
                     // 日志
                     if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                         Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);
                     }
                     AixintuiPushManager.getInstance().setAixintui_token(token);
-
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //登录
-                            UserCenterManager.getInstance().login(0);
-                        }
-                    }, 2000);
                 }
             }
         }

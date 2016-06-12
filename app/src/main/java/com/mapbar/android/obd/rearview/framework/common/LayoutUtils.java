@@ -113,7 +113,7 @@ public class LayoutUtils {
      * 弹出自定义的PopupWindow
      *
      * @param view    弹出的内容view
-     * @param gravity {@link android.view.Gravity#TOP 等等}
+     * @param gravity {@link Gravity#TOP 等等}
      */
     public static void showPopWindow(View view, int gravity) {
         PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -193,7 +193,7 @@ public class LayoutUtils {
     }
 
     public static void showQrPop(String content, String info) {
-        if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null) {
+        if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null && popupQR.isShowing()) {
             tv.setText(info);
         } else {
             url = content;
@@ -203,6 +203,15 @@ public class LayoutUtils {
             }
             View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
+           /* Button btn_state_pop_close= (Button) view.findViewById(R.id.btn_close_QRpop);
+            btn_state_pop_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                            finish();
+                            System.exit(0);
+
+                }
+            });*/
             Bitmap bmQR = QRUtils.createQR(content);
             iv.setImageBitmap(bmQR);
             tv = (TextView) view.findViewById(R.id.tv_qr_info);
@@ -211,6 +220,7 @@ public class LayoutUtils {
 //            ArrayList<AppPage> pages = PageManager.getInstance().getPages();
 //            if (pages.size() > 0) {
                 popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+
 //            }
         }
 

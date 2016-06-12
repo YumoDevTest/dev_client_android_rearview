@@ -7,11 +7,8 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.obd.UserCenter;
 
 import java.util.Hashtable;
 
@@ -91,28 +88,25 @@ public class QRUtils {
     }
 
 
-    /**
+   /* *//**
      * 弹出二维码
-     */
-    public static void showRegQr(String info) {
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->> 弹出二维码");
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
-        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "url_info -->> " + sb.toString());
-        }
-//        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
-        String url = sb.toString();
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "url -->> " + url);
-        }
-        LayoutUtils.showQrPop(url, info);
-    }
+     *//*
+    public static void showRegQr(String info,String url) {
+//        // 日志
+//        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+//            Log.d(LogTag.OBD, " -->> 弹出二维码");
+//        }
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
+//        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
+//        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
+//
+////        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
+//        String url = sb.toString();
+//        // 日志
+//        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+//            Log.d(LogTag.OBD, "url -->> " + url);
+//        }
+//        LayoutUtils.showQrPop(url, info);
+    }*/
 }

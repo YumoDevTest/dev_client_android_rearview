@@ -128,7 +128,7 @@ public class Utils {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
-        return deviceId;
-//        return "777296%%%955s9mmmmmmmmasdfasdfasdfasdf744!ee7";
+//        return deviceId;
+        return "ppppppppp%%955s9mmmmmmmmatttldodee7";
     }
 }
