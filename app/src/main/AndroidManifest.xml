@@ -63,7 +63,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".obd.MainActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
