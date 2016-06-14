@@ -46,11 +46,6 @@ public class SDKListenerManager {
                     Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
                 }
 
-                if(event == Manager.Event.loginSucc){
-                    Manager.getInstance().queryRemoteUserCar();
-                }
-
-
                 if(event==Manager.Event.dataUpdate){
                     RealTimeData data=(RealTimeData)o;
                     Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.speed);
