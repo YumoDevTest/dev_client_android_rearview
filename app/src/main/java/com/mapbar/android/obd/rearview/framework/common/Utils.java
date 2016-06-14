@@ -12,7 +12,6 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 import java.text.DecimalFormat;
 
@@ -121,14 +120,15 @@ public class Utils {
         return versionCode;
     }
 
-    public static String getImei() {
-        TelephonyManager tm = (TelephonyManager) MainActivity.getInstance().getSystemService(Context.TELEPHONY_SERVICE);
+    public static String getImei(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         final String deviceId = tm.getDeviceId();
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
 //        return deviceId;
-        return "356296017352636";
+//        return "777296%%%%hh01739";//绑定是13031162112注册没有完成
+        return "356296017352636";//绑定的是15094099096已经注册完成
     }
 }

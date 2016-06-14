@@ -9,12 +9,12 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 
 /**
- * Created by tianff on 2016/6/12.
+ * 保养功能
  */
 public class CarMaintenanceManager extends OBDManager {
 
 
-    private CarMaintenanceManager() {
+    public CarMaintenanceManager() {
     }
 
     /**
