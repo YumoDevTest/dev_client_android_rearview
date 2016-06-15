@@ -59,6 +59,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private PopupWindow popupWindow;
     private PopupWindow firmwarePopu;
     private StringBuilder sb = new StringBuilder();
+    private int showtimes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -250,7 +251,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-//        CarStateManager.getInstance().startRefreshCarState();
+        if (showtimes != 0) {
+            CarStateManager.getInstance().startRefreshCarState();
+        }
+        showtimes++;
     }
 
     @Override

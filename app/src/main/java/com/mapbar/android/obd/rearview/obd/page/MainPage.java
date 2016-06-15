@@ -95,8 +95,8 @@ public class MainPage extends AppPage {
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
         controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
         fragments = new ArrayList<>();
-        fragments.add(vehicleCheckupPage);
         fragments.add(carDataPage);
+        fragments.add(vehicleCheckupPage);
         fragments.add(carStatePage);
         fragments.add(carMaintenancePage);
         fragments.add(controlTestPage);
