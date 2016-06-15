@@ -33,5 +33,4 @@ public class Configs {
 
     public final static boolean TEST_SERIALPORT = true;//true false
 
-    public static final String URL_REG_INFO = "http://weixin.mapbar.com/obd/userRegister?";
 }

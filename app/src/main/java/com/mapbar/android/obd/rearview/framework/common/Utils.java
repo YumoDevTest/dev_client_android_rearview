@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 import java.text.DecimalFormat;
 
