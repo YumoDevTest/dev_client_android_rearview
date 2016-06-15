@@ -140,6 +140,7 @@ def flavors() {
     if (channels) {
         println "channels is ${channels}"
         def separate1 = ':'
+
         def separate2 = '@'
         def first = "first"
         def indexSeparate1
