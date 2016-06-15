@@ -46,8 +46,8 @@ public class SDKListenerManager {
                     Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
                 }
 
-                if(event==Manager.Event.dataUpdate){
-                    RealTimeData data=(RealTimeData)o;
+                if (event == Manager.Event.dataUpdate) {
+                    RealTimeData data = (RealTimeData) o;
                     Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.speed);
                     Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.gasConsumInLPerHour);
                     Log.v(LogTag.FRAMEWORK, "RealtimeData:" + data.driveCost);

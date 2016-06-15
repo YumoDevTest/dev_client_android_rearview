@@ -278,7 +278,8 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
             }
             //查询车辆基本信息失败,开始远程查询车型信息//// FIXME: tianff 2016/6/13 暂时写死carGenerationId
-            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
+//            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
+            Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
         }
     }
 
