@@ -8,6 +8,7 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -16,16 +17,30 @@ import com.mapbar.obd.UserCenter;
 
 
 /**
- * Created by tianff on 2016/6/2.
+ *用户登录中心管理者
  */
 public class UserCenterManager extends OBDManager {
 
+    /**
+     * 登录成功，开始业务
+     */
+    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;
+    /**
+     * 登录失败,参数o是QRInfo，收到此事件，需要根据QRInfo中url生成二维码并弹出
+     */
+    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;
+    /**
+     * 收到此事件说明微信注册成功,需要做的只有关闭二维码
+     */
+    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;
+    public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
+
+    private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LocalCarModelInfoResult localCarModelInfoResult;
-//    private int loginType = 0;//登录类型
+    private QRInfo qrInfo = null;
 
-
-    protected UserCenterManager() {
+    public UserCenterManager() {
         super();
     }
 
@@ -68,7 +83,7 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "userId -->> " + userId + " token--->" + token);
                             Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei());
+                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
                         }
                         boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
                         if (isUpdata) {
@@ -163,7 +178,7 @@ public class UserCenterManager extends OBDManager {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
                     }
                 }, 5 * 1000);
                 break;
@@ -210,7 +225,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
 
             }
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
 
         }
     }
@@ -259,7 +274,8 @@ public class UserCenterManager extends OBDManager {
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
             }
-            //查询车辆基本信息失败,开始远程查询车型信息
+            //查询车辆基本信息失败,开始远程查询车型信息//// FIXME: tianff 2016/6/13 暂时写死carGenerationId
+//            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
             Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
 //            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
         }
@@ -271,7 +287,7 @@ public class UserCenterManager extends OBDManager {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice(Utils.getImei());
+        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
     }
 
 
@@ -279,14 +295,14 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码,此方法可以保证push_token不为空
      */
     private void showRegQr(final String content) {
-        QRInfo qrInfo = null;
+
         if (AixintuiConfigs.push_token != null) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
+            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
             sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 
@@ -327,7 +343,7 @@ public class UserCenterManager extends OBDManager {
                     login1();//设备登录
                 }
             }
-        }, 1000 * 60);
+        }, 2000 * 60);
 
 
     }

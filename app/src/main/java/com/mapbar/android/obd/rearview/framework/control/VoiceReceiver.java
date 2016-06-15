@@ -23,11 +23,6 @@ public class VoiceReceiver extends BroadcastReceiver {
             }
 
         }
-        //// FIXME: tianff 2016/6/8 VoiceReceiver onReceive 临时测试，测完删除
-        if ("mapbar.obd.intent.action.login".equals(action)) {
-            Toast.makeText(context, "启动v3h服务", Toast.LENGTH_SHORT).show();
-            Intent intent2 = new Intent(context, OBDV3HService.class);
-            context.startService(intent2);
-        }
+
     }
 }

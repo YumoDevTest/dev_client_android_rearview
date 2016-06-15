@@ -14,6 +14,10 @@ public class Configs {
      */
     //URL
 //    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
+    //内网
+//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
+    //外网微信
+    public static final String URL_REG_INFO = "http://weixin.mapbar.com/obd/userRegister?";
 //    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
     /**
      * redirect_uri

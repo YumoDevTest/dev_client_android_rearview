@@ -79,7 +79,6 @@
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
                 <action android:name="mapbar.obd.intent.action.VOICE_CONTROL" />
-                <action android:name="mapbar.obd.intent.action.login" />
             </intent-filter>
         </receiver>
 
@@ -96,9 +95,11 @@
         </service>
         <service
             android:name="com.mapbar.obd.SyncService"
-            android:process="obd.service.process"></service>
+            android:process="obd.service.process">
+
+        </service>
         <service android:name="com.mapbar.obd.TripSyncService"></service>
-        <!-- 后台上传进程自动唤醒广播接收器注册 -->
+        <!--后台上传进程自动唤醒广播接收器注册 -->
         <receiver android:name="com.mapbar.obd.WakeupSyncServiceReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
