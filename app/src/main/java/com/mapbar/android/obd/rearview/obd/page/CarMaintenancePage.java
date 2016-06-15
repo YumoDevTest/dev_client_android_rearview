@@ -278,7 +278,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
 
     @Override
     public void onResume() {
-//        getLocalSchemeCache();
+        getLocalSchemeCache();
         super.onResume();
     }
 
