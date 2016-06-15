@@ -99,7 +99,7 @@ public class OBDV3HService extends Service {
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getApplication()));
+                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
                             }
                         }, 5 * 1000);
                         break;
@@ -165,7 +165,7 @@ public class OBDV3HService extends Service {
             login2();
         } else {
             android.util.Log.e("uuuuuuuu", "自动登录失败");
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getApplication()));
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
 
         }
     }
@@ -219,7 +219,7 @@ public class OBDV3HService extends Service {
         if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
             com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice(Utils.getImei(getApplication()));
+        Manager.getInstance().openDevice(Utils.getImei());
     }
 
 
