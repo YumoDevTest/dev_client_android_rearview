@@ -32,5 +32,6 @@ public class Configs {
     //有 weixintest.mapbar.com/obdWechat/ 改成 weixin.mapbar.com/obd/
 
     public final static boolean TEST_SERIALPORT = true;//true false
+    public final static String BT_TYPE = "7";
 
 }

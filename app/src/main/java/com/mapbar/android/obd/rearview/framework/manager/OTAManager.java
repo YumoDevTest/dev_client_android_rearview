@@ -6,11 +6,9 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.obd.CarDetail;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalUserCarResult;
@@ -53,16 +51,19 @@ public class OTAManager extends OBDManager {
         }
         switch (type) {
             case 0:
-                if (state == 1)
+                if (state == 1 && flag == 0) {
                     showRegQr(scan_succ);
+                    flag = -1;
+                }
                 break;
             case 2:
                 if (state == 1) {
                     //TODO 检测bin
-                    baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_SUCC, null);
                     Manager.getInstance().queryRemoteUserCar();
+                    baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_SUCC, null);
+                } else {
+                    baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, null);
                 }
-                LayoutUtils.disQrPop();
                 break;
 
         }
@@ -91,9 +92,8 @@ public class OTAManager extends OBDManager {
             }
             qrInfo.setUrl(url);
             qrInfo.setContent(content);
-//            baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, qrInfo);
+            baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, qrInfo);
         } else {
-
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -111,7 +111,10 @@ public class OTAManager extends OBDManager {
         OtaSpecial ota = Manager.getInstance().getOtaSpecial();//从本地数据库中获得,或者获取失败返回null,现在在哪里保存?
         String manualVin = Manager.getInstance().getGetObdVinManual();//原先返回手动输入的vin  现在是在微信页面填写
         if ((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) {
-            LayoutUtils.showQrPop(Configs.URL_BIND_VIN, "请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
+            QRInfo qrInfo = new QRInfo();
+            qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
+            qrInfo.setUrl(Configs.URL_BIND_VIN);
+            baseObdListener.onEvent(EVENT_OBD_OTA_NEED_VIN, qrInfo);
         } else {
             checkVersion(mContext);
         }
@@ -126,7 +129,7 @@ public class OTAManager extends OBDManager {
                 firmware = Firmware.getInstance(mContext);
                 firmware.initParma(cur.firstBrand.trim(), cur.carModel.trim(), cur.generation.trim());
 //                firmware.initParma("11111111", "11111111", "11111111");
-                firmware.checkNewVersion("7");
+                firmware.checkNewVersion(Configs.BT_TYPE);
             }
         }
     }
@@ -250,7 +253,6 @@ public class OTAManager extends OBDManager {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                boolean b = PreferencesConfig.OTA_SPEC.get();
                                 Firmware.getInstance(mContext).delBin();
                                 // FileUtils.deleteGeneralFile(getLocalHtmlUrl());
                             }

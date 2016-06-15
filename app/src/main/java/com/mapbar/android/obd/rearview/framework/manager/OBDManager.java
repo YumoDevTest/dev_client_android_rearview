@@ -18,7 +18,9 @@ public class OBDManager {
     public static final int EVENT_OBD_USER_BINDVIN_SUCC = 0xF4005;
     public static final int EVENT_OBD_USER_BINDVIN_FAILED = 0xF4006;
     public static final int EVENT_OBD_OTA_HAS_NEWFIRMEWARE = 0xF4007;
+    public static final int EVENT_OBD_OTA_NEED_VIN = 0xF4008;
     protected static OBDListener baseObdListener;
+    protected static int flag = -1;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
     private static OBDManager obdManager;
     protected SDKListenerManager.SDKListener sdkListener;

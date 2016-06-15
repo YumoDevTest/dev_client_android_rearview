@@ -13,6 +13,8 @@ import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
@@ -266,7 +268,12 @@ public class MainPage extends AppPage {
 //                            }
 //                        }, 5 * 1000);
 //                        break;
-                    case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC://TODO 会有这个回调？
+                    case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
+                    case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
+                        LayoutUtils.disQrPop();
+                        break;
+                    case OBDManager.EVENT_OBD_OTA_NEED_VIN:
+                        LayoutUtils.showQrPop(((QRInfo) o).getUrl(), ((QRInfo) o).getContent());
                         break;
                 }
             }

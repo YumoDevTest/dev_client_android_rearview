@@ -55,6 +55,7 @@ public class UserCenterManager extends OBDManager {
     }
 
 
+
     /**
      * 爱心推收到推送调用
      *
@@ -70,8 +71,15 @@ public class UserCenterManager extends OBDManager {
         }
         switch (type) {
             case 0:
-                if (state == 1)
-                    showRegQr(scan_succ);
+                if (state == 1) {
+                    if (flag == -1) {
+                        //TODO 登录
+                        showRegQr(scan_succ);
+                        flag = 1;
+                    } else if (flag == 0) {
+                        //TODO
+                    }
+                }
                 break;
             case 1:
                 if (state == 1 || state == 3) { //注册成功
@@ -92,6 +100,7 @@ public class UserCenterManager extends OBDManager {
                             Manager.getInstance().queryRemoteUserCar();
                         } else {
                             //显示二维码
+//                            flag = 1;
                             showRegQr(reg_info);
                             // 日志
                             if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
@@ -284,6 +293,7 @@ public class UserCenterManager extends OBDManager {
 
     private void startServer() {
         baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_SUCC, null);
+        flag = 0;
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
