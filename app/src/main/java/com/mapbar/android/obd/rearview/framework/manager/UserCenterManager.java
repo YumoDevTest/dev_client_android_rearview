@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -17,7 +18,7 @@ import com.mapbar.obd.UserCenter;
 
 
 /**
- *用户登录中心管理者
+ * 用户登录中心管理者
  */
 public class UserCenterManager extends OBDManager {
 
@@ -83,7 +84,7 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "userId -->> " + userId + " token--->" + token);
                             Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei());
+                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
                         }
                         boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
                         if (isUpdata) {
@@ -178,7 +179,7 @@ public class UserCenterManager extends OBDManager {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
                     }
                 }, 5 * 1000);
                 break;
@@ -225,7 +226,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
 
             }
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
 
         }
     }
@@ -287,7 +288,7 @@ public class UserCenterManager extends OBDManager {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice(Utils.getImei());
+        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
     }
 
 
@@ -302,7 +303,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
+            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
             sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 

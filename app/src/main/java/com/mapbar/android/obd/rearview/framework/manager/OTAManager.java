@@ -126,14 +126,14 @@ public class OTAManager extends OBDManager {
                 firmware = Firmware.getInstance(mContext);
                 firmware.initParma(cur.firstBrand.trim(), cur.carModel.trim(), cur.generation.trim());
 //                firmware.initParma("11111111", "11111111", "11111111");
-                firmware.checkNewVersion(PreferencesConfig.USERCAR_BTTYPE.get());
+                firmware.checkNewVersion("7");
             }
         }
     }
 
     @Override
     public void onSDKEvent(int event, Object o) {
-        Log.d(LogTag.OBD, "whw OTAManager.onSDKEvent event ==" + event);
+//        Log.d(LogTag.OBD, "whw OTAManager.onSDKEvent event ==" + event);
         switch (event) {
             case Manager.Event.firmwareOTA:
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
@@ -156,7 +156,7 @@ public class OTAManager extends OBDManager {
 //        String version = "test";
 //            version = Manager.getInstance().getOBDVersion();
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->> 请求固件新版本的回调version ==" + version.replace("\r", "") + "==end");
+//            Log.d(LogTag.OBD, " -->> 请求固件新版本的回调version ==" + version.replace("\r", "") + "==end");
         }
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
