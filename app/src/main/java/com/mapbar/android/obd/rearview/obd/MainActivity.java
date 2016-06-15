@@ -22,6 +22,7 @@ import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+import com.mapbar.obd.SerialPortManager;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class MainActivity extends BaseActivity {
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
-
+        SerialPortManager.getInstance().setPath("/dev/ttyMT2");
         OBDSDKListenerManager.getInstance().init();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
