@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
@@ -88,6 +89,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     token = jObj1.getString("token");
                 }
                 UserCenterManager.getInstance().setPushData(type, state, userId, token);
+                OTAManager.getInstance().setPushData(type, state, userId, token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

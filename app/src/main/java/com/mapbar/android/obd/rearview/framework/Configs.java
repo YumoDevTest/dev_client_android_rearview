@@ -14,10 +14,20 @@ public class Configs {
      */
     //URL
 //    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
-    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
+//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
     /**
      * redirect_uri
      */
     public static final String URL_REG1 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WX_APPID;
     public static final String URL_REG2 = "&response_type=code&scope=snsapi_userinfo&state=obdWechat#wechat_redirect";
+    /**
+     * 微信获取vin的url
+     */
+//    public final static String URL_BIND_VIN = "http://weixintest.mapbar.com/obdWechat/vinCollector?pushToken=8125513276403507479";
+    public final static String URL_BIND_VIN = "http://weixin.mapbar.com/obd/vinCollector?pushToken=8125513276403507479";
+    //有 weixintest.mapbar.com/obdWechat/ 改成 weixin.mapbar.com/obd/
+
+    public final static boolean TEST_SERIALPORT = true;//true false
+
+    public static final String URL_REG_INFO = "http://weixin.mapbar.com/obd/userRegister?";
 }

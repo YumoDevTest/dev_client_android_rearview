@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
@@ -10,11 +11,21 @@ import java.util.HashMap;
  * sdk 管理类，接收sdk所有事件
  */
 public class OBDManager {
+    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;//登录成功
+    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;//登录失败,需要注册,弹出二维码
+    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;//微信注册成功,关闭二维码
+    public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
+    public static final int EVENT_OBD_USER_BINDVIN_SUCC = 0xF4005;
+    public static final int EVENT_OBD_USER_BINDVIN_FAILED = 0xF4006;
+    public static final int EVENT_OBD_OTA_HAS_NEWFIRMEWARE = 0xF4007;
     protected static OBDListener baseObdListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
     private static OBDManager obdManager;
     protected SDKListenerManager.SDKListener sdkListener;
-
+    protected String reg_info = "请扫描填写信息，以获得更多汽车智能化功能\n如：远程定位、防盗提醒、远程查看车辆状态等";
+    protected String scan_succ = "扫描成功\\n请等待填写完成";
+    protected String reg_succ = "您已通过手机\\n成功完善爱车信息";
+    protected Handler mHandler = new Handler();
     protected OBDManager() {
         Log.e("event", "构造了");
         initListener();

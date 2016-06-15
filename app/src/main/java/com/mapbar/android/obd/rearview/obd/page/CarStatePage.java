@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,11 +25,16 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
+import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.obd.CarStatusData;
+import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +48,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private GridView gvState;
     @ViewInject(R.id.tv_state_record)
     private TextView tv_state_record;
+    @ViewInject(R.id.tv_state)
+    private TextView tv_state;
     private Button btn_state_pop_close;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
@@ -48,6 +57,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private int[] stateResNoneIds = {R.drawable.car_light_none, R.drawable.car_window_none, R.drawable.car_lock_none, R.drawable.car_door_none, R.drawable.car_trunk_none, R.drawable.car_sunroof_none};
     private StateAdapter adapter;
     private PopupWindow popupWindow;
+    private PopupWindow firmwarePopu;
     private StringBuilder sb = new StringBuilder();
 
     @Override
@@ -74,7 +84,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
             public void onEvent(int event, Object o) {
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                    Log.v(LogTag.FRAMEWORK, "event:" + event);
+//                    Log.v(LogTag.FRAMEWORK, "whw -->> event:" + event);
                 }
                 switch (event) {
                     case Manager.Event.obdCarStatusgetSucc:
@@ -85,11 +95,17 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         break;
                     case Manager.Event.obdCarStatusgetFailed:
                         break;
+
+                    case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
+                        Log.v(LogTag.FRAMEWORK, "whw -->> 请点击更新固件,实现控制功能:");
+                        tv_state.setText("请点击更新固件,实现控制功能");
+                        break;
                 }
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
+        tv_state.setOnClickListener(this);
 
     }
 
@@ -104,14 +120,137 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                     popupWindow.dismiss();
                 }
                 break;
+            case R.id.tv_state://提示有固件升级
+                Log.e(LogTag.OBD, "whw -->> 点击升级固件");
+                showFirmwarePopu();
+                break;
 
         }
+    }
+
+    private void showFirmwarePopu() {
+        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_firmware_pop, null);
+
+        final View prompt_content = popupView.findViewById(R.id.firmware_update_prompt_content);
+        final View succ_content = popupView.findViewById(R.id.firmware_update_succ_content);
+        final View fail_content = popupView.findViewById(R.id.firmware_update_fail_content);
+        final View progress_content = popupView.findViewById(R.id.firmware_update_progress_content);
+
+        prompt_content.setVisibility(View.VISIBLE);
+        succ_content.setVisibility(View.GONE);
+        fail_content.setVisibility(View.GONE);
+        progress_content.setVisibility(View.GONE);
+
+        final TextView tv_download_progress = (TextView) progress_content.findViewById(R.id.tv_download_progress);
+        final ProgressBar progressbar = (ProgressBar) progress_content.findViewById(R.id.progressbar);
+
+        final TextView tv_firmware_pop_update = (TextView) popupView.findViewById(R.id.tv_firmware_pop_update);
+        TextView tv_firmware_pop_cancle = (TextView) popupView.findViewById(R.id.tv_firmware_pop_cancle);
+        tv_firmware_pop_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //刷新固件
+                Log.e(LogTag.OBD, "whw -->>固件");
+                //TODO 显示刷固件进度条
+                prompt_content.setVisibility(View.GONE);
+                succ_content.setVisibility(View.GONE);
+                fail_content.setVisibility(View.GONE);
+                progress_content.setVisibility(View.VISIBLE);
+
+                OTAManager.getInstance().upgrade(MainActivity.getInstance(), new Firmware.UpgradeCallback() {
+                    @Override
+                    public void onDownResult(int statusCode, File file) {
+                        //TODO 下载失败
+                    }
+
+                    @Override
+                    public void onDownProgress(int bytesWritten, int totalSize) {
+
+                    }
+
+                    @SuppressLint("NewApi")
+                    @Override
+                    public void onFlashResult(int statusCode, File file) {
+                        progress_content.setVisibility(View.GONE);
+                        switch (statusCode) {
+                            case Firmware.UpgradeCallback.STATUSCODE_FLASH_OK:
+                                Log.d(LogTag.OTA, "whw -->> 升级成功 == ");
+                                //TODO 显示升级成功的ui 点击完成 重启客户端
+                                succ_content.setVisibility(View.VISIBLE);
+                                succ_content.findViewById(R.id.firmware_update_succ_confirm).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        prompt_content.setVisibility(View.GONE);
+                                        succ_content.setVisibility(View.VISIBLE);
+                                        fail_content.setVisibility(View.GONE);
+                                        progress_content.setVisibility(View.GONE);
+                                        firmwarePopu.dismiss();
+                                        //TODO 重启客户端
+                                        MainActivity.getInstance().restartApp();
+                                    }
+                                });
+                                break;
+                            case Firmware.UpgradeCallback.STATUSCODE_FLASH_FAILED:
+                                //TODO 显示升级失败的ui 点击重试重新升级
+
+                                prompt_content.setVisibility(View.GONE);
+                                succ_content.setVisibility(View.GONE);
+                                fail_content.setVisibility(View.VISIBLE);
+                                progress_content.setVisibility(View.GONE);
+
+                                fail_content.findViewById(R.id.firmware_update_fail_confirm).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        tv_firmware_pop_update.callOnClick();
+                                        prompt_content.setVisibility(View.GONE);
+                                        succ_content.setVisibility(View.GONE);
+                                        fail_content.setVisibility(View.GONE);
+                                        progress_content.setVisibility(View.GONE);
+                                    }
+                                });
+                                fail_content.findViewById(R.id.tv_firmware_pop_fail_cancle).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //TODO 取消popu
+                                        firmwarePopu.dismiss();
+                                        fail_content.setVisibility(View.GONE);
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFlashProgress(int bytesWritten, int totalSize) {
+                        //TODO 显示刷固件进度
+                        progress_content.setVisibility(View.VISIBLE);
+                        int pb = (int) (Float.intBitsToFloat(bytesWritten) / Float.intBitsToFloat(totalSize) * 100f);
+                        progressbar.setProgress(pb);
+                        tv_download_progress.setText(pb + "%");
+                    }
+                });
+            }
+        });
+        tv_firmware_pop_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //取消直接消失popu
+                firmwarePopu.dismiss();
+            }
+        });
+        firmwarePopu = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //设置点击PopupWindow以外的区域取消PopupWindow的显示
+        firmwarePopu.setOutsideTouchable(true);
+        firmwarePopu.setBackgroundDrawable(new BitmapDrawable());
+        firmwarePopu.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        CarStateManager.getInstance().startRefreshCarState();
+//        CarStateManager.getInstance().startRefreshCarState();
     }
 
     @Override

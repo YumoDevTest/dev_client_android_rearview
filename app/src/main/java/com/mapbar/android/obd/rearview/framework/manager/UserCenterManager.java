@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
-import android.os.Handler;
 import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
@@ -21,21 +20,12 @@ import com.mapbar.obd.UserCenter;
  */
 public class UserCenterManager extends OBDManager {
 
-    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;//登录成功
-    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;//登录失败,需要注册,弹出二维码
-    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;//微信注册成功,关闭二维码
-    public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
-
-    private Handler mHandler = new Handler();
     private boolean isPush = true;
-    private String reg_info = "请扫描填写信息，以获得更多汽车智能化功能\n如：远程定位、防盗提醒、远程查看车辆状态等";
-    private String scan_succ = "扫描成功\\n请等待填写完成";
-    private String reg_succ = "您已通过手机\\n成功完善爱车信息";
     private LocalCarModelInfoResult localCarModelInfoResult;
 //    private int loginType = 0;//登录类型
 
 
-    private UserCenterManager() {
+    protected UserCenterManager() {
         super();
     }
 
@@ -97,7 +87,7 @@ public class UserCenterManager extends OBDManager {
                 } else if (state == 2) {
                     showRegQr(reg_info);
                 }
-
+                break;
         }
     }
 
@@ -112,26 +102,26 @@ public class UserCenterManager extends OBDManager {
 
     @Override
     public void onSDKEvent(int event, Object o) {
-        android.util.Log.e("uuuuuuuu", "App回调" + event);
+        android.util.Log.i("uuuuuuuu", "App回调" + event);
         switch (event) {
             case Manager.Event.queryCarSucc:
                 UserCar[] cars = (UserCar[]) o;
                 // 日志
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                    Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
+                    Log.d(LogTag.OBD, " -->> -->> 查询远程车辆成功");
                 }
                 if (cars != null && cars.length > 0) {
                     if (TextUtils.isEmpty(cars[0].carGenerationId)) {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                            Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                            Log.d(LogTag.OBD, " -->> -->> 未注册，数据无效");
                         }
                         showRegQr(reg_info);
                         outTime();
                     } else {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                            Log.d(LogTag.OBD, " -->> 已注册，数据有效");
+                            Log.d(LogTag.OBD, " -->> -->> 已注册，数据有效");
                             Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
                         }
                         queryLocalCarModelInfo(cars[0].carGenerationId);
@@ -139,18 +129,19 @@ public class UserCenterManager extends OBDManager {
                 } else {
                     // 日志
                     if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                        Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                        Log.d(LogTag.OBD, " -->> -->> 未注册，数据无效");
                     }
 
                     showRegQr(reg_info);
                     outTime();
 
                 }
+//                baseObdListener.onEvent(Manager.Event.queryCarSucc,o);
                 break;
             case Manager.Event.queryCarFailed:
                 // 日志
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                    Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
+                    Log.d(LogTag.OBD, "whw -->> -->> 查询远程车辆失败");
                 }
                 //显示二维码
                 showRegQr(reg_info);
@@ -201,22 +192,22 @@ public class UserCenterManager extends OBDManager {
      * 自动登录、设备登录
      */
     private void login1() {
-        android.util.Log.e("uuuuuuuu", "登录开始");
+        android.util.Log.i("uuuuuuuu", "whw -->>登录开始");
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->> 登录开始");
+            Log.d(LogTag.OBD, "whw -->> -->> 登录开始");
         }
 //        UserCenter.getInstance().login("18610857365", "111111");
         if (UserCenter.getInstance().loginAutomatically()) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                Log.d(LogTag.OBD, " -->> 自动登录成功");
+                Log.d(LogTag.OBD, "whw -->> -->> 自动登录成功");
             }
             login2();
         } else {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                Log.d(LogTag.OBD, " -->> 自动登录失败");
+                Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
 
             }
             UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
@@ -234,16 +225,16 @@ public class UserCenterManager extends OBDManager {
             if (car != null && !TextUtils.isEmpty(car.carGenerationId)) {
                 // 日志
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                    Log.d(LogTag.OBD, " -->> 查询本地车辆成功");
+                    Log.d(LogTag.OBD, "whw -->> -->> 查询本地车辆成功");
                 }
                 queryLocalCarModelInfo(car.carGenerationId);
-
+//                startServer();//TODO 破解版
                 return;
             }
         }
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, " -->> 查询本地车辆失败");
+            Log.d(LogTag.OBD, "whw -->> -->> 查询本地车辆失败");
         }
         //查询远程车辆信息
         Manager.getInstance().queryRemoteUserCar();
@@ -270,6 +261,7 @@ public class UserCenterManager extends OBDManager {
             }
             //查询车辆基本信息失败,开始远程查询车型信息
             Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
+//            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
         }
     }
 

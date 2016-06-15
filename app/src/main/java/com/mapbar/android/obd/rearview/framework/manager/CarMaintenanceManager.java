@@ -14,7 +14,7 @@ import com.mapbar.obd.UserCar;
 public class CarMaintenanceManager extends OBDManager {
 
 
-    private CarMaintenanceManager() {
+    protected CarMaintenanceManager() {
     }
 
     /**

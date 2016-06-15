@@ -15,6 +15,8 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -101,12 +103,13 @@ public class MainPage extends AppPage {
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = vehicleCheckupPage;
 
+
         pager.setOffscreenPageLimit(3);
         mContext = MainActivity.getInstance();
         initDialog();
         title = titleBar;
+        OTAManager.getInstance().checkVinVersion(mContext);
     }
-
 
     @Override
     public void setListener() {
@@ -264,6 +267,8 @@ public class MainPage extends AppPage {
 //                            }
 //                        }, 5 * 1000);
 //                        break;
+                    case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC://TODO 会有这个回调？
+                        break;
                 }
             }
         };
@@ -320,7 +325,6 @@ public class MainPage extends AppPage {
 //            }
 //        });
     }
-
 
     private void initDialog() {
         mAlarmTimerDialog = new TimerDialog(mContext, new TimerDialog.Listener() {
@@ -415,11 +419,6 @@ public class MainPage extends AppPage {
     public void setAlarmOn(boolean on) {
         this.mAlarmOn = on;
     }
-
-
-
-
-
 
 
 }

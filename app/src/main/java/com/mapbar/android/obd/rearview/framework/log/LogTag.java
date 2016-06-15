@@ -88,6 +88,16 @@ public enum LogTag implements LogTagInterface {
      */
     LAUNCH,
 
+    /**
+     *
+     */
+    CONNECT,
+
+    /**
+     *
+     */
+    OTA,
+
     @Deprecated
     ALL;
 

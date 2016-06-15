@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -14,7 +15,10 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
@@ -30,6 +34,7 @@ public class MainActivity extends BaseActivity {
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
     private OBDSDKListenerManager.SDKListener sdkListener;
+    private boolean restart;
 
     public static MainActivity getInstance() {
         return instance;
@@ -59,14 +64,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onEvent(int event, Object o) {
                 switch (event) {
-                    case UserCenterManager.EVENT_OBD_USER_LOGIN_SUCC:
+                    case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
                         pageManager.goPage(MainPage.class);
                         break;
-                    case UserCenterManager.EVENT_OBD_USER_LOGIN_FAILED:
+                    case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
                         LayoutUtils.showQrPop(qrInfo.getUrl(), qrInfo.getContent());
                         break;
-                    case UserCenterManager.EVENT_OBD_USER_REGISTER_SUCC:
+                    case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
                 }
@@ -85,8 +90,22 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         LayoutUtils.disQrPop();//防止popupwindow泄露
+        if (restart) {
+            restart = false;
+            restartmyapp();
+        } else {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+        super.onDestroy();
+    }
+
+    private void restartmyapp() {
+        PageManager.getInstance().finishAll();
+        Intent i = this.getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage(this.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     @Override
@@ -130,6 +149,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void run() {
                     //登录
+                    Log.d(LogTag.OBD, "whw -->> UserCenterManager.getInstance().login() ==");
                     UserCenterManager.getInstance().login();
                 }
             }, 2000);
@@ -137,9 +157,13 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
     public RelativeLayout getContentView() {
         return contentView;
+    }
+
+    public void restartApp() {
+        this.restart = true;
+        finish();
     }
 
 }

@@ -26,7 +26,7 @@ public class CarStateManager extends OBDManager {
     private ArrayList<String> errorCode = new ArrayList<>();
     private Handler mHander = new Handler();
 
-    private CarStateManager() {
+    protected CarStateManager() {
         super();
 //        sdkListener = new SDKListenerManager.SDKListener() {
 //            @Override
@@ -58,7 +58,7 @@ public class CarStateManager extends OBDManager {
     public void tryToGetData() {
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
-            Log.d(LogTag.TEMP, "tryToGetData -->> ");
+            //  Log.d(LogTag.TEMP, "tryToGetData -->> ");
         }
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
