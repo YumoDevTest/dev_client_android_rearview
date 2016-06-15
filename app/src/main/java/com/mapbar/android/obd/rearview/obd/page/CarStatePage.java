@@ -122,8 +122,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_state://提示有固件升级
-                Log.e(LogTag.OBD, "whw -->> 点击升级固件");
-                showFirmwarePopu();
+                Log.e(LogTag.OBD, "whw -->> 点击升级固件");//TODO
+                if (tv_state != null && tv_state.getText().toString().trim().equals("请点击更新固件,实现控制功能")) {
+                    showFirmwarePopu();
+                }
                 break;
 
         }
