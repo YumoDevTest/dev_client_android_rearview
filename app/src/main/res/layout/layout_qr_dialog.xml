@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/bg_page"
-              android:gravity="center"
-              android:orientation="vertical">
-
+              android:background="@color/bg_page">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:id="@+id/ll_pop"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/qr_bg"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/iv_qr"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:scaleType="fitXY"/>
 
     </LinearLayout>
@@ -25,11 +24,21 @@
         android:id="@+id/tv_qr_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/ll_pop"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="12sp"
         />
 
+    <Button
+        android:id="@+id/btn_close_QRpop"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_car_data_pop_close_pressed" />
 
-</LinearLayout>
+
+</RelativeLayout>

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -175,9 +176,9 @@ public class LayoutUtils {
         }
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         ArrayList<AppPage> pages = PageManager.getInstance().getPages();
-        if (pages.size() > 0) {
-            popupWindow.showAtLocation(pages.get(pages.size() - 1).getContentView(), Gravity.CENTER, 0, 0);
-        }
+//        if (pages.size() > 0) {
+        popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+//        }
 
         final View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -192,7 +193,7 @@ public class LayoutUtils {
         }
     }
 
-    public static void showQrPop(String content, String info) {
+    public static void showQrPop(String content, String info, View.OnClickListener onClickListener) {
         if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null && popupQR.isShowing()) {
             tv.setText(info);
         } else {
@@ -203,15 +204,8 @@ public class LayoutUtils {
             }
             View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
-           /* Button btn_state_pop_close= (Button) view.findViewById(R.id.btn_close_QRpop);
-            btn_state_pop_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                            finish();
-                            System.exit(0);
-
-                }
-            });*/
+            Button btn_state_pop_close = (Button) view.findViewById(R.id.btn_close_QRpop);
+            btn_state_pop_close.setOnClickListener(onClickListener);
             Bitmap bmQR = QRUtils.createQR(content);
             iv.setImageBitmap(bmQR);
             tv = (TextView) view.findViewById(R.id.tv_qr_info);

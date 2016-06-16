@@ -129,7 +129,6 @@ public class Utils {
         }
 //        return deviceId;
 //        return "777296%%%%hh01739";
-//        return "777296%%%%hh01739!55555555";
-        return "777296%%%%hh01739!55555555";
+        return "777296%%%%hh01739!55555555";//外网注册通过
     }
 }

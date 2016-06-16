@@ -70,7 +70,18 @@ public class MainActivity extends BaseActivity {
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
-                        LayoutUtils.showQrPop(qrInfo.getUrl(), qrInfo.getContent());
+                        LayoutUtils.showQrPop(qrInfo.getUrl(), qrInfo.getContent(), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                        System.exit(0);
+                                    }
+                                });
+                            }
+                        });
                         break;
                     case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
                         LayoutUtils.disQrPop();//关闭二维码

@@ -207,7 +207,12 @@ public class MainPage extends AppPage {
                         LayoutUtils.disQrPop();
                         break;
                     case OBDManager.EVENT_OBD_OTA_NEED_VIN:
-                        LayoutUtils.showQrPop(((QRInfo) o).getUrl(), ((QRInfo) o).getContent());
+                        LayoutUtils.showQrPop(((QRInfo) o).getUrl(), ((QRInfo) o).getContent(), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LayoutUtils.disQrPop();
+                            }
+                        });
                         break;
                 }
             }
