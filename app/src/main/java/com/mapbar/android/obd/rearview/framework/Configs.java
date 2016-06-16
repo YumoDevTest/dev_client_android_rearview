@@ -8,17 +8,16 @@ public class Configs {
     public final static String WX_APPID = "wxf35fb5024de20c47";
 
     /**
-     * imei
-     * pushToken
-     * token
+     * 是否使用内网
      */
-    //URL
-//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister/index?";
-    //内网
-//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
-    //外网微信
-    public static final String URL_REG_INFO = "http://weixin.mapbar.com/obd/userRegister?";
-//    public static final String URL_REG_INFO = "http://weixintest.mapbar.com/obdWechat/userRegister?";
+    public final static boolean IS_USE_INTERNAT_HOST = false;
+
+
+    /**
+     * 微信注册
+     */
+    public static final String URL_REG_INFO = IS_USE_INTERNAT_HOST ? "http://weixintest.mapbar.com/obdWechat/userRegister?" : "http://weixin.mapbar.com/obd/userRegister?";
+
     /**
      * redirect_uri
      */
@@ -27,9 +26,7 @@ public class Configs {
     /**
      * 微信获取vin的url
      */
-//    public final static String URL_BIND_VIN = "http://weixintest.mapbar.com/obdWechat/vinCollector?pushToken=8125513276403507479";
-    public final static String URL_BIND_VIN = "http://weixin.mapbar.com/obd/vinCollector?pushToken=8125513276403507479";
-    //有 weixintest.mapbar.com/obdWechat/ 改成 weixin.mapbar.com/obd/
+    public final static String URL_BIND_VIN = IS_USE_INTERNAT_HOST ? "http://weixintest.mapbar.com/obdWechat/vinCollector?pushToken=" : "http://weixin.mapbar.com/obd/vinCollector?pushToken=";
 
     public final static boolean TEST_SERIALPORT = true;//true false
     public final static String BT_TYPE = "7";

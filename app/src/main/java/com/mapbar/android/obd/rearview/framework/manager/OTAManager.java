@@ -76,13 +76,8 @@ public class OTAManager extends OBDManager {
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, "-->> 弹出二维码");
             }
-//            StringBuilder sb = new StringBuilder();
-//            sb.append(Configs.URL_BIND_VIN).append("imei=").append(Utils.getImei()).append("&");
-//            sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-//            sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
-//
-//            String url = sb.toString();
-            String url = Configs.URL_BIND_VIN;
+
+            String url = Configs.URL_BIND_VIN + AixintuiConfigs.push_token;
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, "url -->> " + url);

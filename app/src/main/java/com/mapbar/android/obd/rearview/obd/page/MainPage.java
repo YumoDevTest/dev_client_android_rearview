@@ -198,76 +198,10 @@ public class MainPage extends AppPage {
                                 }
                             };
                             mHandlerBuy.postDelayed(r, 500);
-//                            }
+
                         }
                         break;
-                    /*case Manager.Event.loginSucc:
-                        Manager.getInstance().queryRemoteUserCar();
-                        break;*/
-//                    case Manager.Event.queryCarSucc:
-//                        UserCar[] cars = (UserCar[]) o;
-//                        // 日志
-//                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                            Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
-//                        }
-//                        if (cars != null && cars.length > 0) {
-//                            if (TextUtils.isEmpty(cars[0].carGenerationId) ){
-//                                // 日志
-//                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                                    Log.d(LogTag.OBD, " -->> 未注册，数据无效");
-//                                }
-//                                showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                                outTime();
-//                            } else {
-//                                // 日志
-//                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                                    Log.d(LogTag.OBD, " -->> 已注册，数据有效");
-//                                    Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
-//                                }
-//                                //关闭二维码
-//                                LayoutUtils.disQrPop();
-//                                startServer();
-//                            }
-//                        } else {
-//                            // 日志
-//                            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                                Log.d(LogTag.OBD, " -->> 未注册，数据无效");
-//                            }
-//                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                            outTime();
-//                        }
-//                        break;
-//                    case Manager.Event.queryCarFailed:
-//                        // 日志
-//                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                            Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
-//                        }
-//                        //显示二维码
-//                        showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                        outTime();
-//                        break;
-//                    case Manager.Event.DeviceloginSucc:
-//                        // 日志
-//                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                            Log.d(LogTag.OBD, " -->> 设备登录成功");
-//                            Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-//                            Log.d(LogTag.OBD, "当前usrId-->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
-//                        }
-//                        login2();
-//                        break;
-//                    case Manager.Event.DeviceloginFailed:
-//                        // 日志
-//                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-//                            Log.d(LogTag.OBD, " -->> 设备登录失败");
-//                        }
-//                        //延迟，最大重试次数
-//                        mHandlerBuy.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei());
-//                            }
-//                        }, 5 * 1000);
-//                        break;
+
                     case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
                     case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
                         LayoutUtils.disQrPop();
@@ -279,57 +213,6 @@ public class MainPage extends AppPage {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-//        login1();
-        //// FIXME: tianff 2016/6/6 MainPage setListener 暂时闭调
-//        UserCenterManager.getInstance().login();
-//        //监听推送消息
-//        AixintuiPushManager.getInstance().setPushCallBack(new AixintuiPushManager.PushCallBack() {
-//            @Override
-//            public void pushData(int type, int state, String userId, String token) {
-//                // 日志
-//                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-//                    Log.d(LogTag.PUSH, " -->> MainPag回调");
-//                }
-//                switch (type) {
-//                    case 0:
-//                        if (state == 1)
-//                            showRegQr(Global.getAppContext().getResources().getString(R.string.scan_succ));
-//                        break;
-//                    case 1:
-//                        if (state == 1 || state == 3) { //注册成功
-//
-//                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_succ));
-//                            isPush = false;//推送成功
-//                            // 更新本地用户信息
-//                            if (userId != null && token != null) {
-//                                // 日志
-//                                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-//                                    Log.d(LogTag.PUSH, "userId -->> " + userId + " token--->" + token);
-//                                    Log.d(LogTag.PUSH, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
-//                                    Log.d(LogTag.PUSH, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-//                                    Log.d(LogTag.PUSH, "当前imei -->>" + Utils.getImei());
-//                                }
-//                                boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
-//                                if (isUpdata) {
-//                                    //远程查询车辆信息
-//                                    Manager.getInstance().queryRemoteUserCar();
-//                                } else {
-//                                    //显示二维码
-//                                    showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                                    // 日志
-//                                    if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-//                                        Log.d(LogTag.PUSH, " -->>更新本地用户信息失败 ");
-//                                    }
-//                                }
-//                            }
-//
-//                        } else if (state == 2) {
-//                            showRegQr(Global.getAppContext().getResources().getString(R.string.reg_info));
-//                        }
-//
-//                }
-//            }
-//        });
     }
 
     private void initDialog() {
