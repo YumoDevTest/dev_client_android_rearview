@@ -253,7 +253,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        OTAManager.getInstance().checkVinVersion(getContext());
         CarStateManager.getInstance().startRefreshCarState();
         showtimes++;
     }

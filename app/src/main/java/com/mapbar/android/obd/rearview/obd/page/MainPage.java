@@ -18,6 +18,7 @@ import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -213,6 +214,9 @@ public class MainPage extends AppPage {
                                 LayoutUtils.disQrPop();
                             }
                         });
+                        break;
+                    case Manager.Event.dataCollectSucc:
+                        OTAManager.getInstance().checkVinVersion(getContext());
                         break;
                 }
             }
