@@ -98,8 +98,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
-                        Log.v(LogTag.FRAMEWORK, "whw -->> 请点击更新固件,实现控制功能:");
-                        tv_state.setText("请点击更新固件,实现控制功能");
+                        tv_state.setText(getResources().getString(R.string.firmware_update_tip));
                         break;
                 }
             }
@@ -122,9 +121,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_state://提示有固件升级
-                Log.e(LogTag.OBD, "whw -->> 点击升级固件");//TODO
-                if (tv_state != null && tv_state.getText().toString().trim().equals("请点击更新固件,实现控制功能")) {
+                if (tv_state != null && tv_state.getText().toString().trim().equals(getResources().getString(R.string.firmware_update_tip))) {
                     showFirmwarePopu();
+                } else {
+                    MainActivity.getInstance().restartApp();
                 }
                 break;
 

@@ -272,4 +272,5 @@
     <string name="reg_info">请扫描填写信息，以获得更多汽车智能化功能\n如：远程定位、防盗提醒、远程查看车辆状态等</string>
     <string name="scan_succ">扫描成功\n请等待填写完成</string>
     <string name="reg_succ">您已通过手机\n成功完善爱车信息</string>
+    <string name="firmware_update_tip">请点击更新固件,实现控制功能</string>
 </resources>
