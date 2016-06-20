@@ -55,7 +55,6 @@ public class UserCenterManager extends OBDManager {
     }
 
 
-
     /**
      * 爱心推收到推送调用
      *
@@ -110,7 +109,10 @@ public class UserCenterManager extends OBDManager {
                     }
 
                 } else if (state == 2) {
-                    showRegQr(reg_info);
+                    //微信注册失败时清除本地token，从新走设备注册
+                    UserCenter.getInstance().clearCurrentUserToken();
+                    login();
+//                    showRegQr(reg_info);
                 }
                 break;
         }
@@ -253,7 +255,6 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, "whw -->> -->> 查询本地车辆成功");
                 }
                 queryLocalCarModelInfo(car.carGenerationId);
-//                startServer();//TODO 破解版
                 return;
             }
         }
@@ -287,7 +288,6 @@ public class UserCenterManager extends OBDManager {
             //查询车辆基本信息失败,开始远程查询车型信息//// FIXME: tianff 2016/6/13 暂时写死carGenerationId
 //            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
             Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
-//            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
         }
     }
 
@@ -343,18 +343,17 @@ public class UserCenterManager extends OBDManager {
 
 
     /**
-     * 弹出二维码后超时，重新设备登录
+     * 弹出二维码后超时，重新查询远程车辆信息
      */
     private void outTime() {
-
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isPush) {//推送失败
-                    login1();//设备登录
-                }
+//                if (isPush) {//推送失败
+                Manager.getInstance().queryRemoteUserCar();
+//                }
             }
-        }, 2000 * 60);
+        }, 1000 * 90);
 
 
     }

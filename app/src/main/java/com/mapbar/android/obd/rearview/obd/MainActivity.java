@@ -91,7 +91,6 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-
     }
 
     @Override

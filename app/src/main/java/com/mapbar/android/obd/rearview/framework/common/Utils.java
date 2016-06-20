@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
 
 import java.text.DecimalFormat;
 
@@ -121,13 +122,14 @@ public class Utils {
     }
 
     public static String getImei(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) MainActivity.getInstance().getSystemService(Context.TELEPHONY_SERVICE);
         final String deviceId = tm.getDeviceId();
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
 //        return deviceId;
+//        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写
 //        return "777296%%%%hh01739";
         return "777296%%%%hh01739!55555555";//外网注册通过
     }

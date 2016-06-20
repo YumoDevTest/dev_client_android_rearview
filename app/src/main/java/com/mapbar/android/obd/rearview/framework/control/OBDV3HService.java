@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.framework.control;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -10,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.common.Global;
-import com.mapbar.android.obd.rearview.framework.common.MainThreadPostUtils;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.LocalCarModelInfoResult;
@@ -19,13 +19,14 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 
+
 /**
  * Created by liuyy on 2016/5/26.
  */
 public class OBDV3HService extends Service {
     public SDKListenerManager.SDKListener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
-
+    public Handler mHandler;
 
     @Nullable
     @Override
@@ -38,7 +39,6 @@ public class OBDV3HService extends Service {
         super.onCreate();
         SDKListenerManager.getInstance().init();
         sdkListener = new SDKListenerManager.SDKListener() {
-            public MainThreadPostUtils mHandler;
 
             @Override
             public void onEvent(int event, Object o) {
@@ -127,7 +127,6 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
 
         //登录
         login1();
