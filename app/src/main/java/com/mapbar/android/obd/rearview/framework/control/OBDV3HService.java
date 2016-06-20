@@ -3,8 +3,10 @@ package com.mapbar.android.obd.rearview.framework.control;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +21,8 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 
+import aidl.IMyAidlInterface;
+
 
 /**
  * Created by liuyy on 2016/5/26.
@@ -28,11 +32,30 @@ public class OBDV3HService extends Service {
     public LocalCarModelInfoResult localCarModelInfoResult;
     public Handler mHandler;
 
+    public Binder binder = new IMyAidlInterface.Stub() {
+
+        @Override
+        public void startExam() throws RemoteException {
+//            PhysicalManager.getInstance().startExam();
+        }
+
+        @Override
+        public String changeData(String data) throws RemoteException {
+            Intent intent = new Intent();
+            intent.setAction("myReceriver");
+            intent.putExtra("myReceriver", "广播");
+            sendBroadcast(intent);
+            return data + "------>你好";
+        }
+
+
+    };
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
+
 
     @Override
     public void onCreate() {
@@ -127,7 +150,6 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         //登录
         login1();
         Toast.makeText(this, "开启了V3服务", Toast.LENGTH_SHORT).show();
