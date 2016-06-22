@@ -3,10 +3,8 @@ package com.mapbar.android.obd.rearview.framework.control;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,15 +16,11 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.PhysicalData;
-import com.mapbar.obd.ReportHead;
 import com.mapbar.obd.SerialPortManager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 
-import java.util.List;
 
-import aidl.IMyAidlInterface;
 
 
 /**
@@ -37,48 +31,11 @@ public class OBDV3HService extends Service {
     public LocalCarModelInfoResult localCarModelInfoResult;
     public Handler mHandler;
 
-    public Binder binder = new IMyAidlInterface.Stub() {
 
-        @Override
-        public void startExam() throws RemoteException {
-//            PhysicalManager.getInstance().startExam();
-        }
-
-        @Override
-        public void stopPhysical() throws RemoteException {
-
-        }
-
-        @Override
-        public ReportHead getReportHead() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public List<PhysicalData> getPhysicalSystem() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public void restartTrip() throws RemoteException {
-
-        }
-
-        @Override
-        public String changeData(String data) throws RemoteException {
-            Intent intent = new Intent();
-            intent.setAction("                                                                    ");
-            intent.putExtra("myReceriver", "广播");
-            sendBroadcast(intent);
-            return data + "------>你好";
-        }
-
-
-    };
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return null;
     }
 
 
