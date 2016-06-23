@@ -192,14 +192,6 @@
 
         <!--爱心推end-->
 
-        <!--umeng APPKEY和渠道-->
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
-        <!-- <meta-data/>
-             android:name="UMENG_APPKEY"
-             android:value="5694f60ce0f55a23d30017d0" />-->
-
 
         <!--后台登录service-->
         <service
@@ -210,6 +202,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+
+        <!--umeng APPKEY和渠道-->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5769e791e0f55a06a8000ed6" />
     </application>
 
 </manifest>
