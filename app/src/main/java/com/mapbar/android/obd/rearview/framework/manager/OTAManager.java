@@ -42,7 +42,7 @@ public class OTAManager extends OBDManager {
 
     public void setPushData(int type, int state, String userId, String token) {
         /**
-         * type  0 扫码  1 注册  2 绑定vin
+         * type  0 扫码  1 注册  2 绑定vin 3 vin扫码
          * state 1 成功  2 失败  3 已注册
          */
         // 日志
@@ -50,10 +50,9 @@ public class OTAManager extends OBDManager {
             Log.d(LogTag.PUSH, " -->> 推送userManager收到");
         }
         switch (type) {
-            case 0:
-                if (state == 1 && flag == 0) {
+            case 3:
+                if (state == 1) {
                     showRegQr(scan_succ);
-                    flag = -1;
                 }
                 break;
             case 2:
@@ -87,7 +86,7 @@ public class OTAManager extends OBDManager {
             }
             qrInfo.setUrl(url);
             qrInfo.setContent(content);
-            baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, qrInfo);
+            baseObdListener.onEvent(EVENT_OBD_OTA_SCANVIN_SUCC, qrInfo);
         } else {
             mHandler.postDelayed(new Runnable() {
                 @Override

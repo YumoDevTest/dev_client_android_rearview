@@ -1,57 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_page"
-              android:gravity="center"
-              android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page"
+    android:gravity="center"
+    android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="420dp"
-        android:layout_height="240dp"
-        android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tv_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="当前车型支持宝马车辆控制功能"
-            android:textColor="@color/white"
-            android:textSize="15sp"/>
-
-        <GridView
-            android:id="@+id/gv_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:numColumns="3"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="18dp"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/iv_state_safe"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/car_state_safe"/>
+        <RelativeLayout
+            android:layout_width="420dp"
+            android:layout_height="240dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_state_record"
+                android:id="@+id/tv_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="车辆无不良状态"
+                android:text="当前车型支持宝马车辆控制功能"
                 android:textColor="@color/white"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
+
+            <GridView
+                android:id="@+id/gv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:numColumns="3" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="18dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_state_safe"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/car_state_safe" />
+
+                <TextView
+                    android:id="@+id/tv_state_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="车辆无不良状态"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/v_carstate"
+            android:layout_width="150dp"
+            android:layout_height="240dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/qr_content_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_page">
+
+        <LinearLayout
+            android:id="@+id/ll_pop"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/qr_bg"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_qr"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:visibility="visible" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_qr_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_pop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="62dp"
+            android:gravity="center"
+            android:text="请扫描填写车辆识别号来扩展此页\r的车辆状态和控制功能"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_close_QRpop"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/btn_car_data_pop_close_pressed"
+            android:visibility="gone" />
+
+
     </RelativeLayout>
-
-    <View
-        android:id="@+id/v_carstate"
-        android:layout_width="150dp"
-        android:layout_height="240dp"/>
-
 </LinearLayout>

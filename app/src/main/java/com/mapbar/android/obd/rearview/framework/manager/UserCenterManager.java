@@ -71,13 +71,8 @@ public class UserCenterManager extends OBDManager {
         switch (type) {
             case 0:
                 if (state == 1) {
-                    if (flag == -1) {
-                        //TODO 登录
-                        showRegQr(scan_succ);
-                        flag = 1;
-                    } else if (flag == 0) {
-                        //TODO
-                    }
+                    //TODO 登录
+                    showRegQr(scan_succ);
                 }
                 break;
             case 1:
@@ -293,7 +288,6 @@ public class UserCenterManager extends OBDManager {
 
     private void startServer() {
         baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_SUCC, null);
-        flag = 0;
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");

@@ -28,7 +28,7 @@ public class Configs {
      */
     public final static String URL_BIND_VIN = IS_USE_INTERNAT_HOST ? "http://weixintest.mapbar.com/obdWechat/vinCollector?pushToken=" : "http://weixin.mapbar.com/obd/vinCollector?pushToken=";
 
-    public final static boolean TEST_SERIALPORT = true;//true false
+    public final static boolean TEST_SERIALPORT = false;//true false
     public final static String BT_TYPE = "7";
 
 }

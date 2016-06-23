@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -19,8 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -50,6 +54,18 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private TextView tv_state_record;
     @ViewInject(R.id.tv_state)
     private TextView tv_state;
+
+    @ViewInject(R.id.qr_content_view)
+    private View qr_content_view;
+    @ViewInject(R.id.content)
+    private View content;
+    @ViewInject(R.id.btn_close_QRpop)
+    private Button btn_close_QRpop;
+    @ViewInject(R.id.iv_qr)
+    private ImageView iv_qr;
+    @ViewInject(R.id.tv_qr_info)
+    private TextView tv_qr_info;
+
     private Button btn_state_pop_close;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
@@ -97,7 +113,35 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                     case Manager.Event.obdCarStatusgetFailed:
                         break;
 
-                    case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
+                    case OBDManager.EVENT_OBD_OTA_NEED_VIN:
+                        QRInfo qrInfo = (QRInfo) o;//TODO 设置url
+                        Bitmap bmQR = QRUtils.createQR(qrInfo.getUrl());
+                        iv_qr.setImageBitmap(bmQR);
+                        tv_qr_info.setText(qrInfo.getContent());
+                        setQrViewVisiable(true);
+                        break;
+
+                    case OBDManager.EVENT_OBD_OTA_SCANVIN_SUCC://TODO 扫描成功
+                        QRInfo qrInfo_scan_succ = (QRInfo) o;
+                        tv_qr_info.setText(qrInfo_scan_succ.getContent());
+                        setQrViewVisiable(true);
+                        break;
+
+                    case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
+                        setQrViewVisiable(false);
+                        break;
+
+                    case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
+                        setQrViewVisiable(true);
+                        break;
+
+                    case Manager.Event.dataCollectSucc:
+                        //TODO 当有固件升级时则自动弹出升级或取消的按钮
+                        //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
+                        OTAManager.getInstance().checkVinVersion(getContext());
+                        break;
+
+                    case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));
                         break;
                 }
@@ -106,7 +150,18 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
         tv_state.setOnClickListener(this);
+        btn_close_QRpop.setOnClickListener(this);
 
+    }
+
+    private void setQrViewVisiable(boolean isVisiable) {
+        if (isVisiable) {
+            content.setVisibility(View.GONE);
+            qr_content_view.setVisibility(View.VISIBLE);
+        } else {
+            content.setVisibility(View.VISIBLE);
+            qr_content_view.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -123,15 +178,17 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
             case R.id.tv_state://提示有固件升级
                 if (tv_state != null && tv_state.getText().toString().trim().equals(getResources().getString(R.string.firmware_update_tip))) {
                     showFirmwarePopu();
-                } else {
+                } else if (Configs.TEST_SERIALPORT) {
                     MainActivity.getInstance().restartApp();
                 }
                 break;
-
+            case R.id.btn_close_QRpop:
+                setQrViewVisiable(false);
+                break;
         }
     }
 
-    private void showFirmwarePopu() {
+    public void showFirmwarePopu() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_firmware_pop, null);
 
         final View prompt_content = popupView.findViewById(R.id.firmware_update_prompt_content);
@@ -192,6 +249,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                                         MainActivity.getInstance().restartApp();
                                     }
                                 });
+                                tv_state.setText("当前车型支持宝马车辆控制功能");
                                 break;
                             case Firmware.UpgradeCallback.STATUSCODE_FLASH_FAILED:
                                 //TODO 显示升级失败的ui 点击重试重新升级
