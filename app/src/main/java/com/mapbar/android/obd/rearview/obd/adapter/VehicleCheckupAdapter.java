@@ -92,11 +92,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
             }
         }
         holder.tv_checkName.setText(physicalList.get(position).getName());
-        /*if (PhysicalManager.getInstance().getStatuses().get(position) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
-            holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), ids[position]));
-        } else {
-            holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), idss[position]));
-        }*/
+
         holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), idss[position]));
         holder.tv_checkResult.setVisibility(View.VISIBLE);
 

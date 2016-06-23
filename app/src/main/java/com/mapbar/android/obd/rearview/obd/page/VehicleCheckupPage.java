@@ -112,10 +112,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_view.setLayoutManager(layoutManager);
-        physicalList = Physical.getInstance().getPhysicalSystem();
+        physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         recyclerAdapter = new VehicleCheckupAdapter(MainActivity.getInstance(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
-        physicalList = Physical.getInstance().getPhysicalSystem();
+        physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
 //        initPage();
         circleDrawable = new CircleDrawable(getContext());

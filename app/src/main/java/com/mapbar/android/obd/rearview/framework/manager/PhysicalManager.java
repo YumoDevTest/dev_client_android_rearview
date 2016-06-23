@@ -109,7 +109,7 @@ public class PhysicalManager extends OBDManager {
      *
      * @return 分类列表
      */
-    public List<PhysicalData> getPhysicalSystem() {
+    public ArrayList<PhysicalData> getPhysicalSystem() {
         return Physical.getInstance().getPhysicalSystem();
     }
 
