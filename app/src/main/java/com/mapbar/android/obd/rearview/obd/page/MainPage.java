@@ -124,13 +124,13 @@ public class MainPage extends AppPage {
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
-                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
-                        currentPage = vehicleCheckupPage;
+                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+                        currentPage = carDataPage;
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
-                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
-                        currentPage = carDataPage;
+                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
+                        currentPage = vehicleCheckupPage;
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
