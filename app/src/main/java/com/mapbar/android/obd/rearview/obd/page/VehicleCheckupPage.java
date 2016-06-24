@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +26,7 @@ import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
-import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter;
+import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
@@ -41,7 +41,7 @@ import java.util.List;
 public class VehicleCheckupPage extends AppPage implements View.OnClickListener {
 
     @ViewInject(R.id.test_rl)
-    private RecyclerView rl_view;
+    private ListView rl_view;
 
     @ViewInject(R.id.gridv)
     private GridView grid;
@@ -88,7 +88,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     private List<PhysicalData> physicalList = new ArrayList<PhysicalData>();
 
-    private VehicleCheckupAdapter recyclerAdapter;
+    private VehicleCheckupAdapter1 recyclerAdapter;
 
     private CheckupGridAdapter checkupGridAdapter;
     private CircleDrawable circleDrawable;
@@ -111,9 +111,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rl_view.setLayoutManager(layoutManager);
+//        rl_view.setLayoutManager(layoutManager);
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
-        recyclerAdapter = new VehicleCheckupAdapter(MainActivity.getInstance(), physicalList);
+        recyclerAdapter = new VehicleCheckupAdapter1(MainActivity.getInstance(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
@@ -127,7 +127,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
-//        initPage();
+        initPage();
     }
 
     private void initPage() {
@@ -163,6 +163,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
             @Override
             public void onEvent(int event, Object o) {
                 super.onEvent(event, o);
+
                 switch (event) {
                     case Manager.Event.obdPhysicalConditionFailed:
                         // 日志
@@ -198,6 +199,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                         }
                         recyclerAdapter.setPhysicalData((PhysicalData) o);
                         recyclerAdapter.notifyDataSetChanged();
+
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
                         // 日志
@@ -264,6 +266,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_start_physical:
             case R.id.btn_last_check:
+                if (recyclerAdapter != null) {
+                    recyclerAdapter.setPhysicalData(null);
+                }
+
                 PhysicalManager.getInstance().startExam();
                 // 日志
                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {

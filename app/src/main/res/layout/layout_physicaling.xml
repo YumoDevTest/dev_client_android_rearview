@@ -64,7 +64,8 @@
                 android:textColor="#ffffff"/>
         </RelativeLayout>
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+
+    <ListView
         android:id="@+id/test_rl"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

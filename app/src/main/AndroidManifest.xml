@@ -82,17 +82,17 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.mapbar.obd.CompactObdService"
-            android:process="obd.service.compact">
-            <intent-filter>
-                <!-- 启动精简版后台服务进程 -->
-                <action android:name="com.mapbar.obd.COMPACT_SERVICE" />
-                <!-- 戴总的服务所发送的广播 -->
-                <action android:name="android.intent.action.mapbar.activity.BLUETOOTH_TRIGGER" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+        <!--android:name="com.mapbar.obd.CompactObdService"-->
+        <!--android:process="obd.service.compact">-->
+        <!--<intent-filter>-->
+        <!--&lt;!&ndash; 启动精简版后台服务进程 &ndash;&gt;-->
+        <!--<action android:name="com.mapbar.obd.COMPACT_SERVICE" />-->
+        <!--&lt;!&ndash; 戴总的服务所发送的广播 &ndash;&gt;-->
+        <!--<action android:name="android.intent.action.mapbar.activity.BLUETOOTH_TRIGGER" />-->
+        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--</intent-filter>-->
+        <!--</service>-->
         <service
             android:name="com.mapbar.obd.SyncService"
             android:process="obd.service.process">
@@ -103,41 +103,41 @@
             android:process="obd.service.restart.process"></service>
         <service android:name="com.mapbar.obd.TripSyncService"></service>
         <!--后台上传进程自动唤醒广播接收器注册 -->
-        <receiver android:name="com.mapbar.obd.WakeupSyncServiceReceiver">
-            <intent-filter>
-                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
-                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-                <action android:name="android.bluetooth.device.action.FOUND" />
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="android.intent.action.BATTERY_LOW" />
-                <action android:name="android.intent.action.BATTERY_OKAY" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="android.intent.action.DOCK_EVENT" />
-                <action android:name="android.intent.action.HEADSET_PLUG" />
-                <action android:name="android.intent.action.PHONE_STATE" />
-                <action android:name="android.net.wifi.SCAN_RESULTS" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-                <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
-                <action android:name="android.intent.action.TIME_TICK" />
-                <action android:name="android.intent.action.mapbar.activity.WAKE_UP" />
-                <action android:name="android.intent.action.mapbar.activity.CELL_UPDATE" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIME_CHANGED" />
+        <!--<receiver android:name="com.mapbar.obd.WakeupSyncServiceReceiver">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />-->
+        <!--<action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />-->
+        <!--<action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />-->
+        <!--<action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />-->
+        <!--<action android:name="android.bluetooth.device.action.ACL_CONNECTED" />-->
+        <!--<action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />-->
+        <!--<action android:name="android.bluetooth.device.action.FOUND" />-->
+        <!--<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />-->
+        <!--<action android:name="android.intent.action.AIRPLANE_MODE" />-->
+        <!--<action android:name="android.intent.action.BATTERY_LOW" />-->
+        <!--<action android:name="android.intent.action.BATTERY_OKAY" />-->
+        <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--<action android:name="android.intent.action.QUICKBOOT_POWERON" />-->
+        <!--<action android:name="android.intent.action.DOCK_EVENT" />-->
+        <!--<action android:name="android.intent.action.HEADSET_PLUG" />-->
+        <!--<action android:name="android.intent.action.PHONE_STATE" />-->
+        <!--<action android:name="android.net.wifi.SCAN_RESULTS" />-->
+        <!--<action android:name="android.net.wifi.STATE_CHANGE" />-->
+        <!--<action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />-->
+        <!--<action android:name="android.intent.action.TIME_TICK" />-->
+        <!--<action android:name="android.intent.action.mapbar.activity.WAKE_UP" />-->
+        <!--<action android:name="android.intent.action.mapbar.activity.CELL_UPDATE" />-->
+        <!--<action android:name="android.intent.action.DATE_CHANGED" />-->
+        <!--<action android:name="android.intent.action.TIME_SET" />-->
+        <!--<action android:name="android.intent.action.TIME_CHANGED" />-->
 
-                <category android:name="android.intent.category.CAR_DOCK" />
-                <category android:name="android.intent.category.CAR_MODE" />
+        <!--<category android:name="android.intent.category.CAR_DOCK" />-->
+        <!--<category android:name="android.intent.category.CAR_MODE" />-->
 
-                <!-- 网络状态变化 -->
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+        <!--&lt;!&ndash; 网络状态变化 &ndash;&gt;-->
+        <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <!--爱心推start-->
         <!-- 定义接收器，用来接收透传、api结果以及点击事件 -->

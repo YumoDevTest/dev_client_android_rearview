@@ -99,6 +99,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
+
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
 //                    Log.v(LogTag.FRAMEWORK, "whw -->> event:" + event);

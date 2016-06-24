@@ -208,7 +208,7 @@ public class MainPage extends AppPage {
                 }
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+//        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
     private void initDialog() {
