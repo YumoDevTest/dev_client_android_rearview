@@ -109,21 +109,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         LayoutUtils.disQrPop();//防止popupwindow泄露
+        super.onDestroy();
         if (restart) {
             restart = false;
             restartmyapp();
         } else {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
-        super.onDestroy();
     }
 
     private void restartmyapp() {
-        PageManager.getInstance().finishAll();
-        Intent i = this.getBaseContext().getPackageManager()
-                .getLaunchIntentForPackage(this.getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        startService(new Intent(MainActivity.this, RestartService.class));
+        System.exit(0);
     }
 
     @Override

@@ -98,6 +98,9 @@
             android:process="obd.service.process">
 
         </service>
+        <service
+            android:name="com.mapbar.android.obd.rearview.obd.RestartService"
+            android:process="obd.service.restart.process"></service>
         <service android:name="com.mapbar.obd.TripSyncService"></service>
         <!--后台上传进程自动唤醒广播接收器注册 -->
         <receiver android:name="com.mapbar.obd.WakeupSyncServiceReceiver">
