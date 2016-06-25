@@ -99,6 +99,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
             tv_progress.setText("" + msg.what);
         }
     };
+    private boolean isFinish;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         rl_view.setAdapter(recyclerAdapter);
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
-//        initPage();
+        initPage();
         circleDrawable = new CircleDrawable(getContext());
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
@@ -127,7 +128,11 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
-        initPage();
+        if (isFinish) {
+            initPage();
+            isFinish = false;
+        }
+
     }
 
     private void initPage() {
@@ -202,6 +207,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
+                        isFinish = true;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalCheckEnd1 -->>");
