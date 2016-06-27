@@ -88,6 +88,7 @@ public class MainPage extends AppPage {
     public void initView() {
         titles = getResources().getStringArray(R.array.page_titles);
         titleBar = new TitleBar(this, R.id.title_main);
+        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);

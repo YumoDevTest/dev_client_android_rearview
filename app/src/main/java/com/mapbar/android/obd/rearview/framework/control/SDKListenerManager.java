@@ -140,7 +140,7 @@ public class SDKListenerManager {
 
         public void onEvent(int event, Object o) {
             //每次响应事件都要判断是否返回code=29，token失效
-            /*if (o != null && o instanceof ObdSDKResult) {
+           /* if (o != null && o instanceof ObdSDKResult) {
                 ObdSDKResult obdSDKResult = (ObdSDKResult) o;
                 if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
                         ) {
