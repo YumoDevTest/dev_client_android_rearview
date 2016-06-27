@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -53,28 +53,28 @@ public class OBDV3HService extends Service {
                     case Manager.Event.queryCarSucc:
                         UserCar[] cars = (UserCar[]) o;
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
                         }
                         if (cars != null && cars.length > 0) {
                             if (TextUtils.isEmpty(cars[0].carGenerationId)) {
                                 // 日志
-                                if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                                    com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                    Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                                 }
                                 goApp();
                             } else {
                                 // 日志
-                                if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                                    com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 已注册，数据有效");
-                                    com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
+                                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                    Log.d(LogTag.OBD, " -->> 已注册，数据有效");
+                                    Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
                                 }
                                 queryLocalCarModelInfo(cars[0].carGenerationId);
                             }
                         } else {
                             // 日志
-                            if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                                com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 未注册，数据无效");
+                            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                                Log.d(LogTag.OBD, " -->> 未注册，数据无效");
                             }
 
                             goApp();
@@ -84,23 +84,23 @@ public class OBDV3HService extends Service {
                         break;
                     case Manager.Event.queryCarFailed:
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
                         }
                         //打开App
                         goApp();
                         break;
                     case Manager.Event.DeviceloginSucc:
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 设备登录成功");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 设备登录成功");
                         }
                         login2();
                         break;
                     case Manager.Event.DeviceloginFailed:
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 设备登录失败");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 设备登录失败");
                         }
                         //延迟，设备登录
                         mHandler.postDelayed(new Runnable() {
@@ -112,16 +112,16 @@ public class OBDV3HService extends Service {
                         break;
                     case Manager.Event.queryRemoteCarModelInfoSucc:
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 查询远程车型信息成功");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车型信息成功");
                         }
 
                         startServer();
                         break;
                     case Manager.Event.queryRemoteCarModelInfoFailed:
                         // 日志
-                        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 查询远程车型信息失败");
+                        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                            Log.d(LogTag.OBD, " -->> 查询远程车型信息失败");
                         }
                         break;
                 }
@@ -205,14 +205,14 @@ public class OBDV3HService extends Service {
         localCarModelInfoResult = Manager.getInstance().queryLocalCarModelInfo(carGenerationId, 1);
         if (localCarModelInfoResult.errCode == LocalCarModelInfoResult.Error.none) {
             // 日志
-            if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
             }
             startServer();
         } else {
             //日志
-            if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-                com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
             }
             //查询车辆基本信息失败,开始远程查询车型信息
             Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
@@ -221,8 +221,8 @@ public class OBDV3HService extends Service {
 
     private void startServer() {
         // 日志
-        if (com.mapbar.android.obd.rearview.framework.log.Log.isLoggable(LogTag.OBD, com.mapbar.android.obd.rearview.framework.log.Log.DEBUG)) {
-            com.mapbar.android.obd.rearview.framework.log.Log.d(LogTag.OBD, " -->> 启动业务");
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, " -->> 启动业务");
         }
         Manager.getInstance().openDevice(Utils.getImei(this.getApplication()));
     }
