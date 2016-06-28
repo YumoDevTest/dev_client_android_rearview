@@ -101,7 +101,7 @@ public class MainPage extends AppPage {
         fragments.add(carMaintenancePage);
         fragments.add(controlTestPage);
         pager.setAdapter(fragmentPagerAdapter);
-        currentPage = vehicleCheckupPage;
+        currentPage = carDataPage;
 
 
         pager.setOffscreenPageLimit(3);
@@ -121,7 +121,9 @@ public class MainPage extends AppPage {
 
             @Override
             public void onPageSelected(int position) {
+                currentPage.isUmenngWorking = true;
                 currentPage.onPause();
+                MainPage.title.setText("", TitleBar.TitleArea.RIGHT);
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
@@ -140,6 +142,7 @@ public class MainPage extends AppPage {
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);
+                        MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
                         titleBar.setText(titles[3], TitleBar.TitleArea.MID);
                         currentPage = carMaintenancePage;
                         break;
@@ -167,20 +170,6 @@ public class MainPage extends AppPage {
             public void onEvent(int event, Object o) {
                 super.onEvent(event, o);
                 switch (event) {
-                    /*case Manager.Event.obdPhysicalCheckStart:
-                        pager.setNoScroll(true);
-                        break;
-                    case Manager.Event.obdPhysicalConditionFailed:
-                        pager.setNoScroll(false);
-                        break;
-                    case Manager.Event.obdPhysicalCheckEnd:
-                        pager.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                pager.setNoScroll(false);
-                            }
-                        });
-                        break;*/
                     case Manager.Event.alarm:
                         if (!sAlarmDataList.contains(o)) {
                             sAlarmDataList.add(o);
@@ -201,7 +190,6 @@ public class MainPage extends AppPage {
                         }
                         break;
 
-
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
                         carStatePage.showFirmwarePopu();
                         break;
@@ -209,7 +197,7 @@ public class MainPage extends AppPage {
                 }
             }
         };
-//        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
     private void initDialog() {

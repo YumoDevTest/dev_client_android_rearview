@@ -34,6 +34,7 @@ import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
@@ -314,12 +315,18 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         super.onResume();
         CarStateManager.getInstance().startRefreshCarState();
         showtimes++;
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         CarStateManager.getInstance().stopRefreshCarState();
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageEnd("CarStatePage");
+        }
     }
 
 

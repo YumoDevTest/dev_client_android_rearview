@@ -27,6 +27,8 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
@@ -128,6 +130,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageStart("VehicleCheckupPage");
+        }
         if (isFinish) {
             initPage();
             isFinish = false;
@@ -135,6 +140,13 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageEnd("VehicleCheckupPage");
+        }
+    }
     private void initPage() {
         ReportHead head = PhysicalManager.getInstance().getReportHead();
         if (head != null) {
@@ -171,6 +183,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
                 switch (event) {
                     case Manager.Event.obdPhysicalConditionFailed:
+                        MobclickAgentEx.onEvent(UmengConfigs.CHECKFAILED);
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalConditionFailed -->>");
@@ -207,6 +220,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
+                        MobclickAgentEx.onEvent(UmengConfigs.CHECKSUCC);
                         isFinish = true;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
@@ -254,9 +268,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "EVENT_OBD_PHYSICAL_CHECK_PROGRESS -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
-//                        int o1 = (int) o;
-//                        tv_progress.setText("" + o1);
-//                        circleDrawable.setProgress(o1);
+
                         handler.sendEmptyMessage((int) o);
                         break;
                 }
@@ -277,6 +289,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                 }
 
                 PhysicalManager.getInstance().startExam();
+                MobclickAgentEx.onEvent(UmengConfigs.STARTEXAM);
                 // 日志
                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                     Log.v(LogTag.TEMP, "btn_start_physical -->>");

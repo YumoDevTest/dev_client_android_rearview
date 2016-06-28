@@ -27,6 +27,8 @@ import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.MaintenanceError;
@@ -146,10 +148,11 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
 
     @Override
     public void initView() {
-        MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
+//        MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
         MainPage.title.setListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgentEx.onEvent(UmengConfigs.SETMAINTENANCE);
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
                 MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
@@ -280,8 +283,20 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     public void onResume() {
         getLocalSchemeCache();
         super.onResume();
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageStart("CarMaintenancePage"); //统计页面
+        }
+
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (isUmenngWorking) {
+            MobclickAgentEx.onPageEnd("CarMaintenancePage");
+        }
+
+    }
     @Override
     public void setListener() {
         et_purchaseDate.setOnClickListener(this);
@@ -414,6 +429,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
                 MainPage.title.setVisibility(View.GONE, TitleBar.TitleArea.RIGHT);
+                MobclickAgentEx.onEvent(UmengConfigs.MAINTENANCED);
                 break;
 
         }

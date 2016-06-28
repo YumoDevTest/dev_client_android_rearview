@@ -60,7 +60,6 @@ public class MainActivity extends BaseActivity {
 
         onFinishedInit();
 
-
         //监听登录结果
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
@@ -87,6 +86,7 @@ public class MainActivity extends BaseActivity {
                     case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
+
                 }
 
             }
@@ -180,5 +180,6 @@ public class MainActivity extends BaseActivity {
         this.restart = true;
         finish();
     }
+
 
 }

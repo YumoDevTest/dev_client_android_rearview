@@ -16,13 +16,13 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 
 
 public abstract class AppPage extends Fragment {
+    public boolean isUmenngWorking = false;
     protected OBDSDKListenerManager.SDKListener sdkListener;
     protected View contentView;
     private Bundle data;
     private Context context;
     private int contentViewResource;
     private boolean isInited;
-
     public AppPage() {
         context = MainActivity.getInstance();
     }

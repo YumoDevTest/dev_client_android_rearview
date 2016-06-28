@@ -25,9 +25,9 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -138,7 +138,13 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        PhysicalManager.getInstance();
+        MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgentEx.onPageEnd("CarDataPage");
     }
 
     @Override
