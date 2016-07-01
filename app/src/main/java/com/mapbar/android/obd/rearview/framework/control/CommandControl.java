@@ -1,6 +1,8 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -13,7 +15,7 @@ import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.Voi
  */
 public class CommandControl {
     private static CommandControl mCommandControl;
-    private int[] commands = new int[]{201001, 201000, 202000, 202001, 207000, 207001};
+    private int[] commands = new int[]{201001, 201000, 202000, 202001, 207001, 207000};
     private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502"};
     private String[] commadNames = new String[]{"开锁", "落锁", "降窗", "升窗", "开天窗", "关天窗"};
 
@@ -36,6 +38,7 @@ public class CommandControl {
         if (command >= 200000) {//控制类指令
             executeCommand2(command);
         } else {//非控制类指令
+            MobclickAgentEx.onEvent(UmengConfigs.VOICE_REALTIMEDATA);
             final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
             switch (command) {
                 case 102000://车速
@@ -75,6 +78,7 @@ public class CommandControl {
         }
     }
 
+
     /**
      * 执行控制指令
      * 应用场景：执行开关窗，开关车门，开关后备箱等。
@@ -82,6 +86,7 @@ public class CommandControl {
      * @param command
      */
     private void executeCommand2(final int command) {
+        uMeng(command);
         ArrayList<Integer> commandList = new ArrayList<>();
         for (int command1 : commands) {
             commandList.add(command1);
@@ -90,6 +95,36 @@ public class CommandControl {
         if (index != -1) {
             String commandStr = commadStrs[index];
             Manager.getInstance().exuSpecialCarAction(commandStr);
+        }
+    }
+
+    /**
+     * 友盟统计
+     *
+     * @param command
+     */
+    private void uMeng(int command) {
+        switch (command) {
+            case 201001:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_LOCK1);
+                break;
+            case 201000:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_LOCK0);
+                break;
+            case 202000:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_WINDOW0);
+                break;
+            case 202001:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_WINDOW1);
+                break;
+            case 207001:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_SKY_LIGHT1);
+                break;
+            case 207000:
+                MobclickAgentEx.onEvent(UmengConfigs.VOICE_SKY_LIGHT0);
+                break;
+
+
         }
     }
 

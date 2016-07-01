@@ -213,7 +213,7 @@
             android:value="${UMENG_CHANNEL_VALUE}" />
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5770dea267e58e5b60003556" />
+            android:value="5769e791e0f55a06a8000ed6" />
     </application>
 
 </manifest>

@@ -28,6 +28,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -289,6 +290,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                 if (!(value1 == -1 || value2 == -1)) {
                     editor.putInt(number + "", value1);
                     editor.putInt((4 + position) + "", value2).commit();
+                    uMeng(number, value1);
                 }
 
                 //更新数据
@@ -299,6 +301,44 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         });
 
         popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * 友盟统计
+     *
+     * @param number
+     * @param value1
+     */
+    private void uMeng(int number, int value1) {
+        switch (value1) {
+            case 0:
+                MobclickAgentEx.onEvent(UmengConfigs.GASCONSUM);
+                break;
+            case 1:
+                MobclickAgentEx.onEvent(UmengConfigs.TRIPTIME);
+                break;
+            case 2:
+                MobclickAgentEx.onEvent(UmengConfigs.TRIPLENGTH);
+                break;
+            case 3:
+                MobclickAgentEx.onEvent(UmengConfigs.DRIVECOST);
+                break;
+            case 4:
+                MobclickAgentEx.onEvent(UmengConfigs.SPEED);
+                break;
+            case 5:
+                MobclickAgentEx.onEvent(UmengConfigs.RPM);
+                break;
+            case 6:
+                MobclickAgentEx.onEvent(UmengConfigs.VOLTAGE);
+                break;
+            case 7:
+                MobclickAgentEx.onEvent(UmengConfigs.ENGINECOOLANTTEMPERATURE);
+                break;
+            case 8:
+                MobclickAgentEx.onEvent(UmengConfigs.AVERAGEGASCONSUM);
+                break;
+        }
     }
 
 }

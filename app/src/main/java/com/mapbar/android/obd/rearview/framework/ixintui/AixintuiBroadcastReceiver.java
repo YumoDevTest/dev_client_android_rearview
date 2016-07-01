@@ -46,7 +46,7 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
 
             // 处理透传内容
             AixintuiPushManager.getInstance().onAppearMsg(context, msg, extra);
-
+            android.util.Log.e("PUSH", msg);
         }
         // SDK API的异步返回结果
         else if (action.equals(SdkConstants.RESULT_ACTION)) {
@@ -83,6 +83,8 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
                     if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                         Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);
                     }
+                    android.util.Log.e("PUSH", token);
+
                     AixintuiPushManager.getInstance().setAixintui_token(token);
                 }
             }

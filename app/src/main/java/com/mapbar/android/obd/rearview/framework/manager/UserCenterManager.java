@@ -10,6 +10,9 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.obd.Config;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -21,25 +24,19 @@ import com.mapbar.obd.UserCenter;
  * 用户登录中心管理者
  */
 public class UserCenterManager extends OBDManager {
-
     /**
-     * 登录成功，开始业务
+     * 默认密码
      */
-    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;
-    /**
-     * 登录失败,参数o是QRInfo，收到此事件，需要根据QRInfo中url生成二维码并弹出
-     */
-    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;
-    /**
-     * 收到此事件说明微信注册成功,需要做的只有关闭二维码
-     */
-    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;
-    public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
-
+    final String DEFAULT_PASSWORD = "123456";
     private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LocalCarModelInfoResult localCarModelInfoResult;
     private QRInfo qrInfo = null;
+    /**
+     * 用户名
+     */
+    private String account;
+    private UserCar userCar;
 
     public UserCenterManager() {
         super();
@@ -100,14 +97,16 @@ public class UserCenterManager extends OBDManager {
                             if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
                                 Log.d(LogTag.PUSH, " -->>更新本地用户信息失败 ");
                             }
+
                         }
                     }
 
                 } else if (state == 2) {
+                    //友盟注册失败统计
+                    MobclickAgentEx.onEvent(UmengConfigs.REGISTR_FAILED);
                     //微信注册失败时清除本地token，从新走设备注册
                     UserCenter.getInstance().clearCurrentUserToken();
                     login();
-//                    showRegQr(reg_info);
                 }
                 break;
         }
@@ -165,9 +164,15 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, "whw -->> -->> 查询远程车辆失败");
                 }
-                //显示二维码
-                showRegQr(reg_info);
-                outTime();
+
+                if (Config.MAPBAR_AIMI) {//非艾米版本
+                    //显示二维码
+                    showRegQr(reg_info);
+                    outTime();
+                } else {//艾米版本，通知填写用户信息
+
+                }
+
                 break;
             case Manager.Event.DeviceloginSucc:
                 // 日志
@@ -337,21 +342,44 @@ public class UserCenterManager extends OBDManager {
 
 
     /**
-     * 弹出二维码后超时，重新查询远程车辆信息
+     * 弹出二维码后超时,设备登录
      */
     private void outTime() {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
 //                if (isPush) {//推送失败
-                Manager.getInstance().queryRemoteUserCar();
+                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
 //                }
             }
-        }, 1000 * 90);
+        }, 1000 * 60 * 5);
 
 
     }
 
 
+    /**
+     * 艾米定制注册
+     */
+    private void aimiRegister(String name) {
+        UserCenter.getInstance().register(name, DEFAULT_PASSWORD);
+    }
+
+    /**
+     * 艾米定制登录
+     */
+    private void aimiLogin(String name) {
+        UserCenter.getInstance().login(name, DEFAULT_PASSWORD);
+    }
+
+    /**
+     * 艾米定制设置用户信息
+     */
+    public void aimiSetUserInfo(String account, String carGenerationId, String vin) {
+        userCar = new UserCar(carGenerationId, null, null, null, 0, 0, null, null);
+        this.account = account;
+        userCar.vinManually = vin;
+        Manager.getInstance().setUserCar(userCar);
+    }
 }
 

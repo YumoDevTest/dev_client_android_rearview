@@ -11,9 +11,18 @@ import java.util.HashMap;
  * sdk 管理类，接收sdk所有事件
  */
 public class OBDManager {
-    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;//登录成功
-    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;//登录失败,需要注册,弹出二维码
-    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;//微信注册成功,关闭二维码
+    /**
+     * 登录成功，开始业务
+     */
+    public static final int EVENT_OBD_USER_LOGIN_SUCC = 0xF40001;
+    /**
+     * 登录失败,参数o是QRInfo，收到此事件，需要根据QRInfo中url生成二维码并弹出
+     */
+    public static final int EVENT_OBD_USER_LOGIN_FAILED = 0xF40002;
+    /**
+     * 收到此事件说明微信注册成功,需要做的只有关闭二维码
+     */
+    public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;
     public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
     public static final int EVENT_OBD_USER_BINDVIN_SUCC = 0xF4005;
     public static final int EVENT_OBD_USER_BINDVIN_FAILED = 0xF4006;
