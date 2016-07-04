@@ -18,6 +18,7 @@ import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
+import com.mapbar.obd.UserCenterError;
 
 
 /**
@@ -27,7 +28,7 @@ public class UserCenterManager extends OBDManager {
     /**
      * 默认密码
      */
-    final String DEFAULT_PASSWORD = "123456";
+    final String DEFAULT_PASSWORD = Config.USE_INTERNAL_HOST ? "654321" : "111qqq,,,";
     private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LocalCarModelInfoResult localCarModelInfoResult;
@@ -132,13 +133,20 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> -->> 查询远程车辆成功");
                 }
                 if (cars != null && cars.length > 0) {
+                    userCar = cars[0];
                     if (TextUtils.isEmpty(cars[0].carGenerationId)) {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                             Log.d(LogTag.OBD, " -->> -->> 未注册，数据无效");
                         }
-                        showRegQr(reg_info);
-                        outTime();
+                        android.util.Log.i("uuuuuuuu", "未注册，数据无效1");
+                        if (!Config.MAPBAR_AIMI) {//非艾米版本
+                            //显示二维码
+                            showRegQr(reg_info);
+                            outTime();
+                        } else {//艾米版本，通知填写用户信息
+                            aimiSetUserInfo("13501065885", "52d3e9d80a36483d2ceefa1b", "11111111111111119");
+                        }
                     } else {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
@@ -146,6 +154,7 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "carGenerationId -->> " + cars[0].carGenerationId);
                         }
                         queryLocalCarModelInfo(cars[0].carGenerationId);
+
                     }
                 } else {
                     // 日志
@@ -153,8 +162,13 @@ public class UserCenterManager extends OBDManager {
                         Log.d(LogTag.OBD, " -->> -->> 未注册，数据无效");
                     }
 
-                    showRegQr(reg_info);
-                    outTime();
+                    if (!Config.MAPBAR_AIMI) {//非艾米版本
+                        //显示二维码
+                        showRegQr(reg_info);
+                        outTime();
+                    } else {//艾米版本，通知填写用户信息
+                        aimiSetUserInfo("13501065885", "52d3e9d80a36483d2ceefa1b", "11111111111111119");
+                    }
 
                 }
 //                baseObdListener.onEvent(Manager.Event.queryCarSucc,o);
@@ -164,13 +178,13 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, "whw -->> -->> 查询远程车辆失败");
                 }
-
-                if (Config.MAPBAR_AIMI) {//非艾米版本
+                android.util.Log.i("uuuuuuuu", "查询远程车辆失败");
+                if (!Config.MAPBAR_AIMI) {//非艾米版本
                     //显示二维码
                     showRegQr(reg_info);
                     outTime();
-                } else {//艾米版本，通知填写用户信息
-
+                } else {//// FIXME: tianff 2016/7/4 UserCenterManager  艾米版本，通知艾米远程查询出错
+                    aimiSetUserInfo("13501065885", "52d3e9d80a36483d2ceefa1b", "11111111111111119");
                 }
 
                 break;
@@ -210,6 +224,68 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> 查询远程车型信息失败" + s);
                 }
                 break;
+            case Manager.Event.registerSucc:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aim注册成功 ");
+                }
+                aimiLogin(account);
+                break;
+            case Manager.Event.registerFailed:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi注册失败");
+                }
+                UserCenterError userCenterError = (UserCenterError) o;
+                android.util.Log.i("uuuuuuuu", "注册失败 " + userCenterError.toString());
+                if (userCenterError.errorCode == 1409) {//用户已注册，走aimi登录
+                    aimiLogin(account);
+                }
+
+                break;
+            case Manager.Event.loginSucc:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi登录成功");
+                }
+                aimiSetUserCar(userCar);
+                break;
+            case Manager.Event.loginFailed:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi登录失败");
+                }
+                UserCenterError userCenterErro = (UserCenterError) o;
+                android.util.Log.i("uuuuuuuu", "登录失败 " + userCenterErro.toString());
+                break;
+            case Manager.Event.carInfoUploadSucc:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi上传车辆信息成功");
+                }
+                //远程查询车辆信息
+                Manager.getInstance().queryRemoteUserCar();
+                break;
+            case Manager.Event.carInfoUploadFailed:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi上传车辆信息失败");
+                }
+                int errorCode = (int) o;
+                android.util.Log.i("uuuuuuuu", "aimi上传车辆信息失败--->" + errorCode);
+                break;
+            case Manager.Event.carInfoWriteDatabaseSucc:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi写数据库车辆信息成功");
+                }
+                break;
+            case Manager.Event.carInfoWriteDatabaseFailed:
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, " -->> aimi写数据库车辆信息失败");
+                }
+                break;
         }
 
     }
@@ -224,7 +300,6 @@ public class UserCenterManager extends OBDManager {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "whw -->> -->> 登录开始");
         }
-//        UserCenter.getInstance().login("18610857365", "111111");
         if (UserCenter.getInstance().loginAutomatically()) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
@@ -285,8 +360,6 @@ public class UserCenterManager extends OBDManager {
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 本地查询车型信息失败");
             }
-            //查询车辆基本信息失败,开始远程查询车型信息//// FIXME: tianff 2016/6/13 暂时写死carGenerationId
-//            Manager.getInstance().queryRemoteCarModelInfo("52d3e9d40a36483d2ceecb10", 1);
             Manager.getInstance().queryRemoteCarModelInfo(carGenerationId, 1);
         }
     }
@@ -373,13 +446,27 @@ public class UserCenterManager extends OBDManager {
     }
 
     /**
+     * aimi设置用户车辆
+     *
+     * @param userCar
+     */
+    private void aimiSetUserCar(UserCar userCar) {
+        Manager.getInstance().setUserCar(userCar);
+    }
+
+    /**
      * 艾米定制设置用户信息
      */
     public void aimiSetUserInfo(String account, String carGenerationId, String vin) {
-        userCar = new UserCar(carGenerationId, null, null, null, 0, 0, null, null);
-        this.account = account;
+        LocalUserCarResult userCars = Manager.getInstance().queryLocalUserCar();
+        if (userCars.userCars != null && userCars.userCars.length != 0) {
+            userCar = userCars.userCars[0];
+        }
+        userCar.carGenerationId = carGenerationId;
         userCar.vinManually = vin;
-        Manager.getInstance().setUserCar(userCar);
+        this.account = "13501605222";
+        //aimi注册
+        aimiRegister(this.account);
     }
 }
 
