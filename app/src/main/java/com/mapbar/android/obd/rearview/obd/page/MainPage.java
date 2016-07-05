@@ -103,7 +103,6 @@ public class MainPage extends AppPage {
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = carDataPage;
 
-
         pager.setOffscreenPageLimit(3);
         mContext = MainActivity.getInstance();
         initDialog();

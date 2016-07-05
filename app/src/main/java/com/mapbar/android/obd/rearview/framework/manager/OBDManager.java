@@ -24,8 +24,15 @@ public class OBDManager {
      */
     public static final int EVENT_OBD_USER_REGISTER_SUCC = 0xF40003;
     public static final int EVENT_OBD_USER_REGISTER_FAILED = 0xF4004;
+    /**
+     * aimi设置用户信息
+     */
+    public static final int EVENT_OBD_AIMI_SET_USER_DATA = 0xF4010;
     public static final int EVENT_OBD_USER_BINDVIN_SUCC = 0xF4005;
     public static final int EVENT_OBD_USER_BINDVIN_FAILED = 0xF4006;
+    /**
+     * 有新的固件
+     */
     public static final int EVENT_OBD_OTA_HAS_NEWFIRMEWARE = 0xF4007;
     public static final int EVENT_OBD_OTA_NEED_VIN = 0xF4008;
     public static final int EVENT_OBD_OTA_SCANVIN_SUCC = 0xF4009;

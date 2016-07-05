@@ -57,8 +57,7 @@ public class OTAManager extends OBDManager {
                 break;
             case 2:
                 if (state == 1) {
-                    //TODO 检测bin
-                    Manager.getInstance().queryRemoteUserCar();
+
                     baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_SUCC, null);
                 } else {
                     baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, null);
