@@ -13,4 +13,9 @@ public class Constants {
      */
     public final static boolean IS_OVERSEAS_EDITION = false;
 
+    public static final String SERIALPORT_PATH = "/dev/ttyMT2";
+    /**
+     * 后台服务行程时默认的的channel名称
+     */
+    public static final String COMAPCT_SERVICE_CHANNEL_NAME = "ObdCompactService";
 }

@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
@@ -48,11 +50,12 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instance = this;
+        stopBackgroundService();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
-        SerialPortManager.getInstance().setPath("/dev/ttyMT1");
+        SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         OBDSDKListenerManager.getInstance().init();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);
@@ -65,6 +68,7 @@ public class MainActivity extends BaseActivity {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
+                Log.e("whw", "whw event Maintivity sdkListener==" + event);
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
                         pageManager.goPage(MainPage.class);
@@ -94,6 +98,11 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+    }
+
+    private void stopBackgroundService() {
+        Intent intent = new Intent("com.mapbar.obd.stopservice");
+        sendBroadcast(intent);
     }
 
     @Override
@@ -148,7 +157,14 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        System.exit(0);
+                        Log.e(LogTag.OBD, "whw OBDV3HService startService");
+                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+                        ComponentName cName = startService(i);
+                        System.exit(0);//TODO 后台服务要留着
                     }
                 });
             }

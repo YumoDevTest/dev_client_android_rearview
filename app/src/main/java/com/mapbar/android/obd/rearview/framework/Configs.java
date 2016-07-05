@@ -27,6 +27,8 @@ public class Configs {
      * 微信获取vin的url
      */
     public final static String URL_BIND_VIN = IS_USE_INTERNAT_HOST ? "http://weixintest.mapbar.com/obdWechat/vinCollector?pushToken=" : "http://weixin.mapbar.com/obd/vinCollector?pushToken=";
+//    public final static String URL_BIND_VIN =  "http://weixin.mapbar.com/obd/vinCollector?pushToken=";//TODO 内网测试
+    //http://192.168.85.29:8010/api2/rearview/push?token=8125513276403507479&type=3&state=1
 
     public final static boolean TEST_SERIALPORT = false;//true false
     public final static String BT_TYPE = "7";
