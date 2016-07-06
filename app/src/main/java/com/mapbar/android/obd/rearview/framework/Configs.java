@@ -6,6 +6,7 @@ public class Configs {
     public final static String OBD_ANDROID = "obd_android";
     public final static String FILE_PATH = "/mapbar/obd";
     public final static String WX_APPID = "wxf35fb5024de20c47";
+    public final static int TOKEN_INVALID = 49;//token失效
 
     /**
      * 是否使用内网

@@ -13,6 +13,7 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Config;
+import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -28,7 +29,7 @@ public class UserCenterManager extends OBDManager {
     /**
      * 默认密码
      */
-    final String DEFAULT_PASSWORD = Config.USE_INTERNAL_HOST ? "654321" : "111qqq,,,";
+    private final String DEFAULT_PASSWORD = Config.USE_INTERNAL_HOST ? "654321" : "111qqq,,,";
     private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LocalCarModelInfoResult localCarModelInfoResult;
@@ -129,6 +130,13 @@ public class UserCenterManager extends OBDManager {
     @Override
     public void onSDKEvent(int event, Object o) {
         android.util.Log.i("uuuuuuuu", "App回调" + event);
+        //token失效判断和处理
+        boolean isTokenInvalid = tokenInvalid(event, o);
+        if (isTokenInvalid) {
+            UserCenter.getInstance().clearCurrentUserToken();
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+            return;
+        }
         switch (event) {
             case Manager.Event.queryCarSucc:
                 UserCar[] cars = (UserCar[]) o;
@@ -162,6 +170,7 @@ public class UserCenterManager extends OBDManager {
 
                     }
                 } else {
+
                     // 日志
                     if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                         Log.d(LogTag.OBD, " -->> -->> 未注册，数据无效");
@@ -173,7 +182,6 @@ public class UserCenterManager extends OBDManager {
                         outTime();
                     } else {//艾米版本，通知填写用户信息
                         baseObdListener.onEvent(EVENT_OBD_AIMI_SET_USER_DATA, null);
-                        aimiSetUserInfo("13501065885", "52d3e9d80a36483d2ceefa1b", "11111111111111119");
                     }
 
                 }
@@ -193,7 +201,7 @@ public class UserCenterManager extends OBDManager {
                         //显示二维码
                         showRegQr(reg_info);
                         outTime();
-                    } else {//// FIXME: tianff 2016/7/4 UserCenterManager  艾米版本，通知艾米远程查询出错
+                    } else {
                         baseObdListener.onEvent(23, errorCode);
                     }
                 }
@@ -471,9 +479,10 @@ public class UserCenterManager extends OBDManager {
 
     /**
      * 艾米定制设置用户信息,参数不可为空。
-     * @param account  用户名（手机号）
+     *
+     * @param account         用户名（手机号）
      * @param carGenerationId 车型id(根据提供的接口获取)
-     * @param vin 车辆vin
+     * @param vin             车辆vin
      */
     public void aimiSetUserInfo(String account, String carGenerationId, String vin) {
         if (account == null || carGenerationId == null || vin == null) {
@@ -485,9 +494,38 @@ public class UserCenterManager extends OBDManager {
         }
         userCar.carGenerationId = carGenerationId;
         userCar.vinManually = vin;
-        this.account = "13501608881";
+        this.account = account;
         //aimi注册
         aimiRegister(this.account);
+    }
+
+    /**
+     * 检测token是否失效
+     *
+     * @param event
+     * @param o
+     * @return true为失效 false为没有失效
+     */
+    private boolean tokenInvalid(int event, Object o) {
+        if (o != null && o instanceof Firmware.EventData) {
+            Firmware.EventData eventData = (Firmware.EventData) o;
+            if (Configs.TOKEN_INVALID == eventData.getRspCode()) {
+                return true;
+            }
+        }
+        if (o != null && o instanceof UserCenterError) {
+            UserCenterError erro = (UserCenterError) o;
+            if (erro.errorType == 2 && erro.errorCode == 1401) {
+                return true;
+            }
+        }
+        if (event == Manager.Event.queryCarFailed) {
+            int errorCode = (int) o;
+            if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

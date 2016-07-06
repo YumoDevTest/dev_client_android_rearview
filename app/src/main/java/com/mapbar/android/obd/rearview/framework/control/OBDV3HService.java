@@ -12,12 +12,15 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.obd.Config;
+import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -25,6 +28,7 @@ import com.mapbar.obd.RealTimeData;
 import com.mapbar.obd.SerialPortManager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
+import com.mapbar.obd.UserCenterError;
 
 
 /**
@@ -71,6 +75,7 @@ public class OBDV3HService extends Service {
     public SDKListenerManager.SDKListener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
     public Handler mHandler;
+    private int times;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -96,6 +101,13 @@ public class OBDV3HService extends Service {
 
             @Override
             public void onEvent(int event, Object o) {
+                //token失效处理
+                boolean isTokenInvalid = tokenInvalid(event, o);
+                if (isTokenInvalid) {
+                    UserCenter.getInstance().clearCurrentUserToken();
+                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                    return;
+                }
                 Log.e(LogTag.OBD, "whw OBDV3HService RealtimeData 有回调+" + event);
                 switch (event) {
                     case Manager.Event.queryCarSucc:
@@ -105,6 +117,7 @@ public class OBDV3HService extends Service {
                             Log.d(LogTag.OBD, " -->> 查询远程车辆成功");
                         }
                         if (cars != null && cars.length > 0) {
+                            times = 0;
                             if (TextUtils.isEmpty(cars[0].carGenerationId)) {
                                 // 日志
                                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
@@ -131,6 +144,15 @@ public class OBDV3HService extends Service {
                         }
                         break;
                     case Manager.Event.queryCarFailed:
+                        if (times < 4) {
+                            times++;
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Manager.getInstance().queryRemoteUserCar();
+                                }
+                            }, 200);
+                        }
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                             Log.d(LogTag.OBD, " -->> 查询远程车辆失败");
@@ -404,5 +426,33 @@ public class OBDV3HService extends Service {
         Manager.getInstance().openDevice(Utils.getImei(this.getApplication()));
     }
 
+    /**
+     * 检测token是否失效
+     *
+     * @param event
+     * @param o
+     * @return true为失效 false为没有失效
+     */
+    private boolean tokenInvalid(int event, Object o) {
+        if (o != null && o instanceof Firmware.EventData) {
+            Firmware.EventData eventData = (Firmware.EventData) o;
+            if (Configs.TOKEN_INVALID == eventData.getRspCode()) {
+                return true;
+            }
+        }
+        if (o != null && o instanceof UserCenterError) {
+            UserCenterError erro = (UserCenterError) o;
+            if (erro.errorType == 2 && erro.errorCode == 1401) {
+                return true;
+            }
+        }
+        if (event == Manager.Event.queryCarFailed) {
+            int errorCode = (int) o;
+            if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
