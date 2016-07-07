@@ -123,6 +123,7 @@ public class UserCenterManager extends OBDManager {
      */
     public void login() {
         //自动登录和设备登录
+
         login1();
     }
 
@@ -335,6 +336,8 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
 
             }
+            //// TODO: tianff 2016/7/7 UserCenterManager login1 开始接收sdk事件
+            sdkListener.setActive(true);
             UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
 
         }
@@ -388,6 +391,8 @@ public class UserCenterManager extends OBDManager {
     }
 
     private void startServer() {
+        //// TODO: tianff 2016/7/7 UserCenterManager startServer 停止接收系统事件
+        sdkListener.setActive(false);
         baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_SUCC, null);
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
