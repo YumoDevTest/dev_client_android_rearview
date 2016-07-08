@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity {
                     Log.d(LogTag.OBD, "whw -->> UserCenterManager.getInstance().login() ==");
                     UserCenterManager.getInstance().login();
                 }
-            }, 2000);
+            }, 1500);
 
         }
     }

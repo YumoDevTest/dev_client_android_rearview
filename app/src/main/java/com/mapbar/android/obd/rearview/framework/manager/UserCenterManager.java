@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
+import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -96,8 +97,9 @@ public class UserCenterManager extends OBDManager {
                             //远程查询车辆信息
                             Manager.getInstance().queryRemoteUserCar();
                         } else {
-                            //显示二维码
-//                            flag = 1;
+                            StringUtil.toastStringShort("此手机号已在其他app注册，请换个手机号");
+                            UserCenter.getInstance().clearCurrentUserToken();
+                            login();
                             showRegQr(reg_info);
                             // 日志
                             if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
