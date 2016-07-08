@@ -116,11 +116,19 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_NEED_VIN:
+//                        StringUtil.toastStringShort("绑定vin");
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                OTAManager.getInstance().checkVinVersion(getContext());
+//                            }
+//                        }, 1000);
                         QRInfo qrInfo = (QRInfo) o;//TODO 设置url
                         Bitmap bmQR = QRUtils.createQR(qrInfo.getUrl());
                         iv_qr.setImageBitmap(bmQR);
                         tv_qr_info.setText(qrInfo.getContent());
                         setQrViewVisiable(true);
+
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_SCANVIN_SUCC://TODO 扫描成功
@@ -137,12 +145,11 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         setQrViewVisiable(true);
                         break;
 
-                    case Manager.Event.dataCollectSucc:
+                    case Manager.Event.dataUpdate:
                         //TODO 当有固件升级时则自动弹出升级或取消的按钮
                         //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
                         OTAManager.getInstance().checkVinVersion(getContext());
                         break;
-
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));
                         break;
