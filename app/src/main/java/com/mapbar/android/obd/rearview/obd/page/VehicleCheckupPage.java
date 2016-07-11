@@ -101,7 +101,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
             tv_progress.setText("" + msg.what);
         }
     };
-    private boolean isFinish;
+    private boolean isCheckupFinish;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,9 +133,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("VehicleCheckupPage");
         }
-        if (isFinish) {
+        if (isCheckupFinish) {
             initPage();
-            isFinish = false;
+            isCheckupFinish = false;
         }
 
     }
@@ -221,7 +221,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
                         MobclickAgentEx.onEvent(UmengConfigs.CHECKSUCC);
-                        isFinish = true;
+                        isCheckupFinish = true;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalCheckEnd1 -->>");

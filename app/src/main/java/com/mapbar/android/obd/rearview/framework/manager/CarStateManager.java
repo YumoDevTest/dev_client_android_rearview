@@ -135,6 +135,9 @@ public class CarStateManager extends OBDManager {
      */
 
     public void startRefreshCarState() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
             @Override

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -145,10 +146,16 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         setQrViewVisiable(true);
                         break;
 
-                    case Manager.Event.dataUpdate:
+                    case Manager.Event.dataCollectSucc:
                         //TODO 当有固件升级时则自动弹出升级或取消的按钮
                         //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
-                        OTAManager.getInstance().checkVinVersion(getContext());
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                OTAManager.getInstance().checkVinVersion(getContext());
+                            }
+                        }, 2000);
+
                         break;
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));
