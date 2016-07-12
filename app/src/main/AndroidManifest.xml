@@ -98,6 +98,7 @@
             android:process="obd.service.process">
 
         </service>
+        <service android:name=".obd.UpdateService" />
         <service
             android:name="com.mapbar.android.obd.rearview.obd.RestartService"
             android:process="obd.service.restart.process"></service>

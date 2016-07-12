@@ -278,11 +278,11 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                                 fail_content.findViewById(R.id.firmware_update_fail_confirm).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        tv_firmware_pop_update.callOnClick();
                                         prompt_content.setVisibility(View.GONE);
                                         succ_content.setVisibility(View.GONE);
                                         fail_content.setVisibility(View.GONE);
                                         progress_content.setVisibility(View.GONE);
+                                        tv_firmware_pop_update.callOnClick();
                                     }
                                 });
                                 fail_content.findViewById(R.id.tv_firmware_pop_fail_cancle).setOnClickListener(new View.OnClickListener() {
