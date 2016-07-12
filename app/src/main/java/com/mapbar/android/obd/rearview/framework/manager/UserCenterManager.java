@@ -132,6 +132,7 @@ public class UserCenterManager extends OBDManager {
      * 登录流程启动
      */
     public void login() {
+        sdkListener.setActive(true);
         //连接设备
         openDevice();
     }
@@ -323,6 +324,7 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.obdConnectFailed:
                 isDeviceConnect = false;
+                openDevice();
                 break;
             case Manager.Event.dataCollectSucc:
                 isDataPrepare = true;
@@ -331,6 +333,7 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
+                openDevice();
                 break;
         }
 
@@ -357,8 +360,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
 
             }
-            //// TODO: tianff 2016/7/7 UserCenterManager login1 开始接收sdk事件
-            sdkListener.setActive(true);
+
             UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
 
         }
@@ -423,7 +425,7 @@ public class UserCenterManager extends OBDManager {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
         // TODO: tianff 2016/7/12 UserCenterManager startServer 开启采集线程
-//        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
+        Manager.getInstance().startReadThread();
     }
 
     /**
@@ -504,7 +506,6 @@ public class UserCenterManager extends OBDManager {
         }
     }
 
-    /*--------------------------------------------------------------------新的注册流程------------------------------------------------------------*/
 
     /**
      * 艾米定制设置用户信息,参数不可为空。
