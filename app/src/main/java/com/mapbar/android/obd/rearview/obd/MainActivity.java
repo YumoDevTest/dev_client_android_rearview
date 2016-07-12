@@ -151,6 +151,7 @@ public class MainActivity extends BaseActivity {
                 LayoutUtils.getPopupWindow().dismiss();
                 return true;
             }
+
             boolean isBack = pageManager.goBack();
             if (!isBack) {
                 LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {

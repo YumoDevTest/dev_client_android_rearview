@@ -187,15 +187,15 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         tv_carData_unit_4.setText(units[spv3]);
         //当车速低于10时,更改单位
         if (realTimeData != null && realTimeData.speed <= 10) {
-            if (spv0 == 1) tv_carData_unit_1.setText("L/H");
-            else if (spv1 == 1) tv_carData_unit_2.setText("L/H");
-            else if (spv2 == 1) tv_carData_unit_3.setText("L/H");
-            else if (spv3 == 1) tv_carData_unit_4.setText("L/H");
+            if (spv0 == 0) tv_carData_unit_1.setText("L/H");
+            else if (spv1 == 0) tv_carData_unit_2.setText("L/H");
+            else if (spv2 == 0) tv_carData_unit_3.setText("L/H");
+            else if (spv3 == 0) tv_carData_unit_4.setText("L/H");
         } else if (realTimeData != null && realTimeData.speed > 10) {
-            if (spv0 == 1) tv_carData_unit_1.setText("L/100KM");
-            else if (spv1 == 1) tv_carData_unit_2.setText("L/100KM");
-            else if (spv2 == 1) tv_carData_unit_3.setText("L/100KM");
-            else if (spv3 == 1) tv_carData_unit_4.setText("L/100KM");
+            if (spv0 == 0) tv_carData_unit_1.setText("L/100KM");
+            else if (spv1 == 0) tv_carData_unit_2.setText("L/100KM");
+            else if (spv2 == 0) tv_carData_unit_3.setText("L/100KM");
+            else if (spv3 == 0) tv_carData_unit_4.setText("L/100KM");
         }
     }
 

@@ -205,7 +205,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     }
 
     public void showFirmwarePopu() {
-        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_firmware_pop, null);
+        final View popupView = View.inflate(MainActivity.getInstance(), R.layout.layout_firmware_pop, null);
 
         final View prompt_content = popupView.findViewById(R.id.firmware_update_prompt_content);
         final View succ_content = popupView.findViewById(R.id.firmware_update_succ_content);
@@ -319,7 +319,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         });
         firmwarePopu = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
-        firmwarePopu.setOutsideTouchable(true);
+//        firmwarePopu.setOutsideTouchable(false);
         firmwarePopu.setBackgroundDrawable(new BitmapDrawable());
         firmwarePopu.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
