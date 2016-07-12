@@ -44,6 +44,15 @@ public class UserCenterManager extends OBDManager {
      * 最大远程查询车辆信息失败次数
      */
     private int times;
+    /**
+     * 设备是否连接成功
+     */
+    private boolean isDeviceConnect = false;
+    /**
+     * 数据是否准备成功
+     */
+    private boolean isDataPrepare = false;
+
 
     public UserCenterManager() {
         super();
@@ -57,7 +66,6 @@ public class UserCenterManager extends OBDManager {
     public static UserCenterManager getInstance() {
         return (UserCenterManager) OBDManager.getInstance(UserCenterManager.class);
     }
-
 
     /**
      * 爱心推收到推送调用
@@ -124,11 +132,9 @@ public class UserCenterManager extends OBDManager {
      * 登录流程启动
      */
     public void login() {
-        //自动登录和设备登录
-
-        login1();
+        //连接设备
+        openDevice();
     }
-
 
     @Override
     public void onSDKEvent(int event, Object o) {
@@ -312,10 +318,23 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> aimi写数据库车辆信息失败");
                 }
                 break;
+            case Manager.Event.obdConnectSucc:
+                isDeviceConnect = true;
+                break;
+            case Manager.Event.obdConnectFailed:
+                isDeviceConnect = false;
+                break;
+            case Manager.Event.dataCollectSucc:
+                isDataPrepare = true;
+                //走自动注册
+                login1();
+                break;
+            case Manager.Event.dataCollectFailed:
+                isDataPrepare = false;
+                break;
         }
 
     }
-
 
     /**
      * 自动登录、设备登录
@@ -392,17 +411,20 @@ public class UserCenterManager extends OBDManager {
         }
     }
 
+    /**
+     * 启动业务
+     */
     private void startServer() {
-        //// TODO: tianff 2016/7/7 UserCenterManager startServer 停止接收系统事件
+        // tianff 2016/7/7 UserCenterManager startServer 停止接收系统事件
         sdkListener.setActive(false);
         baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_SUCC, null);
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
+        // TODO: tianff 2016/7/12 UserCenterManager startServer 开启采集线程
+//        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
     }
-
 
     /**
      * 弹出二维码,此方法可以保证push_token不为空
@@ -441,7 +463,6 @@ public class UserCenterManager extends OBDManager {
         }
     }
 
-
     /**
      * 弹出二维码后超时,设备登录
      */
@@ -457,7 +478,6 @@ public class UserCenterManager extends OBDManager {
 
 
     }
-
 
     /**
      * 艾米定制注册
@@ -483,6 +503,8 @@ public class UserCenterManager extends OBDManager {
             Manager.getInstance().setUserCar(userCar);
         }
     }
+
+    /*--------------------------------------------------------------------新的注册流程------------------------------------------------------------*/
 
     /**
      * 艾米定制设置用户信息,参数不可为空。
@@ -533,6 +555,31 @@ public class UserCenterManager extends OBDManager {
             }
         }
         return false;
+    }
+
+    /**
+     * 设备连接
+     */
+    public void openDevice() {
+        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
+    }
+
+    /**
+     * 获取设备连接连接状态
+     *
+     * @return
+     */
+    public boolean getIsDeviceConnect() {
+        return isDeviceConnect;
+    }
+
+    /**
+     * 获取数据准备状态
+     *
+     * @return
+     */
+    public boolean getIsDataPrepare() {
+        return isDataPrepare;
     }
 }
 
