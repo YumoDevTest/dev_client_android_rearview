@@ -70,9 +70,10 @@
 
         <LinearLayout
             android:id="@+id/ll_pop"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginBottom="40dp"
             android:background="@drawable/qr_bg"
             android:gravity="center"
             android:visibility="visible">
@@ -90,9 +91,9 @@
             android:id="@+id/tv_qr_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_pop"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="62dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="请扫描填写车辆识别号来扩展此页\r的车辆状态和控制功能"
             android:textColor="@color/white"
