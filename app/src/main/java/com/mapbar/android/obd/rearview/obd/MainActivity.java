@@ -2,19 +2,29 @@ package com.mapbar.android.obd.rearview.obd;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -22,12 +32,17 @@ import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.SerialPortManager;
 import com.umeng.analytics.MobclickAgent;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -41,7 +56,14 @@ public class MainActivity extends BaseActivity {
     private RelativeLayout contentView;
     private OBDSDKListenerManager.SDKListener sdkListener;
     private boolean restart;
-
+    private boolean testAppUpdate = false;
+    private PopupWindow updatePopu;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            showAppUpdate((AppInfo) msg.obj);
+        }
+    };
     public static MainActivity getInstance() {
         return instance;
     }
@@ -68,7 +90,6 @@ public class MainActivity extends BaseActivity {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
-                Log.e("whw", "whw event Maintivity sdkListener==" + event);
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
                         pageManager.goPage(MainPage.class);
@@ -105,10 +126,138 @@ public class MainActivity extends BaseActivity {
         sendBroadcast(intent);
     }
 
+    /**
+     * 应用升级
+     */
+    private void checkAppVersion() {
+
+        HttpHandler http = new OBDHttpHandler(MainActivity.getInstance());
+        http.addParamete("package_name", getPackageName());
+
+        String url = "http://wdservice.mapbar.com/appstorewsapi/checkexistlist/" + Build.VERSION.SDK_INT;//接口14.1
+
+        http.setRequest(url, HttpHandler.HttpRequestType.GET);
+        http.setCache(HttpHandler.CacheType.NOCACHE);
+        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");//TODO
+
+        HttpHandler.HttpHandlerListener listener = new HttpHandler.HttpHandlerListener() {
+            @Override
+            public void onResponse(int httpCode, String str, byte[] responseData) {
+                if (httpCode == HttpStatus.SC_OK) {
+                    JSONObject object = null;
+                    try {
+                        object = new JSONObject(new String(responseData));
+                        int code = object.getInt("status");
+                        switch (code) {
+                            case 200:
+                                AppInfo info = parseAppInfo((JSONObject) object.getJSONArray("data").get(0));
+                                if ((info != null && hasNewAppVersion(info)) || testAppUpdate) {
+                                    Message msg = Message.obtain();
+                                    msg.obj = info;
+                                    handler.sendMessage(msg);
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+        };
+        http.setHttpHandlerListener(listener);
+        http.execute();
+    }
+
+    private boolean hasNewAppVersion(AppInfo info) {
+        int versionCode = -1;
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo packageInfo = manager.getPackageInfo(getPackageName(), 0);
+            versionCode = packageInfo.versionCode;
+        } catch (Exception e) {
+        }
+        return (info.getVersion_no() > versionCode && versionCode != -1) ? true : false;
+    }
+
+    private AppInfo parseAppInfo(JSONObject data) {
+        AppInfo info = new AppInfo();
+        try {
+            info.setDescription(data.getString("description"));
+            info.setVersion_no(data.getInt("version_no"));
+            info.setApk_path(data.getString("apk_path"));
+            info.setName(data.getString("name"));
+            info.setPackage_name(data.getString("package_name"));
+            info.setIcon_path(data.getString("icon_path"));
+            info.setApp_id(data.getString("app_id"));
+            info.setVersion_id(data.getString("version_id"));
+            info.setSize(data.getInt("size"));
+        } catch (JSONException e) {
+            info = null;
+            e.printStackTrace();
+        }
+        return info;
+    }
+
+    /**
+     * 点击下载,则开启service,并通知栏同步下载进度
+     *
+     * @param info
+     */
+    private void showAppUpdate(final AppInfo info) {
+        String versionName = "unknow";
+        try {
+            String pkName = getPackageName();
+            versionName = getPackageManager().getPackageInfo(pkName, 0).versionName;
+        } catch (Exception e) {
+        }
+        View popupView = View.inflate(this, R.layout.layout_app_update_pop, null);
+
+        TextView tv_update_pop_content = (TextView) popupView.findViewById(R.id.tv_update_pop_content);
+        TextView tv_update_app_info = (TextView) popupView.findViewById(R.id.tv_update_app_info);
+        tv_update_pop_content.setText(info.getDescription());
+        tv_update_app_info.setText("最新版本 " + versionName + "      " + "新版本大小:" + info.getSize() + "M");
+        View tv_update_confirm = popupView.findViewById(R.id.tv_update_confirm);
+        View tv_update_cancle = popupView.findViewById(R.id.tv_update_cancle);
+
+        tv_update_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (updatePopu != null)
+                    updatePopu.dismiss();
+                startAppDownload(info);
+            }
+        });
+
+        tv_update_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (updatePopu != null)
+                    updatePopu.dismiss();
+            }
+        });
+
+        updatePopu = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        updatePopu.setOutsideTouchable(false);
+        updatePopu.setBackgroundDrawable(new BitmapDrawable());
+        updatePopu.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+    }
+
+    private void startAppDownload(AppInfo info) {
+        Intent updateIntent = new Intent(this, UpdateService.class);
+        updateIntent.putExtra("app_info", info);
+        startService(updateIntent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        checkAppVersion();
     }
 
     @Override
@@ -158,14 +307,13 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        Log.e(LogTag.OBD, "whw OBDV3HService startService");
                         Intent i = new Intent(MainActivity.this, OBDV3HService.class);
                         i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
                         i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
                         i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
                         i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
                         ComponentName cName = startService(i);
-                        System.exit(0);//TODO 后台服务要留着
+                        System.exit(0);
                     }
                 });
             }
