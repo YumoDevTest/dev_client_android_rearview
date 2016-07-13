@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
+import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -101,6 +102,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
             tv_progress.setText("" + msg.what);
         }
     };
+    /**
+     * 所要播报的语音内容
+     */
+    private StringBuffer checkupVoiceResut;
     private boolean isCheckupFinish;
 
     @Override
@@ -111,7 +116,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @Override
     public void initView() {
-
+        checkupVoiceResut = new StringBuffer();
+        checkupVoiceResut.append("体检结果");
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 //        rl_view.setLayoutManager(layoutManager);
@@ -240,15 +246,18 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                 if (physicalReportByMonth != null) {
                                     int score = physicalReportByMonth.get(0).getScore();
                                     tv_score.setText(String.valueOf(score));
-
+                                    checkupVoiceResut.append("分数" + String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
+                                        checkupVoiceResut.append("高危级别");
                                         tv_level.setText("高危级别");
                                         tv_level.setTextColor(Color.RED);
                                     } else if (score > 50 && score <= 70) {
                                         tv_level.setText("亚健康级别");
+                                        checkupVoiceResut.append("亚健康级别");
                                         tv_level.setTextColor(Color.YELLOW);
                                     } else {
                                         tv_level.setText("健康级别");
+                                        checkupVoiceResut.append("健康级别");
                                         tv_level.setTextColor(Color.GREEN);
                                     }
                                     // 日志
@@ -258,6 +267,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                     }
                                 }
                                 CarDataManager.getInstance().restartTrip();
+                                //语音播报
+                                VoiceManager.getInstance().sendBroadcastTTS(checkupVoiceResut.toString());
                             }
                         });
 

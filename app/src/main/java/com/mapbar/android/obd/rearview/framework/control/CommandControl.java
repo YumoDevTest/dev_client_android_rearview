@@ -1,10 +1,15 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
+import com.mapbar.obd.ReportHead;
 
 import java.util.ArrayList;
 
@@ -18,6 +23,7 @@ public class CommandControl {
     private int[] commands = new int[]{201001, 201000, 202000, 202001, 207001, 207000};
     private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502"};
     private String[] commadNames = new String[]{"开锁", "落锁", "降窗", "升窗", "开天窗", "关天窗"};
+    private Context context;
 
     private CommandControl() {
     }
@@ -34,7 +40,8 @@ public class CommandControl {
      *
      * @param command 指令
      */
-    public void executeCommand(final int command) {
+    public void executeCommand(Context context, final int command) {
+        this.context = context;
         if (command >= 200000) {//控制类指令
             executeCommand2(command);
         } else {//非控制类指令
@@ -69,7 +76,29 @@ public class CommandControl {
                     voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.driveCost));
                     break;
                 case 103000://开始体检
-                    PhysicalManager.getInstance().startExam();
+                    VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+                    ReportHead head = PhysicalManager.getInstance().getReportHead();
+                    if (head != null) {
+                        StringBuffer checkupVoiceResut = new StringBuffer();
+                        int score = head.getScore();
+                        checkupVoiceResut.append("体检结果");
+                        checkupVoiceResut.append("分数" + String.valueOf(score));
+                        if (score >= 0 && score <= 50) {
+                            checkupVoiceResut.append("高危级别");
+                        } else if (score > 50 && score <= 70) {
+                            checkupVoiceResut.append("亚健康级别");
+                        } else {
+                            checkupVoiceResut.append("健康级别");
+                        }
+                        VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+                    } else {
+                        Intent startIntent = new Intent();
+                        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
+                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+                        startIntent.setComponent(cName);
+                        context.startActivity(startIntent);
+                        PhysicalManager.getInstance().startExam();
+                    }
                     break;
                 case 104000://播报保养
                     break;

@@ -19,7 +19,7 @@ public class VoiceReceiver extends BroadcastReceiver {
             int command = intent.getIntExtra("command", DEFAULT_COMMAND);
             Toast.makeText(context, "接收器" + command, Toast.LENGTH_SHORT).show();
             if (command != DEFAULT_COMMAND) {
-                CommandControl.getInstance().executeCommand(command);
+                CommandControl.getInstance().executeCommand(context, command);
             }
 
         }
