@@ -327,14 +327,14 @@ public class MainActivity extends BaseActivity {
     public void onFinishedInit() {
         if (!isFinishInitView) {
             isFinishInitView = true;
-            new Handler().postDelayed(new Runnable() {
+            new Handler().post(new Runnable() {
                 @Override
                 public void run() {
                     //登录
                     Log.d(LogTag.OBD, "whw -->> UserCenterManager.getInstance().login() ==");
                     UserCenterManager.getInstance().login();
                 }
-            }, 1500);
+            });
 
         }
     }

@@ -88,15 +88,15 @@ public class MainPage extends AppPage {
     public void initView() {
         titles = getResources().getStringArray(R.array.page_titles);
         titleBar = new TitleBar(this, R.id.title_main);
-        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
         carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
         controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
         fragments = new ArrayList<>();
-        fragments.add(carDataPage);
         fragments.add(vehicleCheckupPage);
+        fragments.add(carDataPage);
         fragments.add(carStatePage);
         fragments.add(carMaintenancePage);
         fragments.add(controlTestPage);
@@ -107,7 +107,9 @@ public class MainPage extends AppPage {
         mContext = MainActivity.getInstance();
         initDialog();
         title = titleBar;
-
+        //默认进入页面为数据页面
+        pager.setCurrentItem(1);
+        rg_tabs.check(R.id.page_tab2);
     }
 
     @Override
@@ -126,13 +128,13 @@ public class MainPage extends AppPage {
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
-                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
-                        currentPage = carDataPage;
+                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
+                        currentPage = vehicleCheckupPage;
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
-                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
-                        currentPage = vehicleCheckupPage;
+                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+                        currentPage = carDataPage;
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
