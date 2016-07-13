@@ -103,7 +103,7 @@ public class OTAManager extends OBDManager {
     public void checkVinVersion(Context mContext) {
         OtaSpecial ota = Manager.getInstance().getOtaSpecial();//从本地数据库中获得,或者获取失败返回null,现在在哪里保存?
         String manualVin = Manager.getInstance().getGetObdVinManual();//原先返回手动输入的vin  现在是在微信页面填写
-        if ((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) {
+        if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) || Configs.testVin) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
             qrInfo.setUrl(Configs.URL_BIND_VIN);
