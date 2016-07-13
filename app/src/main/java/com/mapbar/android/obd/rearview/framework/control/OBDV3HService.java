@@ -18,8 +18,8 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
-import com.mapbar.obd.Config;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -75,7 +75,6 @@ public class OBDV3HService extends Service {
     public SDKListenerManager.SDKListener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
     public Handler mHandler;
-    private int times;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -85,6 +84,7 @@ public class OBDV3HService extends Service {
             System.exit(0);
         }
     };
+    private int times;
 
     @Nullable
     @Override
@@ -196,9 +196,11 @@ public class OBDV3HService extends Service {
                         break;
                     case Manager.Event.obdConnectSucc:
                         mCurrentStatus = CONNECTION_STATE_CONNECTED;
+
                         break;
                     case Manager.Event.obdConnectFailed:
                         mCurrentStatus = CONNECTION_STATE_DISCONNECTED;
+                        openDevice();
                         break;
                     case Manager.Event.disconnectTimeout:
                     case Manager.Event.disconnectManually:
@@ -213,6 +215,14 @@ public class OBDV3HService extends Service {
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData driveCost:" + data.driveCost);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData rpm:" + data.rpm);
                         break;
+
+                    case Manager.Event.dataCollectSucc:
+                        //走自动注册
+                        login1();
+                        break;
+                    case Manager.Event.dataCollectFailed:
+                        openDevice();
+                        break;
                 }
             }
         };
@@ -225,10 +235,8 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //登录
-        login1();
         Toast.makeText(this, "开启了V3服务", Toast.LENGTH_SHORT).show();
-
+        openDevice();
         // Reset the options to default.
         mNeedWaitForSignal = false;
         mNeedConnect = false;
@@ -423,9 +431,15 @@ public class OBDV3HService extends Service {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        Manager.getInstance().openDevice(Utils.getImei(this.getApplication()));
+        Manager.getInstance().startReadThread();
     }
 
+    /**
+     * 设备连接
+     */
+    public void openDevice() {
+        Manager.getInstance().openDevice(Utils.getImei(this));
+    }
     /**
      * 检测token是否失效
      *
@@ -454,5 +468,6 @@ public class OBDV3HService extends Service {
         }
         return false;
     }
+
 
 }

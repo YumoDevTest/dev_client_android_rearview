@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
@@ -135,6 +136,7 @@ public class UserCenterManager extends OBDManager {
         sdkListener.setActive(true);
         //连接设备
         openDevice();
+        StringUtil.toastStringLong("程序初始化中...");
     }
 
     @Override
@@ -226,6 +228,7 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, " -->> 设备登录成功");
                 }
+                LayoutUtils.disHud();
                 login2();
                 break;
             case Manager.Event.DeviceloginFailed:
@@ -233,6 +236,9 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, " -->> 设备登录失败");
                 }
+                //// TODO: tianff 2016/7/13 UserCenterManager onSDKEvent 文案需要确定
+                LayoutUtils.disHud();
+                LayoutUtils.showHud(MainActivity.getInstance(), "无网络，拼命连接中...");
                 //延迟，设备登录
                 mHandler.postDelayed(new Runnable() {
                     @Override

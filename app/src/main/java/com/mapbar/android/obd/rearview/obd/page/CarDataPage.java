@@ -458,7 +458,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             }
         });
 
-        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, -100, -100);
+        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
 
     /**
