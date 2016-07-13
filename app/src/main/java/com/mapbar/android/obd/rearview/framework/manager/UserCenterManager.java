@@ -329,7 +329,13 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.obdConnectFailed:
                 isDeviceConnect = false;
-                openDevice();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        openDevice();
+                        StringUtil.toastStringShort("设备连接失败");
+                    }
+                }, 500);
                 break;
             case Manager.Event.dataCollectSucc:
                 isDataPrepare = true;
@@ -338,7 +344,15 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
-                openDevice();
+
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        openDevice();
+                        StringUtil.toastStringShort("数据准备失败");
+                    }
+                }, 500);
+
                 break;
         }
 
