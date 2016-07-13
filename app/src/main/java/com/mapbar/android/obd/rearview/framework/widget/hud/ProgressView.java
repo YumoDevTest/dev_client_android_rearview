@@ -107,7 +107,7 @@ public class ProgressView extends RelativeLayout {
         textWidth = alertWidth;
         textHeight = ScreenParam.convertDipToPx(activity, TEXT_HEIGHT_DIP);
         textView = new TextView(activity);
-        textView.setTextSize(18);
+        textView.setTextSize(16);
         textView.setTextColor(Color.WHITE);
         textView.setGravity(Gravity.CENTER);
         textView.setText(text);
@@ -145,8 +145,7 @@ public class ProgressView extends RelativeLayout {
         return text;
     }
 
-    public ProgressView setText(int textRes) {
-        String text = resources.getText(textRes).toString();
+    public ProgressView setText(String text) {
         if (this.text != text) {
             this.text = text;
             textView.setText(text);
@@ -155,7 +154,8 @@ public class ProgressView extends RelativeLayout {
         return this;
     }
 
-    public ProgressView setText(String text) {
+    public ProgressView setText(int textRes) {
+        String text = resources.getText(textRes).toString();
         if (this.text != text) {
             this.text = text;
             textView.setText(text);

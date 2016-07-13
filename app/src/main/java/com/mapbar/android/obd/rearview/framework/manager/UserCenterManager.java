@@ -136,7 +136,7 @@ public class UserCenterManager extends OBDManager {
         sdkListener.setActive(true);
         //连接设备
         openDevice();
-        StringUtil.toastStringLong("程序初始化中...");
+
     }
 
     @Override
@@ -236,9 +236,8 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, " -->> 设备登录失败");
                 }
-                //// TODO: tianff 2016/7/13 UserCenterManager onSDKEvent 文案需要确定
                 LayoutUtils.disHud();
-                LayoutUtils.showHud(MainActivity.getInstance(), "无网络，拼命连接中...");
+                LayoutUtils.showHud(MainActivity.getInstance(), "网络问题，无法连接");
                 //延迟，设备登录
                 mHandler.postDelayed(new Runnable() {
                     @Override
@@ -430,7 +429,6 @@ public class UserCenterManager extends OBDManager {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
-        // TODO: tianff 2016/7/12 UserCenterManager startServer 开启采集线程
         Manager.getInstance().startReadThread();
     }
 
@@ -478,9 +476,7 @@ public class UserCenterManager extends OBDManager {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                if (isPush) {//推送失败
                 UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
-//                }
             }
         }, 1000 * 60 * 5);
 
@@ -568,6 +564,7 @@ public class UserCenterManager extends OBDManager {
      * 设备连接
      */
     public void openDevice() {
+        StringUtil.toastStringLong("数据准备中,请稍后");
         Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
     }
 

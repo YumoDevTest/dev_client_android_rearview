@@ -74,7 +74,6 @@ public class OBDV3HService extends Service {
     private static long mDelay = 0L;
     public SDKListenerManager.SDKListener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
-    public Handler mHandler;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,6 +83,7 @@ public class OBDV3HService extends Service {
             System.exit(0);
         }
     };
+    private Handler mHandler;
     private int times;
 
     @Nullable
@@ -95,6 +95,7 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         SDKListenerManager.getInstance().init();
         sdkListener = new SDKListenerManager.SDKListener() {
@@ -173,10 +174,11 @@ public class OBDV3HService extends Service {
                             Log.d(LogTag.OBD, " -->> 设备登录失败");
                         }
                         //延迟，设备登录
+                        //延迟，设备登录
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(Global.getAppContext()));
+                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
                             }
                         }, 5 * 1000);
                         break;
@@ -440,6 +442,7 @@ public class OBDV3HService extends Service {
     public void openDevice() {
         Manager.getInstance().openDevice(Utils.getImei(this));
     }
+
     /**
      * 检测token是否失效
      *
