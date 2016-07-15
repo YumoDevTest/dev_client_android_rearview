@@ -274,8 +274,18 @@ public class MainActivity extends BaseActivity {
             restart = false;
             restartmyapp();
         } else {
+            startV3HService();
             android.os.Process.killProcess(android.os.Process.myPid());
         }
+    }
+
+    private void startV3HService() {
+        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+        ComponentName cName = startService(i);
     }
 
     private void restartmyapp() {
@@ -307,12 +317,6 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
-                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-                        ComponentName cName = startService(i);
                         System.exit(0);
                     }
                 });

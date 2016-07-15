@@ -222,7 +222,7 @@
             android:layout_below="@id/progressbar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="22dp"
-            android:text="正在安装"
+            android:text=""
             android:textSize="36dp" />
     </RelativeLayout>
 
