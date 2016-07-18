@@ -358,12 +358,17 @@ public class OBDV3HService extends Service {
      * 当需要(微信注册)弹出二维码时，启动应用
      */
     private void goApp() {
-        Log.e("uuuuuuuu", "跳转");
-        Intent startIntent = new Intent();
-        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
-        startIntent.setComponent(cName);
-        startActivity(startIntent);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent startIntent = new Intent();
+                startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
+                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+                startIntent.setComponent(cName);
+                startActivity(startIntent);
+            }
+        }, 2 * 60 * 1000);
+
     }
 
 

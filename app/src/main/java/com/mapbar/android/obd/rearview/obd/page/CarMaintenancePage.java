@@ -418,6 +418,10 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         || TextUtils.isEmpty(et_totalMileage.getText().toString()) || TextUtils
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
+                } else if (Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000 > 600000000) {
+
+                    StringUtil.toastStringShort("行驶里程超出了该车保养范围");
+
                 } else {
                     userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000;
                     userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString().trim()) * 1000;
