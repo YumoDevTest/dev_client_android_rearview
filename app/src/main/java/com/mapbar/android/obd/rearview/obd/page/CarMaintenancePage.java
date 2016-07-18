@@ -419,8 +419,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
                 } else {
-                    userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString()) * 1000;
-                    userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString()) * 1000;
+                    userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000;
+                    userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString().trim()) * 1000;
                     Manager.getInstance().setUserCar(userCar);
 
                 }

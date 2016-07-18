@@ -27,6 +27,8 @@
             android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:maxLength="7"
+            android:numeric="integer"
             android:textColor="#ffffff"
             android:textSize="30sp"
             />
@@ -63,6 +65,8 @@
             android:layout_height="50dp"
             android:layout_marginLeft="12dp"
             android:background="@drawable/et_base_upkeep"
+            android:maxLength="7"
+            android:numeric="integer"
             android:textColor="#ffffff"
             android:textSize="30sp"
             />
