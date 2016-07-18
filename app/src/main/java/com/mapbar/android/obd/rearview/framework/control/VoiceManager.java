@@ -9,7 +9,8 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
  */
 public class VoiceManager {
     private static VoiceManager voiceManager;
-    private final String ACTION_TTS = "ime.service.intent.action.TTS_SPEACK";
+    //    private final String ACTION_TTS = "ime.service.intent.action.TTS_SPEACK";//艾米
+    private final String ACTION_TTS = "mapbar.obd.action.ACTION_TTS";//达讯
     private VoiceManager() {
 
     }

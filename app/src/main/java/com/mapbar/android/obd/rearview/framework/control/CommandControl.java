@@ -7,11 +7,19 @@ import android.content.Intent;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.mapdal.DateTime;
+import com.mapbar.obd.MaintenanceInfo;
+import com.mapbar.obd.MaintenanceResult;
+import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 import com.mapbar.obd.ReportHead;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.VoiceManagerHolder.voiceManager;
 
@@ -20,10 +28,16 @@ import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.Voi
  */
 public class CommandControl {
     private static CommandControl mCommandControl;
+    public StringBuffer maintenanceVoice = new StringBuffer();
     private int[] commands = new int[]{201001, 201000, 202000, 202001, 207001, 207000};
     private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502"};
     private String[] commadNames = new String[]{"开锁", "落锁", "降窗", "升窗", "开天窗", "关天窗"};
     private Context context;
+    private short year;
+    private short month;
+    private short day;
+    private long nextDay;
+    private long nextUpkeepDate;
 
     private CommandControl() {
     }
@@ -101,12 +115,71 @@ public class CommandControl {
                     }
                     break;
                 case 104000://播报保养
+                    getLocalSchemeCache();
                     break;
 
             }
         }
     }
 
+    /**
+     * 获取本地保养信息
+     */
+    private void getLocalSchemeCache() {
+        // 获取本地缓存保养数据
+        MaintenanceInfo localSchemeCache = Manager.getInstance().queryMaintenanceInfoByLocalSchemeCache();
+        switch (localSchemeCache.errCode) {
+            case MaintenanceResult.noSchemeFound:
+                // FIXME: 2016/7/17   本地没有保养信息,网络获取保养信息
+
+                break;
+            case MaintenanceResult.ok:
+                DateTime mDate = localSchemeCache.state.getNextMaintenanceDate();
+                year = mDate.year;
+                month = mDate.month;
+                day = mDate.day;
+                maintenanceVoice.append("距离下次保养里程还有");
+                String data2 = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = null;
+                try {
+                    d = sdf.parse(data2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                nextUpkeepDate = c.getTimeInMillis();
+                Date nowDate = new Date();
+                long time = nowDate.getTime();
+                if (time < nextUpkeepDate) {
+                    nextDay = (nextUpkeepDate - time) / 86400000;
+                }
+                int tag = localSchemeCache.state.getTag();
+                switch (tag) {
+                    case MaintenanceState.Tag.invalid:
+                        break;
+                    case MaintenanceState.Tag.nextMaintenanceDateEstimatedByMileage:
+                        // 表示未过保，并且下次保养日期是用里程估算得到的
+                        maintenanceVoice.append(String.valueOf(localSchemeCache.state.getMileageToMaintenance() / 1000));
+                        maintenanceVoice.append("公里,");
+                    case MaintenanceState.Tag.nextMaintenanceDateEstimatedByTime:
+                        maintenanceVoice.append("距离下次保养时间还有").append(nextDay).append("天");
+                        VoiceManager.getInstance().sendBroadcastTTS(maintenanceVoice.toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case MaintenanceResult.carGenerationNotSpecified:
+                VoiceManager.getInstance().sendBroadcastTTS("尚未指定车型");
+                break;
+
+            default:
+                VoiceManager.getInstance().sendBroadcastTTS("网络请求失败");
+                break;
+        }
+    }
 
     /**
      * 执行控制指令

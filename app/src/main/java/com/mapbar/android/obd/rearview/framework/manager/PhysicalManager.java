@@ -18,18 +18,16 @@ import java.util.List;
 public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
     private List<PhysicalData> physicalList = new ArrayList<>();
-    private int progress = 0;
     private ArrayList<Integer> statuses;
+    /**
+     * 体检总项目
+     */
+    private int allCount;
+    private int progress = 0;
 
     public PhysicalManager() {
         super();
-//        sdkListener = new SDKListenerManager.SDKListener() {
-//            @Override
-//            public void onEvent(int event, Object o) {
-//                onSDKEvent(event, o);
-//            }
-//        };
-//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        physicalList = Physical.getInstance().getPhysicalSystem();
     }
 
     /**
@@ -87,7 +85,9 @@ public class PhysicalManager extends OBDManager {
                 case Manager.Event.obdPhysicalCheckStart:
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    progress = getProgress(((PhysicalData) o).getId());
+                    PhysicalData physicalData = (PhysicalData) o;
+
+                    progress = getProgress(((PhysicalData) o).getId(), physicalData);
                     baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     // 日志
                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
@@ -119,30 +119,28 @@ public class PhysicalManager extends OBDManager {
      * @param id PhysicalData的id
      * @return 体检进度
      */
-    private int getProgress(int id) {
-        physicalList = Physical.getInstance().getPhysicalSystem();
-        int progress = 0;
+    private int getProgress(int id, PhysicalData physicalData) {
         switch (id) {
             case 1:
-                progress = 0;
+                progress = physicalData.getProcessed() / (physicalData.getCount() * 4) * 100;
                 break;
             case 2:
-                progress = 25;
+                progress += 1;
                 break;
             case 3:
-                progress = 26;
+                progress += 1;
                 break;
             case 4:
-                progress = 28;
+                progress += 3;
                 break;
             case 5:
-                progress = 29;
+                progress += 1;
                 break;
             case 6:
-                progress = 30;
+                progress = progress + physicalData.getProcessed() / (physicalData.getCount() * 2) * 100;
                 break;
             case 7:
-                progress = 92;
+                progress += 3;
                 break;
         }
         return progress;
