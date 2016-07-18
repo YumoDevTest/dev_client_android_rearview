@@ -37,6 +37,7 @@ import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.obd.Manager;
 import com.mapbar.obd.SerialPortManager;
 import com.umeng.analytics.MobclickAgent;
 
@@ -113,6 +114,8 @@ public class MainActivity extends BaseActivity {
                         MobclickAgentEx.onEvent(UmengConfigs.REGISTER_SUCC);
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
+                    case Manager.Event.dataCollectSucc:
+                    case Manager.Event.dataCollectFailed:
 
                 }
 
