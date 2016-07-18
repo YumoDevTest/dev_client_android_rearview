@@ -87,7 +87,7 @@ public class PhysicalManager extends OBDManager {
                 case Manager.Event.obdPhysicalCheckResult:
                     PhysicalData physicalData = (PhysicalData) o;
 
-                    progress = getProgress(((PhysicalData) o).getId(), physicalData);
+                    progress = getProgress(((PhysicalData) o).getId(), (PhysicalData) o);
                     baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     // 日志
                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
@@ -122,25 +122,28 @@ public class PhysicalManager extends OBDManager {
     private int getProgress(int id, PhysicalData physicalData) {
         switch (id) {
             case 1:
-                progress = physicalData.getProcessed() / (physicalData.getCount() * 4) * 100;
+                progress = (physicalData.getProcessed() * 100 / (physicalData.getCount() * 4));
                 break;
             case 2:
-                progress += 1;
+                progress = 27;
                 break;
             case 3:
-                progress += 1;
+                progress = 29;
                 break;
             case 4:
-                progress += 3;
+                progress = 35;
                 break;
             case 5:
-                progress += 1;
+                progress = 36;
                 break;
             case 6:
-                progress = progress + physicalData.getProcessed() / (physicalData.getCount() * 2) * 100;
+                Log.v(LogTag.TEMP, "getProcessed1 -->>" + physicalData.getProcessed());
+                Log.v(LogTag.TEMP, "getCount1 -->>" + physicalData.getCount());
+                progress = 36;
+                progress = progress + (physicalData.getProcessed() * 100 / (physicalData.getCount() * 2));
                 break;
             case 7:
-                progress += 3;
+                progress = 96;
                 break;
         }
         return progress;

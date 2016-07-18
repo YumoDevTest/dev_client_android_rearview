@@ -421,6 +421,7 @@ public class UserCenterManager extends OBDManager {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
+                Log.d(LogTag.OBD, " -->> token-->" + UserCenter.getInstance().getCurrentUserToken());
             }
             startServer();
         } else {

@@ -219,7 +219,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "getId -->>" + physicalData.getId());
                             Log.v(LogTag.TEMP, "getStatus -->>" + physicalData.getStatus());
                             Log.v(LogTag.TEMP, "getProcessed -->>" + physicalData.getProcessed());
-                            Log.v(LogTag.TEMP, "getName -->>" + physicalData.getName());
+                            Log.v(LogTag.TEMP, "getCount -->>" + physicalData.getCount());
                         }
                         recyclerAdapter.setPhysicalData((PhysicalData) o);
                         recyclerAdapter.notifyDataSetChanged();
