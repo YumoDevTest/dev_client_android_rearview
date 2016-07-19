@@ -202,7 +202,12 @@ public class OBDV3HService extends Service {
                         break;
                     case Manager.Event.obdConnectFailed:
                         mCurrentStatus = CONNECTION_STATE_DISCONNECTED;
-                        openDevice();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                openDevice();
+                            }
+                        }, 500);
                         break;
                     case Manager.Event.disconnectTimeout:
                     case Manager.Event.disconnectManually:
@@ -223,7 +228,12 @@ public class OBDV3HService extends Service {
                         login1();
                         break;
                     case Manager.Event.dataCollectFailed:
-                        openDevice();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                openDevice();
+                            }
+                        }, 500);
                         break;
                 }
             }
@@ -237,8 +247,10 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "开启了V3服务", Toast.LENGTH_SHORT).show();
+
         openDevice();
+        Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
+
         // Reset the options to default.
         mNeedWaitForSignal = false;
         mNeedConnect = false;
@@ -330,7 +342,7 @@ public class OBDV3HService extends Service {
 
     private void doConnect() {
         Log.e(LogTag.OBD, "whw OBDV3HService Manager.getInstance().openDevice ==" + Utils.getImei(Global.getAppContext()));
-        Manager.getInstance().openDevice(Utils.getImei(Global.getAppContext()));
+        Manager.getInstance().openDevice(Utils.getImei(getApplication()));
         /*
         mCandidateDeviceInfo = Manager.getInstance().getCandidateDeviceInfo();
         if (mCandidateDeviceInfo != null && !TextUtils.isEmpty(mCandidateDeviceInfo.mac)) {

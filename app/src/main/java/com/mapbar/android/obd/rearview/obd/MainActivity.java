@@ -276,6 +276,7 @@ public class MainActivity extends BaseActivity {
         } else {
             startV3HService();
             android.os.Process.killProcess(android.os.Process.myPid());
+
         }
     }
 
@@ -317,7 +318,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        System.exit(0);
+//                        System.exit(0);
                     }
                 });
             }
