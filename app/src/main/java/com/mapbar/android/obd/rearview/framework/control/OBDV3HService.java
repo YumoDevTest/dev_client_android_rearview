@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.framework.crash.CrashHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
@@ -95,6 +96,9 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        //捕捉异常注册
+        CrashHandler crashHandler=CrashHandler.getInstance();
+        crashHandler.init(getApplication());
         mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         SDKListenerManager.getInstance().init();

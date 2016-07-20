@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
@@ -44,13 +45,17 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
 
 public class MainActivity extends BaseActivity {
 
+    public final static String FILE_PATH = "/mapbar/obd";
     private static MainActivity instance;
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
@@ -64,6 +69,8 @@ public class MainActivity extends BaseActivity {
             showAppUpdate((AppInfo) msg.obj);
         }
     };
+    private String logFilePath = "";
+
     public static MainActivity getInstance() {
         return instance;
     }
@@ -77,6 +84,18 @@ public class MainActivity extends BaseActivity {
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
+        logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + FILE_PATH + "/client_Log1/";
+        File file = new File(logFilePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat(
+                "yyyy_MM_dd_HH_mm_ss");
+        String fileName = "/log_" + format.format(c.getTime())
+                + ".txt";
+        File logFile = new File(logFilePath + fileName);
+        LogManager.getInstance().setLogFile(logFile);
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         OBDSDKListenerManager.getInstance().init();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
