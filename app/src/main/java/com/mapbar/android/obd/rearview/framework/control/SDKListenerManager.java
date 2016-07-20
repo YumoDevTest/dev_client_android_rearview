@@ -42,7 +42,7 @@ public class SDKListenerManager {
                 android.util.Log.e("event", event + "");
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                    Log.v(LogTag.FRAMEWORK, "sdk -->> event:" + event);
+                    Log.v(LogTag.FRAMEWORK, "whw sdk -->> event:" + event);
                     Log.v(LogTag.FRAMEWORK, "sdk -->> regListeners.size():" + regListeners.size());
                 }
 

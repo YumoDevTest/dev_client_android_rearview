@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
@@ -32,6 +33,7 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
@@ -138,6 +140,7 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OTAManager.getInstance().checkVinVersion(this);
     }
 
     private void stopBackgroundService() {
