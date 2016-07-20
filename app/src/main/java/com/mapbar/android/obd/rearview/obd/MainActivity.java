@@ -18,10 +18,10 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
@@ -40,6 +40,7 @@ import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.obd.Config;
 import com.mapbar.obd.SerialPortManager;
 import com.umeng.analytics.MobclickAgent;
 
@@ -48,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,8 +58,6 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
 
 
 public class MainActivity extends BaseActivity {
-
-    public final static String FILE_PATH = "/mapbar/obd";
     private static MainActivity instance;
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
@@ -86,10 +86,15 @@ public class MainActivity extends BaseActivity {
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
         LogManager.getInstance().init(MainActivity.this);
-        logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + FILE_PATH + "/client_Log1/";
+        logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
+        String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
         File file = new File(logFilePath);
+        File file1 = new File(logFilePath1);
         if (!file.exists()) {
             file.mkdirs();
+        }
+        if (!file1.exists()) {
+            file1.mkdirs();
         }
         Calendar c = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat(
@@ -97,7 +102,16 @@ public class MainActivity extends BaseActivity {
         String fileName = "/log_" + format.format(c.getTime())
                 + ".txt";
         File logFile = new File(logFilePath + fileName);
-        LogManager.getInstance().setLogFile(logFile);
+        if (Config.DEBUG) {
+            if (!logFile.exists())
+                try {
+                    logFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            LogManager.getInstance().setLogFile(logFile);
+        }
+
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         OBDSDKListenerManager.getInstance().init();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
