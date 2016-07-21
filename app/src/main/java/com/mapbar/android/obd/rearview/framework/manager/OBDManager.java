@@ -1,9 +1,9 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
+import com.mapbar.android.obd.rearview.framework.log.Log;
 
 import java.util.HashMap;
 

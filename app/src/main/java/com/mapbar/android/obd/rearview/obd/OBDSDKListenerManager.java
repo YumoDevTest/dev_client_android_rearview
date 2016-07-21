@@ -35,7 +35,7 @@ public class OBDSDKListenerManager {
             @Override
             public void onEvent(int event, Object o) {
                 {
-                    android.util.Log.e("rrrrrrr", event + "");
+                    Log.e("rrrrrrr", event + "");
 
                     // 日志
                     if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {

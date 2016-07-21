@@ -103,7 +103,8 @@ public class OTAManager extends OBDManager {
     public void checkVinVersion(Context mContext) {
         OtaSpecial ota = Manager.getInstance().getOtaSpecial();//从本地数据库中获得,或者获取失败返回null,现在在哪里保存?
         String manualVin = Manager.getInstance().getGetObdVinManual();//原先返回手动输入的vin  现在是在微信页面填写
-        if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) || Configs.testVin) {
+        Log.e(LogTag.OBD,"whw checkVinVersion ota.vin==" + ota.vin + "==manualVin==" + manualVin);
+        if ((((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) || Configs.testVin) && Configs.notForceCheckVersion) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
             qrInfo.setUrl(Configs.URL_BIND_VIN);
@@ -114,11 +115,14 @@ public class OTAManager extends OBDManager {
     }
 
     private void checkVersion(Context mContext) {
+        Log.e(LogTag.OBD,"whw checkVersion ==");
         LocalUserCarResult result = Manager.getInstance().queryLocalUserCar();
         if (result != null) {
+            Log.e(LogTag.OBD,"whw checkVersion result != null ==");
             UserCar car = result.userCars == null || result.userCars.length == 0 ? null : result.userCars[0];
             CarDetail cur = Manager.getInstance().getCarDetailByCarInfo(car);
             if (cur != null) {
+                Log.e(LogTag.OBD,"whw checkVersion cur != null ==");
                 firmware = Firmware.getInstance(mContext);
                 firmware.initParma(cur.firstBrand.trim(), cur.carModel.trim(), cur.generation.trim());
 //                firmware.initParma("11111111", "11111111", "11111111");

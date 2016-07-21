@@ -345,6 +345,7 @@ public class UserCenterManager extends OBDManager {
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
 
+//                Manager.ObdInitError obdInitError = (Manager.ObdInitError) o;
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

@@ -88,6 +88,10 @@ public class MainActivity extends BaseActivity {
         LogManager.getInstance().init(MainActivity.this);
         logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
         String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
+
+        com.mapbar.android.log.LogManager.getInstance().setLog(true);
+        com.mapbar.android.log.LogManager.getInstance().setLogFile(true);
+
         File file = new File(logFilePath);
         File file1 = new File(logFilePath1);
         if (!file.exists()) {
@@ -154,7 +158,6 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-        OTAManager.getInstance().checkVinVersion(this);
     }
 
     private void stopBackgroundService() {
