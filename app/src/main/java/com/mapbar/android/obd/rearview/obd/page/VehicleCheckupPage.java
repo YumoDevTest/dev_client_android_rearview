@@ -195,7 +195,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "obdPhysicalConditionFailed -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
-                        StringUtil.toastStringShort("体检失败!");
+                        StringUtil.toastStringShort("请在怠速下进行车辆检测");
                         CarDataManager.getInstance().restartTrip();
                         break;
                     case Manager.Event.obdPhysicalCheckStart:

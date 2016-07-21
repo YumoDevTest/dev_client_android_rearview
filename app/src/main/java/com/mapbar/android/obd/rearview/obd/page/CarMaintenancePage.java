@@ -259,7 +259,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 StringUtil.toastStringShort("当前未登录");
                 break;
             case MaintenanceResult.outOfData:
-//                StringUtil.toastStringShort("行驶里程超出了该车保养范围");
+                StringUtil.toastStringShort("行驶里程超出了该车保养范围");
                 break;
             case MaintenanceResult.parameterError:
                 line_upkeep_revise.setVisibility(View.VISIBLE);
@@ -297,6 +297,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         }
 
     }
+
     @Override
     public void setListener() {
         et_purchaseDate.setOnClickListener(this);
@@ -370,8 +371,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         StringUtil.toastStringShort("设置失败");
                         break;
                     case Manager.Event.carInfoWriteDatabaseSucc:
-                        getLocalSchemeCache();
                         StringUtil.toastStringShort("设置成功");
+                        getLocalSchemeCache();
                         break;
                     case Manager.Event.carInfoWriteDatabaseFailed:
                         StringUtil.toastStringShort("设置失败");
@@ -418,11 +419,13 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                         || TextUtils.isEmpty(et_totalMileage.getText().toString()) || TextUtils
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
-                } else if (Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000 > 600000000) {
+                }
+//                else if (Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000 > 500000000) {
+//
+//                    StringUtil.toastStringShort("行驶里程超出范围");
 
-                    StringUtil.toastStringShort("行驶里程超出了该车保养范围");
-
-                } else {
+//                }
+                else {
                     userCar.totalMileage = Integer.valueOf(et_totalMileage.getText().toString().trim()) * 1000;
                     userCar.lastMaintenanceMileage = Integer.valueOf(et_lastMaintenanceMileage.getText().toString().trim()) * 1000;
                     Manager.getInstance().setUserCar(userCar);
