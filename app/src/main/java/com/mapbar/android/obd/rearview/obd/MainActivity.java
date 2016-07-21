@@ -33,7 +33,6 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
-import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
@@ -89,9 +88,6 @@ public class MainActivity extends BaseActivity {
         logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
         String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
 
-        com.mapbar.android.log.LogManager.getInstance().setLog(true);
-        com.mapbar.android.log.LogManager.getInstance().setLogFile(true);
-
         File file = new File(logFilePath);
         File file1 = new File(logFilePath1);
         if (!file.exists()) {
@@ -107,6 +103,8 @@ public class MainActivity extends BaseActivity {
                 + ".txt";
         File logFile = new File(logFilePath + fileName);
         if (Config.DEBUG) {
+            com.mapbar.android.log.LogManager.getInstance().setLog(true);
+            com.mapbar.android.log.LogManager.getInstance().setLogFile(true);
             if (!logFile.exists())
                 try {
                     logFile.createNewFile();
