@@ -156,7 +156,6 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-        OTAManager.getInstance().checkVinVersion(this);
     }
 
     private void stopBackgroundService() {
