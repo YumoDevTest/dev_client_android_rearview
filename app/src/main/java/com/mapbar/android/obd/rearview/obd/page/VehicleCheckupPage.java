@@ -245,21 +245,26 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                         .getInstance().getPhysicalReportByMonth(1970, 01);
                                 if (physicalReportByMonth != null) {
                                     int score = physicalReportByMonth.get(0).getScore();
-                                    tv_score.setText(String.valueOf(score));
+
+
                                     checkupVoiceResut.append("分数" + String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
+                                        tv_score.setTextColor(Color.RED);
                                         checkupVoiceResut.append("高危级别");
                                         tv_level.setText("高危级别");
                                         tv_level.setTextColor(Color.RED);
                                     } else if (score > 50 && score <= 70) {
                                         tv_level.setText("亚健康级别");
+                                        tv_score.setTextColor(Color.YELLOW);
                                         checkupVoiceResut.append("亚健康级别");
                                         tv_level.setTextColor(Color.YELLOW);
                                     } else {
                                         tv_level.setText("健康级别");
                                         checkupVoiceResut.append("健康级别");
+                                        tv_score.setTextColor(Color.GREEN);
                                         tv_level.setTextColor(Color.GREEN);
                                     }
+                                    tv_score.setText(String.valueOf(score));
                                     // 日志
                                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                                         Log.v(LogTag.TEMP, "score -->>" + score);

@@ -31,7 +31,7 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
-    <color name="checkUp_gray">#535353</color>
+    <color name="checkUp_gray">#ddd</color>
     <color name="checkUp_yello">#ff9036</color>
     <color name="checkUp_red">#ff4f4f</color>
 

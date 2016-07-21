@@ -259,7 +259,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
                 StringUtil.toastStringShort("当前未登录");
                 break;
             case MaintenanceResult.outOfData:
-                StringUtil.toastStringShort("行驶里程超出了该车保养范围");
+//                StringUtil.toastStringShort("行驶里程超出了该车保养范围");
                 break;
             case MaintenanceResult.parameterError:
                 line_upkeep_revise.setVisibility(View.VISIBLE);
