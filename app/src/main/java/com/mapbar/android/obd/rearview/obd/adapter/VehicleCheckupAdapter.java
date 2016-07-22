@@ -52,7 +52,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
                 if (physicalData.getCount() == physicalData.getProcessed()) {
                     int status = physicalData.getStatus();
                     if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal() || status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal() || status == PhysicalData.Status.OBDCHECK_OK.ordinal())
-                        PhysicalManager.getInstance().getStatuses().add(physicalData.getStatus());
+                        PhysicalManager.getInstance().getStatuses().put(String.valueOf(physicalData.getId()), status);
                 }
                 int status = physicalData.getStatus();
                 if (status == PhysicalData.Status.OBDCHECK_CHECKING.ordinal()) {
@@ -74,7 +74,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
                 holder.tv_checkResult.setText("待检测");
                 holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.checkUp_gray));
             } else {
-                int status = PhysicalManager.getInstance().getStatuses().get(position);
+                int status = PhysicalManager.getInstance().getStatuses().get(String.valueOf(position + 1));
                 if (status == PhysicalData.Status.OBDCHECK_CHECKING.ordinal()) {
                     holder.tv_checkResult.setText("检测中");
                     holder.tv_checkResult.setTextColor(mContext.getResources().getColor(R.color.linechart));
