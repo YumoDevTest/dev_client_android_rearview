@@ -145,8 +145,7 @@ public class UserCenterManager extends OBDManager {
         //token失效判断和处理
         boolean isTokenInvalid = tokenInvalid(event, o);
         if (isTokenInvalid) {
-            UserCenter.getInstance().clearCurrentUserToken();
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+            login();
             return;
         }
         switch (event) {

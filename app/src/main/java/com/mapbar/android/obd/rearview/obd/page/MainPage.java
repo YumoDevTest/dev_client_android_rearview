@@ -140,6 +140,7 @@ public class MainPage extends AppPage {
                         rg_tabs.check(R.id.page_tab3);
                         titleBar.setText(titles[2], TitleBar.TitleArea.MID);
                         currentPage = carStatePage;
+                        carStatePage.onResume();
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);

@@ -53,6 +53,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private GridView gvState;
     @ViewInject(R.id.tv_state_record)
     private TextView tv_state_record;
+    @ViewInject(R.id.iv_state_safe)
+    private ImageView iv_state_safe;
     @ViewInject(R.id.tv_state)
     private TextView tv_state;
 
@@ -76,7 +78,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private PopupWindow popupWindow;
     private PopupWindow firmwarePopu;
     private StringBuilder sb = new StringBuilder();
-    private int showtimes;
     private boolean isFirstDataUpdate = true;
 
     @Override
@@ -325,8 +326,13 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        //判断有无故障
+        if (!TextUtils.isEmpty(getPopContent())) {
+            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
+            tv_state_record.setText("车辆有不良状态");
+//            iv_state_safe.setBackground();
+        }
         CarStateManager.getInstance().startRefreshCarState();
-        showtimes++;
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
         }

@@ -1,9 +1,16 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import com.mapbar.android.obd.rearview.framework.Configs;
+import com.mapbar.android.obd.rearview.framework.common.StringUtil;
+import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCenterError;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -27,6 +34,35 @@ public class OBDSDKListenerManager {
             sdkListenerManager = new OBDSDKListenerManager();
         }
         return sdkListenerManager;
+    }
+
+    /**
+     * 检测token是否失效
+     *
+     * @param event
+     * @param o
+     * @return true为失效 false为没有失效
+     */
+    private static boolean tokenInvalid(int event, Object o) {
+        if (o != null && o instanceof Firmware.EventData) {
+            Firmware.EventData eventData = (Firmware.EventData) o;
+            if (Configs.TOKEN_INVALID == eventData.getRspCode()) {
+                return true;
+            }
+        }
+        if (o != null && o instanceof UserCenterError) {
+            UserCenterError erro = (UserCenterError) o;
+            if (erro.errorType == 2 && erro.errorCode == 1401) {
+                return true;
+            }
+        }
+        if (event == Manager.Event.queryCarFailed) {
+            int errorCode = (int) o;
+            if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void init() {
@@ -127,17 +163,29 @@ public class OBDSDKListenerManager {
         boolean active = true;
 
         public void onEvent(int event, Object o) {
-            //每次响应事件都要判断是否返回code=29，token失效
-            /*if (o != null && o instanceof ObdSDKResult) {
-                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
-                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
-                        ) {
-                    sdkListenerManager.flag_token = true;
-                    PageManager.getInstance().finishAll();
-                    PageManager.getInstance().goPage(LoginPage.class);
-                    return;
-                }
-            }*/
+
+            //token失效判断和处理
+            boolean isTokenInvalid = tokenInvalid(event, o);
+            if (isTokenInvalid) {
+                StringUtil.toastStringShort("token失效");
+                PageManager.getInstance().finishAll();
+                PageManager.getInstance().goPage(SplashPage.class);
+
+                UserCenterManager.getInstance().login();
+                return;
+            }
+
+
+//            if (o != null && o instanceof ObdSDKResult) {
+//                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
+//                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
+//                        ) {
+//                    sdkListenerManager.flag_token = true;
+//
+//                    PageManager.getInstance().goPage(LoginPage.class);
+//                    return;
+//                }
+//            }
         }
 
         protected boolean isReged() {
