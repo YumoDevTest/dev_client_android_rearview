@@ -233,6 +233,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                             Log.v(LogTag.TEMP, "obdPhysicalCheckEnd1 -->>");
                             Log.v(LogTag.TEMP, "Object -->>" + o);
                         }
+                        android.util.Log.e("wwwwwwww", "结果---->" + PhysicalManager.getInstance().getStatuses().toString());
                         rela_physicaling.post(new Runnable() {
                             @Override
                             public void run() {

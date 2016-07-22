@@ -14,7 +14,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -64,8 +64,8 @@ public class CheckupGridAdapter extends BaseAdapter {
             holder.tv_itemCheckup_name = (TextView) view.findViewById(R.id.tv_itemCheckup_name);
             view.setTag(holder);
         }
-        ArrayList<Integer> statuses = PhysicalManager.getInstance().getStatuses();
-        if (statuses.get(position) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
+        HashMap<String, Integer> statuses = PhysicalManager.getInstance().getStatuses();
+        if (statuses.get(String.valueOf(position + 1)) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
             holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), ids[position]));
         } else {
             holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(Global

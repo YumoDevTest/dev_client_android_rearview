@@ -8,6 +8,7 @@ import com.mapbar.obd.PhysicalData;
 import com.mapbar.obd.ReportHead;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
     private List<PhysicalData> physicalList = new ArrayList<>();
-    private ArrayList<Integer> statuses;
+    private HashMap<String, Integer> statuses;
     /**
      * 体检总项目
      */
@@ -52,7 +53,8 @@ public class PhysicalManager extends OBDManager {
      */
     public boolean startExam() {
         Manager.getInstance().stopTrip(false);
-        statuses = new ArrayList<>();
+        statuses = new HashMap<>();
+        CarStateManager.getInstance().stopRefreshCarState();
         int state = Manager.getInstance().getState();
         if (state != Manager.State.tripStoppedManually) {
             return false;
@@ -154,7 +156,7 @@ public class PhysicalManager extends OBDManager {
      *
      * @return ArrayList 每大项体检结果集合
      */
-    public ArrayList<Integer> getStatuses() {
+    public HashMap<String, Integer> getStatuses() {
         return statuses;
     }
 
