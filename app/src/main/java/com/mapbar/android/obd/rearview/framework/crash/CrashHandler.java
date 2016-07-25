@@ -2,12 +2,15 @@ package com.mapbar.android.obd.rearview.framework.crash;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.obd.Config;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -15,9 +18,8 @@ import java.util.Calendar;
  * Created by tianff on 2016/7/20.
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
-
-
     private static CrashHandler instance;  //单例引用，这里我们做成单例的，因为我们一个应用程序里面只需要一个UncaughtExceptionHandler实例
+    private int error = 0;
     private Context context;
 
     private CrashHandler() {
@@ -30,14 +32,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return instance;
     }
 
-    public void init(Context ctx) {  //初始化，把当前对象设置成UncaughtExceptionHandler处理器
+    public void init(Context ctx, int error) {  //初始化，把当前对象设置成UncaughtExceptionHandler处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
         context = ctx;
+        this.error = error;
     }
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {  //当有未处理的异常发生时，就会来到这里。。
-        LogManager.getInstance().init(context);
+        Log.e("CrashHandler", ex.toString());
+
+
         String logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log_obdserver/";
         File file = new File(logFilePath);
         if (!file.exists()) {
@@ -50,9 +55,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 + ".txt";
         File logFile = new File(logFilePath + fileName);
         if (Config.DEBUG) {
-            LogManager.getInstance().setLogFile(logFile);
+            try {
+                PrintWriter printWriter = new PrintWriter(new FileOutputStream(logFile, true));
+                printWriter.println(ex.toString());
+                printWriter.flush();
+                printWriter.close();
+                printWriter = null;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-        System.exit(0);
+//        System.exit(0);
     }
 
 }

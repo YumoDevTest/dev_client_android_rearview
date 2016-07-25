@@ -39,7 +39,6 @@ import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.SerialPortManager;
-import com.mapbar.obd.SyncService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -318,7 +317,11 @@ public class MainActivity extends BaseActivity {
 
     private void startV3HService() {
         //// FIXME: tianff 2016/7/25 关闭上传进程
-        stopService(new Intent(MainActivity.this, SyncService.class));
+//        stopService(new Intent(MainActivity.this, SyncService.class));
+//        if (NativeEnv.isServiceRunning(MainActivity.getInstance(), "obd.service.process")) {
+//            ActivityManager activityManager = (ActivityManager) MainActivity.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
+//            activityManager.killBackgroundProcesses("obd.service.process");
+//        }
         Intent i = new Intent("com.mapbar.obd.OBDV3HService");
         sendBroadcast(i);
 //        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
