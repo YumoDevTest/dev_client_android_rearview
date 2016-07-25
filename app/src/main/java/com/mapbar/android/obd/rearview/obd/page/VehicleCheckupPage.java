@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -31,7 +30,6 @@ import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
 import com.mapbar.obd.ReportHead;
 
@@ -118,14 +116,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
     public void initView() {
         checkupVoiceResut = new StringBuffer();
         checkupVoiceResut.append("体检结果");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        rl_view.setLayoutManager(layoutManager);
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         recyclerAdapter = new VehicleCheckupAdapter1(MainActivity.getInstance(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
-        physicalList = PhysicalManager.getInstance().getPhysicalSystem();
-        checkupGridAdapter = new CheckupGridAdapter(MainActivity.getInstance(), physicalList);
+        checkupGridAdapter = new CheckupGridAdapter(getContext(), physicalList);
         initPage();
         circleDrawable = new CircleDrawable(getContext());
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
@@ -242,13 +236,11 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                 line_last_result.setVisibility(View.GONE);
                                 rela_result.setVisibility(View.VISIBLE);
                                 grid.setAdapter(checkupGridAdapter);
-                                ArrayList<ReportHead> physicalReportByMonth = Physical
-                                        .getInstance().getPhysicalReportByMonth(1970, 01);
-                                if (physicalReportByMonth != null) {
-                                    int score = physicalReportByMonth.get(0).getScore();
+                                ReportHead reportHead = PhysicalManager.getInstance().getReportHead();
+                                if (reportHead != null) {
+                                    int score = reportHead.getScore();
 
-
-                                    checkupVoiceResut.append("分数" + String.valueOf(score));
+                                    checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
                                         tv_score.setTextColor(Color.RED);
                                         checkupVoiceResut.append("高危级别");
@@ -269,7 +261,6 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                     // 日志
                                     if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                                         Log.v(LogTag.TEMP, "score -->>" + score);
-                                        Log.v(LogTag.TEMP, "size -->>" + physicalReportByMonth.size());
                                     }
                                 }
                                 CarDataManager.getInstance().restartTrip();

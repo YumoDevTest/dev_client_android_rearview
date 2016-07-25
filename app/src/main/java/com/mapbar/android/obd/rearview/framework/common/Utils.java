@@ -131,6 +131,6 @@ public class Utils {
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "77729655%%%dfdd%hh99902220!!$$$100000";
 //        return "777296%%%%hh01739!55555555";//外网注册通过
-        return "77726%%fsdffsdfssdfsdfsdfsd";//外网注册通过
+        return "77726%%fsdffsdfssdfsdfsdfsd";//测试专用，不可外传；
     }
 }

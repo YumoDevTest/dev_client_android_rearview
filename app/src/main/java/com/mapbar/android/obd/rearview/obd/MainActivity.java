@@ -318,6 +318,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startV3HService() {
+        //// FIXME: tianff 2016/7/25 关闭上传进程
+//        stopService(new Intent(this, SyncService.class));
+        stopService(new Intent(this, OBDV3HService.class));
         Intent i = new Intent(MainActivity.this, OBDV3HService.class);
         i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
         i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);

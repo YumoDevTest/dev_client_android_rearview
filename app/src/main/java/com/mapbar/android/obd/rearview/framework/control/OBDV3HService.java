@@ -78,6 +78,7 @@ public class OBDV3HService extends Service {
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
             stopSelf();
             Manager.getInstance().stopTrip(true);
@@ -96,12 +97,13 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //捕捉异常注册
         CrashHandler crashHandler=CrashHandler.getInstance();
         crashHandler.init(getApplication());
         mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
-        SDKListenerManager.getInstance().init();
+//        SDKListenerManager.getInstance().init();
         sdkListener = new SDKListenerManager.SDKListener() {
 
             @Override
