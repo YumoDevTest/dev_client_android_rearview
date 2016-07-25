@@ -27,6 +27,7 @@ import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.SyncService;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
@@ -97,13 +98,13 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        this.stopService(new Intent(this, SyncService.class));
         //捕捉异常注册
         CrashHandler crashHandler=CrashHandler.getInstance();
         crashHandler.init(getApplication());
         mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
-//        SDKListenerManager.getInstance().init();
+        SDKListenerManager.getInstance().init();
         sdkListener = new SDKListenerManager.SDKListener() {
 
             @Override

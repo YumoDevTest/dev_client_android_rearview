@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.obd;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,7 +26,6 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
-import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
@@ -41,6 +39,7 @@ import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.SyncService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -319,14 +318,16 @@ public class MainActivity extends BaseActivity {
 
     private void startV3HService() {
         //// FIXME: tianff 2016/7/25 关闭上传进程
-//        stopService(new Intent(this, SyncService.class));
-        stopService(new Intent(this, OBDV3HService.class));
-        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
-        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-        ComponentName cName = startService(i);
+        stopService(new Intent(MainActivity.this, SyncService.class));
+        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
+        sendBroadcast(i);
+//        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+//        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+//        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+//        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+//        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+//        ComponentName cName = startService(i);
+
     }
 
     private void restartmyapp() {

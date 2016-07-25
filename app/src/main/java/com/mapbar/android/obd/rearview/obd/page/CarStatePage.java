@@ -329,8 +329,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         //判断有无故障
         if (!TextUtils.isEmpty(getPopContent())) {
             tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
-            tv_state_record.setText("车辆有不良状态");
-//            iv_state_safe.setBackground();
+            tv_state_record.setText("车辆存在故障码");
+
+            iv_state_safe.setBackgroundResource(R.drawable.trouble);
         }
         CarStateManager.getInstance().startRefreshCarState();
         if (isUmenngWorking) {

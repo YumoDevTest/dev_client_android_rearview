@@ -43,7 +43,7 @@
                     android:id="@+id/iv_state_safe"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/car_state_safe" />
+                    android:background="@drawable/car_state_safe" />
 
                 <TextView
                     android:id="@+id/tv_state_record"
