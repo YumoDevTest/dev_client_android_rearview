@@ -17,18 +17,16 @@
         android:textColor="@color/white"
         android:textSize="@dimen/HiraginoSansGBW3" />
 
-    <TextView
-        android:id="@+id/textview_left"
+    <ImageView
+        android:id="@+id/imageview_left"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/title_height"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/title_margin"
         android:gravity="center"
-        android:text="[left]"
-        android:textColor="@color/title_r_text"
-        android:textSize="@dimen/title_text_size"
-        android:visibility="gone" />
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:src="@drawable/ic_back_selector" />
 
     <TextView
         android:id="@+id/textview_right"
@@ -36,11 +34,12 @@
         android:layout_height="@dimen/title_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/title_margin"
         android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="[right]"
         android:textColor="@color/title_r_text"
-        android:visibility="gone" />
+        android:textSize="@dimen/titlebar_button_text_size" />
 
 
 </RelativeLayout>

@@ -17,6 +17,8 @@ public class SettingActivity extends MyBaseActivity {
 
         if (savedInstanceState == null)
             showFragment(new SettingFragment(), false);
+
+        getTitlebarview().setEnableBackButton(true);
     }
 
 

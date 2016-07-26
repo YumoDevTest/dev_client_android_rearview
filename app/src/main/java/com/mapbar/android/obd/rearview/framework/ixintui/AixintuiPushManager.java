@@ -12,10 +12,12 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
+import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneMessageEvent;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.obd.SessionInfo;
 
 import org.apache.http.HttpStatus;
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,6 +90,9 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     userId = jObj1.getString("userId");
                     token = jObj1.getString("token");
                 }
+                //2016-07-26 张云飞 增加eventbus消息
+                EventBus.getDefault().post(new ChangePhoneMessageEvent(type, state, userId, token));
+
                 UserCenterManager.getInstance().setPushData(type, state, userId, token);
                 OTAManager.getInstance().setPushData(type, state, userId, token);
             } catch (JSONException e) {

@@ -50,17 +50,10 @@ public class AboutFragment extends MyBaseFragment {
     public void onStart() {
         super.onStart();
 
-//        if (getParentActivity().getTitlebarview() != null) {
-//            getParentActivity().getTitlebarview().setTitle(R.string.page_title_setting);
-//            getParentActivity().getTitlebarview().setButtonLeftText("返回");
-//            getParentActivity().getTitlebarview().setButtonLeftVisibility(true);
-//            getParentActivity().getTitlebarview().setButtonLeftListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    getParentActivity().onBackPressed();
-//                }
-//            });
-//        }
+        if (getParentActivity().getTitlebarview() != null) {
+            getParentActivity().getTitlebarview().setTitle(R.string.page_title_about_us);
+            getParentActivity().getTitlebarview().setEnableBackButton(true);
+        }
     }
 
 

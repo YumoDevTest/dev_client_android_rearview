@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -38,9 +39,9 @@ public class SettingFragment extends MyBaseFragment {
             listView1 = (ListView) rootView.findViewById(R.id.listview1);
 
             datasource = new ArrayList<>();
-            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_VIN, "修改VIN", R.drawable.trouble));
-            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_PHONE_NUMER, "修改手机号或车型", R.drawable.trouble));
-            datasource.add(new MyMenuItem(MY_MENU_ITEM_ABOUT_US, "关于我们", R.drawable.trouble));
+            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_VIN, "修改VIN", R.drawable.ic_barcode_selector));
+            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_PHONE_NUMER, "修改手机号或车型", R.drawable.ic_barcode_selector));
+            datasource.add(new MyMenuItem(MY_MENU_ITEM_ABOUT_US, "关于我们", 0));
 
 
             adapter = new QuickAdapter<MyMenuItem>(getActivity(), R.layout.setting_fragment_item, datasource) {
@@ -59,8 +60,10 @@ public class SettingFragment extends MyBaseFragment {
                     if (myMenuItem.index == MY_MENU_ITEM_MODIFY_VIN) {
 
                     } else if (myMenuItem.index == MY_MENU_ITEM_MODIFY_PHONE_NUMER) {
-
+                        //跳转到 修改手机号
+                        startActivity(new Intent(getActivity(), ChangePhoneActivity.class));
                     } else if (myMenuItem.index == MY_MENU_ITEM_ABOUT_US) {
+                        //跳转到关于页
                         getParentActivity().showFragment(new AboutFragment(), true);
                     }
                 }
@@ -76,14 +79,7 @@ public class SettingFragment extends MyBaseFragment {
 
         if (getParentActivity().getTitlebarview() != null) {
             getParentActivity().getTitlebarview().setTitle(R.string.page_title_setting);
-            getParentActivity().getTitlebarview().setButtonLeftText("返回");
-            getParentActivity().getTitlebarview().setButtonLeftVisibility(true);
-            getParentActivity().getTitlebarview().setButtonLeftListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getParentActivity().onBackPressed();
-                }
-            });
+            getParentActivity().getTitlebarview().setEnableBackButton(true);
         }
     }
 

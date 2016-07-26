@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -25,8 +26,8 @@ public class TitleBarView extends RelativeLayout {
 
     @ViewInject(R.id.textview_mid)
     private TextView textview_mid;
-    @ViewInject(R.id.textview_left)
-    private TextView textview_left;
+    @ViewInject(R.id.imageview_left)
+    private ImageView imageview_left;
     @ViewInject(R.id.textview_right)
     private TextView textview_right;
 
@@ -53,7 +54,7 @@ public class TitleBarView extends RelativeLayout {
         ViewInjectTool.inject(this, contentView);
 
         setTitle(R.string.app_name);
-        setButtonLeftVisibility(false);
+        setEnableBackButton(false);
         setButtonRightVisibility(false);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         this.addView(contentView, lp);
@@ -64,9 +65,6 @@ public class TitleBarView extends RelativeLayout {
         textview_right.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
-    public void setButtonLeftVisibility(boolean visibility) {
-        textview_left.setVisibility(visibility ? View.VISIBLE : View.GONE);
-    }
 
     public void setTitle(String text) {
         textview_mid.setText(text);
@@ -76,9 +74,6 @@ public class TitleBarView extends RelativeLayout {
         textview_mid.setText(id);
     }
 
-    public void setButtonLeftText(String text) {
-        textview_left.setText(text);
-    }
 
     public void setButtonRightText(String text) {
         textview_right.setText(text);
@@ -89,22 +84,37 @@ public class TitleBarView extends RelativeLayout {
     }
 
     public void setButtonLeftListener(View.OnClickListener listener) {
-        textview_left.setOnClickListener(listener);
+        imageview_left.setOnClickListener(listener);
     }
 
     public void setButtonRightListener(View.OnClickListener listener) {
         textview_right.setOnClickListener(listener);
     }
 
-    public void setButtonRight(String text,View.OnClickListener listener){
+    public void setButtonRight(String text, View.OnClickListener listener) {
         textview_right.setVisibility(View.VISIBLE);
         textview_right.setText(text);
         textview_right.setOnClickListener(listener);
     }
 
-    public void setButtonLeft(String text,View.OnClickListener listener){
-        textview_left.setVisibility(View.VISIBLE);
-        textview_left.setText(text);
-        textview_left.setOnClickListener(listener);
+
+    /**
+     * 启用返回按钮
+     */
+    public void setEnableBackButton(boolean isEnable) {
+        if (isEnable) {
+            imageview_left.setVisibility(View.VISIBLE);
+            imageview_left.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getContext() instanceof Activity) {
+                        Activity act = (Activity) getContext();
+                        act.onBackPressed();
+                    }
+                }
+            });
+        } else {
+            imageview_left.setVisibility(View.GONE);
+        }
     }
 }

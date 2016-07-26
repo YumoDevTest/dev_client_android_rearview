@@ -79,6 +79,7 @@
         <activity
             android:name=".modules.setting.SettingActivity"
             android:label="@string/page_title_setting" />
+        <activity android:name=".modules.setting.ChangePhoneActivity" />
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>

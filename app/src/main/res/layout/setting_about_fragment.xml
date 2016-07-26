@@ -13,9 +13,31 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:drawablePadding="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:drawableTop="@drawable/weixin_barcode"
+                android:gravity="center"
+                android:text="请扫描关注\n微信公众号"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+        </LinearLayout>
+
         <TableLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="84dp">
 
             <TableRow style="@style/setting_about_row">
 
@@ -116,27 +138,7 @@
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/weixin_barcode" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="请扫描关注我们的微信号"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-        </LinearLayout>
     </LinearLayout>
 
 
