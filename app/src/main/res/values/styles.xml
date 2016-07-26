@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -43,4 +43,14 @@
         <item name="@android:windowEnterAnimation">@anim/slide_in_top</item>
         <item name="@android:windowExitAnimation">@anim/slide_out_top</item>
     </style>
+
+    <style name="setting_about_row">
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="setting_about_text_style">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

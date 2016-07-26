@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,10 +26,13 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -36,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * 车辆 数据 页
  * Created by THINKPAD on 2016/5/6.
  */
 public class CarDataPage extends AppPage implements View.OnClickListener {
@@ -86,6 +91,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private String[] units = getContext().getResources().getStringArray(R.array.units);
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
+    private TitleBarView titlebarview1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,16 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
+        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1.setTitle(R.string.page_title_car_data);
+        titlebarview1.setButtonRightVisibility(true);
+        titlebarview1.setButtonRightText("设置");
+        titlebarview1.setButtonRightListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),SettingActivity.class));
+            }
+        });
         sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
         if (isFirst) {
@@ -105,6 +121,12 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             editor.putBoolean("isFirst", false);
             editor.commit();
         }
+        MainPage.title.setListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert("xxxxx");
+            }
+        }, TitleBar.TitleArea.RIGHT);
         getPopData();
         upDataView();
 

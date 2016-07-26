@@ -29,6 +29,7 @@ import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.PhysicalData;
 import com.mapbar.obd.ReportHead;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 体检
  * Created by THINKPAD on 2016/5/9.
  */
 public class VehicleCheckupPage extends AppPage implements View.OnClickListener {
@@ -105,6 +107,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
      */
     private StringBuffer checkupVoiceResut;
     private boolean isCheckupFinish;
+    private TitleBarView titlebarview1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +117,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @Override
     public void initView() {
+        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1.setTitle(R.string.page_title_aiche_tijian);
+
         checkupVoiceResut = new StringBuffer();
         checkupVoiceResut.append("体检结果");
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();

@@ -76,6 +76,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".modules.setting.SettingActivity"
+            android:label="@string/page_title_setting" />
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
