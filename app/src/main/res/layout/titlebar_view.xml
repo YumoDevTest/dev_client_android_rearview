@@ -28,18 +28,36 @@
         android:paddingRight="32dp"
         android:src="@drawable/ic_back_selector" />
 
-    <TextView
-        android:id="@+id/textview_right"
+    <LinearLayout
+        android:clickable="true"
+        android:id="@+id/right_container"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/title_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:gravity="center"
+        android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="[right]"
-        android:textColor="@color/title_r_text"
-        android:textSize="@dimen/titlebar_button_text_size" />
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/textview_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_height"
+            android:clickable="false"
+            android:gravity="center"
+            android:text="[action]"
+            android:textColor="@color/title_r_text"
+            android:textSize="@dimen/titlebar_button_text_size" />
+
+        <ImageView
+            android:id="@+id/imageview_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_height"
+            android:src="@drawable/ic_settng_selector"
+            android:clickable="false"
+            android:gravity="center" />
+    </LinearLayout>
 
 
 </RelativeLayout>

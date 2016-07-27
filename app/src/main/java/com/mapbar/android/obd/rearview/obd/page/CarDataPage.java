@@ -104,7 +104,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
         titlebarview1.setButtonRightVisibility(true);
-        titlebarview1.setButtonRightText("设置");
+        titlebarview1.setButtonRightImage(R.drawable.ic_settng_selector);
         titlebarview1.setButtonRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,12 +121,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             editor.putBoolean("isFirst", false);
             editor.commit();
         }
-        MainPage.title.setListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert("xxxxx");
-            }
-        }, TitleBar.TitleArea.RIGHT);
+
         getPopData();
         upDataView();
 

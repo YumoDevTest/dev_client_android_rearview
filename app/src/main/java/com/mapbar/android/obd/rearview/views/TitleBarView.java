@@ -2,6 +2,8 @@ package com.mapbar.android.obd.rearview.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.Image;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +28,16 @@ public class TitleBarView extends RelativeLayout {
 
     @ViewInject(R.id.textview_mid)
     private TextView textview_mid;
+
     @ViewInject(R.id.imageview_left)
     private ImageView imageview_left;
+
+    @ViewInject(R.id.right_container)
+    private View right_container;
+
+    @ViewInject(R.id.imageview_right)
+    private ImageView imageview_right;
+
     @ViewInject(R.id.textview_right)
     private TextView textview_right;
 
@@ -62,7 +72,7 @@ public class TitleBarView extends RelativeLayout {
 
 
     public void setButtonRightVisibility(boolean visibility) {
-        textview_right.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        right_container.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
 
@@ -77,26 +87,27 @@ public class TitleBarView extends RelativeLayout {
 
     public void setButtonRightText(String text) {
         textview_right.setText(text);
+        if(!TextUtils.isEmpty(text)){
+            imageview_right.setVisibility(View.GONE);
+        }
     }
 
     public void setButtonRightImage(int id) {
-        textview_right.setBackgroundResource(id);
-    }
-
-    public void setButtonLeftListener(View.OnClickListener listener) {
-        imageview_left.setOnClickListener(listener);
+        imageview_right.setImageResource(id);
+        if(id != 0){
+            textview_right.setVisibility(View.GONE);
+        }
     }
 
     public void setButtonRightListener(View.OnClickListener listener) {
-        textview_right.setOnClickListener(listener);
+        right_container.setOnClickListener(listener);
     }
 
-    public void setButtonRight(String text, View.OnClickListener listener) {
-        textview_right.setVisibility(View.VISIBLE);
-        textview_right.setText(text);
-        textview_right.setOnClickListener(listener);
-    }
 
+    public void clearRightButton(){
+        right_container.setVisibility(View.GONE);
+        right_container.setOnClickListener(null);
+    }
 
     /**
      * 启用返回按钮

@@ -91,6 +91,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     token = jObj1.getString("token");
                 }
                 //2016-07-26 张云飞 增加eventbus消息
+                //在修改手机号，会订阅 ChangePhoneMessageEvent 类型的 eventbus消息
                 EventBus.getDefault().post(new ChangePhoneMessageEvent(type, state, userId, token));
 
                 UserCenterManager.getInstance().setPushData(type, state, userId, token);

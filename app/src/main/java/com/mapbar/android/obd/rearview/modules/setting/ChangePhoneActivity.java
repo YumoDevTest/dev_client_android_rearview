@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.push.PushState;
+import com.mapbar.android.obd.rearview.lib.push.PushType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,22 +66,21 @@ public class ChangePhoneActivity extends MyBaseActivity {
         int type = event.type;
         int state = event.state;
 
-        switch (type) {
-            case 0:
-                if (state == 1) {
-                    showPage_wait();
-                }
-                break;
-            case 1:
-                if (state == 1 || state == 3) { //注册成功
-                    showPage_finish();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    }, 2000);
-                }
+        if (type == PushType.SCAN_OK) {
+            if (state == PushState.SUCCESS) {
+                showPage_wait();
+            }
+
+        } else if (type == PushType.SCAN_REGISTER) {
+            if (state == PushState.SUCCESS || state == PushState.REGISTERED) { //注册成功
+                showPage_finish();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 2000);
+            }
         }
 
     }
