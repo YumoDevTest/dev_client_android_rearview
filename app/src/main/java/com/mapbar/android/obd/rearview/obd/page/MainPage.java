@@ -31,7 +31,8 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
 
 
 /**
- * 首页，具有4个子fragment 页
+ * 首页
+ * 包含1个viewpager,其下有4个子fragment 页
  */
 public class MainPage extends AppPage {
 
@@ -117,7 +118,7 @@ public class MainPage extends AppPage {
     }
 
     /**
-     * 是的主mainActivity 的titlebar不可见。让子fragment的 titlebar 可见
+     * 是否让 主fragment 的titlebar不可见。让子fragment的 titlebar 可见
      */
     private void hideMainTitlebar() {
         MainPage.title.setVisibilitySelf(false);

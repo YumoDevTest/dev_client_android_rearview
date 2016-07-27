@@ -62,8 +62,8 @@ public class ChangePhoneFragment extends MyBaseFragment {
         StringBuilder sb = new StringBuilder();
         sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
         sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken()).append("&");
-        sb.append("userid=").append(UserCenter.getInstance().getCurrentIdAndType().userId); //少了userid
+        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
+//        sb.append("&").append("userid=").append(UserCenter.getInstance().getCurrentIdAndType().userId); //少了userid
 
         String url = sb.toString();
         // 日志

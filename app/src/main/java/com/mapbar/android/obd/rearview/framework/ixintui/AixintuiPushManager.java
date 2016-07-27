@@ -97,6 +97,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                 OTAManager.getInstance().setPushData(type, state, userId, token);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e(LogTag.PUSH, "### 解析推送结果异常:" + e.getMessage(), e);
             }
         }
 

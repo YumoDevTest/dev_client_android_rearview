@@ -54,12 +54,12 @@ public class ChangePhoneActivity extends MyBaseActivity {
 
     /**
      * 当接收到 更改手机的事件时
+     * this is a eventbus 订阅者
      *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ChangePhoneMessageEvent event) {
-        /* Do something */
         Log.d(TAG, "get event:" + event);
         int type = event.type;
         int state = event.state;
