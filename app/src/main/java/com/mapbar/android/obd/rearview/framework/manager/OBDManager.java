@@ -48,7 +48,7 @@ public class OBDManager {
     protected static OBDListener baseObdListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
     private static OBDManager obdManager;
-    protected SDKListenerManager.SDKListener sdkListener;
+    public SDKListenerManager.SDKListener sdkListener;
     protected String reg_info = "请扫描填写信息，绑定激活后才能使用汽车卫士功能\n如：爱车体检、故障预警、语音升窗落锁等";
     protected String scan_succ = "扫描成功\\n请等待绑定激活成功";
     protected String reg_succ = "您已通过手机\\n成功完善爱车信息";
@@ -102,10 +102,7 @@ public class OBDManager {
      * @param o     事件携带的数据
      */
     public void onSDKEvent(int event, Object o) {
-        //当重连的时候，让UserCenterManager继续监听sdk事件
-        if (event == 4) {
-            UserCenterManager.getInstance().sdkListener.setActive(true);
-        }
+
         boolean isTokenInvalid = tokenInvalid(event, o);
         if (isTokenInvalid) {
             // 日志

@@ -11,13 +11,13 @@ public class Configs {
     /**
      * 是否使用内网
      */
-    public final static boolean IS_USE_INTERNAT_HOST = true;
+    public final static boolean IS_USE_INTERNAT_HOST = false;
 
 
     /**
      * 微信注册
      */
-    public static final String URL_REG_INFO = false ? "http://weixintest.mapbar.com/obdWechat/userRegister?" : "http://weixin.mapbar.com/obd/userRegister?";
+    public static final String URL_REG_INFO = IS_USE_INTERNAT_HOST ? "http://weixintest.mapbar.com/obdWechat/userRegister?" : "http://weixin.mapbar.com/obd/userRegister?";
 
     /**
      * redirect_uri

@@ -76,6 +76,9 @@ public class UserCenterManager extends OBDManager {
      * @param token
      */
     public void setPushData(int type, int state, String userId, String token) {
+        if (!isPush) {
+            return;
+        }
         // 日志
         if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
             Log.d(LogTag.PUSH, " -->> 推送userManager收到");
@@ -90,7 +93,6 @@ public class UserCenterManager extends OBDManager {
             case 1:
                 if (state == 1 || state == 3) { //注册成功
                     showRegQr(reg_succ);
-                    isPush = false;//推送成功
                     // 更新本地用户信息
                     if (userId != null && token != null) {
                         // 日志
@@ -438,6 +440,7 @@ public class UserCenterManager extends OBDManager {
      * 启动业务
      */
     private void startServer() {
+        isPush = false;
         // tianff 2016/7/7 UserCenterManager startServer 停止接收系统事件
         sdkListener.setActive(false);
         baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_SUCC, null);
