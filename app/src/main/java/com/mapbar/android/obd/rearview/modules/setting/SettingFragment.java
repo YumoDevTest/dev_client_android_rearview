@@ -39,7 +39,7 @@ public class SettingFragment extends MyBaseFragment {
             listView1 = (ListView) rootView.findViewById(R.id.listview1);
 
             datasource = new ArrayList<>();
-            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_VIN, "修改VIN", R.drawable.ic_barcode_selector));
+//            datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_VIN, "修改VIN", R.drawable.ic_barcode_selector));
             datasource.add(new MyMenuItem(MY_MENU_ITEM_MODIFY_PHONE_NUMER, "修改手机号或车型", R.drawable.ic_barcode_selector));
             datasource.add(new MyMenuItem(MY_MENU_ITEM_ABOUT_US, "关于我们", 0));
 

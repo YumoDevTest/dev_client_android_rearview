@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:src="@drawable/qr_scan_succ" />
+            android:src="@drawable/chang_phone_wait" />
 
         <TextView
             android:id="@+id/textview1"

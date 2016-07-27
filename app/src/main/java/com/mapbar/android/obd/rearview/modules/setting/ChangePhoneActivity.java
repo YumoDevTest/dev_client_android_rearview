@@ -68,18 +68,20 @@ public class ChangePhoneActivity extends MyBaseActivity {
 
         if (type == PushType.SCAN_OK) {
             if (state == PushState.SUCCESS) {
+                Log.d(TAG, "展示等待用户填写页面");
                 showPage_wait();
             }
 
         } else if (type == PushType.SCAN_REGISTER) {
             if (state == PushState.SUCCESS || state == PushState.REGISTERED) { //注册成功
+                Log.d(TAG, "展示填写成功页面");
                 showPage_finish();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         finish();
                     }
-                }, 2000);
+                }, 5000);
             }
         }
 

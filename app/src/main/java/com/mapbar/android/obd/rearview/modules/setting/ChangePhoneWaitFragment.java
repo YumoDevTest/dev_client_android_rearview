@@ -20,7 +20,7 @@ public class ChangePhoneWaitFragment extends MyBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.setting_chang_phone_finish, null);
+            rootView = inflater.inflate(R.layout.setting_chang_phone_wait, null);
         }
         return rootView;
     }
