@@ -15,7 +15,6 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Config;
-import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
@@ -143,11 +142,11 @@ public class UserCenterManager extends OBDManager {
     public void onSDKEvent(int event, Object o) {
         android.util.Log.i("uuuuuuuu", "App回调" + event);
         //token失效判断和处理
-        boolean isTokenInvalid = tokenInvalid(event, o);
-        if (isTokenInvalid) {
-            login();
-            return;
-        }
+//        boolean isTokenInvalid = tokenInvalid(event, o);
+//        if (isTokenInvalid) {
+//            login();
+//            return;
+//        }
         switch (event) {
             case Manager.Event.queryCarSucc:
                 UserCar[] cars = (UserCar[]) o;
@@ -324,6 +323,7 @@ public class UserCenterManager extends OBDManager {
                 }
                 break;
             case Manager.Event.obdConnectSucc:
+                StringUtil.toastStringLong("连接成功");
                 isDeviceConnect = true;
                 break;
             case Manager.Event.obdConnectFailed:
@@ -337,6 +337,7 @@ public class UserCenterManager extends OBDManager {
                 }, 500);
                 break;
             case Manager.Event.dataCollectSucc:
+                StringUtil.toastStringLong("数据准备成功");
                 isDataPrepare = true;
                 //走自动注册
                 login1();
@@ -546,13 +547,13 @@ public class UserCenterManager extends OBDManager {
         aimiRegister(this.account);
     }
 
-    /**
+  /*  *//**
      * 检测token是否失效
      *
      * @param event
      * @param o
      * @return true为失效 false为没有失效
-     */
+     *//*
     private boolean tokenInvalid(int event, Object o) {
         if (o != null && o instanceof Firmware.EventData) {
             Firmware.EventData eventData = (Firmware.EventData) o;
@@ -573,7 +574,7 @@ public class UserCenterManager extends OBDManager {
             }
         }
         return false;
-    }
+    }*/
 
     /**
      * 设备连接

@@ -2,8 +2,13 @@ package com.mapbar.android.obd.rearview.framework.manager;
 
 import android.os.Handler;
 
+import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.obd.Firmware;
+import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCenterError;
 
 import java.util.HashMap;
 
@@ -36,6 +41,10 @@ public class OBDManager {
     public static final int EVENT_OBD_OTA_HAS_NEWFIRMEWARE = 0xF4007;
     public static final int EVENT_OBD_OTA_NEED_VIN = 0xF4008;
     public static final int EVENT_OBD_OTA_SCANVIN_SUCC = 0xF4009;
+    /**
+     * token失效
+     */
+    public static final int EVENT_OBD_TOKEN_LOSE = 0xF4011;
     protected static OBDListener baseObdListener;
     private static HashMap<Class<? extends OBDManager>, OBDManager> map;
     private static OBDManager obdManager;
@@ -93,9 +102,53 @@ public class OBDManager {
      * @param o     事件携带的数据
      */
     public void onSDKEvent(int event, Object o) {
+        //当重连的时候，让UserCenterManager继续监听sdk事件
+        if (event == 4) {
+            UserCenterManager.getInstance().sdkListener.setActive(true);
+        }
+        boolean isTokenInvalid = tokenInvalid(event, o);
+        if (isTokenInvalid) {
+            // 日志
+            if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                Log.d(LogTag.OBD, " -->> token失效，事件为" + event);
+            }
+        }
+        if (isTokenInvalid && baseObdListener != null) {
+
+            baseObdListener.onEvent(EVENT_OBD_TOKEN_LOSE, null);
+        }
         if (baseObdListener != null) {
             baseObdListener.onEvent(event, o);
         }
+    }
+
+    /**
+     * 检测token是否失效
+     *
+     * @param event
+     * @param o
+     * @return true为失效 false为没有失效
+     */
+    private boolean tokenInvalid(int event, Object o) {
+        if (o != null && o instanceof Firmware.EventData) {
+            Firmware.EventData eventData = (Firmware.EventData) o;
+            if (Configs.TOKEN_INVALID == eventData.getRspCode()) {
+                return true;
+            }
+        }
+        if (o != null && o instanceof UserCenterError) {
+            UserCenterError erro = (UserCenterError) o;
+            if (erro.errorType == 2 && erro.errorCode == 1401) {
+                return true;
+            }
+        }
+        if (event == Manager.Event.queryCarFailed) {
+            int errorCode = (int) o;
+            if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -104,5 +157,4 @@ public class OBDManager {
     public interface OBDListener {
         void onEvent(int event, Object o);
     }
-
 }

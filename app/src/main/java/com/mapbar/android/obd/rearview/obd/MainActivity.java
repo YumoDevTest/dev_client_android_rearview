@@ -26,6 +26,7 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
+import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -122,16 +123,16 @@ public class MainActivity extends BaseActivity {
         final AppPage page = pageManager.createPage(SplashPage.class, null);
         transaction.replace(R.id.content_view, page);
         transaction.commit();
-
         onFinishedInit();
-
         //监听登录结果
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
-                        pageManager.goPage(MainPage.class);
+                        if (!PageManager.getInstance().getCurrentPageName().equals(MainPage.class.getName())) {
+                            pageManager.goPage(MainPage.class);
+                        }
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
@@ -151,6 +152,12 @@ public class MainActivity extends BaseActivity {
                     case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
                         MobclickAgentEx.onEvent(UmengConfigs.REGISTER_SUCC);
                         LayoutUtils.disQrPop();//关闭二维码
+                        break;
+                    case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理
+                        StringUtil.toastStringShort("token失效");
+                        PageManager.getInstance().finishAll();
+                        PageManager.getInstance().goPage(SplashPage.class);
+                        UserCenterManager.getInstance().login();
                         break;
 
                 }

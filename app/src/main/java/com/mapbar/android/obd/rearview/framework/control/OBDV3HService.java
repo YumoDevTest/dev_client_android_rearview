@@ -113,8 +113,7 @@ public class OBDV3HService extends Service {
                 //token失效处理
                 boolean isTokenInvalid = tokenInvalid(event, o);
                 if (isTokenInvalid) {
-                    UserCenter.getInstance().clearCurrentUserToken();
-                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                    openDevice();
                     return;
                 }
                 Log.e(LogTag.OBD, "whw OBDV3HService RealtimeData 有回调+" + event);
