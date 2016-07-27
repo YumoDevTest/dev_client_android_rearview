@@ -255,6 +255,15 @@
         <item>当前车辆状态</item>
         <item>保养提醒</item>
     </array>
+    <!--页面标题-->
+    <string name="page_title_aiche_tijian">爱车体检</string>
+    <string name="page_title_car_data">当前车辆数据</string>
+    <string name="page_title_car_state">当前车辆状态</string>
+    <string name="page_title_baoyang">保养提醒</string>
+    <string name="page_title_setting">设置</string>
+    <string name="page_title_about_us">关于我们</string>
+    <string name="page_title_change_phone">修改手机号或车型</string>
+
     <!--预警信息-->
     <string name="bca_instantGasConsume">瞬时油耗%1$s，请注意。</string>
     <string name="dlg_instantGasConsume">瞬时油耗达到%1$sL/100km</string>

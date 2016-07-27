@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+    android:background="@color/bg_title"
+    android:clickable="true"
+    android:minHeight="@dimen/title_height">
+
+
+    <TextView
+        android:id="@+id/textview_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_height"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="[title]"
+        android:textColor="@color/white"
+        android:textSize="@dimen/HiraginoSansGBW3" />
+
+    <ImageView
+        android:id="@+id/imageview_left"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:src="@drawable/ic_back_selector" />
+
+    <LinearLayout
+        android:clickable="true"
+        android:id="@+id/right_container"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/textview_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_height"
+            android:clickable="false"
+            android:gravity="center"
+            android:text="[action]"
+            android:textColor="@color/title_r_text"
+            android:textSize="@dimen/titlebar_button_text_size" />
+
+        <ImageView
+            android:id="@+id/imageview_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_height"
+            android:src="@drawable/ic_settng_selector"
+            android:clickable="false"
+            android:gravity="center" />
+    </LinearLayout>
+
+
+</RelativeLayout>

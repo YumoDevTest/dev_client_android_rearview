@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -96,5 +97,14 @@ public abstract class AppPage extends Fragment {
 
     public void setIsInited(boolean isInited) {
         this.isInited = isInited;
+    }
+
+
+    public void alert(String msg){
+        Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+    }
+
+    public void alert(int sourceID){
+        Toast.makeText(getActivity(),sourceID,Toast.LENGTH_SHORT).show();
     }
 }

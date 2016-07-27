@@ -35,6 +35,7 @@ import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
@@ -43,6 +44,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
+ * 车辆 状态
  * Created by liuyy on 2016/5/7.
  */
 public class CarStatePage extends AppPage implements View.OnClickListener {
@@ -79,6 +81,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private PopupWindow firmwarePopu;
     private StringBuilder sb = new StringBuilder();
     private boolean isFirstDataUpdate = true;
+    private TitleBarView titlebarview1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
+        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1.setTitle(R.string.page_title_car_state);
+
+
         carStateView = new CarStateView(getContentView(), R.id.v_carstate);
         carStateView.setData(data);
         stateNames = getContext().getResources().getStringArray(R.array.state_names);

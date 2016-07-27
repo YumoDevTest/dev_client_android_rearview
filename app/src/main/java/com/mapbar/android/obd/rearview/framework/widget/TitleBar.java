@@ -110,6 +110,14 @@ public class TitleBar {
     }
 
     /**
+     * 控制自身的可见性
+     * @param visibilitySelf
+     */
+    public void setVisibilitySelf(boolean visibilitySelf) {
+        contentView.setVisibility(visibilitySelf ? View.VISIBLE : View.GONE);
+    }
+
+    /**
      * title区域枚举类型，左中右三个值
      */
     public enum TitleArea {
