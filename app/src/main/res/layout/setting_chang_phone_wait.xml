@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:src="@drawable/reg_succ" />
+            android:src="@drawable/qr_scan_succ" />
 
         <TextView
             android:id="@+id/textview1"
@@ -25,7 +25,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="车辆识别填写成功"
+            android:text="扫描成功\n请等待填写完成"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
