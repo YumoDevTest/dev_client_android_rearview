@@ -15,6 +15,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
@@ -113,6 +114,7 @@ public class MainPage extends AppPage {
         pager.setCurrentItem(1);
 
         rg_tabs.check(R.id.page_tab2);
+        CarStateManager.getInstance().stopRefreshCarState();
 
         hideMainTitlebar();
     }
