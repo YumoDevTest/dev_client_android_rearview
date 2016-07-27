@@ -210,7 +210,13 @@
             </intent-filter>
         </service>
 
-
+        <service
+            android:name=".framework.control.ServicManager"
+            android:process="obd.service.servicmanager">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
         <!--umeng APPKEY和渠道-->
         <meta-data
             android:name="UMENG_CHANNEL"

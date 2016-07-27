@@ -27,6 +27,7 @@ import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -37,8 +38,11 @@ import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
+import com.mapbar.obd.Manager;
 import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.TripSyncService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -159,6 +163,10 @@ public class MainActivity extends BaseActivity {
     private void stopBackgroundService() {
         Intent intent = new Intent("com.mapbar.obd.stopservice");
         sendBroadcast(intent);
+        if (!NativeEnv.isServiceRunning(TripSyncService.class.getName())) {
+            Intent intent1 = new Intent(MainActivity.this, TripSyncService.class);
+            stopService(intent1);
+        }
     }
 
     /**
@@ -310,6 +318,7 @@ public class MainActivity extends BaseActivity {
             restartmyapp();
         } else {
             startV3HService();
+            Manager.getInstance().cleanup();
             android.os.Process.killProcess(android.os.Process.myPid());
 
         }
@@ -322,15 +331,39 @@ public class MainActivity extends BaseActivity {
 //            ActivityManager activityManager = (ActivityManager) MainActivity.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
 //            activityManager.killBackgroundProcesses("obd.service.process");
 //        }
-        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
-        sendBroadcast(i);
+//        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
+//        sendBroadcast(i);
+
 //        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
 //        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
 //        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
 //        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
 //        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
 //        ComponentName cName = startService(i);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Looper.prepare();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+//                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+//                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+//                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+//                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+//                        ComponentName cName = startService(i);
+//                        System.exit(0);
+////                        android.os.Process.killProcess(android.os.Process.myPid());
+//                    }
+//                }, 20 * 1000);
+//                Looper.loop();
+//            }
+//
+//        }).start();
 
+        Intent intent = new Intent(this, ServicManager.class);
+        startService(intent);
     }
 
     private void restartmyapp() {
