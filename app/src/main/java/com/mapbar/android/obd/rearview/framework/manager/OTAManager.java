@@ -105,13 +105,15 @@ public class OTAManager extends OBDManager {
         OtaSpecial ota = Manager.getInstance().getOtaSpecial();
         String manualVin = Manager.getInstance().getGetObdVinManual();
 
+        Log.e(LogTag.OBD, "whw checkVinVersion isV3SpecialOta==" + Manager.getInstance().isV3SpecialOta());
+
         if (ota != null) {
             Log.e(LogTag.OBD, "whw checkVinVersion ota.vin==" + ota.vin + "==manualVin==" + manualVin);
         } else {
             Log.e(LogTag.OBD, "whw checkVinVersion ota == null");
         }
 
-        if ((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) {
+        if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) && Manager.getInstance().isV3SpecialOta()) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
             qrInfo.setUrl(Configs.URL_BIND_VIN + AixintuiConfigs.push_token);
