@@ -15,6 +15,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
@@ -31,7 +32,8 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
 
 
 /**
- *
+ * 首页
+ * 包含1个viewpager,其下有4个子fragment 页
  */
 public class MainPage extends AppPage {
 
@@ -89,6 +91,7 @@ public class MainPage extends AppPage {
         titles = getResources().getStringArray(R.array.page_titles);
         titleBar = new TitleBar(this, R.id.title_main);
         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
@@ -109,7 +112,22 @@ public class MainPage extends AppPage {
         title = titleBar;
         //默认进入页面为数据页面
         pager.setCurrentItem(1);
+
         rg_tabs.check(R.id.page_tab2);
+        CarStateManager.getInstance().stopRefreshCarState();
+
+        hideMainTitlebar();
+    }
+
+    /**
+     * 是否让 主fragment 的titlebar不可见。让子fragment的 titlebar 可见
+     */
+    private void hideMainTitlebar() {
+        MainPage.title.setVisibilitySelf(false);
+    }
+
+    private void showMainTitlebar() {
+        MainPage.title.setVisibilitySelf(true);
     }
 
     @Override
@@ -134,12 +152,14 @@ public class MainPage extends AppPage {
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
                         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
+                        hideMainTitlebar();
                         currentPage = carDataPage;
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
                         titleBar.setText(titles[2], TitleBar.TitleArea.MID);
                         currentPage = carStatePage;
+                        carStatePage.onResume();
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);

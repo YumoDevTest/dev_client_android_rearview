@@ -163,6 +163,16 @@ String latestBuildToolsAvailable(String defaultBuildTools) {
     }
 }
 
+//设定图吧obd的sdk的源代码路径
+//读取存储在 local.properties的 参数配置。如果使用这个，
+//你需要在你的 local.properties的 添加：obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
+Properties properties = new Properties()
+File localPropertyFile = project.rootProject.file('local.properties');
+if (localPropertyFile.exists()) {
+    properties.load(localPropertyFile.newDataInputStream())
+    rootProject.ext.obd_sdk_source_dir = properties.getProperty('obd.sdk.source.dir')
+    println "读取到图吧obd的sdk的源代码路径: " + rootProject.ext.obd_sdk_source_dir
+}
 ext.compileSdkVersion = highestSdkAvailable(22)
 ext.buildToolsVersion = latestBuildToolsAvailable("23")
 

@@ -67,7 +67,13 @@ public class PageManager {
         final AppPage page = createPage(clazz, data);
         transaction.replace(containerId, page);
         transaction.commit();
-        pages.add(page);
+        if (pages.size() > 1) {
+            if (!pages.get(pages.size() - 1).getClass().getName().equals(clazz.getName())) {
+                pages.add(page);
+            }
+        } else {
+            pages.add(page);
+        }
     }
 
     /**

@@ -1,8 +1,14 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import android.content.Intent;
+
+import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.mapdal.NativeEnv;
+import com.mapbar.obd.ExtraTripInfo;
 import com.mapbar.obd.Manager;
 
 import java.lang.ref.WeakReference;
@@ -28,6 +34,7 @@ public class OBDSDKListenerManager {
         }
         return sdkListenerManager;
     }
+
 
     public void init() {
         regListeners = new ArrayList<>();
@@ -57,6 +64,28 @@ public class OBDSDKListenerManager {
             }
         };
         OBDManager.init(obdListener);
+        //// TODO: tianff 2016/7/26 SDKListenerManager init 解决后台服务
+        try {
+
+            ExtraTripInfo exInfo = new ExtraTripInfo("0", "autoguardapp");
+            Manager.getInstance().setExtraTripInfo(exInfo);
+            exInfo = Manager.getInstance().getExtraTripInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        if (NativeEnv.isServiceRunning(OBDV3HService.class.getName())) {
+            Intent i = new Intent(OBDV3HService.ACTION_COMPACT_SERVICE);
+
+            i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, false);
+            i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, true);
+            i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, false);
+
+            boolean cName = Global.getAppContext().stopService(i);
+            android.util.Log.e("[OBDBusiness]", "-------------------" + cName + "-------------------");
+
+        }
     }
 
     /**
@@ -127,17 +156,17 @@ public class OBDSDKListenerManager {
         boolean active = true;
 
         public void onEvent(int event, Object o) {
-            //每次响应事件都要判断是否返回code=29，token失效
-            /*if (o != null && o instanceof ObdSDKResult) {
-                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
-                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
-                        ) {
-                    sdkListenerManager.flag_token = true;
-                    PageManager.getInstance().finishAll();
-                    PageManager.getInstance().goPage(LoginPage.class);
-                    return;
-                }
-            }*/
+
+//            if (o != null && o instanceof ObdSDKResult) {
+//                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
+//                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
+//                        ) {
+//                    sdkListenerManager.flag_token = true;
+//
+//                    PageManager.getInstance().goPage(LoginPage.class);
+//                    return;
+//                }
+//            }
         }
 
         protected boolean isReged() {

@@ -58,6 +58,7 @@ public class OTAManager extends OBDManager {
             case 2:
                 if (state == 1) {
 
+                    Manager.getInstance().queryRemoteUserCar();
                     baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_SUCC, null);
                 } else {
                     baseObdListener.onEvent(EVENT_OBD_USER_BINDVIN_FAILED, null);
@@ -98,23 +99,36 @@ public class OTAManager extends OBDManager {
     }
 
     /**
-     * 检测固件版本,vin为null则弹出二维码提示并调到
+     * 检测固件版本,vin不能为空
      */
     public void checkVinVersion(Context mContext) {
-        OtaSpecial ota = Manager.getInstance().getOtaSpecial();//从本地数据库中获得,或者获取失败返回null,现在在哪里保存?
-        String manualVin = Manager.getInstance().getGetObdVinManual();//原先返回手动输入的vin  现在是在微信页面填写
-        Log.e(LogTag.OBD, "whw checkVinVersion ota.vin==" + ota.vin + "==manualVin==" + manualVin);
-        if ((((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) || Configs.testVin) && Configs.notForceCheckVersion) {
+        OtaSpecial ota = Manager.getInstance().getOtaSpecial();
+        String manualVin = Manager.getInstance().getGetObdVinManual();
+
+        Log.e(LogTag.OBD, "whw checkVinVersion isV3SpecialOta==" + Manager.getInstance().isV3SpecialOta());
+
+        if (ota != null) {
+            Log.e(LogTag.OBD, "whw checkVinVersion ota.vin==" + ota.vin + "==manualVin==" + manualVin);
+        } else {
+            Log.e(LogTag.OBD, "whw checkVinVersion ota == null");
+        }
+
+        if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) && Manager.getInstance().isV3SpecialOta()) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
-            qrInfo.setUrl(Configs.URL_BIND_VIN);
+            qrInfo.setUrl(Configs.URL_BIND_VIN + AixintuiConfigs.push_token);
             baseObdListener.onEvent(EVENT_OBD_OTA_NEED_VIN, qrInfo);
         } else {
             checkVersion(mContext);
         }
     }
 
-    private void checkVersion(Context mContext) {
+    /**
+     * 检查固件版本,vin可为空
+     *
+     * @param mContext
+     */
+    public void checkVersion(Context mContext) {
         Log.e(LogTag.OBD, "whw checkVersion ==");
         LocalUserCarResult result = Manager.getInstance().queryLocalUserCar();
         if (result != null) {

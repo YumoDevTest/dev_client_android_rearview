@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.obd;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,8 +26,9 @@ import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
-import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
+import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -37,10 +37,14 @@ import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
+import com.mapbar.obd.Manager;
 import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.TripSyncService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -64,12 +68,9 @@ public class MainActivity extends BaseActivity {
     private boolean restart;
     private boolean testAppUpdate = false;
     private PopupWindow updatePopu;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            showAppUpdate((AppInfo) msg.obj);
-        }
-    };
+
+    private Handler handler;
+
     private String logFilePath = "";
 
     public static MainActivity getInstance() {
@@ -120,16 +121,16 @@ public class MainActivity extends BaseActivity {
         final AppPage page = pageManager.createPage(SplashPage.class, null);
         transaction.replace(R.id.content_view, page);
         transaction.commit();
-
         onFinishedInit();
-
         //监听登录结果
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
-                        pageManager.goPage(MainPage.class);
+                        if (!PageManager.getInstance().getCurrentPageName().equals(MainPage.class.getName())) {
+                            pageManager.goPage(MainPage.class);
+                        }
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
@@ -150,17 +151,28 @@ public class MainActivity extends BaseActivity {
                         MobclickAgentEx.onEvent(UmengConfigs.REGISTER_SUCC);
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
+                    case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理
+                        StringUtil.toastStringShort("token失效");
+                        PageManager.getInstance().finishAll();
+                        PageManager.getInstance().goPage(SplashPage.class);
+                        UserCenterManager.getInstance().login();
+                        break;
 
                 }
 
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        handler = new MyHandler(this);
     }
 
     private void stopBackgroundService() {
         Intent intent = new Intent("com.mapbar.obd.stopservice");
         sendBroadcast(intent);
+        if (!NativeEnv.isServiceRunning(TripSyncService.class.getName())) {
+            Intent intent1 = new Intent(MainActivity.this, TripSyncService.class);
+            stopService(intent1);
+        }
     }
 
     /**
@@ -175,7 +187,7 @@ public class MainActivity extends BaseActivity {
 
         http.setRequest(url, HttpHandler.HttpRequestType.GET);
         http.setCache(HttpHandler.CacheType.NOCACHE);
-        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");//TODO
+        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");
 
         HttpHandler.HttpHandlerListener listener = new HttpHandler.HttpHandlerListener() {
             @Override
@@ -312,18 +324,52 @@ public class MainActivity extends BaseActivity {
             restartmyapp();
         } else {
             startV3HService();
+            Manager.getInstance().cleanup();
             android.os.Process.killProcess(android.os.Process.myPid());
 
         }
     }
 
     private void startV3HService() {
-        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
-        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-        ComponentName cName = startService(i);
+        //// FIXME: tianff 2016/7/25 关闭上传进程
+//        stopService(new Intent(MainActivity.this, SyncService.class));
+//        if (NativeEnv.isServiceRunning(MainActivity.getInstance(), "obd.service.process")) {
+//            ActivityManager activityManager = (ActivityManager) MainActivity.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
+//            activityManager.killBackgroundProcesses("obd.service.process");
+//        }
+//        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
+//        sendBroadcast(i);
+
+//        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+//        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+//        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+//        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+//        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+//        ComponentName cName = startService(i);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Looper.prepare();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
+//                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+//                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+//                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+//                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+//                        ComponentName cName = startService(i);
+//                        System.exit(0);
+////                        android.os.Process.killProcess(android.os.Process.myPid());
+//                    }
+//                }, 20 * 1000);
+//                Looper.loop();
+//            }
+//
+//        }).start();
+
+        Intent intent = new Intent(this, ServicManager.class);
+        startService(intent);
     }
 
     private void restartmyapp() {
@@ -390,5 +436,18 @@ public class MainActivity extends BaseActivity {
         finish();
     }
 
+    private static class MyHandler extends SafeHandler<MainActivity> {
+
+        public MyHandler(MainActivity object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (getInnerObject() == null || getInnerObject().isFinishing())
+                return;
+            getInnerObject().showAppUpdate((AppInfo) msg.obj);
+        }
+    }
 
 }

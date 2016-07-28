@@ -41,7 +41,7 @@ public class OBDV3HService extends Service {
     /**
      * 精简版后台服务ACTION名称
      */
-    public static final String ACTION_COMPACT_SERVICE = "com.mapbar.obd.COMPACT_SERVICE";
+    public static final String ACTION_COMPACT_SERVICE = "com.mapbar.obd.LOGIN_SERVICE";
     /**
      * 是否自动重启后台服务, 缺省值: true
      */
@@ -78,9 +78,11 @@ public class OBDV3HService extends Service {
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
             stopSelf();
             Manager.getInstance().stopTrip(true);
+            Manager.getInstance().cleanup();
             System.exit(0);
         }
     };
@@ -96,9 +98,11 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //捕捉异常注册
         CrashHandler crashHandler=CrashHandler.getInstance();
-        crashHandler.init(getApplication());
+        crashHandler.init(getApplication(), 2);
+//        Log.e(LogTag.OBD, object.toString());
         mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         SDKListenerManager.getInstance().init();
@@ -109,8 +113,7 @@ public class OBDV3HService extends Service {
                 //token失效处理
                 boolean isTokenInvalid = tokenInvalid(event, o);
                 if (isTokenInvalid) {
-                    UserCenter.getInstance().clearCurrentUserToken();
-                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                    openDevice();
                     return;
                 }
                 Log.e(LogTag.OBD, "whw OBDV3HService RealtimeData 有回调+" + event);
@@ -304,7 +307,7 @@ public class OBDV3HService extends Service {
                         mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
                     }
                 }
-                connectDevice();
+//                connectDevice();
             }
 //            }
         } else {
@@ -346,7 +349,7 @@ public class OBDV3HService extends Service {
 
     private void doConnect() {
         Log.e(LogTag.OBD, "whw OBDV3HService Manager.getInstance().openDevice ==" + Utils.getImei(Global.getAppContext()));
-        Manager.getInstance().openDevice(Utils.getImei(getApplication()));
+        openDevice();
         /*
         mCandidateDeviceInfo = Manager.getInstance().getCandidateDeviceInfo();
         if (mCandidateDeviceInfo != null && !TextUtils.isEmpty(mCandidateDeviceInfo.mac)) {
@@ -367,6 +370,8 @@ public class OBDV3HService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Manager.getInstance().cleanup();
+        System.exit(0);
     }
 
 

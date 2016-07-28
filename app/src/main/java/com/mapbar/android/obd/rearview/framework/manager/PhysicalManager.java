@@ -29,6 +29,8 @@ public class PhysicalManager extends OBDManager {
     public PhysicalManager() {
         super();
         physicalList = Physical.getInstance().getPhysicalSystem();
+        statuses = new HashMap<>();
+
     }
 
     /**
@@ -53,7 +55,10 @@ public class PhysicalManager extends OBDManager {
      */
     public boolean startExam() {
         Manager.getInstance().stopTrip(false);
-        statuses = new HashMap<>();
+        statuses.clear();
+        for (int i = 1; i <= 7; i++) {
+            statuses.put(String.valueOf(i), 0);
+        }
         CarStateManager.getInstance().stopRefreshCarState();
         int state = Manager.getInstance().getState();
         if (state != Manager.State.tripStoppedManually) {

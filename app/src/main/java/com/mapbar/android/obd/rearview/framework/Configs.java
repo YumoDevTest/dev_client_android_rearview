@@ -34,6 +34,6 @@ public class Configs {
     public final static boolean TEST_SERIALPORT = false;//true false
     public final static String BT_TYPE = "7";
 
-    public static boolean testVin = false;
+    public static boolean testVin = true;
     public static boolean notForceCheckVersion = true;
 }

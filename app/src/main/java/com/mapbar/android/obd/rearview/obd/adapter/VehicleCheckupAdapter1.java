@@ -84,8 +84,9 @@ public class VehicleCheckupAdapter1 extends BaseAdapter {
                     int status = physicalData.getStatus();
                     Log.e("wwwwwwww", "id----->" + physicalData.getId() + "");
                     Log.e("wwwwwwww", "status---->" + status + "");
-                    if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal() || status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal() || status == PhysicalData.Status.OBDCHECK_OK.ordinal())
-                        PhysicalManager.getInstance().getStatuses().put(String.valueOf(physicalData.getId()), status);
+                    PhysicalManager.getInstance().getStatuses().put(String.valueOf(physicalData.getId()), status);
+//                    if (status == PhysicalData.Status.OBDCHECK_ERROE.ordinal() || status == PhysicalData.Status.OBDCHECK_UNKNOWN.ordinal() || status == PhysicalData.Status.OBDCHECK_OK.ordinal())
+
                 }
                 int status = physicalData.getStatus();
                 if (status == PhysicalData.Status.OBDCHECK_CHECKING.ordinal()) {
