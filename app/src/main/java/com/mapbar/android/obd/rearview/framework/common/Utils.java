@@ -134,6 +134,5 @@ public class Utils {
 //        return "77726%%fsdffsdfssdfsdfsdfsd";//测试专用，不可外传1；
 //        return "77726%%fsdffsdfssdfsdfsd%%%%%%";//测试专用，不可外传2；
         return "77726%%fsdffsdfssdfsdfsd%%%%%%wanglong";//072815测试专用
-
     }
 }

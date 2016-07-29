@@ -23,7 +23,6 @@ public class PhysicalManager extends OBDManager {
     /**
      * 体检总项目
      */
-    private int allCount;
     private int progress = 0;
 
     public PhysicalManager() {
@@ -92,8 +91,6 @@ public class PhysicalManager extends OBDManager {
                 case Manager.Event.obdPhysicalCheckStart:
                     break;
                 case Manager.Event.obdPhysicalCheckResult:
-                    PhysicalData physicalData = (PhysicalData) o;
-
                     progress = getProgress(((PhysicalData) o).getId(), (PhysicalData) o);
                     baseObdListener.onEvent(EVENT_OBD_PHYSICAL_CHECK_PROGRESS, progress);
                     // 日志

@@ -606,7 +606,10 @@ public class UserCenterManager extends OBDManager {
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "更新用户信息updataUserData -->> ");
+            Log.d(LogTag.OBD, "停止采集线程 ");
         }
+        //停止采集线程
+        Manager.getInstance().stopReadThreadForUpgrage();
         sdkListener.setActive(true);
         LocalUserCarResult userCars = Manager.getInstance().queryLocalUserCar();
         if (userCars.userCars != null && userCars.userCars.length != 0) {

@@ -298,4 +298,15 @@ public class OTAManager extends OBDManager {
 
         firmware.upgrade(versionInfo, fu);
     }
+
+    /**
+     * 判断固件是否需要强制升级
+     *
+     * @param context
+     * @return true 需要，false 不需要
+     */
+    public boolean isForceUpdate(Context context) {
+        return Firmware.getInstance(context).isForceUpdate();
+    }
+
 }

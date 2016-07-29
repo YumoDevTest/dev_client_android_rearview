@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -13,14 +14,11 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.crash.CrashHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -73,7 +71,7 @@ public class OBDV3HService extends Service {
     private static boolean mNeedAutoRestart = true;
     private static boolean mNeedConnect = true;
     private static long mDelay = 0L;
-    public SDKListenerManager.SDKListener sdkListener;
+    public Manager.Listener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -86,6 +84,7 @@ public class OBDV3HService extends Service {
             System.exit(0);
         }
     };
+    private Manager manager;
     private Handler mHandler;
     private int times;
 
@@ -98,15 +97,14 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        manager = Manager.getInstance();
         //捕捉异常注册
         CrashHandler crashHandler=CrashHandler.getInstance();
         crashHandler.init(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
         mHandler = new Handler();
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
-        SDKListenerManager.getInstance().init();
-        sdkListener = new SDKListenerManager.SDKListener() {
+        sdkListener = new Manager.Listener() {
 
             @Override
             public void onEvent(int event, Object o) {
@@ -116,7 +114,7 @@ public class OBDV3HService extends Service {
                     openDevice();
                     return;
                 }
-                Log.e(LogTag.OBD, "whw OBDV3HService RealtimeData 有回调+" + event);
+                android.util.Log.e("uuuuuu", " 有回调+" + event);
                 switch (event) {
                     case Manager.Event.queryCarSucc:
                         UserCar[] cars = (UserCar[]) o;
@@ -185,7 +183,7 @@ public class OBDV3HService extends Service {
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getApplication()));
                             }
                         }, 5 * 1000);
                         break;
@@ -245,7 +243,8 @@ public class OBDV3HService extends Service {
                 }
             }
         };
-        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+        String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
+        manager.init(this, sdkListener, sdPath, null);
         //
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.mapbar.obd.stopservice");
@@ -340,15 +339,10 @@ public class OBDV3HService extends Service {
 //            } else {
             doConnect();
 //            }
-        } else {
-            if (Config.DEBUG) {
-                Toast.makeText(this, "设备已经连接", Toast.LENGTH_LONG);
-            }
         }
     }
 
     private void doConnect() {
-        Log.e(LogTag.OBD, "whw OBDV3HService Manager.getInstance().openDevice ==" + Utils.getImei(Global.getAppContext()));
         openDevice();
         /*
         mCandidateDeviceInfo = Manager.getInstance().getCandidateDeviceInfo();
@@ -405,7 +399,7 @@ public class OBDV3HService extends Service {
             login2();
         } else {
             android.util.Log.e("uuuuuuuu", "自动登录失败");
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(Global.getAppContext()));
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getApplication()));
 
         }
     }
@@ -466,7 +460,7 @@ public class OBDV3HService extends Service {
      * 设备连接
      */
     public void openDevice() {
-        Manager.getInstance().openDevice(Utils.getImei(this));
+        Manager.getInstance().openDevice(Utils.getImei(getApplication()));
     }
 
     /**
@@ -494,6 +488,9 @@ public class OBDV3HService extends Service {
             if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
                 return true;
             }
+        }
+        if (event == Manager.Event.commitLogFailed) {
+            return true;
         }
         return false;
     }

@@ -13,15 +13,10 @@ import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.lib.push.ChangePhonePushMessageDispatcher;
-import com.mapbar.android.obd.rearview.lib.push.PushState;
-import com.mapbar.android.obd.rearview.lib.push.PushType;
-import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_RegisterOK;
-import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_ScanOK;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.obd.SessionInfo;
 
 import org.apache.http.HttpStatus;
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,7 +91,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                 }
                 //“修改手机号”需要监听推送来的消息,判断消息内容，通过eventbus再次分发
                 ChangePhonePushMessageDispatcher.handlePushMessage(type, state, userId, token);
-
+//// FIXME: tianff 2016/7/29 AixintuiPushManager onAppearMsg 保持一致
                 UserCenterManager.getInstance().setPushData(type, state, userId, token);
                 OTAManager.getInstance().setPushData(type, state, userId, token);
             } catch (JSONException e) {

@@ -7,6 +7,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
@@ -42,9 +43,13 @@ public class SDKListenerManager {
             public void onEvent(int event, Object o) {
                 android.util.Log.e("event", event + "");
                 //当重连的时候，让UserCenterManager继续监听sdk事件
-                if (event == 4) {
-                    UserCenterManager.getInstance().sdkListener.setActive(true);
+
+                if (NativeEnv.isApplicationRunning("com.mapbar.android.obd.rearview")) {
+                    if (event == 4) {
+                        UserCenterManager.getInstance().sdkListener.setActive(true);
+                    }
                 }
+
                 // 日志
                 if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
                     Log.v(LogTag.FRAMEWORK, "whw sdk -->> event:" + event);
