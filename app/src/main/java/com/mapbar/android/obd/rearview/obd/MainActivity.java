@@ -313,6 +313,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        sdkListener.setActive(false);
         MobclickAgent.onPause(this);
     }
 

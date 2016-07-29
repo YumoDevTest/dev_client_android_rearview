@@ -102,21 +102,8 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
                             Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
                         }
-                        boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
-                        if (isUpdata) {
-                            //远程查询车辆信息
-                            Manager.getInstance().queryRemoteUserCar();
-                        } else {
-                            StringUtil.toastStringShort("此手机号已在其他app注册，请换个手机号");
-                            UserCenter.getInstance().clearCurrentUserToken();
-                            login();
-                            showRegQr(reg_info);
-                            // 日志
-                            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                                Log.d(LogTag.PUSH, " -->>更新本地用户信息失败 ");
-                            }
 
-                        }
+                        updateUserInfoByRemoteLogin(userId, null, token, "zs");
                     }
 
                 } else if (state == 2) {
@@ -138,6 +125,33 @@ public class UserCenterManager extends OBDManager {
         //连接设备
         openDevice();
 
+    }
+
+    /**
+     * 更新本地用户信息
+     *
+     * @param userId
+     * @param p1
+     * @param token
+     * @param p2
+     * @return
+     */
+    public void updateUserInfoByRemoteLogin(String userId, String p1, String token, String p2) {
+        boolean isUpdata = UserCenter.getInstance().UpdateUserInfoByRemoteLogin(userId, null, token, "zs");
+        if (isUpdata) {
+            //远程查询车辆信息
+            Manager.getInstance().queryRemoteUserCar();
+        } else {
+            StringUtil.toastStringShort("此手机号已在其他app注册，请换个手机号");
+            UserCenter.getInstance().clearCurrentUserToken();
+            login();
+            showRegQr(reg_info);
+            // 日志
+            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+                Log.d(LogTag.PUSH, " -->>更新本地用户信息失败 ");
+            }
+
+        }
     }
 
     @Override
@@ -492,6 +506,10 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码后超时,设备登录
      */
     private void outTime() {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "推送超时 -->> ");
+        }
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -550,39 +568,15 @@ public class UserCenterManager extends OBDManager {
         aimiRegister(this.account);
     }
 
-  /*  *//**
-     * 检测token是否失效
-     *
-     * @param event
-     * @param o
-     * @return true为失效 false为没有失效
-     *//*
-    private boolean tokenInvalid(int event, Object o) {
-        if (o != null && o instanceof Firmware.EventData) {
-            Firmware.EventData eventData = (Firmware.EventData) o;
-            if (Configs.TOKEN_INVALID == eventData.getRspCode()) {
-                return true;
-            }
-        }
-        if (o != null && o instanceof UserCenterError) {
-            UserCenterError erro = (UserCenterError) o;
-            if (erro.errorType == 2 && erro.errorCode == 1401) {
-                return true;
-            }
-        }
-        if (event == Manager.Event.queryCarFailed) {
-            int errorCode = (int) o;
-            if (errorCode == Manager.CarInfoResponseErr.unauthorized || errorCode == Manager.CarInfoResponseErr.notLogined) {
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     /**
      * 设备连接
      */
     public void openDevice() {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "连接设备openDevice -->> ");
+        }
         StringUtil.toastStringLong("数据准备中,请稍后");
         Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
     }
@@ -603,6 +597,38 @@ public class UserCenterManager extends OBDManager {
      */
     public boolean getIsDataPrepare() {
         return isDataPrepare;
+    }
+
+    /**
+     * 手动填写手机号，或者carGenerationId和vin信息；
+     *
+     * @param account
+     * @param carGenerationId
+     * @param vin
+     */
+    public void updataUserData(String account, String carGenerationId, String vin) {
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "更新用户信息updataUserData -->> ");
+        }
+        sdkListener.setActive(true);
+        LocalUserCarResult userCars = Manager.getInstance().queryLocalUserCar();
+        if (userCars.userCars != null && userCars.userCars.length != 0) {
+            userCar = userCars.userCars[0];
+        }
+
+        if (carGenerationId != null) {
+            userCar.carGenerationId = carGenerationId;
+        }
+        if (vin != null) {
+            userCar.vinManually = vin;
+        }
+        if (account != null) {
+            this.account = account;
+        }
+        // todo: tianff 2016/7/27 UserCenterManager updataUserData 更新手机号
+        //aimi注册
+        aimiRegister(this.account);
     }
 }
 

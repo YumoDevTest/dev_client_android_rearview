@@ -3,12 +3,13 @@ package com.mapbar.android.obd.rearview.modules.setting;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.push.PushState;
 import com.mapbar.android.obd.rearview.lib.push.PushType;
+import com.mapbar.obd.Manager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +38,11 @@ public class ChangePhoneActivity extends MyBaseActivity {
 
         if (savedInstanceState == null) {
             showPage_barcode();
+            //启动UserCenterManager事件接收
+            UserCenterManager.getInstance().sdkListener.setActive(true);
+            //停止采集线程
+            Manager.getInstance().stopReadThreadForUpgrage();
+
         }
     }
 
@@ -53,6 +59,7 @@ public class ChangePhoneActivity extends MyBaseActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
 
     /**
      * 当接收到 更改手机的事件时
@@ -73,9 +80,11 @@ public class ChangePhoneActivity extends MyBaseActivity {
             }
 
         } else if (type == PushType.SCAN_REGISTER) {
-            if (state == PushState.SUCCESS || state == PushState.REGISTERED) { //注册成功
+            if (state == PushState.SUCCESS) { //注册成功
                 Log.d(TAG, "展示填写成功页面");
                 showPage_finish();
+                //更新本地用户信息
+                UserCenterManager.getInstance().updateUserInfoByRemoteLogin(event.userId, null, event.token, "zs");
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
