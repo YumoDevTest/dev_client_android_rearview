@@ -15,11 +15,11 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.crash.CrashHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.obd.Config;
+import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
