@@ -282,4 +282,6 @@
     <string name="scan_succ">扫描成功\n请等待填写完成</string>
     <string name="reg_succ">您已通过手机\n成功完善爱车信息</string>
     <string name="firmware_update_tip">请点击更新固件,实现控制功能</string>
+    <string name="firmware_force_update_tip">由于现有硬件版本可能会导致使用不正常,请升级固件操作:点升级进入升级流程;不操作5s自动执行升级。 </string>
+    <string name="tv_firmware_pop_content_tip">有新的固件可升级,升级后,可实现远程查看车辆状态远程控制等功能,不操作10s后取消升级提示。 </string>
 </resources>

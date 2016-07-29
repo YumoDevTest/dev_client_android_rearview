@@ -37,6 +37,7 @@ import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.mapdal.NativeEnv;
@@ -67,12 +68,9 @@ public class MainActivity extends BaseActivity {
     private boolean restart;
     private boolean testAppUpdate = false;
     private PopupWindow updatePopu;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            showAppUpdate((AppInfo) msg.obj);
-        }
-    };
+
+    private Handler handler;
+
     private String logFilePath = "";
 
     public static MainActivity getInstance() {
@@ -165,6 +163,7 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        handler = new MyHandler(this);
     }
 
     private void stopBackgroundService() {
@@ -188,7 +187,7 @@ public class MainActivity extends BaseActivity {
 
         http.setRequest(url, HttpHandler.HttpRequestType.GET);
         http.setCache(HttpHandler.CacheType.NOCACHE);
-        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");//TODO
+        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");
 
         HttpHandler.HttpHandlerListener listener = new HttpHandler.HttpHandlerListener() {
             @Override
@@ -438,5 +437,18 @@ public class MainActivity extends BaseActivity {
         finish();
     }
 
+    private static class MyHandler extends SafeHandler<MainActivity> {
+
+        public MyHandler(MainActivity object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (getInnerObject() == null || getInnerObject().isFinishing())
+                return;
+            getInnerObject().showAppUpdate((AppInfo) msg.obj);
+        }
+    }
 
 }
