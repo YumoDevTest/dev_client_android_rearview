@@ -19,6 +19,7 @@ import com.mapbar.android.obd.rearview.framework.crash.CrashHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -99,7 +100,7 @@ public class OBDV3HService extends Service {
         super.onCreate();
         manager = Manager.getInstance();
         //捕捉异常注册
-        CrashHandler crashHandler=CrashHandler.getInstance();
+        CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
         mHandler = new Handler();
@@ -222,6 +223,8 @@ public class OBDV3HService extends Service {
 
                     case Manager.Event.dataUpdate:
                         RealTimeData data = (RealTimeData) o;
+                        if (Config.DEBUG)
+                            Toast.makeText(OBDV3HService.this, "有数据", Toast.LENGTH_SHORT).show();
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData speed:" + data.speed);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData gasConsumInLPerHour:" + data.gasConsumInLPerHour);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData driveCost:" + data.driveCost);
