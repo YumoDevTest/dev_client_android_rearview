@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.push.PushState;
 import com.mapbar.android.obd.rearview.lib.push.PushType;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,8 +43,16 @@ public class ChangePhoneActivity extends MyBaseActivity {
             UserCenterManager.getInstance().sdkListener.setActive(true);
             //停止采集线程
             Manager.getInstance().stopReadThreadForUpgrage();
-
+            LogUtil.d(TAG,"停止采集线程");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //启动采集线程
+        Manager.getInstance().startReadThread();
+        LogUtil.d(TAG,"启动采集线程");
     }
 
     @Override
@@ -62,38 +71,35 @@ public class ChangePhoneActivity extends MyBaseActivity {
 
 
     /**
-     * 当接收到 更改手机的事件时
+     * 当接收到 扫码成功时
      * this is a eventbus 订阅者
      *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(ChangePhoneMessageEvent event) {
-        Log.d(TAG, "get event:" + event);
-        int type = event.type;
-        int state = event.state;
+    public void onEvent(ChangePhoneEvent_ScanOK event) {
+        Log.d(TAG, "展示等待用户填写页面");
+        showPage_wait();
+    }
 
-        if (type == PushType.SCAN_OK) {
-            if (state == PushState.SUCCESS) {
-                Log.d(TAG, "展示等待用户填写页面");
-                showPage_wait();
+    /**
+     * 当接收到 用户填写注册成功时
+     * 只有当本页面存活，才可能收到这个消息时
+     *
+     * this is a eventbus 订阅者
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ChangePhoneEvent_RegisterOK event) {
+        Log.d(TAG, "展示填写成功页面");
+        showPage_finish();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
             }
-
-        } else if (type == PushType.SCAN_REGISTER) {
-            if (state == PushState.SUCCESS) { //注册成功
-                Log.d(TAG, "展示填写成功页面");
-                showPage_finish();
-                //更新本地用户信息
-                UserCenterManager.getInstance().updateUserInfoByRemoteLogin(event.userId, null, event.token, "zs");
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 5000);
-            }
-        }
-
+        }, 5000);
     }
 
 

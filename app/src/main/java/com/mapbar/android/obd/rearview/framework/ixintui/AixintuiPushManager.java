@@ -12,7 +12,11 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
-import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneMessageEvent;
+import com.mapbar.android.obd.rearview.lib.push.ChangePhonePushMessageDispatcher;
+import com.mapbar.android.obd.rearview.lib.push.PushState;
+import com.mapbar.android.obd.rearview.lib.push.PushType;
+import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_ScanOK;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.obd.SessionInfo;
 
@@ -90,9 +94,8 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     userId = jObj1.getString("userId");
                     token = jObj1.getString("token");
                 }
-                //2016-07-26 张云飞 增加eventbus消息
-                //在修改手机号，会订阅 ChangePhoneMessageEvent 类型的 eventbus消息
-                EventBus.getDefault().post(new ChangePhoneMessageEvent(type, state, userId, token));
+                //“修改手机号”需要监听推送来的消息,判断消息内容，通过eventbus再次分发
+                ChangePhonePushMessageDispatcher.handlePushMessage(type, state, userId, token);
 
                 UserCenterManager.getInstance().setPushData(type, state, userId, token);
                 OTAManager.getInstance().setPushData(type, state, userId, token);
@@ -103,6 +106,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
         }
 
     }
+
 
     @Override
     public void onAsyResult(Context context, String extra) {
