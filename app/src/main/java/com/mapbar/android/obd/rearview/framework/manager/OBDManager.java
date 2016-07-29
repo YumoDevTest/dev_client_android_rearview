@@ -145,6 +145,9 @@ public class OBDManager {
                 return true;
             }
         }
+        if (event == Manager.Event.commitLogFailed) {
+            return true;
+        }
         return false;
     }
 
