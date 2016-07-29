@@ -5,12 +5,15 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
+import com.mapbar.android.obd.rearview.obd.util.MyStringUtils;
 import com.mapbar.obd.Config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -21,6 +24,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler instance;  //单例引用，这里我们做成单例的，因为我们一个应用程序里面只需要一个UncaughtExceptionHandler实例
     private int error = 0;
     private Context context;
+    private String exceptionString;
 
     private CrashHandler() {
     }
@@ -40,8 +44,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {  //当有未处理的异常发生时，就会来到这里。。
-        Log.e("CrashHandler", ex.toString());
 
+        String errorString = MyStringUtils.getExceptionString(ex);
+        Log.e("CrashHandler", errorString);
 
         String logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log_obdserver/";
         File file = new File(logFilePath);
@@ -57,7 +62,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (Config.DEBUG) {
             try {
                 PrintWriter printWriter = new PrintWriter(new FileOutputStream(logFile, true));
-                printWriter.println(ex.toString());
+                printWriter.println(errorString);
                 printWriter.flush();
                 printWriter.close();
                 printWriter = null;
@@ -67,5 +72,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
 //        System.exit(0);
     }
+
 
 }
