@@ -142,7 +142,6 @@ public class UserCenterManager extends OBDManager {
             //远程查询车辆信息
             Manager.getInstance().queryRemoteUserCar();
         } else {
-            StringUtil.toastStringShort("此手机号已在其他app注册，请换个手机号");
             UserCenter.getInstance().clearCurrentUserToken();
             login();
             showRegQr(reg_info);
@@ -156,13 +155,10 @@ public class UserCenterManager extends OBDManager {
 
     @Override
     public void onSDKEvent(int event, Object o) {
-        android.util.Log.i("uuuuuuuu", "App回调" + event);
-        //token失效判断和处理
-//        boolean isTokenInvalid = tokenInvalid(event, o);
-//        if (isTokenInvalid) {
-//            login();
-//            return;
-//        }
+        // 日志
+        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+            Log.d(LogTag.OBD, "event---->" + event + "");
+        }
         switch (event) {
             case Manager.Event.queryCarSucc:
                 UserCar[] cars = (UserCar[]) o;
