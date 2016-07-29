@@ -99,7 +99,7 @@ public class ChangePhoneActivity extends MyBaseActivity {
             public void run() {
                 finish();
             }
-        }, 5000);
+        }, 3500);
     }
 
 
