@@ -117,7 +117,7 @@ android {
             jniLibs.srcDirs = ['libs']
 //            java.srcDirs = ['src']
 //            java.srcDirs +=['D:\\workspace\\as_work\\dev_sdk\\java\\core']
-//            java.srcDirs += ['D:/obdCode1/dev_sdk/java/core']
+            java.srcDirs += ['D:/obdCode1/dev_sdk/java/core']
 //            java.srcDirs +=['/Users/zhangyunfei/git/dev_sdk/java/core']
             if (rootProject.hasProperty('obd_sdk_source_dir') && rootProject.ext.obd_sdk_source_dir)
                 java.srcDirs += [rootProject.ext.obd_sdk_source_dir]
