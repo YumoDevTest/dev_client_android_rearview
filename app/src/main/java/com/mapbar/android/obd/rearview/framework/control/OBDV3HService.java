@@ -109,10 +109,10 @@ public class OBDV3HService extends Service {
 
             @Override
             public void onEvent(int event, Object o) {
-                //token失效处理
+                //token失效处理走设备登陆
                 boolean isTokenInvalid = tokenInvalid(event, o);
                 if (isTokenInvalid) {
-                    openDevice();
+                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getApplication()));
                     return;
                 }
                 android.util.Log.e("uuuuuu", " 有回调+" + event);
