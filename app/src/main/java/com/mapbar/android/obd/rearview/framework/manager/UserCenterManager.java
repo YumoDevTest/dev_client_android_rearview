@@ -502,13 +502,13 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码后超时,设备登录
      */
     private void outTime() {
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "推送超时 -->> ");
-        }
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, "推送超时 -->> ");
+                }
                 UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
             }
         }, 1000 * 60 * 5);

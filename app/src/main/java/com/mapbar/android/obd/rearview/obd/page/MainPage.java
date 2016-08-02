@@ -114,7 +114,6 @@ public class MainPage extends AppPage {
         pager.setCurrentItem(1);
 
         rg_tabs.check(R.id.page_tab2);
-        CarStateManager.getInstance().stopRefreshCarState();
 
         hideMainTitlebar();
     }
@@ -159,6 +158,7 @@ public class MainPage extends AppPage {
                         rg_tabs.check(R.id.page_tab3);
                         titleBar.setText(titles[2], TitleBar.TitleArea.MID);
                         currentPage = carStatePage;
+                        CarStateManager.getInstance().startRefreshCarState();
                         carStatePage.onResume();
                         break;
                     case 3:

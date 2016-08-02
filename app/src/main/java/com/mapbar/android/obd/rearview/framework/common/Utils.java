@@ -132,7 +132,7 @@ public class Utils {
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
 //        return "777296%%%%hh01739!55555555";//外网注册通过
 //        return "77726%%fsdffsdfssdfsdfsdfsd";//测试专用，不可外传1；
-//        return "77726%%fsdffsdfssdfsdfsd%%%%%%";//测试专用，不可外传2；
+//        return "77726%%fsdffsdfssdfsdfsd%%%%%%";//测试专用，不可外传2（艾米黑后视镜沉的）；
         return "77726%%fsdffsdfssdfsdfsd%%%%%%wanglong";//072815测试专用
     }
 }

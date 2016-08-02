@@ -226,7 +226,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
 
             iv_state_safe.setBackgroundResource(R.drawable.trouble);
         }
-        CarStateManager.getInstance().startRefreshCarState();
+
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
         }

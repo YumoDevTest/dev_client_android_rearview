@@ -58,7 +58,7 @@ public class CarStateManager extends OBDManager {
     public void tryToGetData() {
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
-            //  Log.d(LogTag.TEMP, "tryToGetData -->> ");
+            Log.d(LogTag.TEMP, "tryToGetData -->> ");
         }
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }

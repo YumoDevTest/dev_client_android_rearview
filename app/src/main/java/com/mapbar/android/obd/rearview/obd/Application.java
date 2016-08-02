@@ -5,6 +5,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.obd.Manager;
 
 
 /**
@@ -25,9 +26,17 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         Global.setAppContext(this);
+        Manager.onApplicationonCreate(this);
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
         //禁用默认页面统计
         MobclickAgentEx.openActivityDurationTrack(false);
+    }
+
+    @Override
+    public void onTerminate() {
+        // infos 当前应用如果被系统强杀则方法不会被调用
+        Manager.onApplicationTerminate();
+        super.onTerminate();
     }
 }
