@@ -61,7 +61,7 @@ ext {
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.1'
     println "getBuildToolVersion" + getBuildToolVersion()
     defaultConfig {
         minSdkVersion 8
@@ -93,12 +93,12 @@ android {
 //            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")
 
         }
         debug {
             debuggable true
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")
 
         }
     }
@@ -222,6 +222,7 @@ def flavors() {
 dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
