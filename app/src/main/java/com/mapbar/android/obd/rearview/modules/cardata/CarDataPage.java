@@ -34,6 +34,7 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.PermissionAlertView;
 import com.mapbar.android.obd.rearview.views.TirePressureView;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
@@ -103,6 +104,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private TirePressureView tire_pressure_rignt_top;
     private TirePressureView tire_pressure_rignt_bottom;
     private TirePressureView[] tirePressureViewArray;
+    private PermissionAlertView permissionAlertView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,6 +148,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         getPopData();
         upDataView();
 
+        showPermissionAlertView_FreeTrial(true,0);
     }
 
     @Override
@@ -453,5 +456,27 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         tire_pressure_left_bottom.setVisibility(View.GONE);
         tire_pressure_rignt_top.setVisibility(View.GONE);
         tire_pressure_rignt_bottom.setVisibility(View.GONE);
+    }
+
+    /**
+     * 根节点是个framentView,可以放入 授权提醒的视图作为浮层
+     *
+     * @param numberOfDay
+     */
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertView == null) {
+            permissionAlertView = new PermissionAlertView(getActivity());
+            FrameLayout frameLayout = (FrameLayout) getContentView();
+            frameLayout.addView(permissionAlertView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        }
+        permissionAlertView.setExpired(isExpired);//是否过期
+        permissionAlertView.setNumberOfDay(numberOfDay);//剩余天数
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertView != null && permissionAlertView.getParent() == getContentView()) {
+            FrameLayout frameLayout = (FrameLayout) getContentView();
+            frameLayout.removeView(permissionAlertView);
+        }
     }
 }

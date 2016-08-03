@@ -100,7 +100,7 @@ android {
         }
         debug {
             debuggable true
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")
             buildConfigField("String", "FAKE_IMEI", "\"77726%%fsdffsdfssdfsdfsd%%%%%%wanglong\"")
         }
