@@ -433,7 +433,7 @@ public class UserCenterManager extends OBDManager {
         if (localCarModelInfoResult.errCode == LocalCarModelInfoResult.Error.none) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功" + carGenerationId);
                 Log.d(LogTag.OBD, " -->> token-->" + UserCenter.getInstance().getCurrentUserToken());
             }
             startServer();
@@ -624,10 +624,13 @@ public class UserCenterManager extends OBDManager {
         }
         if (account != null) {
             this.account = account;
+            //aimi注册
+            aimiRegister(this.account);
+        } else {
+            //不修改手机号,只修改车辆信息
+            aimiSetUserCar(userCar);
         }
-        // todo: tianff 2016/7/27 UserCenterManager updataUserData 更新手机号
-        //aimi注册
-        aimiRegister(this.account);
+
     }
 }
 
