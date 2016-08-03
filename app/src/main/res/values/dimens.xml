@@ -14,4 +14,11 @@
     <dimen name="titlebar_button_text_size">12sp</dimen>
     <!-- 文字规格 -->
     <dimen name="HiraginoSansGBW3">16sp</dimen>
+
+    <!-- 胎压，单一指示器样式 -->
+    <dimen name="cardata_taiya_text">10sp</dimen>
+    <dimen name="cardata_taiya_text2">14sp</dimen>
+    <!-- 胎压，4胎压指示器样式 -->
+    <dimen name="tire_pressture_text_size">18sp</dimen>
+    <dimen name="tire_pressture_unit_text_size">12sp</dimen>
 </resources>

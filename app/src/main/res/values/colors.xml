@@ -75,4 +75,8 @@
 
     <color name="pink">#ff5777</color>
     <color name="dashboard_red_text">#ed331a</color>
+
+    <!--车辆数据页面，胎压文字 ，正常是绿色，警告是红色 ，-->
+    <color name="tire_pressture_text_normal">#1bffd7</color>
+    <color name="tire_pressture_text_warning">#ee3f3f</color>
 </resources>

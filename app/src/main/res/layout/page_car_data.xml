@@ -98,16 +98,79 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="165dp"
+        <FrameLayout
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/img_car" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/img_car2" />
+
+            <!-- 单一胎压指示器，有正常和警告状态 -->
+            <FrameLayout
+                android:id="@+id/taiya_single_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top">
+
+                <RadioButton
+                    android:id="@+id/taiya_single_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_tirepressure_selector"
+                    android:text="胎压\n正常"
+                    android:textColor="@color/taiya_single_text_color"
+                    android:textSize="@dimen/cardata_taiya_text"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <com.mapbar.android.obd.rearview.views.TirePressureView
+                android:id="@+id/tire_pressure_left_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:paddingBottom="18dp"
+                android:paddingTop="18dp" />
+
+            <com.mapbar.android.obd.rearview.views.TirePressureView
+                android:id="@+id/tire_pressure_left_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:paddingBottom="18dp"
+                android:paddingTop="18dp" />
+
+
+            <com.mapbar.android.obd.rearview.views.TirePressureView
+                android:id="@+id/tire_pressure_rignt_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:paddingBottom="18dp"
+                android:paddingTop="18dp" />
+
+
+            <com.mapbar.android.obd.rearview.views.TirePressureView
+                android:id="@+id/tire_pressure_rignt_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:paddingBottom="18dp"
+                android:paddingTop="18dp" />
+
+
+        </FrameLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:orientation="vertical">
 
 

@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd.page;
+package com.mapbar.android.obd.rearview.modules.cardata;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -26,12 +28,13 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.TirePressureView;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
@@ -43,7 +46,7 @@ import java.util.HashMap;
  * 车辆 数据 页
  * Created by THINKPAD on 2016/5/6.
  */
-public class CarDataPage extends AppPage implements View.OnClickListener {
+public class CarDataPage extends AppPage implements View.OnClickListener, ICarDataView {
     private final int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
 
@@ -92,6 +95,14 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
     private TitleBarView titlebarview1;
+    private CarDataPresenter carDataPresenter;
+    private FrameLayout taiya_single_indicator;//单一胎压指示视图
+    private RadioButton taiya_single_view;//单一胎压指示视图
+    private TirePressureView tire_pressure_left_top;//4胎压指示视图
+    private TirePressureView tire_pressure_left_bottom;
+    private TirePressureView tire_pressure_rignt_top;
+    private TirePressureView tire_pressure_rignt_bottom;
+    private TirePressureView[] tirePressureViewArray;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,16 +112,26 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
-        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
         titlebarview1.setButtonRightVisibility(true);
         titlebarview1.setButtonRightImage(R.drawable.ic_settng_selector);
         titlebarview1.setButtonRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),SettingActivity.class));
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
+        //单一胎压
+        taiya_single_indicator = (FrameLayout) getContentView().findViewById(R.id.taiya_single_indicator);
+        taiya_single_view = (RadioButton) getContentView().findViewById(R.id.taiya_single_view);
+        //4胎压
+        tire_pressure_left_top = (TirePressureView) getContentView().findViewById(R.id.tire_pressure_left_top);
+        tire_pressure_left_bottom = (TirePressureView) getContentView().findViewById(R.id.tire_pressure_left_bottom);
+        tire_pressure_rignt_top = (TirePressureView) getContentView().findViewById(R.id.tire_pressure_rignt_top);
+        tire_pressure_rignt_bottom = (TirePressureView) getContentView().findViewById(R.id.tire_pressure_rignt_bottom);
+        tirePressureViewArray = new TirePressureView[]{tire_pressure_left_top, tire_pressure_left_bottom, tire_pressure_rignt_top, tire_pressure_rignt_bottom};
+
         sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
         if (isFirst) {
@@ -121,7 +142,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             editor.putBoolean("isFirst", false);
             editor.commit();
         }
-
+        carDataPresenter = new CarDataPresenter(this);
         getPopData();
         upDataView();
 
@@ -165,6 +186,12 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         MobclickAgentEx.onPageEnd("CarDataPage");
+    }
+
+    @Override
+    public void onDestroy() {
+        carDataPresenter.clear();
+        super.onDestroy();
     }
 
     @Override
@@ -360,4 +387,71 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         }
     }
 
+    /**
+     * 显示单一胎压样式。正常状态
+     */
+    @Override
+    public void showTirePresstureSingleNormal() {
+        taiya_single_indicator.setVisibility(View.VISIBLE);
+        taiya_single_view.setChecked(false);//非checed，显示绿色
+    }
+
+    /**
+     * 显示单一胎压样式。警告状态
+     */
+    @Override
+    public void showTirePresstureSingleWarning() {
+        taiya_single_indicator.setVisibility(View.VISIBLE);
+        taiya_single_view.setChecked(true);//checed，显示红色
+    }
+
+    /**
+     * 隐藏单一胎压样式。
+     */
+    @Override
+    public void hideTirePresstureSingleView() {
+        taiya_single_indicator.setVisibility(View.GONE);
+        taiya_single_view.setChecked(false);
+    }
+
+    /**
+     * 显示四胎压样式。数组里显示4个胎压，分别对应，左上，左下，右上，右下
+     *
+     * @param tirePressureArray
+     */
+    @Override
+    public void showTirePresstureFour(TirePressureBean[] tirePressureArray) {
+        if (tirePressureArray == null || tirePressureArray.length != 4) {
+            alert("胎压数据异常");
+            return;
+        }
+        boolean isHasNull = false;
+        for (int i = 0; i < tirePressureArray.length; i++) {
+            if (tirePressureArray[i] == null) {
+                isHasNull = true;
+                break;
+            }
+        }
+        if (isHasNull) {
+            alert("胎压数据异常");
+            return;
+        }
+        for (int i = 0; i < tirePressureViewArray.length; i++) {
+            tirePressureViewArray[i].setVisibility(View.VISIBLE);
+            tirePressureViewArray[i].setTirePressure(tirePressureArray[i].tirePressure);
+            tirePressureViewArray[i].setTireTemperature(tirePressureArray[i].tirePressure);
+            tirePressureViewArray[i].setWarning(tirePressureArray[i].isWarning);
+        }
+    }
+
+    /**
+     * 隐藏 四胎压样式。
+     */
+    @Override
+    public void hideTirePresstureFoureView() {
+        tire_pressure_left_top.setVisibility(View.GONE);
+        tire_pressure_left_bottom.setVisibility(View.GONE);
+        tire_pressure_rignt_top.setVisibility(View.GONE);
+        tire_pressure_rignt_bottom.setVisibility(View.GONE);
+    }
 }
