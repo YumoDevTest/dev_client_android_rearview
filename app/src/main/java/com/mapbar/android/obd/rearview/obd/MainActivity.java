@@ -155,6 +155,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
                         StringUtil.toastStringShort("token失效");
+                        Manager.getInstance().stopReadThreadForUpgrage();
                         PageManager.getInstance().finishAll();
                         PageManager.getInstance().goPage(SplashPage.class);
                         UserCenterManager.getInstance().sdkListener.setActive(true);

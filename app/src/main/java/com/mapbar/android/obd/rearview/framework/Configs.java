@@ -11,7 +11,7 @@ public class Configs {
     /**
      * 是否使用内网
      */
-    public final static boolean IS_USE_INTERNAT_HOST = true;
+    public final static boolean IS_USE_INTERNAT_HOST = false;
 
 
     /**
