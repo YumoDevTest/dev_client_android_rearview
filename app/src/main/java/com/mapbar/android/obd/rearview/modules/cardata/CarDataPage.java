@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionUpdateFailureDialog;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
@@ -148,6 +150,26 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         carDataPresenter = new CarDataPresenter(this);
         getPopData();
         upDataView();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+                dialog.setOnRetryClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //do retry
+                    }
+                });
+                dialog.setOnSkipClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        },2000);
 
     }
 

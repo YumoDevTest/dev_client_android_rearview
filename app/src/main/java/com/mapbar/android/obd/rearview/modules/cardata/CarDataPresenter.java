@@ -2,6 +2,7 @@ package com.mapbar.android.obd.rearview.modules.cardata;
 
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -33,8 +34,11 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
 
         permissionManager = new PermissionManager();
         //试用提醒
-        IPermissionAlertViewAble permissionAlertViewAble = getView();
-        permissionAlertViewAble.showPermissionAlertView_FreeTrial(true, 0);
+        PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_DATA);
+        if (!result.isValid) {
+            IPermissionAlertViewAble permissionAlertViewAble = getView();
+            permissionAlertViewAble.showPermissionAlertView_FreeTrial(result.expired, result.numberOfDay);
+        }
     }
 
 

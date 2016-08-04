@@ -47,7 +47,7 @@ public class PermissionAlertViewAdapter implements IPermissionAlertViewAdatper {
                     frameLayout.addView(permissionAlertView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             }
         }
-        permissionAlertView.setExpired(false);//是否过期
+        permissionAlertView.setExpired(isExpired);//是否过期
         permissionAlertView.setNumberOfDay(numberOfDay);//剩余天数
         permissionAlertView.setOnContinueTryButtonClickListener(new View.OnClickListener() {
             @Override

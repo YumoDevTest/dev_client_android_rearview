@@ -94,15 +94,18 @@ android {
 //            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
             buildConfigField("String", "FAKE_IMEI", "")
         }
         debug {
             debuggable true
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")
-            buildConfigField("String", "FAKE_IMEI", "\"77726%%fsdffsdfssdfsdfsd%%%%%%wanglong\"")
+            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")
         }
     }
     lintOptions {
