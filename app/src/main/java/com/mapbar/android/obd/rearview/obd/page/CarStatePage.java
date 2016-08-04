@@ -30,6 +30,10 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
+import com.mapbar.android.obd.rearview.modules.checkup.CarStatePresenter;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.FirmwareManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -44,7 +48,7 @@ import java.util.ArrayList;
  * 车辆 状态
  * Created by liuyy on 2016/5/7.
  */
-public class CarStatePage extends AppPage implements View.OnClickListener {
+public class CarStatePage extends AppPage implements View.OnClickListener, ICarStateView {
 
     private CarStateView carStateView;
     private CarStatusData data;
@@ -79,6 +83,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private StringBuilder sb = new StringBuilder();
     private boolean isFirstDataUpdate = true;
     private TitleBarView titlebarview1;
+    private CarStatePresenter presenter;
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
+
+        presenter = new CarStatePresenter(this);
 
     }
 
@@ -356,5 +364,17 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
             ImageView iv;
             TextView tv;
         }
+    }
+
+
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
     }
 }

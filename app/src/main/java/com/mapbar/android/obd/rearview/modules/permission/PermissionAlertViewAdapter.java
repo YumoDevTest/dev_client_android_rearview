@@ -41,9 +41,11 @@ public class PermissionAlertViewAdapter implements IPermissionAlertViewAdatper {
 
         if (permissionAlertView == null) {
             permissionAlertView = new PermissionAlertView(getFragment().getActivity());
-            FrameLayout frameLayout = (FrameLayout) (getFragment().getContentView());
-            if (frameLayout != null)
-                frameLayout.addView(permissionAlertView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            if(getFragment().getContentView() instanceof FrameLayout) {
+                FrameLayout frameLayout = (FrameLayout) (getFragment().getContentView());
+                if (frameLayout != null)
+                    frameLayout.addView(permissionAlertView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            }
         }
         permissionAlertView.setExpired(false);//是否过期
         permissionAlertView.setNumberOfDay(numberOfDay);//剩余天数

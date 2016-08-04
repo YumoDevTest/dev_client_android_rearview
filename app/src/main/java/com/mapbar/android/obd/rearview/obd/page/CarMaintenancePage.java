@@ -24,6 +24,11 @@ import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
+import com.mapbar.android.obd.rearview.modules.maintenance.MaintenancePresenter;
+import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenanceView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
@@ -49,7 +54,7 @@ import java.util.Date;
  * 保养 页
  * Created by liuyy on 2016/5/7.
  */
-public class CarMaintenancePage extends AppPage implements View.OnClickListener {
+public class CarMaintenancePage extends AppPage implements View.OnClickListener, IMaintenanceView {
 
     UserCar userCar;
     @ViewInject(R.id.line_upkeep)
@@ -117,6 +122,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
     private long nextUpkeepDate;
     private UpkeepItemAdapter upkeepItemAdapter;
     private TitleBarView titlebarview1;
+    private MaintenancePresenter presenter;
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
 
     private DatePickerDialog.OnDateSetListener mBuyDateListener = new DatePickerDialog.OnDateSetListener() {
@@ -193,9 +200,11 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
             et_lastMaintenanceMileage.setText(userCar.lastMaintenanceMileage / 1000 + "");
         } else {
         }
+
+        presenter = new MaintenancePresenter(this);
     }
 
-    private void setButtonRightVisiable(boolean visiable){
+    private void setButtonRightVisiable(boolean visiable) {
         titlebarview1.setButtonRightVisibility(visiable);
     }
 
@@ -524,6 +533,17 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener 
         view_upkeep_time.setImageDrawable(circleDrawable);
         view_upkeep.setImageDrawable(circleDrawable);
 
+    }
+
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
     }
 
 }

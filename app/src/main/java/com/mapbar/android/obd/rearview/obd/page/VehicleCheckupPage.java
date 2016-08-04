@@ -23,6 +23,10 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
+import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
+import com.mapbar.android.obd.rearview.modules.checkup.contract.IVehicleCheckupView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
@@ -41,7 +45,7 @@ import java.util.List;
  * 体检
  * Created by THINKPAD on 2016/5/9.
  */
-public class VehicleCheckupPage extends AppPage implements View.OnClickListener {
+public class VehicleCheckupPage extends AppPage implements View.OnClickListener, IVehicleCheckupView {
 
     @ViewInject(R.id.test_rl)
     private ListView rl_view;
@@ -95,6 +99,10 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     private CheckupGridAdapter checkupGridAdapter;
     private CircleDrawable circleDrawable;
+    private VehicleCheckupPresenter presenter;
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
+
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -117,7 +125,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
 
     @Override
     public void initView() {
-        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_aiche_tijian);
 
         checkupVoiceResut = new StringBuffer();
@@ -131,6 +139,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
         circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
         view_upkeep_time.setImageDrawable(circleDrawable);
+
+        presenter = new VehicleCheckupPresenter(this);
     }
 
     @Override
@@ -153,6 +163,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
             MobclickAgentEx.onPageEnd("VehicleCheckupPage");
         }
     }
+
     private void initPage() {
         ReportHead head = PhysicalManager.getInstance().getReportHead();
         if (head != null) {
@@ -310,5 +321,21 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                 }
                 break;
         }
+    }
+
+    /**
+     * 根节点是个framentView,可以放入 授权提醒的视图作为浮层
+     *
+     * @param numberOfDay
+     */
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
     }
 }

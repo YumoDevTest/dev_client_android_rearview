@@ -2,6 +2,7 @@ package com.mapbar.android.obd.rearview.modules.cardata;
 
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 
@@ -11,6 +12,7 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
  */
 public class CarDataPresenter extends BasePresenter<ICarDataView> {
     private TirePressureManager tirePressureManager;
+    private PermissionManager permissionManager;
 
     public CarDataPresenter(ICarDataView view) {
         super(view);
@@ -29,6 +31,7 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
         TirePressureBean[] tirePressureBeenArray = tirePressureManager.getTirePressures();
         getView().showTirePresstureFour(tirePressureBeenArray);
 
+        permissionManager = new PermissionManager();
         //试用提醒
         IPermissionAlertViewAble permissionAlertViewAble = getView();
         permissionAlertViewAble.showPermissionAlertView_FreeTrial(true, 0);
