@@ -2,12 +2,13 @@ package com.mapbar.android.obd.rearview.modules.cardata.contract;
 
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.modules.cardata.TirePressureBean;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 
 /**
  * 车辆数据页
  * Created by zhangyunfei on 16/8/3.
  */
-public interface ICarDataView extends IMvpView {
+public interface ICarDataView extends IMvpView, IPermissionAlertViewAble {
 
     /**
      * 显示单一胎压样式。正常状态
@@ -35,5 +36,6 @@ public interface ICarDataView extends IMvpView {
      * 隐藏 四胎压样式。
      */
     void hideTirePresstureFoureView();
+
 
 }

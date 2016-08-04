@@ -29,12 +29,13 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.views.PermissionAlertView;
 import com.mapbar.android.obd.rearview.views.TirePressureView;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
@@ -104,7 +105,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private TirePressureView tire_pressure_rignt_top;
     private TirePressureView tire_pressure_rignt_bottom;
     private TirePressureView[] tirePressureViewArray;
-    private PermissionAlertView permissionAlertView;
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         getPopData();
         upDataView();
 
-        showPermissionAlertView_FreeTrial(true,0);
     }
 
     @Override
@@ -189,6 +189,13 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     public void onPause() {
         super.onPause();
         MobclickAgentEx.onPageEnd("CarDataPage");
+    }
+
+    @Override
+    public void onDetach() {
+        if(permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.clear();
+        super.onDetach();
     }
 
     @Override
@@ -464,19 +471,13 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
      * @param numberOfDay
      */
     public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
-        if (permissionAlertView == null) {
-            permissionAlertView = new PermissionAlertView(getActivity());
-            FrameLayout frameLayout = (FrameLayout) getContentView();
-            frameLayout.addView(permissionAlertView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        }
-        permissionAlertView.setExpired(isExpired);//是否过期
-        permissionAlertView.setNumberOfDay(numberOfDay);//剩余天数
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
     }
 
     public void hidePermissionAlertView_FreeTrial() {
-        if (permissionAlertView != null && permissionAlertView.getParent() == getContentView()) {
-            FrameLayout frameLayout = (FrameLayout) getContentView();
-            frameLayout.removeView(permissionAlertView);
-        }
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
     }
 }

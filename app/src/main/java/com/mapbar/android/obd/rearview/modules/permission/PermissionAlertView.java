@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.views;
+package com.mapbar.android.obd.rearview.modules.permission;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,6 +28,8 @@ import com.mapbar.obd.UserCenter;
 import java.security.InvalidParameterException;
 
 /**
+ * 权限提醒。两个状态： 1.试用中剩余多少天。2.试用过期
+ * 包含一个二维码，剩余多少天，点击继续按钮
  * Created by zhangyunfei on 16/8/3.
  */
 public class PermissionAlertView extends FrameLayout {
@@ -64,6 +66,7 @@ public class PermissionAlertView extends FrameLayout {
         btn_continue_try = (Button) findViewById(R.id.btn_continue_try);
         barcodeView = (ImageView) findViewById(R.id.barcodeView);
         showQrBarcodeView();
+        setClickable(true);
     }
 
     /**

@@ -7,7 +7,10 @@
     <color name="black">#ff000000</color>
 
     <color name="theme_title_text_color">#000000</color>
-
+    <!-- 主背景色-->
+    <color name="main_background_color">#1a1a1a</color>
+    <!-- 遮盖层背景色，比如试用期到期提醒时-->
+    <color name="float_background_color">#cc000000</color>
 
     <color name="theme_blue">#37c7fd</color>
     <color name="theme_gray">#E1E2E3</color>
