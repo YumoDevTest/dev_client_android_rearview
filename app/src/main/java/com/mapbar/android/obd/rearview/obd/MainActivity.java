@@ -27,7 +27,6 @@ import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -46,7 +45,6 @@ import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.SerialPortManager;
 import com.mapbar.obd.TripSyncService;
-import com.mapbar.obd.UserCenter;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -154,12 +152,15 @@ public class MainActivity extends BaseActivity {
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
-                        StringUtil.toastStringShort("token失效");
-                        Manager.getInstance().stopReadThreadForUpgrage();
-                        PageManager.getInstance().finishAll();
-                        PageManager.getInstance().goPage(SplashPage.class);
-                        UserCenterManager.getInstance().sdkListener.setActive(true);
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                        StringUtil.toastStringShort("token失效,重新启动请稍等");
+
+                        restartApp();
+//                        Manager.getInstance().stopReadThreadForUpgrage();
+////                        PageManager.getInstance().finishAll();
+//                        PageManager.getInstance().goPage(SplashPage.class);
+//                        UserCenterManager.getInstance().sdkListener.setActive(true);
+
+
                         break;
 
                 }
