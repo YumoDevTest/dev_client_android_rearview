@@ -30,8 +30,8 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.modules.carstate.CarStatePresenter;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
-import com.mapbar.android.obd.rearview.modules.checkup.CarStatePresenter;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.FirmwareManager;
@@ -234,7 +234,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 
             iv_state_safe.setBackgroundResource(R.drawable.trouble);
         }
-        CarStateManager.getInstance().startRefreshCarState();
+
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
         }
@@ -293,6 +293,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         }
         return sb.toString();
     }
+
 
     class StateAdapter extends BaseAdapter {
         private int[] dataStates;
@@ -379,5 +380,16 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void hidePermissionAlertView_FreeTrial() {
         if (permissionAlertAbleAdapter != null)
             permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
+    }
+
+    /**
+     * 是否显示 车辆状态错误码 的提示语
+     *
+     * @param isVisiable
+     */
+    @Override
+    public void setCarStateRecordVisiable(boolean isVisiable) {
+        if (tv_state_record != null)
+            tv_state_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
     }
 }

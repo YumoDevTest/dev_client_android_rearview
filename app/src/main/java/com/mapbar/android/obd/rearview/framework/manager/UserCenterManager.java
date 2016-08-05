@@ -91,27 +91,26 @@ public class UserCenterManager extends OBDManager {
                 }
                 break;
             case 1:
-                if (state == 1 || state == 3) { //注册成功
+                if (state == 1) { //注册成功
                     showRegQr(reg_succ);
                     // 更新本地用户信息
                     if (userId != null && token != null) {
                         // 日志
                         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                            Log.d(LogTag.OBD, "userId -->> " + userId + " token--->" + token);
+                            Log.d(LogTag.OBD, "推送的userId -->> " + userId + " token--->" + token);
                             Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
                             Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
                         }
 
-                        updateUserInfoByRemoteLogin(userId, null, token, "zs");
+                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
                     }
 
-                } else if (state == 2) {
+                } else if (state == 2 || state == 3) {
                     //友盟注册失败统计
                     MobclickAgentEx.onEvent(UmengConfigs.REGISTR_FAILED);
-                    //微信注册失败时清除本地token，从新走设备注册
-                    UserCenter.getInstance().clearCurrentUserToken();
-                    login();
+                    //微信注册失败，从新走设备注册
+                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
                 }
                 break;
         }
@@ -357,7 +356,9 @@ public class UserCenterManager extends OBDManager {
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
 
-//                Manager.ObdInitError obdInitError = (Manager.ObdInitError) o;
+               int c = (int)o;
+
+                StringUtil.toastStringShort(c+"");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -389,12 +390,11 @@ public class UserCenterManager extends OBDManager {
         } else {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败");
+                Log.d(LogTag.OBD, "whw -->> -->> 自动登录失败，开始设备登录");
 
             }
 
             UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
-
         }
     }
 
@@ -433,7 +433,7 @@ public class UserCenterManager extends OBDManager {
         if (localCarModelInfoResult.errCode == LocalCarModelInfoResult.Error.none) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功");
+                Log.d(LogTag.OBD, " -->> 本地查询车型信息成功" + carGenerationId);
                 Log.d(LogTag.OBD, " -->> token-->" + UserCenter.getInstance().getCurrentUserToken());
             }
             startServer();
@@ -502,13 +502,13 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码后超时,设备登录
      */
     private void outTime() {
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "推送超时 -->> ");
-        }
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                // 日志
+                if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
+                    Log.d(LogTag.OBD, "推送超时 -->> ");
+                }
                 UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
             }
         }, 1000 * 60 * 5);
@@ -624,10 +624,13 @@ public class UserCenterManager extends OBDManager {
         }
         if (account != null) {
             this.account = account;
+            //aimi注册
+            aimiRegister(this.account);
+        } else {
+            //不修改手机号,只修改车辆信息
+            aimiSetUserCar(userCar);
         }
-        // todo: tianff 2016/7/27 UserCenterManager updataUserData 更新手机号
-        //aimi注册
-        aimiRegister(this.account);
+
     }
 }
 

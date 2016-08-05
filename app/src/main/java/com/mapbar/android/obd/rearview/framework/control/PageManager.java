@@ -173,7 +173,7 @@ public class PageManager {
      */
     public void finishAll() {
         pages.clear();
-        SDKListenerManager.getInstance().clearListener();
+//        SDKListenerManager.getInstance().clearListener();
     }
 
     public Context getmContext() {

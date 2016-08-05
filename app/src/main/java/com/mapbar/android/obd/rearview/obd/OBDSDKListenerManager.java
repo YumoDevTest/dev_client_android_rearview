@@ -64,7 +64,7 @@ public class OBDSDKListenerManager {
             }
         };
         OBDManager.init(obdListener);
-        //// TODO: tianff 2016/7/26 SDKListenerManager init 解决后台服务
+//        //// TODO: tianff 2016/7/26 SDKListenerManager init 解决后台服务
         try {
 
             ExtraTripInfo exInfo = new ExtraTripInfo("0", "autoguardapp");

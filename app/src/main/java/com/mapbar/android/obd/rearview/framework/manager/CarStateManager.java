@@ -58,7 +58,7 @@ public class CarStateManager extends OBDManager {
     public void tryToGetData() {
         // 日志
         if (Log.isLoggable(LogTag.TEMP, Log.DEBUG)) {
-            //  Log.d(LogTag.TEMP, "tryToGetData -->> ");
+            Log.d(LogTag.TEMP, "tryToGetData -->> ");
         }
         Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
     }
@@ -72,7 +72,7 @@ public class CarStateManager extends OBDManager {
                 break;
             case Manager.Event.dataUpdate:
                 final RealTimeData realTimeData = (RealTimeData) o;
-                if (realTimeData.voltage < 10 && realTimeData.voltage > 15) {
+                if (realTimeData.voltage < 10 || realTimeData.voltage > 15) {
                     String votage = DecFormatUtil.format2dot1(realTimeData.voltage);
                     alarmDatas.set(1, votage);
                 }

@@ -1,17 +1,17 @@
 package com.mapbar.android.obd.rearview.lib.push;
 
-import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_RegisterOK;
-import com.mapbar.android.obd.rearview.modules.setting.ChangePhoneEvent_ScanOK;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterFailure;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
 
 import org.greenrobot.eventbus.EventBus;
 
 /**
  * 更改手机号，推送消息 handler
  * 判断消息，根据不同，分发消息。
- *
+ * <p/>
  * 在本类收到 用户注册成功 的消息时
- *
+ * <p/>
  * 使用了 eventbus
  * Created by zhangyunfei on 16/7/29.
  */
@@ -29,6 +29,8 @@ public class ChangePhonePushMessageDispatcher {
             //收到推送 填写并注册成功
             //在修改手机号，会订阅 ChangePhoneEvent_ScanOK 类型的 eventbus消息
             EventBus.getDefault().post(new ChangePhoneEvent_RegisterOK(type, state, userId, token));
+        } else if (type == PushType.SCAN_REGISTER && (state == PushState.FAILURE) || state == PushState.REGISTERED) {
+            EventBus.getDefault().post(new ChangePhoneEvent_RegisterFailure(type, state, userId, token));
         }
     }
 }

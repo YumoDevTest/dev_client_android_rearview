@@ -31,7 +31,7 @@ public abstract class AppPage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (contentView == null || contentView == null) {
+        if (contentView == null) {
             contentView = inflater.inflate(contentViewResource, container, false);
             ViewInjectTool.inject(this, this.contentView);
             initView();
