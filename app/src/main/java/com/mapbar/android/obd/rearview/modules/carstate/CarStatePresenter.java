@@ -1,7 +1,9 @@
-package com.mapbar.android.obd.rearview.modules.checkup;
+package com.mapbar.android.obd.rearview.modules.carstate;
 
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 
 /**
@@ -10,11 +12,23 @@ import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAl
  */
 public class CarStatePresenter extends BasePresenter<ICarStateView> {
 
+    private PermissionManager permissionManager;
+
     public CarStatePresenter(ICarStateView view) {
         super(view);
+        if (permissionManager != null) {
+            //是否具有 车辆状态权限
+            PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_STATE);
+            if (!permission4State.isValid) {
+                IPermissionAlertViewAble permissionAlertViewAble = getView();
+                permissionAlertViewAble.showPermissionAlertView_FreeTrial(true, 0);
+            }
+            //检查 是否具有体检权限，如果有，才会显示 故障码
+            PermissionManager.PermissionResult permission4Checkup = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
+            if(permission4Checkup.isValid){
 
-        //试用提醒
-        IPermissionAlertViewAble permissionAlertViewAble = getView();
-        permissionAlertViewAble.showPermissionAlertView_FreeTrial(true, 0);
+            }
+        }
+
     }
 }

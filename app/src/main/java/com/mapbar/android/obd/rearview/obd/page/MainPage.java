@@ -19,6 +19,9 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -79,6 +82,7 @@ public class MainPage extends AppPage {
             return super.getItemPosition(object);
         }
     };
+    private PermissionManager permissionManager;
 
 
     @Override
@@ -118,6 +122,7 @@ public class MainPage extends AppPage {
         CarStateManager.getInstance().stopRefreshCarState();
 
         hideMainTitlebar();
+        permissionManager = LogicFactory.createPermissionManager();
     }
 
     /**
@@ -202,7 +207,13 @@ public class MainPage extends AppPage {
                                 public void run() {
                                     setAlarmOn(true);
                                     if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
-                                        showNextTimerDialog();
+                                        //检查是否有 体检模块权限，如果有，才弹出故障码提醒
+                                        if (permissionManager != null) {
+                                            PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
+                                            if (!result.isValid)
+                                                return;
+                                            showNextTimerDialog();
+                                        }
                                     }
                                 }
                             };

@@ -2,6 +2,7 @@ package com.mapbar.android.obd.rearview.modules.cardata;
 
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
@@ -17,32 +18,37 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
 
     public CarDataPresenter(ICarDataView view) {
         super(view);
-        tirePressureManager = new TirePressureManager();
+        tirePressureManager = LogicFactory.createTirePressureManager();
+        permissionManager = LogicFactory.createPermissionManager();
 
         //先隐藏所有的胎压视图
         getView().hideTirePresstureFoureView();
         getView().hideTirePresstureSingleView();
+        //检查是否有胎压权限，如果有，则显示胎压
+        PermissionManager.PermissionResult result1 = permissionManager.checkPermission(PermissionKey.PERMISSION_TIRE_PRESSURE);
+        if (result1.isValid) {
+            //单一胎压
+            if (tirePressureManager.isTirePressuresOK())
+                getView().showTirePresstureSingleNormal();
+            else
+                getView().showTirePresstureSingleWarning();
+            //四轮胎压
+            TirePressureBean[] tirePressureBeenArray = tirePressureManager.getTirePressures();
+            getView().showTirePresstureFour(tirePressureBeenArray);
+        }
 
-        //单一胎压
-        if (tirePressureManager.isTirePressuresOK())
-            getView().showTirePresstureSingleNormal();
-        else
-            getView().showTirePresstureSingleWarning();
-        //四轮胎压
-        TirePressureBean[] tirePressureBeenArray = tirePressureManager.getTirePressures();
-        getView().showTirePresstureFour(tirePressureBeenArray);
-
-        permissionManager = new PermissionManager();
-        //试用提醒
-        PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_DATA);
-        if (!result.isValid) {
+        //检查是否有车辆数据权限，如果没有，则弹出 试用提醒浮层
+        PermissionManager.PermissionResult result2 = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_DATA);
+        if (!result2.isValid) {
             IPermissionAlertViewAble permissionAlertViewAble = getView();
-            permissionAlertViewAble.showPermissionAlertView_FreeTrial(result.expired, result.numberOfDay);
+            permissionAlertViewAble.showPermissionAlertView_FreeTrial(result2.expired, result2.numberOfDay);
         }
     }
 
 
     public void clear() {
+//        if (permissionManager != null)
+//            permissionManager.release();
         if (tirePressureManager != null) {
             tirePressureManager.clear();
             tirePressureManager = null;

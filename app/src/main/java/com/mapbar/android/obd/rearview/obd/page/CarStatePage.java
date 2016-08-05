@@ -250,6 +250,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     }
 
 
+    /**
+     * 点击故障码，展示故障码popwindow
+     */
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
         TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
