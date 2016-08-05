@@ -91,7 +91,7 @@ public class UserCenterManager extends OBDManager {
                 }
                 break;
             case 1:
-                if (state == 1 || state == 3) { //注册成功
+                if (state == 1) { //注册成功
                     showRegQr(reg_succ);
                     // 更新本地用户信息
                     if (userId != null && token != null) {
@@ -106,12 +106,12 @@ public class UserCenterManager extends OBDManager {
                         updateUserInfoByRemoteLogin(userId, null, token, "zs");
                     }
 
-                } else if (state == 2) {
+                } else if (state == 2 || state == 3) {
                     //友盟注册失败统计
                     MobclickAgentEx.onEvent(UmengConfigs.REGISTR_FAILED);
                     //微信注册失败时清除本地token，从新走设备注册
                     UserCenter.getInstance().clearCurrentUserToken();
-                    login();
+                    login1();
                 }
                 break;
         }
