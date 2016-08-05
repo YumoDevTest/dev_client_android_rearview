@@ -7,6 +7,9 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterFailure;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
@@ -54,14 +57,9 @@ public class ChangePhoneActivity extends MyBaseActivity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onWaitUserOperationTimeout();
-                        }
-                    });
+                    onWaitUserOperationTimeout();
                 }
-            }, TIMEOUT,TIMEOUT);
+            }, TIMEOUT, TIMEOUT);
         }
     }
 
@@ -70,14 +68,19 @@ public class ChangePhoneActivity extends MyBaseActivity {
      */
     private void onWaitUserOperationTimeout() {
         LogUtil.d(TAG, "##等待用户操作Timerout");
-        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
-        this.finish();
+        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getActivity()));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(timer != null)
+        if (timer != null)
             timer.cancel();
         //启动采集线程
         Manager.getInstance().startReadThread();
@@ -129,7 +132,7 @@ public class ChangePhoneActivity extends MyBaseActivity {
         //更新本地用户信息
         UserCenterManager.getInstance().updateUserInfoByRemoteLogin(userId, null, token, "zs");
 
-        if(timer != null)
+        if (timer != null)
             timer.cancel();
         handler.postDelayed(new Runnable() {
             @Override
@@ -137,6 +140,18 @@ public class ChangePhoneActivity extends MyBaseActivity {
                 finish();
             }
         }, 3500);
+    }
+
+
+    /**
+     * 当接收到 注册失败时
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ChangePhoneEvent_RegisterFailure event) {
+        //触发超时
+        onWaitUserOperationTimeout();
     }
 
 
