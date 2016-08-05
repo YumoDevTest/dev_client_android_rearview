@@ -126,8 +126,8 @@ public class ChangePhoneActivity extends MyBaseActivity {
 
         String userId = event.userId;
         String token = event.token;
-        //更新本地用户信息
-        UserCenterManager.getInstance().updateUserInfoByRemoteLogin(userId, null, token, "zs");
+        //从新走设备登录
+        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(ChangePhoneActivity.this));
 
         if(timer != null)
             timer.cancel();
