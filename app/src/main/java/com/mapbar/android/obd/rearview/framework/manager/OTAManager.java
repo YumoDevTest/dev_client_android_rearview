@@ -138,6 +138,11 @@ public class OTAManager extends OBDManager {
             if (cur != null) {
                 Log.e(LogTag.OBD, "whw checkVersion cur != null ==");
                 firmware = Firmware.getInstance(mContext);
+                if (cur.firstBrand == null || cur.carModel == null || cur.generation == null) {
+                    Log.e(LogTag.OBD, "OTAManager中car.firstBrand等参数为空 null ==");
+                    return;
+                }
+
                 firmware.initParma(cur.firstBrand.trim(), cur.carModel.trim(), cur.generation.trim());
 //                firmware.initParma("11111111", "11111111", "11111111");
                 firmware.checkNewVersion(Configs.BT_TYPE);
