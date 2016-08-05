@@ -394,7 +394,7 @@ public class UserCenterManager extends OBDManager {
 
             }
 
-
+            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
         }
     }
 

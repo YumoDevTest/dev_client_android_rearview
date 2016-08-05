@@ -10,7 +10,6 @@ import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterFailure;
 import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterOK;
 import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenter;
@@ -68,6 +67,7 @@ public class ChangePhoneActivity extends MyBaseActivity {
      */
     private void onWaitUserOperationTimeout() {
         LogUtil.d(TAG, "##等待用户操作Timerout");
+        UserCenterManager.getInstance().sdkListener.setActive(true);
         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getActivity()));
         runOnUiThread(new Runnable() {
             @Override
@@ -130,6 +130,7 @@ public class ChangePhoneActivity extends MyBaseActivity {
         String userId = event.userId;
         String token = event.token;
         //从新走设备登录
+        UserCenterManager.getInstance().sdkListener.setActive(true);
         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(ChangePhoneActivity.this));
 
         if (timer != null)
