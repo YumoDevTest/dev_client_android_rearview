@@ -3,10 +3,9 @@ package com.mapbar.android.obd.rearview.modules.cardata;
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 
 /**
  * 车辆数据，呈现器

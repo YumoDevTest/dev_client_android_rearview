@@ -71,6 +71,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private ImageView iv_qr;
     @ViewInject(R.id.tv_qr_info)
     private TextView tv_qr_info;
+    //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
+    @ViewInject(R.id.viewgrounp_stage_record)
+    private ViewGroup viewgrounp_stage_record;
+
 
     private Button btn_state_pop_close;
     private String[] stateNames;
@@ -389,7 +393,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      */
     @Override
     public void setCarStateRecordVisiable(boolean isVisiable) {
-        if (tv_state_record != null)
-            tv_state_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
+        if (viewgrounp_stage_record != null)
+            viewgrounp_stage_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
     }
 }

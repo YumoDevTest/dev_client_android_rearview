@@ -50,6 +50,7 @@
                         android:numColumns="3" />
 
                     <LinearLayout
+                        android:id="@+id/viewgrounp_stage_record"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
