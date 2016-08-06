@@ -21,7 +21,7 @@ public class PermissionManagerImpl implements PermissionManager {
 
 
     @Override
-    public void downloadPermissionList(final DownloadPermissionCallback callback) throws InvalidObjectException {
+    public void downloadPermissionList(final DownloadPermissionCallback callback) {
         final SDKConnection sdkConnection = new SDKConnection();
         sdkConnection.startConnectSDK(new OBDSDKListenerManager.SDKListener() {
             @Override
@@ -74,6 +74,21 @@ public class PermissionManagerImpl implements PermissionManager {
         if (permissionKey == PermissionKey.PERMISSION_CAR_STATE)
             return new PermissionResult(true, true, 10, permissionKey);
         return new PermissionResult(false, true, 10, permissionKey);
+    }
+
+    /**
+     * 获得权限概要
+     *
+     * @return
+     */
+    @Override
+    public PermissionSummary getPermissionSummary() {
+        PermissionSummary res = new PermissionSummary();
+        res.summary = PermissionSummary.HAS_PAY;
+        return res;
+//        return PermissionSummary.NO_PERSSION;
+//        return PermissionSummary.TRAIL;
+//        return PermissionSummary.HAS_PAY;
     }
 
 

@@ -325,5 +325,43 @@ public class MainPage extends AppPage {
         this.mAlarmOn = on;
     }
 
+//    /**
+//     * 显示权限验证提醒，试用期，过期等
+//     */
+//    public void showPermissionAlert(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
 
+//    /**
+//     * 显示权限验证失败
+//     */
+//    public void showPermissionFailure(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
 }

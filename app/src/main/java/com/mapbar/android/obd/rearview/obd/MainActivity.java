@@ -366,11 +366,11 @@ public class MainActivity extends BaseActivity {
 //        ComponentName cName = startService(i);
 //        new Thread(new Runnable() {
 //            @Override
-//            public void run() {
+//            public void downloadPermision() {
 //                Looper.prepare();
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
-//                    public void run() {
+//                    public void downloadPermision() {
 //                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
 //                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
 //                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);

@@ -12,7 +12,7 @@ public class PermissionManagerFake implements PermissionManager {
     private static final String TAG = PermissionManagerFake.class.getSimpleName();
 
     @Override
-    public void downloadPermissionList(DownloadPermissionCallback callback) throws InvalidObjectException {
+    public void downloadPermissionList(DownloadPermissionCallback callback) {
         LogUtil.d(TAG, "采用PermissionManagerFake，停止使用权限管理");
     }
 
@@ -20,5 +20,17 @@ public class PermissionManagerFake implements PermissionManager {
     public PermissionResult checkPermission(int permissionKey) {
         //都返回有权限
         return new PermissionResult(true, false, Integer.MAX_VALUE, 0);
+    }
+
+    /**
+     * 获得权限概要
+     *
+     * @return
+     */
+    @Override
+    public PermissionSummary getPermissionSummary() {
+        PermissionSummary res = new PermissionSummary();
+        res.summary = PermissionSummary.HAS_PAY;
+        return res;
     }
 }

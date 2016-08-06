@@ -10,9 +10,13 @@ import java.io.InvalidObjectException;
  * Created by zhangyunfei on 16/8/5.
  */
 public interface PermissionManager {
-    void downloadPermissionList(DownloadPermissionCallback callback) throws InvalidObjectException;
+
+
+    void downloadPermissionList(DownloadPermissionCallback callback);
 
     public PermissionResult checkPermission(int permissionKey);
+
+    public PermissionSummary getPermissionSummary();
 
 
     public interface DownloadPermissionCallback {
@@ -23,6 +27,19 @@ public interface PermissionManager {
         void onFailure(UserCenterError userCenterError);
     }
 
+
+    /**
+     * 权限摘要
+     */
+    public static class PermissionSummary {
+        public static final int NO_PERSSION = 0;
+        public static final int HAS_PAY = 1;
+        public static final int TRAIL = 2;
+
+        public int summary;
+        public boolean expired;
+        public int numberOfDay;
+    }
 
     /**
      * 权限结果

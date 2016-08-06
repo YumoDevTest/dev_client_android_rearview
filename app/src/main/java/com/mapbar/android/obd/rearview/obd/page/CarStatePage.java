@@ -137,7 +137,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 //                        StringUtil.toastStringShort("绑定vin");
 //                        new Handler().postDelayed(new Runnable() {
 //                            @Override
-//                            public void run() {
+//                            public void downloadPermision() {
 //                                OTAManager.getInstance().checkVinVersion(getContext());
 //                            }
 //                        }, 1000);

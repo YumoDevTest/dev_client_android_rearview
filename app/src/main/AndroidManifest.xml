@@ -80,6 +80,9 @@
             android:name=".modules.setting.SettingActivity"
             android:label="@string/page_title_setting" />
         <activity android:name=".modules.setting.ChangePhoneActivity" />
+        <activity
+            android:name=".modules.permission.PermissionUpdateFailureActivity"
+            android:label="更新权限失败重试" />
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
