@@ -56,6 +56,8 @@ public class ChangePhoneActivity extends MyBaseActivity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
+                    //设置超时标志
+                    UserCenterManager.getInstance().setOutTime(true);
                     onWaitUserOperationTimeout();
                 }
             }, TIMEOUT, TIMEOUT);
