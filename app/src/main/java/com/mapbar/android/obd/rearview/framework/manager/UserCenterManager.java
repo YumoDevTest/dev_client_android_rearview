@@ -56,6 +56,12 @@ public class UserCenterManager extends OBDManager {
     private boolean isDataPrepare = false;
 
 
+    /**
+     * 推送是否超时
+     */
+    private boolean isOutTime = false;
+
+
     public UserCenterManager() {
         super();
         permissonCheckerOnStart = new PermissonCheckerOnStart();
@@ -246,7 +252,13 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> 设备登录成功");
                 }
                 LayoutUtils.disHud();
-                login2();
+                if (isOutTime) {
+                    isOutTime = false;
+                    //查询远程车辆信息
+                    Manager.getInstance().queryRemoteUserCar();
+                } else {
+                    login2();
+                }
                 break;
             case Manager.Event.DeviceloginFailed:
                 // 日志
@@ -603,6 +615,14 @@ public class UserCenterManager extends OBDManager {
         return isDataPrepare;
     }
 
+    /**
+     * 设置超时标志
+     *
+     * @param outTime
+     */
+    public void setOutTime(boolean outTime) {
+        isOutTime = outTime;
+    }
     /**
      * 手动填写手机号，或者carGenerationId和vin信息；
      *
