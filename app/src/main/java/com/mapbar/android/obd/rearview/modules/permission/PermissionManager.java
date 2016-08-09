@@ -1,9 +1,11 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
+import com.mapbar.box.protobuf.bean.ObdRightBean;
 import com.mapbar.obd.OBDFuncRightData;
 import com.mapbar.obd.UserCenterError;
 
 import java.io.InvalidObjectException;
+import java.util.List;
 
 /**
  * 权限管理类
@@ -20,11 +22,9 @@ public interface PermissionManager {
 
 
     public interface DownloadPermissionCallback {
-        void onSuccess(OBDFuncRightData result);
+        void onSuccess(List<ObdRightBean.ObdRight> permissionList);
 
-        void onFuncRightServerFailed(UserCenterError userCenterError);
-
-        void onFailure(UserCenterError userCenterError);
+        void onFailure(Exception ex);
     }
 
 
@@ -39,6 +39,13 @@ public interface PermissionManager {
         public int summary;
         public boolean expired;
         public int numberOfDay;
+
+        public PermissionSummary() {
+        }
+
+        public PermissionSummary(int summary) {
+            this.summary = summary;
+        }
     }
 
     /**

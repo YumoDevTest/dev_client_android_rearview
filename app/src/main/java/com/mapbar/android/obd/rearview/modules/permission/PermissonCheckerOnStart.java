@@ -6,8 +6,11 @@ import android.content.Intent;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.box.protobuf.bean.ObdRightBean;
 import com.mapbar.obd.OBDFuncRightData;
 import com.mapbar.obd.UserCenterError;
+
+import java.util.List;
 
 /**
  * 在app启动时，用本类查询权限，仅在app启动时检查一次
@@ -24,19 +27,13 @@ public class PermissonCheckerOnStart {
         final PermissionManager permissionManager = LogicFactory.createPermissionManager();
         permissionManager.downloadPermissionList(new PermissionManager.DownloadPermissionCallback() {
             @Override
-            public void onSuccess(OBDFuncRightData result) {
+            public void onSuccess(List<ObdRightBean.ObdRight> permissionList) {
                 //表示更新权限成功。
                 checkLocalPermissionSummary(context);
             }
 
             @Override
-            public void onFuncRightServerFailed(UserCenterError userCenterError) {
-                //提示用户，更新权限失败
-                showDialog_DownloadFailure(context);
-            }
-
-            @Override
-            public void onFailure(UserCenterError userCenterError) {
+            public void onFailure(Exception ex) {
                 //提示用户，更新权限失败
                 showDialog_DownloadFailure(context);
             }
