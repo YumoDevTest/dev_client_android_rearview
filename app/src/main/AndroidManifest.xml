@@ -83,6 +83,9 @@
         <activity
             android:name=".modules.permission.PermissionUpdateFailureActivity"
             android:label="更新权限失败重试" />
+        <activity
+            android:name=".modules.permission.PermissionTrialAlertDialog"
+            android:label="提醒权限试用或过期" />
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
