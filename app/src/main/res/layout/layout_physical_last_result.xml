@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/vehicle_checkup_score"
                 android:textColor="#ffffff"
-                android:textSize="30sp"
+                android:textSize="16sp"
                 />
 
             <TextView
@@ -30,7 +30,7 @@
                 android:gravity="center"
                 android:text="25"
                 android:textColor="#ff4444"
-                android:textSize="60sp"/>
+                android:textSize="106sp" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="您的爱车处于"
                 android:textColor="#ffffff"
-                android:textSize="30sp"
+                android:textSize="16sp"
                 />
 
             <TextView
@@ -73,17 +73,17 @@
                 android:layout_marginTop="12dp"
                 android:text="高危级别"
                 android:textColor="#ff4444"
-                android:textSize="56sp"
+                android:textSize="29sp"
                 />
 
             <Button
                 android:id="@+id/btn_last_check"
-                android:layout_width="300dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="12dp"
+                android:layout_width="200dp"
+                android:layout_height="63dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/btn_checkup"
                 android:text="@string/vehicle_checkup"
-                android:textSize="30sp"/>
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

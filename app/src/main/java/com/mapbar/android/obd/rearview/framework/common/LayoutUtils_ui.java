@@ -36,7 +36,7 @@ public class LayoutUtils_ui {
     /**
      * 屏幕宽度所对应的dp个数
      */
-    private static final float WIDTH_DP_COUNT = 540;
+    private static final float WIDTH_DP_COUNT = 360;
 
     /**
      * 宽高
@@ -63,7 +63,7 @@ public class LayoutUtils_ui {
 
         int width = getScreenWH()[WIDTH];
 
-//        width = correctWidth(width,currentEnvironmentDensity);// 纠正宽度（未来觉得不合适时再考虑使用）
+        width = correctWidth(width, currentEnvironmentDensity);// 纠正宽度（未来觉得不合适时再考虑使用）
 
         changeDensity(width / WIDTH_DP_COUNT);
     }

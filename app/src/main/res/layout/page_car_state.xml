@@ -28,8 +28,10 @@
             android:visibility="visible">
 
             <RelativeLayout
-                android:layout_width="420dp"
-                android:layout_height="240dp"
+                android:layout_width="300dp"
+                android:layout_height="220dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -38,20 +40,19 @@
                     android:layout_height="wrap_content"
                     android:text="当前车型支持宝马车辆控制功能"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <GridView
                     android:id="@+id/gv_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginTop="30dp"
                     android:numColumns="3" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="18dp"
+                    android:layout_below="@id/gv_state"
                     android:gravity="center">
 
                     <ImageView
@@ -66,14 +67,15 @@
                         android:layout_height="wrap_content"
                         android:text="车辆无不良状态"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
+
             </RelativeLayout>
 
             <View
                 android:id="@+id/v_carstate"
-                android:layout_width="150dp"
-                android:layout_height="240dp" />
+                android:layout_width="120dp"
+                android:layout_height="200dp" />
         </LinearLayout>
 
         <RelativeLayout

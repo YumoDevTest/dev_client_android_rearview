@@ -19,14 +19,17 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="112dp"
+                android:layout_height="112dp"
+                android:src="@drawable/weixin_barcode" />
 
             <TextView
-                android:drawablePadding="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:drawableTop="@drawable/weixin_barcode"
+                android:drawablePadding="4dp"
                 android:gravity="center"
                 android:text="请扫描关注\n微信公众号"
                 android:textColor="@color/white"
@@ -37,7 +40,7 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-            android:layout_marginLeft="84dp">
+            android:layout_marginLeft="27dp">
 
             <TableRow style="@style/setting_about_row">
 

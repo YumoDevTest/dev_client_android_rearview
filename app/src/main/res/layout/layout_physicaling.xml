@@ -7,10 +7,10 @@
 
     <RelativeLayout
         android:id="@+id/rela"
-        android:layout_width="160dp"
-        android:layout_height="300dp"
+        android:layout_width="100dp"
+        android:layout_height="230dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="89dp">
+        android:layout_marginLeft="60dp">
     <ImageView
         android:id="@+id/iv"
         android:layout_width="fill_parent"
@@ -28,8 +28,8 @@
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 />
 
             <TextView
@@ -37,10 +37,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="13dp"
                 android:text="体检中"
                 android:textColor="#ffffff"
-                android:textSize="13sp"/>
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/tv_progress"
@@ -48,17 +48,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv2"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="1dp"
                 android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="45sp"
+                android:textSize="40sp"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tv_progress"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:layout_toRightOf="@+id/tv_progress"
                 android:text="%"
                 android:textColor="#ffffff"/>

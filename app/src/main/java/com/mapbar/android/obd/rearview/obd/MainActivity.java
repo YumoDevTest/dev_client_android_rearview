@@ -25,6 +25,7 @@ import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
-//        LayoutUtils_ui.proportional();
+        LayoutUtils_ui.proportional();
         LogManager.getInstance().init(MainActivity.this);
         logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
         String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
