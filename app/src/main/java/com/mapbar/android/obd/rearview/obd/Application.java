@@ -41,8 +41,8 @@ public class Application extends android.app.Application {
         Global.setAppContext(this);
         Manager.onApplicationonCreate(this);
         //捕捉异常注册
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(this, 3);
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(this, 3);
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
         //禁用默认页面统计

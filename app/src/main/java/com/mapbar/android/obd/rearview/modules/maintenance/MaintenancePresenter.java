@@ -18,7 +18,7 @@ public class MaintenancePresenter extends BasePresenter<IMaintenanceView>{
     public MaintenancePresenter(IMaintenanceView view) {
         super(view);
 
-        permissionManager = LogicFactory.createPermissionManager();
+        permissionManager = LogicFactory.createPermissionManager(getView().getContext());
         PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_MAINTENANCE);
         if (!permission4State.isValid) {
             IPermissionAlertViewAble permissionAlertViewAble = getView();

@@ -18,7 +18,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     public CarStatePresenter(ICarStateView view) {
         super(view);
 
-        permissionManager = LogicFactory.createPermissionManager();
+        permissionManager = LogicFactory.createPermissionManager(getView().getContext());
         //是否具有 车辆状态权限
         PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_STATE);
         if (!permission4State.isValid) {

@@ -11,6 +11,7 @@ import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,15 @@ import java.util.concurrent.Callable;
  * Created by zhangyunfei on 16/8/9.
  */
 public class PermissionRepository {
+    WeakReference<Context> context;
 
-    public void saveAndReplacePermission(List<ObdRightBean.ObdRight> obdRightList) {
+    public PermissionRepository(Context context1) {
+        this.context = new WeakReference<>(context1);
+    }
+
+    public void saveAndReplacePermission(List<ObdRightBean.ObdRight> obdRightList) throws Exception {
+        if (context == null || context.get() == null)
+            throw new Exception();
         final List<MyPermissionInfo> newPermissionInfoList = new ArrayList<>(8);
         MyPermissionInfo tmp;
         for (int i = 0; i < obdRightList.size(); i++) {
@@ -33,9 +41,7 @@ public class PermissionRepository {
                     obdRight.getDeadline());
             newPermissionInfoList.add(tmp);
         }
-        Context context = Application.getInstance();
-
-        final MyOrmLiteSqliteOpenHelper myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context);
+        final MyOrmLiteSqliteOpenHelper myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context.get());
         final ConnectionSource connectionSource = myOrmLiteSqliteOpenHelper.getConnectionSource();
         //事务操作
         try {
@@ -69,9 +75,8 @@ public class PermissionRepository {
     public List<ObdRightBean.ObdRight> getPermissonList() {
         MyOrmLiteSqliteOpenHelper myOrmLiteSqliteOpenHelper = null;// = new MyOrmLiteSqliteOpenHelper(context);
         Dao<MyPermissionInfo, Integer> dao;
-        Context context = Application.getInstance();
         try {
-            myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context);
+            myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context.get());
             dao = myOrmLiteSqliteOpenHelper.getDao(MyPermissionInfo.class);
             List<MyPermissionInfo> myPermissionInfoList = dao.queryForAll();
             List<ObdRightBean.ObdRight> lst = new ArrayList<>();

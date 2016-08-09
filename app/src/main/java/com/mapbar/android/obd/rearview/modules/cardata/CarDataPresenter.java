@@ -18,7 +18,7 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
     public CarDataPresenter(ICarDataView view) {
         super(view);
         tirePressureManager = LogicFactory.createTirePressureManager();
-        permissionManager = LogicFactory.createPermissionManager();
+        permissionManager = LogicFactory.createPermissionManager(getView().getContext());
 
         //先隐藏所有的胎压视图
         getView().hideTirePresstureFoureView();

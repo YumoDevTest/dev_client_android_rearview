@@ -24,7 +24,7 @@ public class PermissonCheckerOnStart {
     private static final String KEY_FOR_HAS_CHECKED_ON_START = "KEY_FOR_HAS_CHECKED_ON_START";
 
     public synchronized void downloadPermision(final Context context) {
-        final PermissionManager permissionManager = LogicFactory.createPermissionManager();
+        final PermissionManager permissionManager = LogicFactory.createPermissionManager(context);
         permissionManager.downloadPermissionList(new PermissionManager.DownloadPermissionCallback() {
             @Override
             public void onSuccess(List<ObdRightBean.ObdRight> permissionList) {
@@ -51,7 +51,7 @@ public class PermissonCheckerOnStart {
             return;//已检查过，则无需再次检查
         }
 
-        PermissionManager permissionManager = LogicFactory.createPermissionManager();
+        PermissionManager permissionManager = LogicFactory.createPermissionManager(context);
         PermissionManager.PermissionSummary permissionSummary = permissionManager.getPermissionSummary();
         if (permissionSummary.summary == PermissionManager.PermissionSummary.HAS_PAY) {
             //支付过，不弹窗

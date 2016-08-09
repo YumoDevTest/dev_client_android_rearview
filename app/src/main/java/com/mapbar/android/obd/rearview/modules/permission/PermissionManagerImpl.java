@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
@@ -27,8 +28,8 @@ public class PermissionManagerImpl implements PermissionManager {
     private PermissionRepository permissionRepository;
     private static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
-    public PermissionManagerImpl() {
-        permissionRepository = new PermissionRepository();
+    public PermissionManagerImpl(Context context) {
+        permissionRepository = new PermissionRepository(context);
     }
 
     @Override
@@ -73,7 +74,11 @@ public class PermissionManagerImpl implements PermissionManager {
                     List<ObdRightBean.ObdRight> obdRightList = obdProductData.getObdRightList();
 
                     //TODO 将权限信息中,保存到数据库
-                    permissionRepository.saveAndReplacePermission(obdRightList);
+                    try {
+                        permissionRepository.saveAndReplacePermission(obdRightList);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (callback != null)
                         callback.onSuccess(obdRightList);
                 } catch (InvalidProtocolBufferException e) {

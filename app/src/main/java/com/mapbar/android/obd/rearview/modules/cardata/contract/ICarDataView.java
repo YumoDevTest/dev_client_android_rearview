@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.cardata.contract;
 
+import android.content.Context;
+
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.modules.cardata.TirePressureBean;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
@@ -38,4 +40,5 @@ public interface ICarDataView extends IMvpView, IPermissionAlertViewAble {
     void hideTirePresstureFoureView();
 
 
+    Context getContext();
 }

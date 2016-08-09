@@ -9,16 +9,16 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "MyPermissionInfo")
 public class MyPermissionInfo {
-    @DatabaseField(generatedId = true)
+    @DatabaseField(columnName="idpk",generatedId = true)
     private int idpk;
 
-    @DatabaseField
+    @DatabaseField(columnName="productId")
     private String productId;//产品编号
 
-    @DatabaseField
+    @DatabaseField(columnName="producteStatus")
     private int producteStatus;//产品状态
 
-    @DatabaseField
+    @DatabaseField(columnName="deadline")
     private String deadline;//产品过期时间
 
     public MyPermissionInfo() {

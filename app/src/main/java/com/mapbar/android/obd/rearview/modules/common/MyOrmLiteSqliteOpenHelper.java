@@ -13,7 +13,7 @@ import com.j256.ormlite.table.TableUtils;
  */
 public class MyOrmLiteSqliteOpenHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "permission.db";
+    private static final String DATABASE_NAME = "obd_permission.db";
 
     public MyOrmLiteSqliteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

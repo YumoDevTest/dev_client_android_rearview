@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
+import android.content.Context;
+
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.modules.cardata.TirePressureManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
@@ -28,10 +30,10 @@ public class LogicFactory {
      *
      * @return
      */
-    public static PermissionManager createPermissionManager() {
+    public static PermissionManager createPermissionManager(Context context) {
         if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
             return new PermissionManagerFake();
         else
-            return new PermissionManagerImpl();
+            return new PermissionManagerImpl(context);
     }
 }

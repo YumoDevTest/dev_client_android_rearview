@@ -121,7 +121,7 @@ public class MainPage extends AppPage {
         rg_tabs.check(R.id.page_tab2);
 
         hideMainTitlebar();
-        permissionManager = LogicFactory.createPermissionManager();
+        permissionManager = LogicFactory.createPermissionManager(getActivity());
     }
 
     /**

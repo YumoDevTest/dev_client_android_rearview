@@ -18,7 +18,7 @@ public class PermissionUpdateFailureActivity extends Activity {
     private View contentView;
     private Button btn_retry;
     private Button btn_skip;
-    private PermissonCheckerOnStart permissonCheckerOnStart = new PermissonCheckerOnStart();
+    private PermissonCheckerOnStart permissonCheckerOnStart;
 
 
     @Override

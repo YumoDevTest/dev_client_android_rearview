@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.mvp;
 
+import android.content.Context;
 import android.widget.Toast;
 
 /**
@@ -19,4 +20,6 @@ public interface IMvpView {
      * @param sourceID
      */
     public void alert(int sourceID);
+
+    Context getContext();
 }

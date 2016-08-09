@@ -16,7 +16,7 @@ public class VehicleCheckupPresenter extends BasePresenter<IVehicleCheckupView>{
     public VehicleCheckupPresenter(IVehicleCheckupView view) {
         super(view);
 
-        permissionManager = LogicFactory.createPermissionManager();
+        permissionManager = LogicFactory.createPermissionManager(getView().getContext());
         PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
         if (!permission4State.isValid) {
             IPermissionAlertViewAble permissionAlertViewAble = getView();
