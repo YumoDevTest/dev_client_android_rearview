@@ -165,8 +165,8 @@ public class UserCenterManager extends OBDManager {
         switch (event) {
             case Manager.Event.queryCarSucc:
                 //启动权限检查
-                if (permissonCheckerOnStart != null)
-                    permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
+//                if (permissonCheckerOnStart != null)
+//                    permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
 
                 UserCar[] cars = (UserCar[]) o;
                 // 日志

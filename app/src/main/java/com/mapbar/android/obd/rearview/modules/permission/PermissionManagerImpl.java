@@ -4,40 +4,19 @@ import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.lib.net.ErrorCode;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
-import com.mapbar.android.obd.rearview.lib.net.MyHttpContext;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
-import com.mapbar.android.obd.rearview.obd.Application;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.android.obd.rearview.obd.util.SDKConnection;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
-import com.mapbar.obd.Manager;
-import com.mapbar.obd.OBDFuncRightData;
-import com.mapbar.obd.UserCenterError;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import security.OBD2Security;
 
 /**
  * 权限管理类
@@ -94,7 +73,7 @@ public class PermissionManagerImpl implements PermissionManager {
                     List<ObdRightBean.ObdRight> obdRightList = obdProductData.getObdRightList();
 
                     //TODO 将权限信息中,保存到数据库
-                    permissionRepository.savePermission(obdRightList);
+                    permissionRepository.saveAndReplacePermission(obdRightList);
                     if (callback != null)
                         callback.onSuccess(obdRightList);
                 } catch (InvalidProtocolBufferException e) {
