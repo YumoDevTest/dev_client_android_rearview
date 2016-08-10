@@ -23,6 +23,20 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
         //先隐藏所有的胎压视图
         getView().hideTirePresstureFoureView();
         getView().hideTirePresstureSingleView();
+
+    }
+
+
+    public void clear() {
+//        if (permissionManager != null)
+//            permissionManager.release();
+        if (tirePressureManager != null) {
+            tirePressureManager.clear();
+            tirePressureManager = null;
+        }
+    }
+
+    public void checkPermission() {
         //检查是否有胎压权限，如果有，则显示胎压
         PermissionManager.PermissionResult result1 = permissionManager.checkPermission(PermissionKey.PERMISSION_TIRE_PRESSURE);
         if (result1.isValid) {
@@ -38,19 +52,11 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
 
         //检查是否有车辆数据权限，如果没有，则弹出 试用提醒浮层
         PermissionManager.PermissionResult result2 = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_DATA);
+        IPermissionAlertViewAble permissionAlertViewAble = getView();
         if (!result2.isValid) {
-            IPermissionAlertViewAble permissionAlertViewAble = getView();
             permissionAlertViewAble.showPermissionAlertView_FreeTrial(result2.expired, result2.numberOfDay);
-        }
-    }
-
-
-    public void clear() {
-//        if (permissionManager != null)
-//            permissionManager.release();
-        if (tirePressureManager != null) {
-            tirePressureManager.clear();
-            tirePressureManager = null;
+        } else {
+            permissionAlertViewAble.hidePermissionAlertView_FreeTrial();
         }
     }
 }

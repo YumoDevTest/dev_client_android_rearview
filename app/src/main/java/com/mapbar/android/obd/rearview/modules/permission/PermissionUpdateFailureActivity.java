@@ -3,9 +3,11 @@ package com.mapbar.android.obd.rearview.modules.permission;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 
@@ -50,7 +52,17 @@ public class PermissionUpdateFailureActivity extends Activity {
         });
 
         permissonCheckerOnStart = new PermissonCheckerOnStart();
+        //如果本地权限为空，则隐藏跳过按钮
+        if (permissonCheckerOnStart.isLocalPermissionEmpty(getActivity())) {
+            btn_skip.setVisibility(View.GONE);
+        }
 
+        if (getIntent() != null) {
+            String error = getIntent().getStringExtra("error");
+            if (!TextUtils.isEmpty(error)) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**

@@ -146,6 +146,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
+        presenter.checkPermission();
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("VehicleCheckupPage");
         }

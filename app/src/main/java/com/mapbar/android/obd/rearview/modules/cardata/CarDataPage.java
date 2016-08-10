@@ -182,6 +182,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     @Override
     public void onResume() {
         super.onResume();
+        carDataPresenter.checkPermission();
         MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
     }
 

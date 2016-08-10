@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
@@ -34,8 +35,12 @@ public class PermissionManagerImpl implements PermissionManager {
 
     @Override
     public void downloadPermissionList(final DownloadPermissionCallback callback) {
+        LogUtil.d(TAG, "## 启动下载权限");
 
-        String imei = "221111-22-333333";
+        String imei = "111111-22-333333";
+//        String imei = "211111-22-333333";
+//        String imei = "311111-22-333333";
+//        String imei = "411111-22-333333";
 //        imei = Utils.getImei(Application.getInstance());
         ObdRightBean.ObdRightRequest obdRightRequest;
         obdRightRequest = ObdRightBean.ObdRightRequest.newBuilder().setImei(imei).build();
@@ -59,6 +64,8 @@ public class PermissionManagerImpl implements PermissionManager {
 
                     if (ErrorCode.OK != code) {
                         Log.i(TAG, "error: " + msgStr);
+                        if (callback != null)
+                            callback.onFailure(new Exception("网络访问异常，错误码" + code));
                         return;
                     } else {
                         Log.i(TAG, "OK : " + msgStr);
@@ -68,17 +75,35 @@ public class PermissionManagerImpl implements PermissionManager {
                     Log.i(TAG, obdProductResponse.toString());
 
                     ObdRightBean.ObdRightData obdProductData = ObdRightBean.ObdRightData.parseFrom(data);
-                    long serverTime = obdProductData.getServerTime();
-                    long modifyTime = obdProductData.getModifyTime();
-                    String imei1 = obdProductData.getImei();
-                    List<ObdRightBean.ObdRight> obdRightList = obdProductData.getObdRightList();
+//                    long serverTime = obdProductData.getServerTime();
+//                    long modifyTime = obdProductData.getModifyTime();
+//                    String imei1 = obdProductData.getImei();
+                    final List<ObdRightBean.ObdRight> obdRightList = obdProductData.getObdRightList();
 
-                    //TODO 将权限信息中,保存到数据库
-                    try {
-                        permissionRepository.saveAndReplacePermission(obdRightList);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    //将权限信息中,保存到数据库
+                    new AsyncTask<Void, Void, Boolean>() {
+                        private Exception exception;
+
+                        @Override
+                        protected Boolean doInBackground(Void... voids) {
+                            try {
+                                permissionRepository.saveAndReplacePermission(obdRightList);
+                                permissionRepository.clearCache();
+                                return true;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                exception = e;
+                                return false;
+                            }
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean isok) {
+                            if (!isok)
+                                if (callback != null)
+                                    callback.onFailure(exception);
+                        }
+                    }.execute();
                     if (callback != null)
                         callback.onSuccess(obdRightList);
                 } catch (InvalidProtocolBufferException e) {
@@ -97,6 +122,7 @@ public class PermissionManagerImpl implements PermissionManager {
      */
     @Override
     public PermissionResult checkPermission(int permissionKey) {
+        LogUtil.d(TAG, "## 准备 检查本地权限" + permissionKey);
         List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
         if (permissonList == null) {
             return new PermissionResult(false, true, 0, permissionKey);
@@ -137,6 +163,7 @@ public class PermissionManagerImpl implements PermissionManager {
      */
     @Override
     public PermissionSummary getPermissionSummary() {
+        LogUtil.d(TAG, "## 获得权限概要");
         List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
         //一条也没有，认为过期
         if (permissonList == null) {
@@ -206,5 +233,10 @@ public class PermissionManagerImpl implements PermissionManager {
                 calendar.get(Calendar.DAY_OF_MONTH));
         long numberOfDay = (dateTarget.getTime() - dateNow.getTime()) / (1000 * 3600 * 24);
         return (int) numberOfDay;
+    }
+
+    public List<ObdRightBean.ObdRight> getPermissonList() {
+        LogUtil.d(TAG, "## 获得权限列表");
+        return permissionRepository.getPermissonList();
     }
 }

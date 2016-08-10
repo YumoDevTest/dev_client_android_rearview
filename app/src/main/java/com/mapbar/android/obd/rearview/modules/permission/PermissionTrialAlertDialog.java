@@ -33,6 +33,12 @@ public class PermissionTrialAlertDialog extends Activity {
             permissionAlertView.setExpired(expired);//是否过期
             permissionAlertView.setNumberOfDay(numberOfDay);//剩余天数
         }
+        permissionAlertView.setOnContinueTryButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 //    /**

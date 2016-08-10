@@ -1,36 +1,42 @@
 package com.mapbar.android.obd.rearview.modules.permission.repo;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.misc.TransactionManager;
-import com.j256.ormlite.support.ConnectionSource;
-import com.mapbar.android.obd.rearview.modules.common.MyOrmLiteSqliteOpenHelper;
+import com.mapbar.android.obd.rearview.modules.common.BaseDao;
 import com.mapbar.android.obd.rearview.modules.permission.model.MyPermissionInfo;
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.obd.util.Cache;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.android.obd.rearview.obd.util.MemoryCache;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * 权限信息的持久化仓库
  * Created by zhangyunfei on 16/8/9.
  */
-public class PermissionRepository {
-    WeakReference<Context> context;
+public class PermissionRepository extends BaseDao {
+    private static final String TAG = PermissionRepository.class.getSimpleName();
+    private Cache mPermissionListCache;
+    private static final String CACHE_KEY_GET_PERMISSON_LIST = "CACHE_KEY_GET_PERMISSON_LIST";
+
+    private WeakReference<Context> context;
 
     public PermissionRepository(Context context1) {
+        super(context1);
         this.context = new WeakReference<>(context1);
+        mPermissionListCache = new MemoryCache();
     }
 
     public void saveAndReplacePermission(List<ObdRightBean.ObdRight> obdRightList) throws Exception {
         if (context == null || context.get() == null)
             throw new Exception();
+        LogUtil.d(TAG, "## 准备 保存权限到本地数据库");
         final List<MyPermissionInfo> newPermissionInfoList = new ArrayList<>(8);
         MyPermissionInfo tmp;
         for (int i = 0; i < obdRightList.size(); i++) {
@@ -41,61 +47,73 @@ public class PermissionRepository {
                     obdRight.getDeadline());
             newPermissionInfoList.add(tmp);
         }
-        final MyOrmLiteSqliteOpenHelper myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context.get());
-        final ConnectionSource connectionSource = myOrmLiteSqliteOpenHelper.getConnectionSource();
-        //事务操作
+        SQLiteDatabase db = getDB();
         try {
-            final Dao<MyPermissionInfo, Integer> dao = myOrmLiteSqliteOpenHelper.getDao(MyPermissionInfo.class);
+            db.beginTransaction();
 
-            TransactionManager.callInTransaction(connectionSource,
-                    new Callable<Void>() {
-                        @Override
-                        public Void call() throws Exception {
-                            //读旧的
-                            List<MyPermissionInfo> oldList = dao.queryForAll();
-                            //删旧的
-                            dao.delete(oldList);
-                            dao.create(newPermissionInfoList);
-                            //写新的
-                            return null;
-                        }
-                    });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connectionSource.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            db.execSQL("delete from MyPermissionInfo");
+            for (int i = 0; i < newPermissionInfoList.size(); i++) {
+                MyPermissionInfo item1 = newPermissionInfoList.get(i);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("productId", item1.getProductId());
+                contentValues.put("producteStatus", item1.getProducteStatus());
+                contentValues.put("deadline", item1.getDeadline());
+                db.insert("MyPermissionInfo", null, contentValues);
             }
-            myOrmLiteSqliteOpenHelper.close();
+            db.setTransactionSuccessful();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.endTransaction();
+                db.close();
+            }
         }
     }
 
     public List<ObdRightBean.ObdRight> getPermissonList() {
-        MyOrmLiteSqliteOpenHelper myOrmLiteSqliteOpenHelper = null;// = new MyOrmLiteSqliteOpenHelper(context);
-        Dao<MyPermissionInfo, Integer> dao;
+        if (mPermissionListCache.exist(CACHE_KEY_GET_PERMISSON_LIST)) {
+            LogUtil.d(TAG, "## 准备从内存缓存读取 getPermissonList");
+            try {
+                return (List<ObdRightBean.ObdRight>) mPermissionListCache.getCache(CACHE_KEY_GET_PERMISSON_LIST);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        LogUtil.d(TAG, "## 准备从数据库读取 getPermissonList");
+        SQLiteDatabase db = getReadableDB();
+        Cursor cursor = null;
         try {
-            myOrmLiteSqliteOpenHelper = new MyOrmLiteSqliteOpenHelper(context.get());
-            dao = myOrmLiteSqliteOpenHelper.getDao(MyPermissionInfo.class);
-            List<MyPermissionInfo> myPermissionInfoList = dao.queryForAll();
+            cursor = db.rawQuery("select * from MyPermissionInfo", null);
             List<ObdRightBean.ObdRight> lst = new ArrayList<>();
-            for (int i = 0; i < myPermissionInfoList.size(); i++) {
-                MyPermissionInfo item = myPermissionInfoList.get(i);
+            while (cursor.moveToNext()) {
+                String productId = cursor.getString(cursor.getColumnIndex("productId"));
+                int producteStatus = cursor.getInt(cursor.getColumnIndex("producteStatus"));
+                String deadline = cursor.getString(cursor.getColumnIndex("deadline"));
+
                 ObdRightBean.ObdRight tmp = ObdRightBean.ObdRight.newBuilder()
-                        .setProductId(item.getProductId())
-                        .setProducteStatus(item.getProducteStatus())
-                        .setDeadline(item.getDeadline()).build();
+                        .setProductId(productId)
+                        .setProducteStatus(producteStatus)
+                        .setDeadline(deadline).build();
                 lst.add(tmp);
             }
+            mPermissionListCache.cache(CACHE_KEY_GET_PERMISSON_LIST, lst);
             return lst;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         } finally {
-            if (myOrmLiteSqliteOpenHelper != null)
-                myOrmLiteSqliteOpenHelper.close();
+            if (cursor != null)
+                cursor.close();
+            if (db != null)
+                db.close();
         }
-
     }
+
+    public void clearCache() {
+        LogUtil.d(TAG, "## 清理缓存");
+        mPermissionListCache.clear();
+    }
+
+
 }

@@ -22,6 +22,7 @@ import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -64,6 +65,8 @@ public class MainPage extends AppPage {
     private Context mContext;
     private Handler mHandlerBuy = new Handler();
     private boolean isPush = true;
+    private PermissonCheckerOnStart permissonCheckerOnStart;
+    private PermissionManager permissionManager;
 
     private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
 
@@ -82,7 +85,6 @@ public class MainPage extends AppPage {
             return super.getItemPosition(object);
         }
     };
-    private PermissionManager permissionManager;
 
 
     @Override
@@ -122,6 +124,11 @@ public class MainPage extends AppPage {
 
         hideMainTitlebar();
         permissionManager = LogicFactory.createPermissionManager(getActivity());
+
+        //下载权限
+        permissonCheckerOnStart = new PermissonCheckerOnStart();
+        permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
+
     }
 
     /**

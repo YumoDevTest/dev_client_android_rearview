@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.lib.net;
 import android.util.Log;
 
 import com.google.protobuf.AbstractMessageLite;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
@@ -27,16 +28,21 @@ public class HttpPBUtil {
 
     /**
      * 发送请求
+     *
      * @param url
-     * @param abstractMessageLite
+     * @param message
      * @param callback
      */
-    public static void post(String url, AbstractMessageLite abstractMessageLite, final HttpPBCallback callback) {
-        post(url, abstractMessageLite.toByteArray(), callback);
+    public static void post(String url, AbstractMessageLite message, final HttpPBCallback callback) {
+        if (message == null)
+            throw new NullPointerException("message 不能为空");
+        LogUtil.d(TAG, "## HTTP准备发送请求" + message.toString());
+        post(url, message.toByteArray(), callback);
     }
 
     /**
      * 发送请求
+     *
      * @param url
      * @param pbReqeustBytes
      * @param callback
@@ -48,7 +54,7 @@ public class HttpPBUtil {
             btye4Request = OBD2Security.OBDEncode(pbReqeustBytes);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            Log.e(TAG, "ERROR:" + e.getMessage(), e);
+            LogUtil.e(TAG, "## ERROR:" + e.getMessage(), e);
         }
         RequestBody requestBody = RequestBody.create(CONTENT_TYPE, btye4Request);
         //构建请求
@@ -63,13 +69,14 @@ public class HttpPBUtil {
 
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.e(TAG, e.getMessage(), e);
+                LogUtil.e(TAG, "## HTTP" + e.getMessage(), e);
                 if (callback != null)
                     callback.onFailure(e);
             }
 
             @Override
             public void onResponse(final Response response) throws IOException {
+                LogUtil.d(TAG, "## HTTP收到响应,cod=" + response.code() + ", content length=" + response.body().contentLength());
                 if (!response.isSuccessful()) {
                     if (callback != null) {
                         callback.onFailure(new Exception("HTTP异常，code=" + response.code()));

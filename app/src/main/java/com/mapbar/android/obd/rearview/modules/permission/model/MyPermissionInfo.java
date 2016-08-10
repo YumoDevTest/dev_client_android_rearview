@@ -1,24 +1,22 @@
 package com.mapbar.android.obd.rearview.modules.permission.model;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * 权限信息，对应数据库表
  * Created by zhangyunfei on 16/8/9.
  */
-@DatabaseTable(tableName = "MyPermissionInfo")
+//@DatabaseTable(tableName = "MyPermissionInfo")
 public class MyPermissionInfo {
-    @DatabaseField(columnName="idpk",generatedId = true)
+//    @DatabaseField(columnName="idpk",generatedId = true)
     private int idpk;
 
-    @DatabaseField(columnName="productId")
+//    @DatabaseField(columnName="productId")
     private String productId;//产品编号
 
-    @DatabaseField(columnName="producteStatus")
+//    @DatabaseField(columnName="producteStatus")
     private int producteStatus;//产品状态
 
-    @DatabaseField(columnName="deadline")
+//    @DatabaseField(columnName="deadline")
     private String deadline;//产品过期时间
 
     public MyPermissionInfo() {

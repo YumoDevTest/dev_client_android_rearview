@@ -1,8 +1,10 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.box.protobuf.bean.ObdRightBean;
 
 import java.io.InvalidObjectException;
+import java.util.List;
 
 /**
  * 伪造的权限管理类。在停止进行权限管理的试用采用此类
@@ -32,5 +34,10 @@ public class PermissionManagerFake implements PermissionManager {
         PermissionSummary res = new PermissionSummary();
         res.summary = PermissionSummary.HAS_PAY;
         return res;
+    }
+
+    @Override
+    public List<ObdRightBean.ObdRight> getPermissonList() {
+        return null;
     }
 }

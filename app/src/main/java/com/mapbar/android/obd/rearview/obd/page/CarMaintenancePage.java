@@ -302,6 +302,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
     public void onResume() {
         getLocalSchemeCache();
         super.onResume();
+
+        presenter.checkPermission();
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarMaintenancePage"); //统计页面
         }

@@ -231,6 +231,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     @Override
     public void onResume() {
         super.onResume();
+        presenter.checkPermisson();
         //判断有无故障
         if (!TextUtils.isEmpty(getPopContent())) {
             tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));

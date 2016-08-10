@@ -19,16 +19,22 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         super(view);
 
         permissionManager = LogicFactory.createPermissionManager(getView().getContext());
+
+
+    }
+
+    public void checkPermisson() {
         //是否具有 车辆状态权限
         PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_STATE);
+        IPermissionAlertViewAble permissionAlertViewAble = getView();
         if (!permission4State.isValid) {
-            IPermissionAlertViewAble permissionAlertViewAble = getView();
             permissionAlertViewAble.showPermissionAlertView_FreeTrial(permission4State.expired, permission4State.numberOfDay);
+        }else {
+            permissionAlertViewAble.hidePermissionAlertView_FreeTrial();
         }
         //检查 是否具有体检权限，如果有，才会显示 故障码
         PermissionManager.PermissionResult permission4Checkup = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
         getView().setCarStateRecordVisiable(permission4Checkup.isValid);
-
 
     }
 }

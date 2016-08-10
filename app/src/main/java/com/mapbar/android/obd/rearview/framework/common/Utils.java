@@ -131,10 +131,10 @@ public class Utils {
             Log.d(LogTag.OBD, "设备IMEI是: " + deviceId);
         }
         if (!BuildConfig.IS_FAKE_IMEI) {
-            LogUtil.d(TAG, "##准备返回真实的IMEI: " + deviceId);
+            LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
             return deviceId;
         } else {
-            LogUtil.d(TAG, "##准备返回模拟的IMEI: " + deviceId);
+            LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
             return BuildConfig.FAKE_IMEI;
         }
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\

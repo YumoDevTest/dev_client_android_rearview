@@ -32,7 +32,6 @@ public class UserCenterManager extends OBDManager {
      * 默认密码
      */
     private final String DEFAULT_PASSWORD = Config.USE_INTERNAL_HOST ? "654321" : "111qqq,,,";
-    private final PermissonCheckerOnStart permissonCheckerOnStart;
     private Handler mHandler = new Handler();
     private boolean isPush = true;
     private LocalCarModelInfoResult localCarModelInfoResult;
@@ -64,7 +63,6 @@ public class UserCenterManager extends OBDManager {
 
     public UserCenterManager() {
         super();
-        permissonCheckerOnStart = new PermissonCheckerOnStart();
 
     }
 
@@ -170,10 +168,6 @@ public class UserCenterManager extends OBDManager {
         }
         switch (event) {
             case Manager.Event.queryCarSucc:
-                //启动权限检查
-//                if (permissonCheckerOnStart != null)
-//                    permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
-
                 UserCar[] cars = (UserCar[]) o;
                 // 日志
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {

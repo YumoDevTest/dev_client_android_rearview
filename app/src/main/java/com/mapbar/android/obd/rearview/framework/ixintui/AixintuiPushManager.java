@@ -100,7 +100,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e(LogTag.PUSH, "### 解析推送结果异常:" + e.getMessage(), e);
+                Log.e(LogTag.PUSH, "## 解析推送结果异常:" + e.getMessage(), e);
             }
         }
 
