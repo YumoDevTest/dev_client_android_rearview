@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
@@ -45,7 +46,7 @@ import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
 import com.umeng.analytics.MobclickAgent;
@@ -120,8 +121,13 @@ public class MainActivity extends BaseActivity {
             LogManager.getInstance().setLogFile(logFile);
         }
 
-        SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
-        OBDSDKListenerManager.getInstance().init();
+        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
+        try {
+            OBDSDKListenerManager.getInstance().init();
+        } catch (IOException e) {
+            e.printStackTrace();
+            alert("初始化串口失败");
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);
         transaction.replace(R.id.content_view, page);
@@ -175,7 +181,6 @@ public class MainActivity extends BaseActivity {
                         }, 5000);
 
 
-
                         break;
 
                 }
@@ -184,6 +189,10 @@ public class MainActivity extends BaseActivity {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         handler = new MyHandler(this);
+    }
+
+    private void alert(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void stopBackgroundService() {
@@ -346,6 +355,7 @@ public class MainActivity extends BaseActivity {
         } else {
             startV3HService();
             Manager.getInstance().cleanup();
+            ObdContext.getObdContext().exit();
             android.os.Process.killProcess(android.os.Process.myPid());
 
         }

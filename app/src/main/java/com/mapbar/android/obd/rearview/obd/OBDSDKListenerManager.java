@@ -11,6 +11,7 @@ import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ExtraTripInfo;
 import com.mapbar.obd.Manager;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class OBDSDKListenerManager {
     }
 
 
-    public void init() {
+    public void init() throws IOException {
         regListeners = new ArrayList<>();
         OBDManager.OBDListener obdListener = new OBDManager.OBDListener() {
             @Override

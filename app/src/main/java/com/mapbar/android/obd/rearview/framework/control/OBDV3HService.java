@@ -24,11 +24,13 @@ import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.RealTimeData;
-import com.mapbar.obd.SerialPortManager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
+
+import java.io.IOException;
 
 
 /**
@@ -100,11 +102,11 @@ public class OBDV3HService extends Service {
         super.onCreate();
         manager = Manager.getInstance();
         //捕捉异常注册
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplication(), 2);
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
         mHandler = new Handler();
-        SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
+        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         sdkListener = new Manager.Listener() {
 
             @Override
@@ -247,7 +249,12 @@ public class OBDV3HService extends Service {
             }
         };
         String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
-        manager.init(this, sdkListener, sdPath, null);
+        try {
+            manager.init(this, sdkListener, sdPath, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("### 初始化串口异常");
+        }
         //
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.mapbar.obd.stopservice");

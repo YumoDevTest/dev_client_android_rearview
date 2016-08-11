@@ -10,6 +10,7 @@ import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenterError;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -79,7 +80,7 @@ public class OBDManager {
      *
      * @param obdListener {@link OBDListener}事件回调接口
      */
-    public static void init(OBDListener obdListener) {
+    public static void init(OBDListener obdListener) throws IOException {
         SDKListenerManager.getInstance().init();
         baseObdListener = obdListener;
     }

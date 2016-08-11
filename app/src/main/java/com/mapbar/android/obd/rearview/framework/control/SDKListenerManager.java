@@ -11,6 +11,7 @@ import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class SDKListenerManager {
         return sdkListenerManager;
     }
 
-    public void init() {
+    public void init() throws IOException {
         manager = Manager.getInstance();
         regListeners = new ArrayList<>();
         listener = new Manager.Listener() {

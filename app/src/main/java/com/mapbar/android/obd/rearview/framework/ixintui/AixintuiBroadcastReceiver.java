@@ -27,9 +27,9 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         // 日志
-        if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-            Log.d(LogTag.PUSH, " action " + action);
-        }
+//        if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//            Log.d(LogTag.PUSH, " action " + action);
+//        }
 
         // 透传消息
         if (action.equals(SdkConstants.MESSAGE_ACTION)) {
@@ -37,12 +37,12 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
             String extra = intent.getStringExtra(SdkConstants.ADDITION);
 
             // 日志
-            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                Log.d(LogTag.PUSH, "透传 message received, msg is: " + msg);
-                Log.d(LogTag.PUSH, "透传 message received, extra is: " + extra);
-
-
-            }
+//            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                Log.d(LogTag.PUSH, "透传 message received, msg is: " + msg);
+//                Log.d(LogTag.PUSH, "透传 message received, extra is: " + extra);
+//
+//
+//            }
 
             // 处理透传内容
             AixintuiPushManager.getInstance().onAppearMsg(context, msg, extra);
@@ -57,32 +57,32 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
             if (code != 0) {
                 // 错误信息
                 String error = intent.getStringExtra(SdkConstants.ERROR);
-                // 日志
-                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                    Log.d(LogTag.PUSH, "command is: " + cmd + " result error: " + error);
-                }
+//                // 日志
+//                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                    Log.d(LogTag.PUSH, "command is: " + cmd + " result error: " + error);
+//                }
             } else {
-                // 日志
-                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                    Log.d(LogTag.PUSH, " command is:-->> " + cmd + "result OK");
-                }
+//                // 日志
+//                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                    Log.d(LogTag.PUSH, " command is:-->> " + cmd + "result OK");
+//                }
             }
             // 附加结果，比如添加成功的tag， 比如推送是否暂停等
             String extra = intent.getStringExtra(SdkConstants.ADDITION);
             if (extra != null) {
-                // 日志
-                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                    Log.d(LogTag.PUSH, "result extra: -->> " + extra);
-                }
+//                // 日志
+//                if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                    Log.d(LogTag.PUSH, "result extra: -->> " + extra);
+//                }
             }
             if (SdkConstants.REGISTER.equals(cmd)) {
                 token = intent.getStringExtra(SdkConstants.ADDITION);
                 if (!TextUtils.isEmpty(token)) {
 
                     // 日志
-                    if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                        Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);
-                    }
+//                    if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                        Log.d(LogTag.PUSH, " 调用绑定接口-->> " + " aixtoken-->> " + token);
+//                    }
                     android.util.Log.e("PUSH", token);
 
                     AixintuiPushManager.getInstance().setAixintui_token(token);
@@ -94,10 +94,10 @@ public class AixintuiBroadcastReceiver extends BroadcastReceiver {
         else if (action.equals(SdkConstants.NOTIFICATION_CLICK_ACTION)) {
 
             String msg = intent.getStringExtra(SdkConstants.MESSAGE);
-            // 日志
-            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
-                Log.e(LogTag.PUSH, " notification click received, msg is:-->> " + msg);
-            }
+//            // 日志
+//            if (Log.isLoggable(LogTag.PUSH, Log.DEBUG)) {
+//                Log.e(LogTag.PUSH, " notification click received, msg is:-->> " + msg);
+//            }
             AixintuiPushManager.getInstance().onNofificationClick(context, msg);
         }
     }
