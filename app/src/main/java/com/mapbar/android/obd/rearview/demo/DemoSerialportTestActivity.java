@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.demo;
 
 import android.app.Activity;
 import android.os.AsyncTask;

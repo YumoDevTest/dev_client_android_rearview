@@ -17,13 +17,4 @@
         android:onClick="onClick1"
         android:text="New Button" />
 
-    <EditText
-        android:textColor="#000"
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:editable="false"
-        android:inputType="none"
-        android:scrollbars="vertical"
-        android:textSize="12sp" />
 </LinearLayout>

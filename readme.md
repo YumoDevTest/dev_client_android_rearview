@@ -40,3 +40,19 @@
 http://weixin.mapbar.com/obd/userRegister?imei=77726%%fsdffsdfssdfsdfsdfsd&pushToken=113323225539582313&token=GiOm/2xBR5s8OmsMg+w9ekdRxQ3Wy1BqML1Ty7F6SlfbsvoJMOFLgnRn2Zyjw6wY
 
 ======================
+
+1. app 刷固件前，停止数据采集流程.stopThread...
+
+刷固件流程
+1.  发 ATE1 设置回显等。 响应以>结束
+    发 AT@LOCK0  。 响应以>结束
+2. 让固件重启。发 ATBOOT，等待固件重启。   atboot结尾，第一次atboot没有响应
+3. 固件会启动 booloader.
+4. bootloader的响应不再是普通指令，以回车符结束，本次和后续指令都以回车符结束
+5. 再次发 atboot, 固件在1.5内再次收到 atboot,会进入刷固件模式，第二次响应 nakb，整数15
+
+如果需要验证权限，发  AT@AUTH+密码
+
+6. 多次数据请求和应答。。。 升级过程中有进度事件
+7. 最后，抛出升级成功事件
+8. 升级完成后 重启

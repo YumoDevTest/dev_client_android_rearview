@@ -2,6 +2,7 @@ package com.mapbar.android.obd.rearview.obd.page;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.demo.DemoOtaSerialActivity;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
@@ -218,6 +220,8 @@ public class MainPage extends AppPage {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+
+        startActivity(new Intent(getActivity(), DemoOtaSerialActivity.class));
     }
 
     private void initDialog() {
