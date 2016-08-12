@@ -71,9 +71,7 @@ public class MainActivity extends BaseActivity {
     private boolean restart;
     private boolean testAppUpdate = false;
     private PopupWindow updatePopu;
-
     private Handler handler;
-
     private String logFilePath = "";
 
     public static MainActivity getInstance() {
