@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.obd.ConnectManager;
-import com.mapbar.obd.serial.OutputStringUtil;
-import com.mapbar.obd.serial.ReadTimeoutException;
-import com.mapbar.obd.serial.SerialPortManager4Commond;
+import com.mapbar.obd.serial.comond.OutputStringUtil;
+import com.mapbar.obd.serial.comond.ReadTimeoutException;
+import com.mapbar.obd.serial.comond.CommondSerialPortManager;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,13 +22,12 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class DemoSerialportTestActivity extends Activity {
     public static final int ALERT = 1;
     private static final int SEND = 2;
     private static final long LOOP_TIME = 100;
-    private SerialPortManager4Commond mSerialPortManager;
+    private CommondSerialPortManager mSerialPortManager;
     EditText textView2;
 
     public static final String SERIALPORT_PATH = "/dev/ttyS1";
@@ -80,7 +79,7 @@ public class DemoSerialportTestActivity extends Activity {
     }
 
     private void start() throws IOException {
-        mSerialPortManager = new SerialPortManager4Commond();
+        mSerialPortManager = new CommondSerialPortManager();
         mSerialPortManager.setPath(SERIALPORT_PATH);
         mSerialPortManager.init(this, new ConnectManager.Listener() {
             @Override
