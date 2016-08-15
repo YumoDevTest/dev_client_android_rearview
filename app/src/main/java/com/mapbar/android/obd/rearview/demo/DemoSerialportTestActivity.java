@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.obd.ConnectManager;
-import com.mapbar.obd.serial.comond.OutputStringUtil;
+import com.mapbar.obd.utilsppp.OutputStringUtil;
 import com.mapbar.obd.serial.comond.ReadTimeoutException;
 import com.mapbar.obd.serial.comond.CommondSerialPortManager;
 
