@@ -6,8 +6,10 @@ import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.net.ErrorCode;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionRepositoryChanged;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
@@ -31,16 +33,27 @@ public class PermissionManagerImpl implements PermissionManager {
 
     public PermissionManagerImpl(Context context) {
         permissionRepository = new PermissionRepository(context);
+        permissionRepository.setChangedListener(changedListener);
     }
+
+    private PermissionRepository.ChangedListener changedListener = new PermissionRepository.ChangedListener() {
+        @Override
+        public void onChanged() {
+            //通知权限发生了变化
+            EventBusManager.post(new PermissionRepositoryChanged());
+        }
+    };
 
     @Override
     public void downloadPermissionList(final DownloadPermissionCallback callback) {
         LogUtil.d(TAG, "## 启动下载权限");
 
-        String imei = "111111-22-333333";
+//        String imei = "111111-22-333333";
 //        String imei = "211111-22-333333";
 //        String imei = "311111-22-333333";
-//        String imei = "411111-22-333333";
+        String imei = "411111-22-333333";
+//        String imei = "511111-22-333333";
+//        String imei = "611111-22-333333";
 //        imei = Utils.getImei(Application.getInstance());
         ObdRightBean.ObdRightRequest obdRightRequest;
         obdRightRequest = ObdRightBean.ObdRightRequest.newBuilder().setImei(imei).build();
@@ -66,9 +79,8 @@ public class PermissionManagerImpl implements PermissionManager {
                         Log.i(TAG, "error: " + msgStr);
                         if (callback != null)
                             callback.onFailure(new Exception("网络访问异常，错误码" + code));
+                        LogUtil.d(TAG, "## 下载权限 失败");
                         return;
-                    } else {
-                        Log.i(TAG, "OK : " + msgStr);
                     }
 
                     ByteString data = obdProductResponse.getData();
@@ -79,7 +91,7 @@ public class PermissionManagerImpl implements PermissionManager {
 //                    long modifyTime = obdProductData.getModifyTime();
 //                    String imei1 = obdProductData.getImei();
                     final List<ObdRightBean.ObdRight> obdRightList = obdProductData.getObdRightList();
-
+                    LogUtil.d(TAG, "## 下载权限 成功");
                     //将权限信息中,保存到数据库
                     new AsyncTask<Void, Void, Boolean>() {
                         private Exception exception;
@@ -88,11 +100,14 @@ public class PermissionManagerImpl implements PermissionManager {
                         protected Boolean doInBackground(Void... voids) {
                             try {
                                 permissionRepository.saveAndReplacePermission(obdRightList);
+                                LogUtil.d(TAG, "## 保存权限到本地 成功");
                                 permissionRepository.clearCache();
+                                LogUtil.d(TAG, "## 清理本地权限 成功");
                                 return true;
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 exception = e;
+                                LogUtil.d(TAG, "## 保存权限到本地 失败");
                                 return false;
                             }
                         }
@@ -108,7 +123,7 @@ public class PermissionManagerImpl implements PermissionManager {
                         callback.onSuccess(obdRightList);
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();
-                    Log.e(TAG, e.getMessage(), e);
+                    LogUtil.e(TAG, "## 下载权限 失败", e);
                 }
             }
         });
@@ -122,13 +137,13 @@ public class PermissionManagerImpl implements PermissionManager {
      */
     @Override
     public PermissionResult checkPermission(int permissionKey) {
-        LogUtil.d(TAG, "## 准备 检查本地权限" + permissionKey);
+//        LogUtil.d(TAG, "## 准备 检查本地权限");
         List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
         if (permissonList == null) {
             return new PermissionResult(false, true, 0, permissionKey);
         }
-        boolean isValid = false;// 有效
-        boolean isTrial = false;// 试用
+//        boolean isValid = false;// 有效
+//        boolean isTrial = false;// 试用
         ObdRightBean.ObdRight obdRight = null;
         for (int i = 0; i < permissonList.size(); i++) {
             obdRight = permissonList.get(i);
@@ -137,10 +152,12 @@ public class PermissionManagerImpl implements PermissionManager {
             }
         }
         if (obdRight == null) {
+            LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=无权限");
             return new PermissionResult(false, true, 0, permissionKey);
         }
         //免费
         if (obdRight.getProducteStatus() == PermissionStatus.FREE) {
+            LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=免费");
             return new PermissionResult(true, false, Integer.MAX_VALUE, permissionKey);
         }
         //试用,或者已购买，要判断过期
@@ -148,11 +165,13 @@ public class PermissionManagerImpl implements PermissionManager {
                 || obdRight.getProducteStatus() == PermissionStatus.BUYED) {
             int trialDayOfReset = getDayOfReset(obdRight);
             boolean expired = trialDayOfReset <= 0;
+            LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=试用,或者已购买，剩余时长=" + trialDayOfReset);
             return new PermissionResult(true, expired, trialDayOfReset, permissionKey);
         }
 //        if (permissionKey == PermissionKey.PERMISSION_CAR_STATE)
 //            return new PermissionResult(isValid, true, 10, permissionKey);
         //default
+        LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=无权限");
         return new PermissionResult(false, true, 0, permissionKey);
     }
 
@@ -163,7 +182,7 @@ public class PermissionManagerImpl implements PermissionManager {
      */
     @Override
     public PermissionSummary getPermissionSummary() {
-        LogUtil.d(TAG, "## 获得权限概要");
+//        LogUtil.d(TAG, "## 获得权限概要");
         List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
         //一条也没有，认为过期
         if (permissonList == null) {
@@ -204,6 +223,7 @@ public class PermissionManagerImpl implements PermissionManager {
             PermissionSummary permissionSummary = new PermissionSummary(PermissionSummary.TRAIL);
             permissionSummary.numberOfDay = trialDayOfReset;
             permissionSummary.expired = trialDayOfReset <= 0;
+            return permissionSummary;
         }
         //defalut
         return new PermissionSummary(PermissionSummary.HAS_PAY);
@@ -219,19 +239,19 @@ public class PermissionManagerImpl implements PermissionManager {
      */
     public static int getDayOfReset(ObdRightBean.ObdRight obdRight) {
         String date = obdRight.getDeadline();
-        Date dateTarget = null;
+        Calendar calendarTarget;
         try {
+            Date dateTarget = null;
             dateTarget = SIMPLE_DATE_FORMAT.parse(date);
+            calendarTarget = Calendar.getInstance();
+            calendarTarget.setTimeInMillis(dateTarget.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             LogUtil.e(TAG, "日期格式异常" + e.getMessage(), e);
             return -1;
         }
-        Calendar calendar = Calendar.getInstance();
-        Date dateNow = new Date(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-        long numberOfDay = (dateTarget.getTime() - dateNow.getTime()) / (1000 * 3600 * 24);
+        Calendar calendarNow = Calendar.getInstance();
+        long numberOfDay = (calendarTarget.getTimeInMillis() - calendarNow.getTimeInMillis()) / (1000 * 3600 * 24);
         return (int) numberOfDay;
     }
 

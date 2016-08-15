@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.box.protobuf.bean.ObdRightBean;
+
+import java.util.List;
 
 /**
  * 权限失败dialog
@@ -69,8 +73,20 @@ public class PermissionUpdateFailureActivity extends Activity {
      * 重试按钮点击事件
      */
     private void onClickButtonRetry() {
-        permissonCheckerOnStart.downloadPermision(getActivity());
-        finish();
+        permissonCheckerOnStart.downloadPermision(getActivity(), new PermissionManager.DownloadPermissionCallback() {
+            @Override
+            public void onSuccess(List<ObdRightBean.ObdRight> permissionList) {
+                //表示更新权限成功。
+                permissonCheckerOnStart.checkLocalPermissionSummary(getActivity());
+                finish();
+            }
+
+            @Override
+            public void onFailure(Exception ex) {
+                //提示用户，更新权限失败
+
+            }
+        });
     }
 
     public Activity getActivity() {

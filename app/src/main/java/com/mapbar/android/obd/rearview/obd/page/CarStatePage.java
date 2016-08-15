@@ -231,7 +231,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     @Override
     public void onResume() {
         super.onResume();
-        presenter.checkPermisson();
+        if (presenter != null)
+            presenter.checkPermission();
         //判断有无故障
         if (!TextUtils.isEmpty(getPopContent())) {
             tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
@@ -254,6 +255,14 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         }
     }
 
+    @Override
+    public void onDestroy() {
+        if (presenter != null) {
+            presenter.clear();
+            presenter = null;
+        }
+        super.onDestroy();
+    }
 
     /**
      * 点击故障码，展示故障码popwindow

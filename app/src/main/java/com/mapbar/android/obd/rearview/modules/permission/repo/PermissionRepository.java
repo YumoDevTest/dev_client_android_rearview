@@ -26,6 +26,7 @@ public class PermissionRepository extends BaseDao {
     private static final String CACHE_KEY_GET_PERMISSON_LIST = "CACHE_KEY_GET_PERMISSON_LIST";
 
     private WeakReference<Context> context;
+    private ChangedListener changedListener;
 
     public PermissionRepository(Context context1) {
         super(context1);
@@ -61,6 +62,8 @@ public class PermissionRepository extends BaseDao {
                 db.insert("MyPermissionInfo", null, contentValues);
             }
             db.setTransactionSuccessful();
+
+            notifyChanged();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -73,7 +76,7 @@ public class PermissionRepository extends BaseDao {
 
     public List<ObdRightBean.ObdRight> getPermissonList() {
         if (mPermissionListCache.exist(CACHE_KEY_GET_PERMISSON_LIST)) {
-            LogUtil.d(TAG, "## 准备从内存缓存读取 getPermissonList");
+//            LogUtil.d(TAG, "## 准备从内存缓存读取 getPermissonList");
             try {
                 return (List<ObdRightBean.ObdRight>) mPermissionListCache.getCache(CACHE_KEY_GET_PERMISSON_LIST);
             } catch (Exception ex) {
@@ -113,7 +116,26 @@ public class PermissionRepository extends BaseDao {
     public void clearCache() {
         LogUtil.d(TAG, "## 清理缓存");
         mPermissionListCache.clear();
+        notifyChanged();
     }
 
+    private void notifyChanged() {
+        if (changedListener != null)
+            changedListener.onChanged();
+    }
 
+    /**
+     * 设置一个监听，本地数据发生了变化
+     * @param changedListener
+     */
+    public void setChangedListener(ChangedListener changedListener) {
+        this.changedListener = changedListener;
+    }
+
+    /**
+     * 权限存储的 变更监听器
+     */
+    public interface ChangedListener {
+        void onChanged();
+    }
 }

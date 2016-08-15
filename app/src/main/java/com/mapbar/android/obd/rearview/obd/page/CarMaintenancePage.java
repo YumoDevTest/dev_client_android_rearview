@@ -303,7 +303,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         getLocalSchemeCache();
         super.onResume();
 
-        presenter.checkPermission();
+        if (presenter != null) presenter.checkPermission();
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarMaintenancePage"); //统计页面
         }
@@ -317,6 +317,15 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
             MobclickAgentEx.onPageEnd("CarMaintenancePage");
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        if (presenter != null) {
+            presenter.clear();
+            presenter = null;
+        }
+        super.onDestroy();
     }
 
     @Override

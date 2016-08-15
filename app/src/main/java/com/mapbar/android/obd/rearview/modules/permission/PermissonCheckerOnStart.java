@@ -26,6 +26,13 @@ public class PermissonCheckerOnStart {
     private static final String KEY_FOR_HAS_CHECKED_ON_START = "KEY_FOR_HAS_CHECKED_ON_START";
     private static final String TAG = PermissonCheckerOnStart.class.getSimpleName();
 
+    public void downloadPermision(final Context context,PermissionManager.DownloadPermissionCallback callback1) {
+        //如果开启了 关闭了权限验证。则不下载
+        if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
+            return;
+        final PermissionManager permissionManager = LogicFactory.createPermissionManager(context);
+        permissionManager.downloadPermissionList(callback1);
+    }
     public void downloadPermision(final Context context) {
         //如果开启了 关闭了权限验证。则不下载
         if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
@@ -51,7 +58,7 @@ public class PermissonCheckerOnStart {
      * 检查本地权限
      */
     public void checkLocalPermissionSummary(Context context) {
-        LogUtil.d(TAG, "## 准备 判断 本地权限摘要");
+        LogUtil.d(TAG, "## 准备 判断本地权限摘要");
         //判断 是否在启动时 检查过权限
         final Session session = Application.getInstance().getSession();
         if (session.getBoolean(KEY_FOR_HAS_CHECKED_ON_START, false)) {

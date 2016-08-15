@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -98,7 +97,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
     private TitleBarView titlebarview1;
-    private CarDataPresenter carDataPresenter;
+    private CarDataPresenter presenter;
     private FrameLayout taiya_single_indicator;//单一胎压指示视图
     private RadioButton taiya_single_view;//单一胎压指示视图
     private TirePressureView tire_pressure_left_top;//4胎压指示视图
@@ -146,7 +145,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
             editor.putBoolean("isFirst", false);
             editor.commit();
         }
-        carDataPresenter = new CarDataPresenter(this);
+        presenter = new CarDataPresenter(this);
         getPopData();
         upDataView();
     }
@@ -182,7 +181,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     @Override
     public void onResume() {
         super.onResume();
-        carDataPresenter.checkPermission();
+        if (presenter != null) presenter.checkPermission();
         MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
     }
 
@@ -194,14 +193,14 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
 
     @Override
     public void onDetach() {
-        if(permissionAlertAbleAdapter != null)
+        if (permissionAlertAbleAdapter != null)
             permissionAlertAbleAdapter.clear();
         super.onDetach();
     }
 
     @Override
     public void onDestroy() {
-        carDataPresenter.clear();
+        presenter.clear();
         super.onDestroy();
     }
 
