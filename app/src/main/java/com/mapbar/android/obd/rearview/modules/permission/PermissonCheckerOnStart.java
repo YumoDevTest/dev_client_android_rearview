@@ -42,6 +42,7 @@ public class PermissonCheckerOnStart {
             @Override
             public void onSuccess(List<ObdRightBean.ObdRight> permissionList) {
                 //表示更新权限成功。
+                LogUtil.d(TAG, "## 例行下载权限成功");
                 checkLocalPermissionSummary(context);
             }
 

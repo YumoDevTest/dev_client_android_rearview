@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.modules.common.BaseDao;
 import com.mapbar.android.obd.rearview.modules.permission.model.MyPermissionInfo;
@@ -22,6 +23,10 @@ import java.util.List;
  */
 public class PermissionRepository extends BaseDao {
     private static final String TAG = PermissionRepository.class.getSimpleName();
+    public static final String PRODUCT_ID = "productId";
+    public static final String PRODUCTE_STATUS = "producteStatus";
+    public static final String DEAD_LINE = "deadline";
+    public static final String IMEI = "imei";
     private Cache mPermissionListCache;
     private static final String CACHE_KEY_GET_PERMISSON_LIST = "CACHE_KEY_GET_PERMISSON_LIST";
 
@@ -34,7 +39,9 @@ public class PermissionRepository extends BaseDao {
         mPermissionListCache = new MemoryCache();
     }
 
-    public void saveAndReplacePermission(List<ObdRightBean.ObdRight> obdRightList) throws Exception {
+    public void saveAndReplacePermission(String imei, List<ObdRightBean.ObdRight> obdRightList) throws Exception {
+        if (TextUtils.isEmpty(imei))
+            throw new NullPointerException();
         if (context == null || context.get() == null)
             throw new Exception();
         LogUtil.d(TAG, "## 准备 保存权限到本地数据库");
@@ -56,9 +63,10 @@ public class PermissionRepository extends BaseDao {
             for (int i = 0; i < newPermissionInfoList.size(); i++) {
                 MyPermissionInfo item1 = newPermissionInfoList.get(i);
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("productId", item1.getProductId());
-                contentValues.put("producteStatus", item1.getProducteStatus());
-                contentValues.put("deadline", item1.getDeadline());
+                contentValues.put(PRODUCT_ID, item1.getProductId());
+                contentValues.put(PRODUCTE_STATUS, item1.getProducteStatus());
+                contentValues.put(DEAD_LINE, item1.getDeadline());
+                contentValues.put(IMEI, imei);
                 db.insert("MyPermissionInfo", null, contentValues);
             }
             db.setTransactionSuccessful();
@@ -74,7 +82,9 @@ public class PermissionRepository extends BaseDao {
         }
     }
 
-    public List<ObdRightBean.ObdRight> getPermissonList() {
+    public List<ObdRightBean.ObdRight> getPermissonList(String imei) {
+        if (TextUtils.isEmpty(imei))
+            throw new NullPointerException();
         if (mPermissionListCache.exist(CACHE_KEY_GET_PERMISSON_LIST)) {
 //            LogUtil.d(TAG, "## 准备从内存缓存读取 getPermissonList");
             try {
@@ -87,13 +97,13 @@ public class PermissionRepository extends BaseDao {
         SQLiteDatabase db = getReadableDB();
         Cursor cursor = null;
         try {
-            cursor = db.rawQuery("select * from MyPermissionInfo", null);
+            cursor = db.rawQuery("select * from MyPermissionInfo where imei=?", new String[]{imei});
             List<ObdRightBean.ObdRight> lst = new ArrayList<>();
             while (cursor.moveToNext()) {
-                String productId = cursor.getString(cursor.getColumnIndex("productId"));
-                int producteStatus = cursor.getInt(cursor.getColumnIndex("producteStatus"));
-                String deadline = cursor.getString(cursor.getColumnIndex("deadline"));
-
+                String productId = cursor.getString(cursor.getColumnIndex(PRODUCT_ID));
+                int producteStatus = cursor.getInt(cursor.getColumnIndex(PRODUCTE_STATUS));
+                String deadline = cursor.getString(cursor.getColumnIndex(DEAD_LINE));
+//                String imei = cursor.getString(cursor.getColumnIndex(IMEI));
                 ObdRightBean.ObdRight tmp = ObdRightBean.ObdRight.newBuilder()
                         .setProductId(productId)
                         .setProducteStatus(producteStatus)
@@ -126,6 +136,7 @@ public class PermissionRepository extends BaseDao {
 
     /**
      * 设置一个监听，本地数据发生了变化
+     *
      * @param changedListener
      */
     public void setChangedListener(ChangedListener changedListener) {

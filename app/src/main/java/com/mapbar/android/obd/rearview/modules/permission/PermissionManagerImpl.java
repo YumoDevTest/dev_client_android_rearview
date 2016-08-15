@@ -46,19 +46,12 @@ public class PermissionManagerImpl implements PermissionManager {
 
     @Override
     public void downloadPermissionList(final DownloadPermissionCallback callback) {
-        LogUtil.d(TAG, "## 启动下载权限");
-
-//        String imei = "111111-22-333333";
-//        String imei = "211111-22-333333";
-//        String imei = "311111-22-333333";
-        String imei = "411111-22-333333";
-//        String imei = "511111-22-333333";
-//        String imei = "611111-22-333333";
-//        imei = Utils.getImei(Application.getInstance());
+        String imei = getImei();
+        LogUtil.d(TAG, "## 启动下载权限，imei=" + imei);
         ObdRightBean.ObdRightRequest obdRightRequest;
         obdRightRequest = ObdRightBean.ObdRightRequest.newBuilder().setImei(imei).build();
 
-        HttpPBUtil.post(Urls.PERMISSION_DOWNLOAD_PERMISSIONS, obdRightRequest, new HttpPBUtil.HttpPBCallback() {
+        HttpPBUtil.post(Urls.PERMISSION_DOWNLOAD, obdRightRequest, new HttpPBUtil.HttpPBCallback() {
             @Override
             public void onFailure(Exception e) {
                 if (callback != null)
@@ -99,7 +92,7 @@ public class PermissionManagerImpl implements PermissionManager {
                         @Override
                         protected Boolean doInBackground(Void... voids) {
                             try {
-                                permissionRepository.saveAndReplacePermission(obdRightList);
+                                permissionRepository.saveAndReplacePermission(getImei(), obdRightList);
                                 LogUtil.d(TAG, "## 保存权限到本地 成功");
                                 permissionRepository.clearCache();
                                 LogUtil.d(TAG, "## 清理本地权限 成功");
@@ -114,13 +107,16 @@ public class PermissionManagerImpl implements PermissionManager {
 
                         @Override
                         protected void onPostExecute(Boolean isok) {
-                            if (!isok)
+                            if (isok) {
+                                if (callback != null)
+                                    callback.onSuccess(obdRightList);
+                            } else {
                                 if (callback != null)
                                     callback.onFailure(exception);
+                            }
                         }
                     }.execute();
-                    if (callback != null)
-                        callback.onSuccess(obdRightList);
+
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();
                     LogUtil.e(TAG, "## 下载权限 失败", e);
@@ -138,7 +134,7 @@ public class PermissionManagerImpl implements PermissionManager {
     @Override
     public PermissionResult checkPermission(int permissionKey) {
 //        LogUtil.d(TAG, "## 准备 检查本地权限");
-        List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
+        List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList(getImei());
         if (permissonList == null) {
             return new PermissionResult(false, true, 0, permissionKey);
         }
@@ -165,7 +161,7 @@ public class PermissionManagerImpl implements PermissionManager {
                 || obdRight.getProducteStatus() == PermissionStatus.BUYED) {
             int trialDayOfReset = getDayOfReset(obdRight);
             boolean expired = trialDayOfReset <= 0;
-            LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=试用,或者已购买，剩余时长=" + trialDayOfReset);
+            LogUtil.d(TAG, "## 检查本地权限" + permissionKey + ",结果=试用或已购买，剩余时长=" + trialDayOfReset);
             return new PermissionResult(true, expired, trialDayOfReset, permissionKey);
         }
 //        if (permissionKey == PermissionKey.PERMISSION_CAR_STATE)
@@ -183,7 +179,7 @@ public class PermissionManagerImpl implements PermissionManager {
     @Override
     public PermissionSummary getPermissionSummary() {
 //        LogUtil.d(TAG, "## 获得权限概要");
-        List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList();
+        List<ObdRightBean.ObdRight> permissonList = permissionRepository.getPermissonList(getImei());
         //一条也没有，认为过期
         if (permissonList == null) {
             return new PermissionSummary(PermissionSummary.NO_PERSSION);
@@ -257,6 +253,17 @@ public class PermissionManagerImpl implements PermissionManager {
 
     public List<ObdRightBean.ObdRight> getPermissonList() {
         LogUtil.d(TAG, "## 获得权限列表");
-        return permissionRepository.getPermissonList();
+        return permissionRepository.getPermissonList(getImei());
+    }
+
+    private String getImei() {
+//                String imei = "111111-22-333333";
+//        String imei = "211111-22-333333";
+//        String imei = "311111-22-333333";
+//        String imei = "411111-22-333333";
+        String imei = "511111-22-333333";
+//        String imei = "611111-22-333333";
+//        imei = Utils.getImei(Application.getInstance());
+        return imei;
     }
 }

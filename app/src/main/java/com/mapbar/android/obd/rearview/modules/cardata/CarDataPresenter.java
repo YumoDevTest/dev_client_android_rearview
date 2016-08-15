@@ -64,6 +64,8 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
         IPermissionAlertViewAble permissionAlertViewAble = getView();
         if (!result2.isValid) {
             permissionAlertViewAble.showPermissionAlertView_FreeTrial(result2.expired, result2.numberOfDay);
+        } else {
+            permissionAlertViewAble.hidePermissionAlertView_FreeTrial();
         }
     }
 

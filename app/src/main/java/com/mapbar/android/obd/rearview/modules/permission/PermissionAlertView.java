@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
@@ -21,10 +22,19 @@ import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.framework.log.Log;
+import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.util.QrBarcodeUtils;
+import com.mapbar.android.obd.rearview.obd.util.Urls;
+import com.mapbar.obd.CarDetail;
+import com.mapbar.obd.LocalUserCarResult;
+import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidParameterException;
 
 /**
@@ -40,6 +50,7 @@ public class PermissionAlertView extends FrameLayout {
     private TextView title;
     private ImageView barcodeView;
     private Button btn_continue_try;
+    private static CarDetail localCarDetail;
 
     public PermissionAlertView(Context context) {
         super(context);
@@ -55,6 +66,7 @@ public class PermissionAlertView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
     }
+
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         layoutInflater = LayoutInflater.from(context);
@@ -131,24 +143,71 @@ public class PermissionAlertView extends FrameLayout {
 
     private void showQrBarcodeView() {
         new AsyncTask<Void, Integer, BitmapDrawable>() {
+            Exception ex;
+
             @Override
             protected BitmapDrawable doInBackground(Void... voids) {
-                String url = buildQrContentUrl();
-                Bitmap bmQR = QrBarcodeUtils.createQrBitmap(url, 344, 344);
-                return new BitmapDrawable(bmQR);
+                String url = null;
+                try {
+                    url = buildQrContentUrl();
+                    Bitmap bmQR = QrBarcodeUtils.createQrBitmap(url, 344, 344);
+                    return new BitmapDrawable(bmQR);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    ex = e;
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(BitmapDrawable bitmapDrawable) {
-                setQrBarcodeImage(bitmapDrawable);
+                if (ex != null) {
+                    Toast.makeText(getContext(), "" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    setQrBarcodeImage(bitmapDrawable);
+                }
             }
         }.execute();
     }
 
-    private static String buildQrContentUrl() {
+    private static CarDetail getLocalCarDetail() {
+        LocalUserCarResult result = Manager.getInstance().queryLocalUserCar();
+        if (result == null)
+            return null;
+        UserCar car = result.userCars == null || result.userCars.length == 0 ? null : result.userCars[0];
+        if (car == null)
+            return null;
+        return Manager.getInstance().getCarDetailByCarInfo(car);
+    }
+
+
+    private static String buildQrContentUrl() throws UnsupportedEncodingException {
+        CarDetail carDetail = getLocalCarDetail();
+        if (carDetail == null)
+            throw new InvalidParameterException("无法获得本地车辆信息");
+        String pinpai = carDetail.firstBrand;
+        String xinghao = carDetail.carModel;
+
         StringBuilder sb = new StringBuilder();
-        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
-        sb.append("pushToken=").append(AixintuiConfigs.push_token);
+        sb.append(Urls.PERMISSION_BUY)
+                .append("?i=").append(Utils.getImei(MainActivity.getInstance()))
+                .append("&p=").append(AixintuiConfigs.push_token)
+                .append("&b=").append(URLEncoder.encode(pinpai, "UTF-8"))
+                .append("&m=").append(URLEncoder.encode(xinghao, "UTF-8"));
         return sb.toString();
     }
 }
+
+
+/*
+            扫码支付的url参数：
+
+            i：imei号
+            p：pushToken
+            b：品牌
+            m：型号
+
+这里需要需要传入 1级和3级
+车型信息，一级品牌 奥迪等，二级 进口， 三级品牌 型号A6,四级 2011年款
+
+*/

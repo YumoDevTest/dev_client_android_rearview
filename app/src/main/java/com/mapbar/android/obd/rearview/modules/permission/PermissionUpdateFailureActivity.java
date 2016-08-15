@@ -11,7 +11,12 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyResult;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -20,6 +25,7 @@ import java.util.List;
  * Created by zhangyunfei on 16/8/4.
  */
 public class PermissionUpdateFailureActivity extends Activity {
+    public static final String TAG = PermissionUpdateFailureActivity.class.getSimpleName();
 
     private View contentView;
     private Button btn_retry;
@@ -50,6 +56,7 @@ public class PermissionUpdateFailureActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //下载失败时，跳过而不再下载，进入下一流程，检查本地权限摘要
+                LogUtil.d(TAG, "## 点击跳过按钮");
                 permissonCheckerOnStart.checkLocalPermissionSummary(getActivity());
                 finish();
             }
@@ -74,9 +81,11 @@ public class PermissionUpdateFailureActivity extends Activity {
      */
     private void onClickButtonRetry() {
         permissonCheckerOnStart.downloadPermision(getActivity(), new PermissionManager.DownloadPermissionCallback() {
+
             @Override
             public void onSuccess(List<ObdRightBean.ObdRight> permissionList) {
                 //表示更新权限成功。
+                LogUtil.d(TAG, "## 重试成功");
                 permissonCheckerOnStart.checkLocalPermissionSummary(getActivity());
                 finish();
             }
@@ -93,4 +102,17 @@ public class PermissionUpdateFailureActivity extends Activity {
         return this;
     }
 
+
+    /**
+     * 收到推送事件：购买功能成功或失败
+     *
+     * @param permissionBuyResult
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PermissionBuyResult permissionBuyResult) {
+        //购买成功则关闭自身,MainActivity也会收到推送，它会下载最新的权限
+        if (permissionBuyResult.isBuySuccess()) {
+            finish();
+        }
+    }
 }

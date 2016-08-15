@@ -35,6 +35,8 @@ public class VehicleCheckupPresenter extends BasePresenter<IVehicleCheckupView>{
         IPermissionAlertViewAble permissionAlertViewAble = getView();
         if (!permission4State.isValid) {
             permissionAlertViewAble.showPermissionAlertView_FreeTrial(permission4State.expired, permission4State.numberOfDay);
+        }else {
+            permissionAlertViewAble.hidePermissionAlertView_FreeTrial();
         }
     }
 

@@ -1,9 +1,12 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,12 +38,18 @@ import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyResult;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.box.protobuf.bean.ObdRightBean;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
@@ -50,6 +59,8 @@ import com.mapbar.obd.UserCenter;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,6 +69,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
@@ -174,7 +186,6 @@ public class MainActivity extends BaseActivity {
                         }, 5000);
 
 
-
                         break;
 
                 }
@@ -183,6 +194,7 @@ public class MainActivity extends BaseActivity {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         handler = new MyHandler(this);
+        EventBusManager.register(this);
     }
 
     private void stopBackgroundService() {
@@ -338,6 +350,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         LayoutUtils.disQrPop();//防止popupwindow泄露
+        EventBusManager.unregister(this);
         super.onDestroy();
         if (restart) {
             restart = false;
@@ -468,6 +481,21 @@ public class MainActivity extends BaseActivity {
                 return;
             getInnerObject().showAppUpdate((AppInfo) msg.obj);
         }
+    }
+
+    /**
+     * 收到推送事件：购买功能成功或失败
+     *
+     * @param permissionBuyResult
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PermissionBuyResult permissionBuyResult) {
+        //购买成功后，需要重新下载功能权限
+        new PermissonCheckerOnStart().downloadPermision(getActivity());
+    }
+
+    public Activity getActivity() {
+        return this;
     }
 
 }

@@ -99,6 +99,7 @@ android {
             buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
             buildConfigField("String", "FAKE_IMEI", "")
             buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
+            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
         debug {
             debuggable true
@@ -108,6 +109,7 @@ android {
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
             buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
             buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
+            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
     }
     lintOptions {

@@ -39,6 +39,8 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         IPermissionAlertViewAble permissionAlertViewAble = getView();
         if (!permission4State.isValid) {
             permissionAlertViewAble.showPermissionAlertView_FreeTrial(permission4State.expired, permission4State.numberOfDay);
+        }else {
+            permissionAlertViewAble.hidePermissionAlertView_FreeTrial();
         }
         //检查 是否具有体检权限，如果有，才会显示 故障码
         PermissionManager.PermissionResult permission4Checkup = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
