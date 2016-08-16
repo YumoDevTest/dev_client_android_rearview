@@ -22,7 +22,7 @@ public class Session {
         return hashMap.get(key);
     }
 
-    public String getString(String key, String defalutValue) throws InvalidObjectException {
+    public String getString(String key, String defalutValue)  {
         if (!hashMap.containsKey(key)) {
             return defalutValue;
         }

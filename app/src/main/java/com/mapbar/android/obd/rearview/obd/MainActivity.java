@@ -1,12 +1,10 @@
 package com.mapbar.android.obd.rearview.obd;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +18,7 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
@@ -39,17 +38,15 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
+import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyResult;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
-import com.mapbar.box.protobuf.bean.ObdRightBean;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
@@ -69,7 +66,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
@@ -489,13 +485,25 @@ public class MainActivity extends BaseActivity {
      * @param permissionBuyResult
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(PermissionBuyResult permissionBuyResult) {
+    public void onEvent(PermissionBuyEvent permissionBuyResult) {
         //购买成功后，需要重新下载功能权限
-        new PermissonCheckerOnStart().downloadPermision(getActivity());
+        if (permissionBuyResult.isBuySuccess())
+            new PermissonCheckerOnStart().downloadPermision(getActivity());
     }
 
     public Activity getActivity() {
         return this;
     }
 
+
+    /**
+     * 当遇到 http的错误消息时
+     * @param pbHttpErrorEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PBHttpErrorEvent pbHttpErrorEvent) {
+        if (pbHttpErrorEvent.getException() == null)
+            return;
+        Toast.makeText(getActivity(), pbHttpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }

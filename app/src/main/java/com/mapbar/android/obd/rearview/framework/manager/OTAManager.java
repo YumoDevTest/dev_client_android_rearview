@@ -70,13 +70,13 @@ public class OTAManager extends OBDManager {
 
     private void showRegQr(final String content) {
         QRInfo qrInfo = null;
-        if (AixintuiConfigs.push_token != null) {
+        if (AixintuiConfigs.getPushToken() != null) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, "-->> 弹出二维码");
             }
 
-            String url = Configs.URL_BIND_VIN + AixintuiConfigs.push_token;
+            String url = Configs.URL_BIND_VIN + AixintuiConfigs.getPushToken();
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, "url -->> " + url);
@@ -116,7 +116,7 @@ public class OTAManager extends OBDManager {
         if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) && !Manager.getInstance().isV3SpecialOta()) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
-            qrInfo.setUrl(Configs.URL_BIND_VIN + AixintuiConfigs.push_token);
+            qrInfo.setUrl(Configs.URL_BIND_VIN + AixintuiConfigs.getPushToken());
             baseObdListener.onEvent(EVENT_OBD_OTA_NEED_VIN, qrInfo);
         } else {
             checkVersion(mContext);

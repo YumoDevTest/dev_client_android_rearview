@@ -6,11 +6,11 @@ import android.os.Handler;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterFailure;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterOK;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterFailure;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_ScanOK;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenter;
@@ -25,7 +25,7 @@ import java.util.TimerTask;
  * 更改手机号
  * Created by zhangyunfei on 16/7/26.
  */
-public class ChangePhoneActivity extends MyBaseActivity {
+public class ChangePhoneActivity extends MyBaseFragmentActivity {
     private static final String TAG = ChangePhoneActivity.class.getSimpleName();
     private static final int TIMEOUT = 300000;
     private ChangePhoneFragment changePhoneFragment;

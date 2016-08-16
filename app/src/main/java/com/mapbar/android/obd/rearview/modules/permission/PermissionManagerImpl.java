@@ -5,11 +5,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.net.ErrorCode;
+import com.mapbar.android.obd.rearview.lib.net.HttpPBCallback;
+import com.mapbar.android.obd.rearview.lib.net.PBErrorCode;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionRepositoryChanged;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
@@ -40,7 +40,7 @@ public class PermissionManagerImpl implements PermissionManager {
         @Override
         public void onChanged() {
             //通知权限发生了变化
-            EventBusManager.post(new PermissionRepositoryChanged());
+            EventBusManager.post(new PermissionChangedEvent());
         }
     };
 
@@ -51,7 +51,7 @@ public class PermissionManagerImpl implements PermissionManager {
         ObdRightBean.ObdRightRequest obdRightRequest;
         obdRightRequest = ObdRightBean.ObdRightRequest.newBuilder().setImei(imei).build();
 
-        HttpPBUtil.post(Urls.PERMISSION_DOWNLOAD, obdRightRequest, new HttpPBUtil.HttpPBCallback() {
+        HttpPBUtil.post(Urls.PERMISSION_DOWNLOAD, obdRightRequest, new HttpPBCallback() {
             @Override
             public void onFailure(Exception e) {
                 if (callback != null)
@@ -68,12 +68,8 @@ public class PermissionManagerImpl implements PermissionManager {
                     ByteString msg = obdProductResponse.getMsg();
                     String msgStr = msg.toStringUtf8();
 
-                    if (ErrorCode.OK != code) {
-                        Log.i(TAG, "error: " + msgStr);
-                        if (callback != null)
-                            callback.onFailure(new Exception("网络访问异常，错误码" + code));
-                        LogUtil.d(TAG, "## 下载权限 失败");
-                        return;
+                    if (PBErrorCode.OK != code) {
+                        throw new Exception("网络访问异常，错误码" + code);
                     }
 
                     ByteString data = obdProductResponse.getData();
@@ -117,9 +113,11 @@ public class PermissionManagerImpl implements PermissionManager {
                         }
                     }.execute();
 
-                } catch (InvalidProtocolBufferException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    LogUtil.e(TAG, "## 下载权限 失败", e);
+                    LogUtil.e(TAG, "## " + e.getMessage(), e);
+                    if (callback != null)
+                        callback.onFailure(e);
                 }
             }
         });
@@ -257,13 +255,25 @@ public class PermissionManagerImpl implements PermissionManager {
     }
 
     private String getImei() {
-//                String imei = "111111-22-333333";
+        String imei = "111111-22-333333";
 //        String imei = "211111-22-333333";
 //        String imei = "311111-22-333333";
 //        String imei = "411111-22-333333";
-        String imei = "511111-22-333333";
+//        String imei = "511111-22-333333";
 //        String imei = "611111-22-333333";
 //        imei = Utils.getImei(Application.getInstance());
         return imei;
     }
 }
+
+
+/*
+
+
+111111-22-333333 1001，1002，1003 全部在试用中 ，1004，1005免费
+211111-22-333333 1001已购买。1002，1003在试用中，1004，1005免费
+311111-22-333333 1001过期，1002，1003在试用中，1004，1005免费
+411111-22-333333 1001，1002，1003 全部购买，1004，1005免费
+
+
+* */

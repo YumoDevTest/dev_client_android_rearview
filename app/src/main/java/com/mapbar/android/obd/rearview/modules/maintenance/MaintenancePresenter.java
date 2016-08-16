@@ -7,7 +7,7 @@ import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenance
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionRepositoryChanged;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -48,7 +48,7 @@ public class MaintenancePresenter extends BasePresenter<IMaintenanceView> {
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(PermissionRepositoryChanged event) {
+    public void onEvent(PermissionChangedEvent event) {
         checkPermission();
     }
 }

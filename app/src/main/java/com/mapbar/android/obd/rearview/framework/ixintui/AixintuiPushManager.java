@@ -66,7 +66,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
 
     public void setAixintui_token(String aixintui_token) {
-        AixintuiConfigs.push_token = aixintui_token;
+        AixintuiConfigs.setPushToken(aixintui_token);;
         this.aixintui_token = aixintui_token;
     }
 

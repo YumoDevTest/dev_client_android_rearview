@@ -23,7 +23,7 @@ import security.OBD2Security;
  */
 public class HttpPBUtil {
     private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
-    private static final String TAG = HttpPBUtil.class.getSimpleName();
+    public static final String TAG = "HTTP";
 
 
     /**
@@ -90,13 +90,5 @@ public class HttpPBUtil {
 
             }
         });
-    }
-
-
-    public interface HttpPBCallback {
-
-        void onFailure(Exception e);
-
-        void onSuccess(byte[] bytes2);
     }
 }

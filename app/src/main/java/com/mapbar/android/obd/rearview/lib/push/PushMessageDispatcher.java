@@ -1,18 +1,11 @@
 package com.mapbar.android.obd.rearview.lib.push;
 
-import android.os.AsyncTask;
-
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterFailure;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_RegisterOK;
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
-import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyResult;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionRepositoryChanged;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterFailure;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_ScanOK;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 /**
  * 更改手机号，推送消息 handler
@@ -26,6 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class PushMessageDispatcher {
 
     public static void handlePushMessage(int type, int state, String userId, String token) {
+        LogUtil.d("PUSH", String.format("## 收到推送: type=%s, state=%s, userId=%s", type, state, userId));
         if (type == PushType.SCAN_OK && state == PushState.SUCCESS) {
             //收到推送 扫码成功
             //在修改手机号，会订阅 ChangePhoneEvent_ScanOK 类型的 eventbus消息
@@ -44,7 +38,7 @@ public class PushMessageDispatcher {
             boolean isSUccess = false;
             if (state == PushState.SUCCESS)
                 isSUccess = true;
-            EventBusManager.post(new PermissionBuyResult(isSUccess));
+            EventBusManager.post(new PermissionBuyEvent(isSUccess));
         }
     }
 

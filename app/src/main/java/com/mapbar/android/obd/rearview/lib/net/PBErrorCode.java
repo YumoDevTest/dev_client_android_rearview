@@ -6,8 +6,8 @@ package com.mapbar.android.obd.rearview.lib.net;
  * Created by zhangyunfei on 16/8/9.
  */
 
-public class ErrorCode {
-    private ErrorCode() {
+public class PBErrorCode {
+    private PBErrorCode() {
     }
 
     public static final int OK = 200;//	1．成功	调用成功

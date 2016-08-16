@@ -1,7 +1,5 @@
 package com.mapbar.android.obd.rearview.lib.eventbus;
 
-import com.mapbar.android.obd.rearview.lib.push.events.ChangePhoneEvent_ScanOK;
-
 import org.greenrobot.eventbus.EventBus;
 
 /**

@@ -479,14 +479,14 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码,此方法可以保证push_token不为空
      */
     private void showRegQr(final String content) {
-        if (AixintuiConfigs.push_token != null) {
+        if (AixintuiConfigs.getPushToken() != null) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
             sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
-            sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
+            sb.append("pushToken=").append(AixintuiConfigs.getPushToken()).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 
             String url = sb.toString();

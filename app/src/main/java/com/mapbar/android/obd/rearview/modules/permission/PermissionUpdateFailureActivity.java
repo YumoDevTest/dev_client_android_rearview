@@ -1,17 +1,15 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyResult;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
@@ -24,7 +22,7 @@ import java.util.List;
  * 权限失败dialog
  * Created by zhangyunfei on 16/8/4.
  */
-public class PermissionUpdateFailureActivity extends Activity {
+public class PermissionUpdateFailureActivity extends MyBaseActivity {
     public static final String TAG = PermissionUpdateFailureActivity.class.getSimpleName();
 
     private View contentView;
@@ -71,7 +69,7 @@ public class PermissionUpdateFailureActivity extends Activity {
         if (getIntent() != null) {
             String error = getIntent().getStringExtra("error");
             if (!TextUtils.isEmpty(error)) {
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                alert(error);
             }
         }
     }
@@ -91,9 +89,15 @@ public class PermissionUpdateFailureActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Exception ex) {
+            public void onFailure(final Exception ex) {
                 //提示用户，更新权限失败
-
+                if (getActivity() != null && !getActivity().isFinishing())
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            alert("" + ex.getMessage());
+                        }
+                    });
             }
         });
     }
@@ -109,7 +113,7 @@ public class PermissionUpdateFailureActivity extends Activity {
      * @param permissionBuyResult
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(PermissionBuyResult permissionBuyResult) {
+    public void onEvent(PermissionBuyEvent permissionBuyResult) {
         //购买成功则关闭自身,MainActivity也会收到推送，它会下载最新的权限
         if (permissionBuyResult.isBuySuccess()) {
             finish();

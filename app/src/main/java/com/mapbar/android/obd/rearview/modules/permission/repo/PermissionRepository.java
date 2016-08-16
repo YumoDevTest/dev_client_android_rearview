@@ -93,7 +93,7 @@ public class PermissionRepository extends BaseDao {
                 ex.printStackTrace();
             }
         }
-        LogUtil.d(TAG, "## 准备从数据库读取 getPermissonList");
+        LogUtil.d(TAG, "## 准备从数据库读取权限列表t");
         SQLiteDatabase db = getReadableDB();
         Cursor cursor = null;
         try {
