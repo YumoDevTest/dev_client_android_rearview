@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 权限试用提醒 弹窗
@@ -39,19 +44,25 @@ public class PermissionTrialAlertDialog extends Activity {
                 finish();
             }
         });
+        EventBusManager.register(this);
     }
 
-//    /**
-//     * 重试按钮点击事件
-//     *
-//     * @param onRetryClickListener
-//     */
-//    public void setOnRetryClickListener(View.OnClickListener onRetryClickListener) {
-//        this.onRetryClickListener = onRetryClickListener;
-//        if (btn_retry != null)
-//            btn_retry.setOnClickListener(this.onRetryClickListener);
-//
-//    }
+    @Override
+    protected void onDestroy() {
+        EventBusManager.unregister(this);
+        super.onDestroy();
+    }
 
-
+    /**
+     * 收到推送事件：购买功能成功或失败
+     *
+     * @param permissionBuyResult
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PermissionBuyEvent permissionBuyResult) {
+        //购买成功则关闭自身,MainActivity也会收到推送，它会下载最新的权限
+        if (permissionBuyResult.isBuySuccess()) {
+            finish();
+        }
+    }
 }

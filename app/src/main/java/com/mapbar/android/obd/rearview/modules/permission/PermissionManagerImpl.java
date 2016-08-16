@@ -5,12 +5,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
+import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBCallback;
 import com.mapbar.android.obd.rearview.lib.net.PBErrorCode;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
 import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
+import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
@@ -255,14 +257,7 @@ public class PermissionManagerImpl implements PermissionManager {
     }
 
     private String getImei() {
-        String imei = "111111-22-333333";
-//        String imei = "211111-22-333333";
-//        String imei = "311111-22-333333";
-//        String imei = "411111-22-333333";
-//        String imei = "511111-22-333333";
-//        String imei = "611111-22-333333";
-//        imei = Utils.getImei(Application.getInstance());
-        return imei;
+        return Utils.getImei(Application.getInstance());
     }
 }
 
