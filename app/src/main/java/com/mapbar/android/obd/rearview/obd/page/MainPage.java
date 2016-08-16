@@ -18,6 +18,11 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -60,6 +65,8 @@ public class MainPage extends AppPage {
     private Context mContext;
     private Handler mHandlerBuy = new Handler();
     private boolean isPush = true;
+    private PermissonCheckerOnStart permissonCheckerOnStart;
+    private PermissionManager permissionManager;
 
     private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
 
@@ -116,6 +123,12 @@ public class MainPage extends AppPage {
         rg_tabs.check(R.id.page_tab2);
 
         hideMainTitlebar();
+        permissionManager = LogicFactory.createPermissionManager(getActivity());
+
+        //下载权限
+        permissonCheckerOnStart = new PermissonCheckerOnStart();
+        permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
+
     }
 
     /**
@@ -201,6 +214,11 @@ public class MainPage extends AppPage {
                                 public void run() {
                                     setAlarmOn(true);
                                     if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
+
+                                        //检查是否有 体检模块权限，如果有，才弹出故障码提醒
+                                        PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
+                                        if (!result.isValid)
+                                            return;
                                         showNextTimerDialog();
                                     }
                                 }
@@ -314,5 +332,43 @@ public class MainPage extends AppPage {
         this.mAlarmOn = on;
     }
 
+//    /**
+//     * 显示权限验证提醒，试用期，过期等
+//     */
+//    public void showPermissionAlert(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
 
+//    /**
+//     * 显示权限验证失败
+//     */
+//    public void showPermissionFailure(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
 }

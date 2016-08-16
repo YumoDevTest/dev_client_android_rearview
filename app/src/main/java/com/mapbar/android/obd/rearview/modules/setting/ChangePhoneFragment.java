@@ -61,7 +61,7 @@ public class ChangePhoneFragment extends MyBaseFragment {
     private String buildQrURL() {
         StringBuilder sb = new StringBuilder();
         sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
-        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
+        sb.append("pushToken=").append(AixintuiConfigs.getPushToken()).append("&");
         sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 //        sb.append("&").append("userid=").append(UserCenter.getInstance().getCurrentIdAndType().userId); //少了userid
 

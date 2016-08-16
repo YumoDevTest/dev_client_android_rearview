@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 4胎压指示器 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/taiya_four_indicator_left"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/tire_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="0.0"
+            android:textColor="@color/taiya_single_text_color"
+            android:textSize="@dimen/tire_pressture_text_size"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/tire_pressure_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text=" bar"
+            android:textColor="@color/taiya_single_text_color"
+            android:textSize="@dimen/tire_pressture_unit_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/tire_pressure_divider"
+        android:layout_width="57dp"
+        android:layout_height="1px"
+        android:background="#ee3f3f" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/tire_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="00"
+            android:textColor="@color/taiya_single_text_color"
+            android:textSize="@dimen/tire_pressture_text_size"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/tire_temperature_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text=" °C"
+            android:textColor="@color/taiya_single_text_color"
+            android:textSize="@dimen/tire_pressture_unit_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

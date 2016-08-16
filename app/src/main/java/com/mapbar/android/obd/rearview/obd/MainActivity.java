@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.obd;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
@@ -36,6 +38,10 @@ import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
@@ -51,6 +57,8 @@ import com.mapbar.obd.UserCenter;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -173,7 +181,6 @@ public class MainActivity extends BaseActivity {
                         }, 5000);
 
 
-
                         break;
 
                 }
@@ -182,6 +189,7 @@ public class MainActivity extends BaseActivity {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         handler = new MyHandler(this);
+        EventBusManager.register(this);
     }
 
     private void stopBackgroundService() {
@@ -337,6 +345,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         LayoutUtils.disQrPop();//防止popupwindow泄露
+        EventBusManager.unregister(this);
         super.onDestroy();
         if (restart) {
             restart = false;
@@ -367,11 +376,11 @@ public class MainActivity extends BaseActivity {
 //        ComponentName cName = startService(i);
 //        new Thread(new Runnable() {
 //            @Override
-//            public void run() {
+//            public void downloadPermision() {
 //                Looper.prepare();
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
-//                    public void run() {
+//                    public void downloadPermision() {
 //                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
 //                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
 //                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
@@ -469,4 +478,31 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 收到推送事件：购买功能成功或失败
+     *
+     * @param permissionBuyResult
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PermissionBuyEvent permissionBuyResult) {
+        //购买成功后，需要重新下载功能权限
+        if (permissionBuyResult.isBuySuccess())
+            new PermissonCheckerOnStart().downloadPermision(getActivity());
+    }
+
+    public Activity getActivity() {
+        return this;
+    }
+
+
+    /**
+     * 当遇到 http的错误消息时
+     * @param pbHttpErrorEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PBHttpErrorEvent pbHttpErrorEvent) {
+        if (pbHttpErrorEvent.getException() == null)
+            return;
+        Toast.makeText(getActivity(), pbHttpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }

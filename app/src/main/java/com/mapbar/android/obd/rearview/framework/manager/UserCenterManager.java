@@ -11,6 +11,7 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
@@ -62,6 +63,7 @@ public class UserCenterManager extends OBDManager {
 
     public UserCenterManager() {
         super();
+
     }
 
     /**
@@ -368,9 +370,9 @@ public class UserCenterManager extends OBDManager {
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
 
-               int c = (int)o;
+                int c = (int) o;
 
-                StringUtil.toastStringShort(c+"");
+                StringUtil.toastStringShort(c + "");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -477,14 +479,14 @@ public class UserCenterManager extends OBDManager {
      * 弹出二维码,此方法可以保证push_token不为空
      */
     private void showRegQr(final String content) {
-        if (AixintuiConfigs.push_token != null) {
+        if (AixintuiConfigs.getPushToken() != null) {
             // 日志
             if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
             sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
-            sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
+            sb.append("pushToken=").append(AixintuiConfigs.getPushToken()).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 
             String url = sb.toString();

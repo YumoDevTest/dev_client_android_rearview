@@ -60,14 +60,14 @@ ext {
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 22
     buildToolsVersion '23.0.1'
     println "getBuildToolVersion" + getBuildToolVersion()
     defaultConfig {
         minSdkVersion 8
 //        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
 //        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        targetSdkVersion 15
+        targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
         versionCode 2
         versionName "1.0.1"
@@ -81,12 +81,11 @@ android {
             keyPassword "mapbar2009"
         }
         debug {
-
         }
     }
-    // 配置打包的版本
     buildTypes {
         release {
+            debuggable false
             // 不显示Log
 //            buildConfigField "boolean", "LOG_DEBUG", "false"
 //            minifyEnabled true// 是否混淆
@@ -95,16 +94,29 @@ android {
 //            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
+            buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
+            buildConfigField("String", "FAKE_IMEI", "")
+            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
+            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
         debug {
             debuggable true
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
+            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
+            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
+            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
+            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
     }
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
-    // 多渠道打包
+
     flavors()
     sourceSets {
         main {
@@ -219,13 +231,17 @@ def flavors() {
 
 dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
-
-
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okio:okio:1.5.0'
+    compile files('libs/OBDDecodeHelper-1.1.jar')
+    compile files('libs/protobuf-java-2.5.0.jar')
+    compile files('libs/protobuf-java-2.5.0-sources.jar')
+    compile files('libs/protobuf-java-format-1.2.jar')
 }
 
 android.applicationVariants.all { variant ->
