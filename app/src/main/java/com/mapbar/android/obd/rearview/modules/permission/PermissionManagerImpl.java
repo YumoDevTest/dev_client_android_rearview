@@ -257,6 +257,7 @@ public class PermissionManagerImpl implements PermissionManager {
     }
 
     private String getImei() {
+//        return "311111-22-333333";
         return Utils.getImei(Application.getInstance());
     }
 }

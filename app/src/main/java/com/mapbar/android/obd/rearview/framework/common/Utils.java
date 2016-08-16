@@ -145,5 +145,9 @@ public class Utils {
 //        return "77726%%fsdffsdfssdfsdfsd%%%%%%wanglong";//072815测试专用
 //        return "oooooooofsdfsd%%%%%%meiwang";//王龙内网1
 //        return "oooooooofsdfsddwwwwd%%%%%%meiwang444";//王龙内网2
+//        return "12317777777733439943848301";//王龙内网8.5
+//        return "9231777770048302";//王龙外网8.8
+//        return "20160815weishite";//威仕特8.15
+//        return "20160815diruite";//迪瑞特8.15
     }
 }

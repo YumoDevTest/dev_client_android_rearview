@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
@@ -46,6 +47,8 @@ public class ChangePhoneActivity extends MyBaseFragmentActivity {
 
         if (savedInstanceState == null) {
             showPage_barcode();
+            //ui调整
+            LayoutUtils_ui.proportional();
             //启动UserCenterManager事件接收
             UserCenterManager.getInstance().sdkListener.setActive(true);
             //停止采集线程

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="11dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -21,8 +21,8 @@
             <ImageView
                 android:id="@+id/view_upkeep"
                 style="@style/upkeep"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 />
 
             <TextView
@@ -41,10 +41,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:text="0"
                 android:textColor="#00d4b9"
-                android:textSize="55sp"
+                android:textSize="40sp"
                 />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_next_mileage"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:text="公里"
                 android:textColor="#00d4b9"
                 android:textSize="15sp"/>
@@ -66,8 +66,8 @@
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 />
 
             <TextView
@@ -86,10 +86,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv2"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:text="0"
                 android:textColor="#00d4b9"
-                android:textSize="55sp"
+                android:textSize="40sp"
                 />
 
             <TextView
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_next_time"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:text="天"
                 android:textColor="#00d4b9"
                 android:textSize="15sp"/>
@@ -108,7 +108,7 @@
         android:id="@+id/line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:text="下次保养项目 共 0 项"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
             />
 
         <TextView
@@ -128,14 +128,14 @@
             android:layout_marginLeft="12dp"
             android:text="预计费用 0 元"
             android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:textSize="16sp"
 
             />
 
         <Button
             android:id="@+id/btn_alreadyUpkeep"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="70dp"
+            android:layout_height="27dp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/btn_al_upkeep"
             android:text="已保养"/>
@@ -148,6 +148,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         />
 </LinearLayout>

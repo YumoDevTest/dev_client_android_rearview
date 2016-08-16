@@ -48,14 +48,14 @@ public class CarDataPresenter extends BasePresenter<ICarDataView> {
         //检查是否有胎压权限，如果有，则显示胎压
         PermissionManager.PermissionResult result1 = permissionManager.checkPermission(PermissionKey.PERMISSION_TIRE_PRESSURE);
         if (result1.isValid) {
-            //单一胎压
-            if (tirePressureManager.isTirePressuresOK())
-                getView().showTirePresstureSingleNormal();
-            else
-                getView().showTirePresstureSingleWarning();
-            //四轮胎压
-            TirePressureBean[] tirePressureBeenArray = tirePressureManager.getTirePressures();
-            getView().showTirePresstureFour(tirePressureBeenArray);
+//            //单一胎压
+//            if (tirePressureManager.isTirePressuresOK())
+//                getView().showTirePresstureSingleNormal();
+//            else
+//                getView().showTirePresstureSingleWarning();
+//            //四轮胎压
+//            TirePressureBean[] tirePressureBeenArray = tirePressureManager.getTirePressures();
+//            getView().showTirePresstureFour(tirePressureBeenArray);
         }
 
         //检查是否有车辆数据权限，如果没有，则弹出 试用提醒浮层

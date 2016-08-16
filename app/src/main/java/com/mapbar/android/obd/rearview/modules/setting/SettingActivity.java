@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.modules.setting;
 import android.os.Bundle;
 
 import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
 
 /**
  * 设置 页
@@ -16,7 +17,7 @@ public class SettingActivity extends MyBaseFragmentActivity {
 
         if (savedInstanceState == null)
             showFragment(new SettingFragment(), false);
-
+        LayoutUtils_ui.proportional();
         getTitlebarview().setEnableBackButton(true);
     }
 

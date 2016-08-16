@@ -23,8 +23,6 @@ import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
-import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
-import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
 import com.mapbar.android.obd.rearview.modules.maintenance.MaintenancePresenter;
 import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenanceView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
@@ -196,6 +194,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                 boolLastMaintenanceDate = false;
                 et_lastMaintenanceDate.setText("未设置");
             }
+            if (userCar.totalMileage > 0)
             et_totalMileage.setText(userCar.totalMileage / 1000 + "");
             et_lastMaintenanceMileage.setText(userCar.lastMaintenanceMileage / 1000 + "");
         } else {
