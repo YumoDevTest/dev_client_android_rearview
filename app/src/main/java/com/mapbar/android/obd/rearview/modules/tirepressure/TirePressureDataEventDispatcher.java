@@ -11,6 +11,7 @@ import com.mapbar.obd.RealTimeDataTPMSAll;
  * Created by zhangyunfei on 16/8/17.
  */
 public class TirePressureDataEventDispatcher {
+    public static final String TAG = "TirePressure";
 
     private OBDSDKListenerManager.SDKListener sdkListener;
 
@@ -22,15 +23,16 @@ public class TirePressureDataEventDispatcher {
             public void onEvent(int event, Object o) {
                 switch (event) {
                     case Manager.Event.dataUpdateTPMS://精确胎压数据
-                        LogUtil.i("TIRE","## 收到胎压事件");
+                        LogUtil.i(TAG, "## 收到胎压事件 - 精确胎压 ");
                         if (o instanceof RealTimeDataTPMSAll) {
                             RealTimeDataTPMSAll realTimeDataTPMSAll = (RealTimeDataTPMSAll) o;
-                            if (tirePressureDataEventHandler != null)
-                                tirePressureDataEventHandler.onReceiveTirePressureFromImmediate(realTimeDataTPMSAll);
+//                            if (tirePressureDataEventHandler != null)
+//                                tirePressureDataEventHandler.onReceiveTirePressureFromImmediate(realTimeDataTPMSAll);
                         }
                         break;
                     case Manager.Event.dataUpdateWSBTPMS://算法胎压数据
-//                    //存储着更新了的实时数据,此时数据中只有轮胎位置和轮胎欠压标志位有效
+                        LogUtil.i(TAG, "## 收到胎压事件 - 算法胎压数据");
+                        //存储着更新了的实时数据,此时数据中只有轮胎位置和轮胎欠压标志位有效
                         if (o instanceof RealTimeDataTPMSAll) {
                             RealTimeDataTPMSAll realTimeDataTPMSAll = (RealTimeDataTPMSAll) o;
                             if (tirePressureDataEventHandler != null)

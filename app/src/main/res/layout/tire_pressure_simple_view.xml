@@ -16,11 +16,13 @@
 
     <LinearLayout
         android:id="@+id/indicator"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="wrap_content">
 
         <RadioButton
+            android:layout_gravity="center_horizontal"
             android:id="@+id/indicator_text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,15 +31,18 @@
             android:drawableTop="@drawable/ic_tirepressure_selector"
             android:text="胎压"
             android:textColor="@color/taiya_single_text_color"
+            android:gravity="center"
             android:textSize="@dimen/cardata_taiya_text"
             android:textStyle="bold" />
 
         <RadioButton
+            android:layout_gravity="center_horizontal"
             android:id="@+id/indicator_text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
             android:text="正常"
+            android:gravity="center"
             android:textColor="@color/taiya_single_text_color"
             android:textSize="@dimen/cardata_taiya_text"
             android:textStyle="bold" />

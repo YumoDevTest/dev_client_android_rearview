@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:my="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -127,16 +127,6 @@
                     android:src="@drawable/img_car2" />
 
                 <!-- 单一胎压指示器，有正常和警告状态 -->
-                <!--<com.mapbar.android.obd.rearview.views.TirePressureViewSimple-->
-                    <!--android:id="@+id/tire_simple_right_top"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="right|top"-->
-                    <!--android:paddingBottom="18dp"-->
-                    <!--android:paddingTop="18dp"-->
-                    <!--/>-->
-
-                <!-- 单一胎压指示器，有正常和警告状态 -->
                 <com.mapbar.android.obd.rearview.views.TirePressureViewSimple
                     android:id="@+id/tire_simple_left_top"
                     android:layout_width="wrap_content"
@@ -144,8 +134,33 @@
                     android:layout_gravity="left|top"
                     android:paddingBottom="18dp"
                     android:paddingTop="18dp"
-                    android:visibility="gone" />
+                    my:reverse_sign="true" />
 
+                <com.mapbar.android.obd.rearview.views.TirePressureViewSimple
+                    android:id="@+id/tire_simple_right_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|top"
+                    android:paddingBottom="18dp"
+                    android:paddingTop="18dp" />
+
+
+                <com.mapbar.android.obd.rearview.views.TirePressureViewSimple
+                    android:id="@+id/tire_simple_left_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:paddingBottom="18dp"
+                    android:paddingTop="18dp"
+                    my:reverse_sign="true" />
+
+                <com.mapbar.android.obd.rearview.views.TirePressureViewSimple
+                    android:id="@+id/tire_simple_right_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:paddingBottom="18dp"
+                    android:paddingTop="18dp" />
 
                 <!-- 数字胎压指示器，有具体胎压数值 -->
                 <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
@@ -154,7 +169,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:paddingBottom="18dp"
-                    android:paddingTop="18dp" />
+                    android:paddingTop="18dp"
+                    android:visibility="gone" />
 
                 <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
                     android:id="@+id/tire_pressure_left_bottom"
@@ -162,7 +178,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|bottom"
                     android:paddingBottom="18dp"
-                    android:paddingTop="18dp" />
+                    android:paddingTop="18dp"
+                    android:visibility="gone" />
 
 
                 <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
@@ -171,7 +188,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|top"
                     android:paddingBottom="18dp"
-                    android:paddingTop="18dp" />
+                    android:paddingTop="18dp"
+                    android:visibility="gone" />
 
 
                 <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
@@ -180,7 +198,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:paddingBottom="18dp"
-                    android:paddingTop="18dp" />
+                    android:paddingTop="18dp"
+                    android:visibility="gone" />
 
 
             </FrameLayout>
