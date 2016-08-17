@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -126,26 +127,28 @@
                     android:src="@drawable/img_car2" />
 
                 <!-- 单一胎压指示器，有正常和警告状态 -->
-                <FrameLayout
-                    android:id="@+id/taiya_single_indicator"
+                <!--<com.mapbar.android.obd.rearview.views.TirePressureViewSimple-->
+                    <!--android:id="@+id/tire_simple_right_top"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|top"-->
+                    <!--android:paddingBottom="18dp"-->
+                    <!--android:paddingTop="18dp"-->
+                    <!--/>-->
+
+                <!-- 单一胎压指示器，有正常和警告状态 -->
+                <com.mapbar.android.obd.rearview.views.TirePressureViewSimple
+                    android:id="@+id/tire_simple_left_top"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|top">
+                    android:layout_gravity="left|top"
+                    android:paddingBottom="18dp"
+                    android:paddingTop="18dp"
+                    android:visibility="gone" />
 
-                    <RadioButton
-                        android:id="@+id/taiya_single_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:button="@null"
-                        android:drawableTop="@drawable/ic_tirepressure_selector"
-                        android:text="胎压\n正常"
-                        android:textColor="@color/taiya_single_text_color"
-                        android:textSize="@dimen/cardata_taiya_text"
-                        android:textStyle="bold" />
-                </FrameLayout>
 
-                <com.mapbar.android.obd.rearview.views.TirePressureView
+                <!-- 数字胎压指示器，有具体胎压数值 -->
+                <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
                     android:id="@+id/tire_pressure_left_top"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -153,7 +156,7 @@
                     android:paddingBottom="18dp"
                     android:paddingTop="18dp" />
 
-                <com.mapbar.android.obd.rearview.views.TirePressureView
+                <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
                     android:id="@+id/tire_pressure_left_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,7 +165,7 @@
                     android:paddingTop="18dp" />
 
 
-                <com.mapbar.android.obd.rearview.views.TirePressureView
+                <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
                     android:id="@+id/tire_pressure_rignt_top"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -171,7 +174,7 @@
                     android:paddingTop="18dp" />
 
 
-                <com.mapbar.android.obd.rearview.views.TirePressureView
+                <com.mapbar.android.obd.rearview.views.TirePressureViewDigital
                     android:id="@+id/tire_pressure_rignt_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

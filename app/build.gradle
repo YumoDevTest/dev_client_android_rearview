@@ -104,6 +104,7 @@ android {
         debug {
             debuggable true
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI

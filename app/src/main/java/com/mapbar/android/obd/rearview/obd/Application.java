@@ -24,6 +24,7 @@ public class Application extends android.app.Application {
     // 不建议存放 业务操作类，比如manager等，以防止内存泄漏
     // 自己放的，自己用，用完清理
     private Session mSession;
+    private boolean imei;
 
     public Application() {
         instance = this;
@@ -81,5 +82,9 @@ public class Application extends android.app.Application {
      */
     public String getToken() {
         return UserCenter.getInstance().getCurrentUserToken();
+    }
+
+    public String getImei() {
+        return Utils.getImei(MainActivity.getInstance());
     }
 }

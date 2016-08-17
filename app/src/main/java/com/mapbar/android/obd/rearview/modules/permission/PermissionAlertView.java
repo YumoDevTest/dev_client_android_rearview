@@ -192,7 +192,7 @@ public class PermissionAlertView extends FrameLayout {
         StringBuilder sb = new StringBuilder();
         sb.append(Urls.PERMISSION_BUY)
 //                .append("?i=").append("111111-22-333333")
-                .append("?i=").append(Utils.getImei(MainActivity.getInstance()))
+                .append("?i=").append(Application.getInstance().getImei())
                 .append("&p=").append(Application.getInstance().getPushToken())
                 .append("&t=").append(Application.getInstance().getToken())
                 .append("&b=").append(URLEncoder.encode(pinpai, "UTF-8"))
