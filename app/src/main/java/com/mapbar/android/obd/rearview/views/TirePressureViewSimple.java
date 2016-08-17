@@ -2,6 +2,8 @@ package com.mapbar.android.obd.rearview.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +42,9 @@ public class TirePressureViewSimple extends FrameLayout {
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.TirePressureViewSimple);
-        boolean isReverseSign = a.getBoolean(R.styleable.TirePressureViewSimple_reverseSign,
+        boolean isReverseSign = a.getBoolean(R.styleable.TirePressureViewSimple_reverse_sign,
                 false);
+        a.recycle();
 
         layoutInflater = LayoutInflater.from(context);
         View content = layoutInflater.inflate(R.layout.tire_pressure_simple_view, null);
@@ -56,6 +59,9 @@ public class TirePressureViewSimple extends FrameLayout {
                 viewGroup.removeView(image_sign);
                 viewGroup.addView(image_sign);
             }
+            Drawable drawable = ContextCompat.getDrawable(context,R.drawable.ic_tirepressure_sign_right);
+            image_sign.setCompoundDrawables(drawable, null, null, null);
+            image_sign.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
         setWarning(false);//设置 非警告状态
     }

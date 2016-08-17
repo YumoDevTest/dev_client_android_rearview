@@ -98,13 +98,11 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
         PermissionManager.PermissionResult result1 = permissionManager.checkPermission(PermissionKey.PERMISSION_TIRE_PRESSURE);
         if (result1.isValid) {
             isHaveTireperssturePermission = true;
-
-//            getView().showTirePresstureSingleNormal();
-//            getView().showTirePresstureSingleWarning();
-
-            //四轮胎压
-//            TirePressure4ViewModel[] tirePressureBeenArray = tirePressureManager.getTirePressures();
-//            getView().showTirePresstureFour(tirePressureBeenArray);
+        } else {
+            isHaveTireperssturePermission = false;
+            //隐藏所有的胎压视图
+            getView().hideTirePresstureFoureView();
+            getView().hideTirePresstureSingleView();
         }
     }
 
@@ -116,6 +114,23 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PermissionChangedEvent event) {
         checkPermission();
+    }
+
+
+    /**
+     * 重用model
+     *
+     * @return
+     */
+    @NonNull
+    private TirePressure4ViewModel[] makeTirePressureViewModels() {
+        if (tirePressureViewModels == null) {
+            tirePressureViewModels = new TirePressure4ViewModel[4];
+            for (int i = 0; i < tirePressureViewModels.length; i++) {
+                tirePressureViewModels[i] = new TirePressure4ViewModel();
+            }
+        }
+        return tirePressureViewModels;
     }
 
     /**
@@ -150,21 +165,6 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
         getView().showTirePresstureFour(tirePressureViewModels);
     }
 
-    /**
-     * 重用model
-     *
-     * @return
-     */
-    @NonNull
-    private TirePressure4ViewModel[] makeTirePressureViewModels() {
-        if (tirePressureViewModels == null) {
-            tirePressureViewModels = new TirePressure4ViewModel[4];
-            for (int i = 0; i < tirePressureViewModels.length; i++) {
-                tirePressureViewModels[i] = new TirePressure4ViewModel();
-            }
-        }
-        return tirePressureViewModels;
-    }
 
     /**
      * 当收到，算法胎压数据
@@ -175,5 +175,16 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
     public void onReceiveTirePressureFromIndirect(RealTimeDataTPMSAll realTimeDataTPMSAll) {
         if (!isHaveTireperssturePermission)
             return;
+        if (realTimeDataTPMSAll == null || realTimeDataTPMSAll.m_tpmsData.length != 4)
+            return;
+        TirePressure4ViewModel[] tirePressureViewModels = makeTirePressureViewModels();
+        for (int i = 0; i < realTimeDataTPMSAll.m_tpmsData.length; i++) {
+            RealTimeDataTPMS item = realTimeDataTPMSAll.m_tpmsData[i];
+            TirePressure4ViewModel t = tirePressureViewModels[i];
+            t.isWarning = item.attStatus5 != 0;
+            LogUtil.i("TIRE", "## 显示胎压： " + item.toString());
+        }
+        //0左前轮、1右前轮、2左后轮、3右后轮
+        getView().showTirePresstureSingle(tirePressureViewModels);
     }
 }

@@ -11,14 +11,9 @@ import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4V
 public interface ITirePressureView extends IMvpView, IPermissionAlertViewAble {
 
     /**
-     * 显示单一胎压样式。正常状态
+     * 显示单一胎压样式。
      */
-    void showTirePresstureSingleNormal();
-
-    /**
-     * 显示单一胎压样式。警告状态
-     */
-    void showTirePresstureSingleWarning();
+    void showTirePresstureSingle(TirePressure4ViewModel[] tirePressureArray);
 
     /**
      * 隐藏单一胎压样式。

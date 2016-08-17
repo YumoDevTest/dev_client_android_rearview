@@ -35,7 +35,6 @@ import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressu
 import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
@@ -44,7 +43,6 @@ import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -104,13 +102,10 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private TitleBarView titlebarview1;
     private CarDataPresenter cardataPresenter;
     private TirePressurePresenter tirePressurePresenter;
-//    private TirePressureViewSimple tire_simple_left_top;//单一胎压指示视图
 
-    private TirePressureViewDigital tire_pressure_left_top;//4胎压指示视图
-    private TirePressureViewDigital tire_pressure_left_bottom;
-    private TirePressureViewDigital tire_pressure_rignt_top;
-    private TirePressureViewDigital tire_pressure_rignt_bottom;
-    private TirePressureViewDigital[] tirePressureViewArray;
+
+    private TirePressureViewSimple[] tirePressureSimpleViewArray;//单一胎压指示视图
+    private TirePressureViewDigital[] tirePressureForeViewArray;//4胎压指示视图
 
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
@@ -133,13 +128,17 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
             }
         });
         //单一胎压
-//        tire_simple_left_top = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_left_top);
+        TirePressureViewSimple tire_simple_left_top = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_left_top);
+        TirePressureViewSimple tire_simple_right_top = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_right_top);
+        TirePressureViewSimple tire_simple_left_bottom = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_left_bottom);
+        TirePressureViewSimple tire_simple_right_bottom = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_right_bottom);
+        tirePressureSimpleViewArray = new TirePressureViewSimple[]{tire_simple_left_top, tire_simple_right_top, tire_simple_left_bottom, tire_simple_right_bottom};
         //4胎压
-        tire_pressure_left_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_top);
-        tire_pressure_left_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_bottom);
-        tire_pressure_rignt_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_top);
-        tire_pressure_rignt_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_bottom);
-        tirePressureViewArray = new TirePressureViewDigital[]{tire_pressure_left_top, tire_pressure_rignt_top, tire_pressure_left_bottom, tire_pressure_rignt_bottom};
+        TirePressureViewDigital tire_pressure_left_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_top);
+        TirePressureViewDigital tire_pressure_left_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_bottom);
+        TirePressureViewDigital tire_pressure_rignt_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_top);
+        TirePressureViewDigital tire_pressure_rignt_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_bottom);
+        tirePressureForeViewArray = new TirePressureViewDigital[]{tire_pressure_left_top, tire_pressure_rignt_top, tire_pressure_left_bottom, tire_pressure_rignt_bottom};
 
         sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
@@ -189,6 +188,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     public void onResume() {
         super.onResume();
         if (cardataPresenter != null) cardataPresenter.checkPermission();
+        if (tirePressurePresenter != null) tirePressurePresenter.checkPermission();
         MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
     }
 
@@ -408,21 +408,29 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     }
 
     /**
-     * 显示单一胎压样式。正常状态
+     * 显示单一胎压样式
      */
     @Override
-    public void showTirePresstureSingleNormal() {
-//        tire_simple_left_top.setVisibility(View.VISIBLE);
-//        taiya_single_view.setChecked(false);//非checed，显示绿色
-    }
-
-    /**
-     * 显示单一胎压样式。警告状态
-     */
-    @Override
-    public void showTirePresstureSingleWarning() {
-//        taiya_single_indicator.setVisibility(View.VISIBLE);
-//        taiya_single_view.setChecked(true);//checed，显示红色
+    public void showTirePresstureSingle(TirePressure4ViewModel[] tirePressureArray) {
+        if (tirePressureArray == null || tirePressureArray.length != 4) {
+            alert("胎压数据异常");
+            return;
+        }
+        boolean isHasNull = false;
+        for (int i = 0; i < tirePressureArray.length; i++) {
+            if (tirePressureArray[i] == null) {
+                isHasNull = true;
+                break;
+            }
+        }
+        if (isHasNull) {
+            alert("读取胎压数据时发生错误");
+            return;
+        }
+        for (int i = 0; i < tirePressureForeViewArray.length; i++) {
+            tirePressureSimpleViewArray[i].setVisibility(View.VISIBLE);
+            tirePressureSimpleViewArray[i].setWarning(tirePressureArray[i].isWarning);
+        }
     }
 
     /**
@@ -430,8 +438,9 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
      */
     @Override
     public void hideTirePresstureSingleView() {
-//        taiya_single_indicator.setVisibility(View.GONE);
-//        taiya_single_view.setChecked(false);
+        for (int i = 0; i < tirePressureSimpleViewArray.length; i++) {
+            tirePressureSimpleViewArray[i].setVisibility(View.GONE);
+        }
     }
 
 
@@ -457,11 +466,11 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
             alert("读取胎压数据时发生错误");
             return;
         }
-        for (int i = 0; i < tirePressureViewArray.length; i++) {
-            tirePressureViewArray[i].setVisibility(View.VISIBLE);
-            tirePressureViewArray[i].setTirePressure(String.format(Locale.US, "%.1f", tirePressureArray[i].tirePressure));
-            tirePressureViewArray[i].setTireTemperature(String.format(Locale.US, "%d", (int) tirePressureArray[i].itreTemprature));
-            tirePressureViewArray[i].setWarning(tirePressureArray[i].isWarning);
+        for (int i = 0; i < tirePressureForeViewArray.length; i++) {
+            tirePressureForeViewArray[i].setVisibility(View.VISIBLE);
+            tirePressureForeViewArray[i].setTirePressure(String.format(Locale.US, "%.1f", tirePressureArray[i].tirePressure));
+            tirePressureForeViewArray[i].setTireTemperature(String.format(Locale.US, "%d", (int) tirePressureArray[i].itreTemprature));
+            tirePressureForeViewArray[i].setWarning(tirePressureArray[i].isWarning);
         }
     }
 
@@ -470,10 +479,9 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
      */
     @Override
     public void hideTirePresstureFoureView() {
-        tire_pressure_left_top.setVisibility(View.GONE);
-        tire_pressure_left_bottom.setVisibility(View.GONE);
-        tire_pressure_rignt_top.setVisibility(View.GONE);
-        tire_pressure_rignt_bottom.setVisibility(View.GONE);
+        for (int i = 0; i < tirePressureSimpleViewArray.length; i++) {
+            tirePressureForeViewArray[i].setVisibility(View.GONE);
+        }
     }
 
     /**
