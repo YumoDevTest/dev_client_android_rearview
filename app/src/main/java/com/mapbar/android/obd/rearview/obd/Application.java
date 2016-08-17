@@ -8,6 +8,7 @@ import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.UserCenter;
 
 import java.util.HashMap;
 
@@ -64,5 +65,21 @@ public class Application extends android.app.Application {
      */
     public Session getSession(){
         return mSession;
+    }
+
+    /**
+     * 获得推送的token
+     * @return
+     */
+    public String getPushToken() {
+        return AixintuiConfigs.getPushToken();
+    }
+
+    /**
+     * 获得用户登录后的token
+     * @return
+     */
+    public String getToken() {
+        return UserCenter.getInstance().getCurrentUserToken();
     }
 }

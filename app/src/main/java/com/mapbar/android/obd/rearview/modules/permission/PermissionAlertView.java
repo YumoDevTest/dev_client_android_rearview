@@ -24,6 +24,7 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.util.QrBarcodeUtils;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
@@ -192,7 +193,8 @@ public class PermissionAlertView extends FrameLayout {
         sb.append(Urls.PERMISSION_BUY)
 //                .append("?i=").append("111111-22-333333")
                 .append("?i=").append(Utils.getImei(MainActivity.getInstance()))
-                .append("&p=").append(AixintuiConfigs.getPushToken())
+                .append("&p=").append(Application.getInstance().getPushToken())
+                .append("&t=").append(Application.getInstance().getToken())
                 .append("&b=").append(URLEncoder.encode(pinpai, "UTF-8"))
                 .append("&m=").append(URLEncoder.encode(xinghao, "UTF-8"));
         return sb.toString();
@@ -207,6 +209,7 @@ public class PermissionAlertView extends FrameLayout {
             p：pushToken
             b：品牌
             m：型号
+            t: token
 
 这里需要需要传入 1级和3级
 车型信息，一级品牌 奥迪等，二级 进口， 三级品牌 型号A6,四级 2011年款
