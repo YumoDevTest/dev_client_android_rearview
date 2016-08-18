@@ -13,6 +13,7 @@ public abstract class BasePresenter<T extends IMvpView> {
 
     /**
      * 设置视图
+     *
      * @param view
      */
     public void setView(T view) {
@@ -22,4 +23,6 @@ public abstract class BasePresenter<T extends IMvpView> {
     public T getView() {
         return view;
     }
+
+    public abstract void clear();
 }

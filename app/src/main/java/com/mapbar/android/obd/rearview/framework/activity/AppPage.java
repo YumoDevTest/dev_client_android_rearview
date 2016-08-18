@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
+import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 
 
-public abstract class AppPage extends Fragment {
+public abstract class AppPage extends Fragment implements IMvpView {
     public boolean isUmenngWorking = false;
     protected OBDSDKListenerManager.SDKListener sdkListener;
     protected View contentView;
@@ -24,6 +25,7 @@ public abstract class AppPage extends Fragment {
     private Context context;
     private int contentViewResource;
     private boolean isInited;
+
     public AppPage() {
         context = MainActivity.getInstance();
     }
@@ -100,11 +102,11 @@ public abstract class AppPage extends Fragment {
     }
 
 
-    public void alert(String msg){
-        Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+    public void alert(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void alert(int sourceID){
-        Toast.makeText(getActivity(),sourceID,Toast.LENGTH_SHORT).show();
+    public void alert(int sourceID) {
+        Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
     }
 }

@@ -284,4 +284,31 @@
     <string name="firmware_update_tip">请点击更新固件,实现控制功能</string>
     <string name="firmware_force_update_tip">由于现有硬件版本可能会导致使用不正常,请升级固件操作:点升级进入升级流程;不操作5s自动执行升级。 </string>
     <string name="tv_firmware_pop_content_tip">有新的固件可升级,升级后,可实现远程查看车辆状态远程控制等功能,不操作10s后取消升级提示。 </string>
+
+    <!--胎压提醒-->
+    <string name="rapid_leak">快速漏气</string>
+    <string name="slow_leak">慢速漏气</string>
+    <string name="over_pressure">轮胎过压</string>
+    <string name="under_pressure">轮胎欠压</string>
+    <string name="overheating">轮胎过热</string>
+    <string name="normal_pressure_text">轮胎正常</string>
+    <string name="low_power">低电量</string>
+    <string name="lost_connect_text">连接丢失</string>
+    <string name="under_pressure_description">-欠压</string>
+    <string name="over_pressure_description">-过压</string>
+    <string name="over_heat_description">-过热</string>
+    <string name="over_tirePage_pressure">过压</string>
+    <string name="under_tirePage_pressure">欠压</string>
+    <string name="tirePage_overheating">过热</string>
+    <string name="normal_tirePage_pressure_text"></string>
+    <string name="left_top_text">&#160;左前胎\n</string>
+    <string name="right_top_text">&#160;右前胎\n</string>
+    <string name="left_bot_text">&#160;左后胎\n</string>
+    <string name="right_bot_text">&#160;右后胎\n</string>
+    <string name="pressure_tireDialog">胎压:</string>
+    <string name="temperature_tireDialog">温度:</string>
+    <string name="battery_tireDialog">电池电量:</string>
+    <string name="connect_tireDialog">传感器连接:</string>
+    <string name="power_low_tireDialog">低</string>
+
 </resources>

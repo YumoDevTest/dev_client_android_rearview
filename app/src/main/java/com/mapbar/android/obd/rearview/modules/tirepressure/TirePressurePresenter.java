@@ -25,7 +25,6 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class TirePressurePresenter extends BasePresenter<ITirePressureView> implements TirePressureDataEventDispatcher.TirePressureDataEventHandler {
     private PermissionManager permissionManager;
-    private TirePressureManager tirePressureManager;
     private TirePressureDataEventDispatcher tirePressureDataEventDispatcher;
     private TirePressure4ViewModel[] tirePressureViewModels;
     private boolean isHaveTireperssturePermission = false;
@@ -40,9 +39,8 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
 
         EventBusManager.register(this);
 
-        tirePressureManager = LogicFactory.createTirePressureManager();
-        tirePressureDataEventDispatcher = tirePressureManager.getTirePressureDataEventDispatcher();
-        tirePressureDataEventDispatcher.start(this);
+        tirePressureDataEventDispatcher = new TirePressureDataEventDispatcher(this);
+        tirePressureDataEventDispatcher.start();
 
 //        test1();
     }
@@ -81,10 +79,6 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
         if (tirePressureDataEventDispatcher != null) {
             tirePressureDataEventDispatcher.stop();
             tirePressureDataEventDispatcher = null;
-        }
-        if (tirePressureManager != null) {
-            tirePressureManager.clear();
-            tirePressureManager = null;
         }
         permissionManager = null;
         EventBusManager.unregister(this);

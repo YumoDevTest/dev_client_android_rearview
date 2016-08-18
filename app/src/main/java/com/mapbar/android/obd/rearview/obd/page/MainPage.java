@@ -7,10 +7,16 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
+import com.mapbar.android.log.Log;
+import com.mapbar.android.log.LogTag;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
@@ -18,8 +24,11 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.common.MainPagePersenter;
+import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -29,8 +38,10 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.TPMSAlarmData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
@@ -40,7 +51,7 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
  * 首页
  * 包含1个viewpager,其下有4个子fragment 页
  */
-public class MainPage extends AppPage {
+public class MainPage extends AppPage implements IMainPageView {
 
     public static TitleBar title;
     protected static ArrayList<Object> sAlarmDataList = new ArrayList<Object>();
@@ -67,6 +78,8 @@ public class MainPage extends AppPage {
     private boolean isPush = true;
     private PermissonCheckerOnStart permissonCheckerOnStart;
     private PermissionManager permissionManager;
+    private MainPagePersenter mainPagePersenter;
+    private SpannableStringBuilder mSpanBuilder = new SpannableStringBuilder();
 
     private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
 
@@ -129,6 +142,7 @@ public class MainPage extends AppPage {
         permissonCheckerOnStart = new PermissonCheckerOnStart();
         permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
 
+        mainPagePersenter = new MainPagePersenter(this);
     }
 
     /**
@@ -204,28 +218,15 @@ public class MainPage extends AppPage {
                 super.onEvent(event, o);
                 switch (event) {
                     case Manager.Event.alarm:
+                        //检查是否有 体检模块权限，如果有，才弹出故障码提醒
+                        PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
+                        if (!result.isValid)
+                            break;
+                        //有权限，则加入到提醒队列
                         if (!sAlarmDataList.contains(o)) {
                             sAlarmDataList.add(o);
                         }
-
-                        if (!mAlarmTimerDialog.isShowing()) {
-                            Runnable r = new Runnable() {
-                                @Override
-                                public void run() {
-                                    setAlarmOn(true);
-                                    if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
-
-                                        //检查是否有 体检模块权限，如果有，才弹出故障码提醒
-                                        PermissionManager.PermissionResult result = permissionManager.checkPermission(PermissionKey.PERMISSION_CHECK_UP);
-                                        if (!result.isValid)
-                                            return;
-                                        showNextTimerDialog();
-                                    }
-                                }
-                            };
-                            mHandlerBuy.postDelayed(r, 500);
-
-                        }
+                        startCheckAlermQueue();
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
@@ -236,6 +237,24 @@ public class MainPage extends AppPage {
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+    }
+
+    /**
+     * 启动,检查提醒消息队列
+     */
+    private void startCheckAlermQueue() {
+        if (!mAlarmTimerDialog.isShowing()) {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    setAlarmOn(true);
+                    if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
+                        showNextTimerDialog();
+                    }
+                }
+            };
+            mHandlerBuy.postDelayed(r, 500);
+        }
     }
 
     private void initDialog() {
@@ -263,7 +282,9 @@ public class MainPage extends AppPage {
     }
 
     private void showNextTimerDialog() {
-        if (sAlarmDataList.size() > 0 && sAlarmDataList.get(0) instanceof AlarmData) {
+        if (sAlarmDataList.size() == 0)
+            return;
+        if (sAlarmDataList.get(0) instanceof AlarmData) {
             AlarmData data = (AlarmData) sAlarmDataList.get(0);
             sAlarmDataList.remove(0);
             mAlarmTimerDialog.setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
@@ -314,6 +335,88 @@ public class MainPage extends AppPage {
                 mAlarmTimerDialog.getContentTextView().setTextColor(mContext.getResources().getColor(R.color.dashboard_red_text));
             }
 
+        } else if (sAlarmDataList.get(0) instanceof TPMSAlarmData) {
+            if (com.mapbar.android.log.Log.isLoggable(LogTag.TEMP, com.mapbar.android.log.Log.INFO)) {
+                Log.i(this.getClass().getSimpleName(), "弹出框是第" + ((TPMSAlarmData) sAlarmDataList.get(0)).getType() + "数据为" + Arrays.toString(((TPMSAlarmData) sAlarmDataList.get(0)).getData()));
+            }
+            TPMSAlarmData data = (TPMSAlarmData) sAlarmDataList.get(0);
+            sAlarmDataList.remove(0);
+            mAlarmTimerDialog.setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
+
+//            /*mDialogHeight = getAlarmDialogHeight();
+//            mDialogWith = getAlarmDialogWidth();*/
+//
+//            // RingUtil.startRing(mContext, R.raw.alarm, SoundUtil.MODE_ONCE);
+//
+//            if (mDialogHeight == 0 || mDialogHeight == 0)
+//                return;
+
+            int type = data.getType();
+            String tyreStr = "";
+            String speekStr = "";
+            //左前胎or 右前胎 or..
+            switch (type) {
+                case 0:
+                    tyreStr = mContext.getResources().getString(R.string.left_top_text);
+                    break;
+                case 1:
+                    tyreStr = mContext.getResources().getString(R.string.right_top_text);
+                    break;
+                case 2:
+                    tyreStr = mContext.getResources().getString(R.string.left_bot_text);
+                    break;
+                case 3:
+                    tyreStr = mContext.getResources().getString(R.string.right_bot_text);
+                    break;
+            }
+            speekStr = tyreStr;
+            int[] dataArr = data.getData();
+            //一个轮胎的信息，返回的ddaArr数据中安装优先级排序
+            for (int i = 0; i < dataArr.length; i++) {
+                switch (dataArr[i]) {
+                    case Manager.TPMSAlarmType.tyrequickLeak:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.rapid_leak) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.rapid_leak);
+                        break;
+                    case Manager.TPMSAlarmType.tyreslowLeak:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.slow_leak) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.slow_leak);
+                        break;
+                    case Manager.TPMSAlarmType.tyreHot:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.overheating) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.overheating);
+                        break;
+                    case Manager.TPMSAlarmType.tyreUnderPa:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.under_pressure) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.under_pressure);
+                        break;
+                    case Manager.TPMSAlarmType.tyreOverPa:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.over_pressure) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.over_pressure);
+                        break;
+                    case Manager.TPMSAlarmType.sensorInvalided:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.lost_connect_text) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.lost_connect_text);
+                        break;
+                    case Manager.TPMSAlarmType.tyrelowPower:
+                        tyreStr = tyreStr + (mContext.getResources().getString(R.string.low_power) + "\n");
+                        speekStr += mContext.getResources().getString(R.string.low_power);
+                        break;
+                }
+                if (i == dataArr.length - 1) {
+                    tyreStr = tyreStr.substring(0, tyreStr.length() - 1);
+
+                }
+            }
+            mAlarmTimerDialog.show(tyreStr);
+            mSpanBuilder.clear();
+            mSpanBuilder.append(tyreStr);
+            mSpanBuilder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.dashboard_black_text)), 0, tyreStr.indexOf("胎") + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mSpanBuilder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.dashboard_red_text)), tyreStr.indexOf("胎") + 1, tyreStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mAlarmTimerDialog.getContentTextView().setText(mSpanBuilder, TextView.BufferType.SPANNABLE);
+            VoiceManager.getInstance().sendBroadcastTTS(speekStr);
+//            Manager.getInstance().speak(speekStr);
+
         }
     }
 
@@ -321,6 +424,7 @@ public class MainPage extends AppPage {
     /**
      * @return the mAlarmOn
      */
+
     public boolean isAlarmOn() {
         return mAlarmOn;
     }
@@ -332,7 +436,20 @@ public class MainPage extends AppPage {
         this.mAlarmOn = on;
     }
 
-//    /**
+    @Override
+    public void onDestroy() {
+        if (mainPagePersenter != null)
+            mainPagePersenter.clear();
+        super.onDestroy();
+    }
+
+    @Override
+    public void notifyTirePresstureAlermComming(TPMSAlarmData alarmData) {
+        sAlarmDataList.add(alarmData);
+    }
+
+
+    //    /**
 //     * 显示权限验证提醒，试用期，过期等
 //     */
 //    public void showPermissionAlert(){

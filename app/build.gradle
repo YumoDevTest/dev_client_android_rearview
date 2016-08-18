@@ -61,7 +61,7 @@ ext {
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.3'
     println "getBuildToolVersion" + getBuildToolVersion()
     defaultConfig {
         minSdkVersion 8

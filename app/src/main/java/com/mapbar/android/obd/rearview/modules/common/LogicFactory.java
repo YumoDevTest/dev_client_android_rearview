@@ -6,7 +6,6 @@ import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManagerFake;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManagerImpl;
-import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressureManager;
 
 /**
  * 业务工厂类。以构建 各个业务类。试用了 静态工厂模式
@@ -16,14 +15,14 @@ public class LogicFactory {
     private LogicFactory() {
     }
 
-    /**
-     * 获得 胎压 业务操作类
-     *
-     * @return
-     */
-    public static TirePressureManager createTirePressureManager() {
-        return new TirePressureManager();
-    }
+//    /**
+//     * 获得 胎压 业务操作类
+//     *
+//     * @return
+//     */
+//    public static TirePressureManager createTirePressureManager() {
+//        return new TirePressureManager();
+//    }
 
     /**
      * 获得 权限管理 业务操作类

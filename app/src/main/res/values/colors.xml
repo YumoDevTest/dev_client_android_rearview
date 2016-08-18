@@ -82,4 +82,6 @@
     <!--车辆数据页面，胎压文字 ，正常是绿色，警告是红色 ，-->
     <color name="tire_pressture_text_normal">#1bffd7</color>
     <color name="tire_pressture_text_warning">#ee3f3f</color>
+    <!-- 胎压提示文字颜色-->
+    <color name="dashboard_black_text">#1f2023</color>
 </resources>
