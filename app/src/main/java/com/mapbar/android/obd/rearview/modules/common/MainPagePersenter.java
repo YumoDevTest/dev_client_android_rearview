@@ -42,7 +42,7 @@ public class MainPagePersenter extends BasePresenter<IMainPageView> {
      * 启动,检查提醒消息队列
      */
     public void startCheckNotifications() {
-        LogUtil.d(TAG, "## 检查是否有通知 - start, 数量=" + notificationManager.getCountOfNotification());
+//        LogUtil.d(TAG, "## 检查是否有通知 - start, 数量=" + notificationManager.getCountOfNotification());
         if (!notificationManager.hasMore()) {
             return;
         }
@@ -63,7 +63,7 @@ public class MainPagePersenter extends BasePresenter<IMainPageView> {
                 if (!getView().isShowingNotification()) {
                     Notification notification = notificationManager.poll();
                     if (notification != null) {
-                        LogUtil.d(TAG, "## 检查是否有通知 - 显示通知");
+//                        LogUtil.d(TAG, "## 检查是否有通知 - 显示通知");
                         getView().showNotification(notification);
                     }
                 }

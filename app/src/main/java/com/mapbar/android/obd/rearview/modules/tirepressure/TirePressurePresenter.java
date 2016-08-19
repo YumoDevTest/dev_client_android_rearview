@@ -122,10 +122,11 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
                     item.attStatus6 != 0 ||
                     item.attStatus7 != 0;
 
-            LogUtil.i("TIRE", "## 显示胎压： " + item.toString());
+//            LogUtil.i("TIRE", "## 显示胎压： " + item.toString());
         }
         //0左前轮、1右前轮、2左后轮、3右后轮
         getView().showTirePresstureFour(tirePressureViewModels);
+        getView().hideTirePresstureSingleView();
     }
 
 
@@ -145,9 +146,10 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
             RealTimeDataTPMS item = realTimeDataTPMSAll.m_tpmsData[i];
             TirePressure4ViewModel t = tirePressureViewModels[i];
             t.isWarning = item.attStatus5 != 0;
-            LogUtil.i("TIRE", "## 显示胎压： " + item.toString());
+//            LogUtil.i("TIRE", "## 显示胎压： " + item.toString());
         }
         //0左前轮、1右前轮、2左后轮、3右后轮
         getView().showTirePresstureSingle(tirePressureViewModels);
+        getView().hideTirePresstureFoureView();
     }
 }

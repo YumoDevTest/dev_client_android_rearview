@@ -20,7 +20,6 @@ public class TirePressureDataEventDispatcher extends BaseEventDispatcher<TirePre
 
     @Override
     protected void onSDKEvent(int event, Object o, TirePressureDataEventHandler tirePressureDataEventHandler) {
-        LogUtil.i(TAG, "## 胎压事件监听: " + event);
         if (event == Manager.Event.dataUpdateTPMS) {
             LogUtil.i(TAG, "## 收到胎压事件 - 精确胎压 ");
             if (o instanceof RealTimeDataTPMSAll) {
