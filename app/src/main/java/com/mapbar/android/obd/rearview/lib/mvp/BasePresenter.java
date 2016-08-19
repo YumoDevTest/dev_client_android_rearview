@@ -7,6 +7,8 @@ package com.mapbar.android.obd.rearview.lib.mvp;
 public abstract class BasePresenter<T extends IMvpView> {
     private T view;
 
+
+
     public BasePresenter(T view) {
         this.view = view;
     }
@@ -25,4 +27,6 @@ public abstract class BasePresenter<T extends IMvpView> {
     }
 
     public abstract void clear();
+
+
 }

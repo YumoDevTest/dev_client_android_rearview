@@ -13,9 +13,13 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
  * <p/>
  * Created by zhangyunfei on 16/8/18.
  */
-public abstract class BaseEventDispatcher {
+public abstract class BaseEventDispatcher<CALLBACK extends Object> {
     private OBDSDKListenerManager.SDKListener sdkListener;
+    private CALLBACK callback;
 
+    public BaseEventDispatcher(CALLBACK callback) {
+        this.callback = callback;
+    }
 
     public final void start() {
         if (sdkListener != null)
@@ -23,7 +27,7 @@ public abstract class BaseEventDispatcher {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
-                onSDKEvent(event, o);
+                raiseOnSDKEvent(event, o);
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
@@ -36,7 +40,11 @@ public abstract class BaseEventDispatcher {
      * @param event
      * @param o
      */
-    protected abstract void onSDKEvent(int event, Object o);
+    protected void raiseOnSDKEvent(int event, Object o) {
+        onSDKEvent(event, o, callback);
+    }
+
+    protected abstract void onSDKEvent(int event, Object o, CALLBACK callback);
 
 
     public final void stop() {

@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.modules.common;
 import android.content.Context;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
+import com.mapbar.android.obd.rearview.lib.notify.NotificationManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManagerFake;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManagerImpl;
@@ -12,6 +13,8 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissionManagerImpl;
  * Created by zhangyunfei on 16/8/5.
  */
 public class LogicFactory {
+    private static NotificationManager notificationManager;
+
     private LogicFactory() {
     }
 
@@ -34,5 +37,12 @@ public class LogicFactory {
             return new PermissionManagerFake();
         else
             return new PermissionManagerImpl(context);
+    }
+
+    public static NotificationManager getNotifycationManager() {
+        if (notificationManager == null) {
+            notificationManager = new NotificationManager();
+        }
+        return notificationManager;
     }
 }

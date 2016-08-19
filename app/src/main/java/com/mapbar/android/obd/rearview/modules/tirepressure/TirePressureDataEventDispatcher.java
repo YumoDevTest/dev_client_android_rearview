@@ -10,23 +10,23 @@ import com.mapbar.obd.RealTimeDataTPMSAll;
  * 从sdk收到消息，再次分发
  * Created by zhangyunfei on 16/8/17.
  */
-public class TirePressureDataEventDispatcher extends BaseEventDispatcher {
+public class TirePressureDataEventDispatcher extends BaseEventDispatcher<TirePressureDataEventDispatcher.TirePressureDataEventHandler> {
     public static final String TAG = "TirePressure";
-    private TirePressurePresenter tirePressureDataEventHandler;
 
-    public TirePressureDataEventDispatcher(TirePressurePresenter tirePressureDataEventHandler) {
-        this.tirePressureDataEventHandler = tirePressureDataEventHandler;
+    public TirePressureDataEventDispatcher(TirePressureDataEventHandler tirePressureDataEventHandler) {
+        super(tirePressureDataEventHandler);
     }
 
+
     @Override
-    protected void onSDKEvent(int event, Object o) {
+    protected void onSDKEvent(int event, Object o, TirePressureDataEventHandler tirePressureDataEventHandler) {
         switch (event) {
             case Manager.Event.dataUpdateTPMS://精确胎压数据
                 LogUtil.i(TAG, "## 收到胎压事件 - 精确胎压 ");
                 if (o instanceof RealTimeDataTPMSAll) {
                     RealTimeDataTPMSAll realTimeDataTPMSAll = (RealTimeDataTPMSAll) o;
-//                            if (tirePressureDataEventHandler != null)
-//                                tirePressureDataEventHandler.onReceiveTirePressureFromImmediate(realTimeDataTPMSAll);
+                    if (tirePressureDataEventHandler != null)
+                        tirePressureDataEventHandler.onReceiveTirePressureFromImmediate(realTimeDataTPMSAll);
                 }
                 break;
             case Manager.Event.dataUpdateWSBTPMS://算法胎压数据

@@ -22,6 +22,8 @@ public interface PermissionManager {
 
     public List<ObdRightBean.ObdRight> getPermissonList();
 
+
+
     public interface DownloadPermissionCallback {
         void onSuccess(List<ObdRightBean.ObdRight> permissionList);
 
