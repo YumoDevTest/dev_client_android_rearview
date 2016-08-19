@@ -199,12 +199,16 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-def String SERIALPORT_PATH = null;
-if (System.getenv('SERIALPORT_PATH') != null) {
-    SERIALPORT_PATH = System.getenv('SERIALPORT_PATH');
+def getSerialportPath = {
+    def SERIALPORT_PATH = System.getenv('SERIALPORT_PATH')
+    if (SERIALPORT_PATH) {
+        return SERIALPORT_PATH
+    }
+    return null
 }
-project.ext.SERIALPORT_PATH = SERIALPORT_PATH;
-println "读取环境参数,串口名：SERIALPORT_PATH=" + project.ext.SERIALPORT_PATH
+
+//project.ext.SERIALPORT_PATH = SERIALPORT_PATH;
+//println "读取环境参数,串口名：SERIALPORT_PATH=" + project.ext.SERIALPORT_PATH
 
 def Boolean IS_FAKE_IMEI;
 if (System.getenv('SERIALPORT_PATH') != null) {
@@ -226,3 +230,8 @@ if (System.getenv('BASE_PERMISSION_URL') != null) {
 println "读取环境参数,权限url：BASE_PERMISSION_URL=" + BASE_PERMISSION_URL
 
 
+ext {
+    SERIALPORT_PATH = getSerialportPath()
+}
+
+println '读取环境参数,串口名：' + project.SERIALPORT_PATH
