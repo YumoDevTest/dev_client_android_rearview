@@ -14,24 +14,24 @@ import java.util.TimerTask;
  */
 public class TirePressureAlermEventDispatcher extends BaseEventDispatcher<TirePressureAlermEventDispatcher.TirePressureAlarmCallback> {
     private static final String TAG = TirePressureAlermEventDispatcher.class.getSimpleName();
-    private Timer timer;
+//    private Timer timer;
 
     public TirePressureAlermEventDispatcher(TirePressureAlarmCallback tirePressureAlarmCallback) {
         super(tirePressureAlarmCallback);
 //        makeDemoData();
     }
 
-    private void makeDemoData() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                LogUtil.i(TAG, "## 模拟胎压预警");
-                TPMSAlarmData demoData = TireAlermMessageBuilder.createDemoData();
-                raiseOnSDKEvent(Manager.Event.alarmTPMS, demoData);
-            }
-        }, 23000, 3000);
-    }
+//    private void makeDemoData() {
+//        timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                LogUtil.i(TAG, "## 模拟胎压预警");
+//                TPMSAlarmData demoData = TireAlermMessageBuilder.createDemoData();
+//                raiseOnSDKEvent(Manager.Event.alarmTPMS, demoData);
+//            }
+//        }, 23000, 3000);
+//    }
 
     @Override
     protected void onSDKEvent(int event, Object o, TirePressureAlarmCallback tirePressureAlarmCallback) {

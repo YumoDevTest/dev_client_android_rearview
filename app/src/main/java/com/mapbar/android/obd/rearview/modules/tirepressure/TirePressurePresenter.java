@@ -42,38 +42,7 @@ public class TirePressurePresenter extends BasePresenter<ITirePressureView> impl
         tirePressureDataEventDispatcher = new TirePressureDataEventDispatcher(this);
         tirePressureDataEventDispatcher.start();
 
-//        test1();
     }
-
-
-//    float t1 = 0.1f;
-//    float t2 = 0;
-//
-//    private void test1() {
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                RealTimeDataTPMS[] realTimeDataTPMSes = new RealTimeDataTPMS[4];
-//                for (int i = 0; i < realTimeDataTPMSes.length; i++) {
-//                    int pos = i;
-//                    realTimeDataTPMSes[i] = new RealTimeDataTPMS(pos, t1, t2, 0, 0, 0, 0, 0, 0, 0, 0);
-//                }
-//
-//                RealTimeDataTPMSAll realTimeDataTPMSAll;
-//                realTimeDataTPMSAll = new RealTimeDataTPMSAll(realTimeDataTPMSes.length, realTimeDataTPMSes);
-//                onReceiveTirePressureFromImmediate(realTimeDataTPMSAll);
-//
-//                t1 += 0.2;
-//                if (t1 > 10) //1.8-3.2
-//                    t1 = 0.1f;
-//                t2 += 5;
-//                if (t2 > 100)
-//                    t2 = 10;
-//                test1();
-//            }
-//        }, 200);
-//    }
-
 
     public void clear() {
         if (tirePressureDataEventDispatcher != null) {

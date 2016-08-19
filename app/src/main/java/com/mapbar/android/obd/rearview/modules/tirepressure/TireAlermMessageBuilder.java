@@ -87,16 +87,16 @@ public class TireAlermMessageBuilder {
 
     static Random random = new Random();
 
-    public static TPMSAlarmData createDemoData() {
-
-        int type = random.nextInt(4);
-
-        int n = random.nextInt(3) + 1;
-        int[] dataArr = new int[n];
-        for (int i = 0; i < dataArr.length; i++) {
-            dataArr[i] = random.nextInt(8);
-        }
-        TPMSAlarmData tpmsAlarmData = new TPMSAlarmData(type, 0, 0, dataArr);
-        return tpmsAlarmData;
-    }
+//    public static TPMSAlarmData createDemoData() {
+//
+//        int type = random.nextInt(4);
+//
+//        int n = random.nextInt(3) + 1;
+//        int[] dataArr = new int[n];
+//        for (int i = 0; i < dataArr.length; i++) {
+//            dataArr[i] = random.nextInt(8);
+//        }
+//        TPMSAlarmData tpmsAlarmData = new TPMSAlarmData(type, 0, 0, dataArr);
+//        return tpmsAlarmData;
+//    }
 }
