@@ -215,13 +215,13 @@ println "读取环境参数,是否伪造IMEI：IS_FAKE_IMEI=" + IS_FAKE_IMEI
 
 def String FAKE_IMEI;
 if (System.getenv('FAKE_IMEI') != null) {
-    SERIALPORT_PATH = System.getenv('FAKE_IMEI');
+    FAKE_IMEI = System.getenv('FAKE_IMEI');
 }
 println "读取环境参数,伪造IMEI：FAKE_IMEI=" + FAKE_IMEI
 
 def String BASE_PERMISSION_URL;
 if (System.getenv('BASE_PERMISSION_URL') != null) {
-    SERIALPORT_PATH = System.getenv('BASE_PERMISSION_URL');
+    BASE_PERMISSION_URL = System.getenv('BASE_PERMISSION_URL');
 }
 println "读取环境参数,权限url：BASE_PERMISSION_URL=" + BASE_PERMISSION_URL
 
