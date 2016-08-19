@@ -198,3 +198,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+println "读取环境参数：SERIALPORT_PATH="+project.hasProperty("SERIALPORT_PATH")
+println "读取环境参数：SERIALPORT_PATH=" + System.getenv('SERIALPORT_PATH')
+println "读取环境参数：SERIALPORT_PATH=" + properties.getProperty('SERIALPORT_PATH')
