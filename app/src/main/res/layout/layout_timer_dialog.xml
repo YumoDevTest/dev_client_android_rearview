@@ -31,7 +31,7 @@
             android:layout_toRightOf="@id/iv_td_icon"
             android:textColor="#ed331a"
             android:text="-"
-            android:textSize="20dip" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <View
@@ -61,7 +61,7 @@
                 android:gravity="center_horizontal"
                 android:text="关闭"
                 android:textColor="#007aff"
-                android:textSize="20dip" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_countdown"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="(3S)"
                 android:textColor="#007aff"
-                android:textSize="20dip" />
+                android:textSize="20sp" />
         </LinearLayout>
     </FrameLayout>
 

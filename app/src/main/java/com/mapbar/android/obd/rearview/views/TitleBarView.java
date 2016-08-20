@@ -60,7 +60,7 @@ public class TitleBarView extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        contentView = (RelativeLayout) layoutInflater.inflate(R.layout.titlebar_view, null);
+        contentView = layoutInflater.inflate(R.layout.titlebar_view, null);
         ViewInjectTool.inject(this, contentView);
 
         setTitle(R.string.app_name);
@@ -87,14 +87,14 @@ public class TitleBarView extends RelativeLayout {
 
     public void setButtonRightText(String text) {
         textview_right.setText(text);
-        if(!TextUtils.isEmpty(text)){
+        if (!TextUtils.isEmpty(text)) {
             imageview_right.setVisibility(View.GONE);
         }
     }
 
     public void setButtonRightImage(int id) {
         imageview_right.setImageResource(id);
-        if(id != 0){
+        if (id != 0) {
             textview_right.setVisibility(View.GONE);
         }
     }
@@ -104,7 +104,7 @@ public class TitleBarView extends RelativeLayout {
     }
 
 
-    public void clearRightButton(){
+    public void clearRightButton() {
         right_container.setVisibility(View.GONE);
         right_container.setOnClickListener(null);
     }

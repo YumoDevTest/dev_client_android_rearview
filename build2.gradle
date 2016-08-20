@@ -199,19 +199,18 @@ def getPara_BASE_PERMISSION_URL = {
     return null
 }
 
-
-
-def getBuildSDKVersion = { ->
-    def buildSDKVersion = System.getenv("Android_SDK_Version")
-    println "buildSDKVersion is ${buildSDKVersion}"
-    if (buildSDKVersion) {
-        return Integer.parseInt(buildSDKVersion)
-    }
-//    if (rootProject.ext.compileSdkVersion) {
-//        return rootProject.ext.compileSdkVersion
+//
+//def getBuildSDKVersion = { ->
+//    def buildSDKVersion = System.getenv("Android_SDK_Version")
+//    println "buildSDKVersion is ${buildSDKVersion}"
+//    if (buildSDKVersion) {
+//        return Integer.parseInt(buildSDKVersion)
 //    }
-    return Integer.parseInt("22")
-}
+////    if (rootProject.ext.compileSdkVersion) {
+////        return rootProject.ext.compileSdkVersion
+////    }
+//    return Integer.parseInt("22")
+//}
 
 def getGitVersion = { ->
     try {
@@ -238,7 +237,7 @@ def getPrefixName = { ->
 def getBranchName = { ->
     def var1 = System.getenv("Branch_Name")
     if (var1) {
-        var1 = var1.substring(0, var1.indexOf("/"))
+        var1 = var1.replace('/', '_');// var1.substring(0, var1.indexOf("/"))
         return var1
     }
     return null

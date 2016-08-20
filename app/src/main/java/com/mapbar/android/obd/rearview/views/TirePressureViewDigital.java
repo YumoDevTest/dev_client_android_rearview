@@ -45,7 +45,7 @@ public class TirePressureViewDigital extends FrameLayout {
         tire_pressure_unit = (RadioButton) content.findViewById(R.id.tire_pressure_unit);
         tire_temperature = (RadioButton) content.findViewById(R.id.tire_temperature);
         tire_temperature_unit = (RadioButton) content.findViewById(R.id.tire_temperature_unit);
-        tire_pressure_divider = (View) content.findViewById(R.id.tire_pressure_divider);
+        tire_pressure_divider = content.findViewById(R.id.tire_pressure_divider);
         setWarning(false);//设置 非警告状态
     }
 

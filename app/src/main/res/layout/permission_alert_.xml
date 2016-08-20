@@ -64,7 +64,7 @@
                     android:gravity="center"
                     android:text="限时特价促销扫描更改"
                     android:textColor="@color/white"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
 

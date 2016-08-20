@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:text="请扫描关注\n微信公众号"
                 android:textColor="@color/white"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <TableLayout

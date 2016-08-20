@@ -10,7 +10,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 23
         applicationId "com.mapbar.android.obd.rearview"
         versionCode 2
@@ -86,10 +86,10 @@ android {
         // Move the tests to tests/java, tests/res, etc...
 
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_7
+//        targetCompatibility JavaVersion.VERSION_1_7
+//    }
     dexOptions {    // 打开dex增量编译
         incremental true
 //        jumboMode true
@@ -156,23 +156,23 @@ def flavors() {
 
         def log = project.logger
     }
-    if (System.getenv("Android_SDK_Version")) {
-        boolean debugVersion = true
-        debugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
-        println "-----" + debugVersion
-        println "debugVersion is ${debugVersion}"
-        android.variantFilter { varian ->
-            if (debugVersion) {
-                if (varian.buildType.name.equals('release')) {
-                    varian.setIgnore(true)
-                }
-            } else {
-                if (varian.buildType.name.equals('debug')) {
-                    varian.setIgnore(true)
-                }
+//    if (System.getenv("Android_SDK_Version")) {
+    boolean isDebugVersion = true
+    isDebugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
+    println "-----" + isDebugVersion
+    println "debugVersion is ${isDebugVersion}"
+    android.variantFilter { varian ->
+        if (isDebugVersion) {
+            if (varian.buildType.name.equals('release')) {
+                varian.setIgnore(true)
+            }
+        } else {
+            if (varian.buildType.name.equals('debug')) {
+                varian.setIgnore(true)
             }
         }
     }
+//    }
 
 }
 
@@ -196,9 +196,9 @@ dependencies {
 android.applicationVariants.all { variant ->
     // 将打包的目录指定出去，对齐生成的apk
     variant.outputs.each { output ->
-        if (System.getenv("Android_SDK_Version") == null) {
-            return
-        }
+//        if (System.getenv("Android_SDK_Version") == null) {
+//            return
+//        }
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
             String outPath = System.getProperty('user.dir') + File.separator + 'apk'
