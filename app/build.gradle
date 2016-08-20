@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-println "test: ************* "+ project.GET_VERSION
+println "test: ************* " + project.GET_VERSION
 
 android {
     compileSdkVersion 23
@@ -34,7 +34,7 @@ android {
             signingConfig signingConfigs.release
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
-            buildConfigField("String", "FAKE_IMEI", "")
+            buildConfigField("String", "FAKE_IMEI", "\"\"")
             buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
