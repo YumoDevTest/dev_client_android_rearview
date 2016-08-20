@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 println "test: ************* " + project.GET_VERSION
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
     defaultConfig {
@@ -23,6 +27,7 @@ android {
         debug {
         }
     }
+
     buildTypes {
         release {
             debuggable false
@@ -60,10 +65,8 @@ android {
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
     }
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
+
+
 
     flavors()
     sourceSets {
