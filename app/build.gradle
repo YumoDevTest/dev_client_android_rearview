@@ -1,73 +1,13 @@
 apply plugin: 'com.android.application'
 
-
-def getBuildSDKVersion = { ->
-    def buildSDKVersion = System.getenv("Android_SDK_Version")
-    println "buildSDKVersion is ${buildSDKVersion}"
-    if (buildSDKVersion) {
-        return Integer.parseInt(buildSDKVersion)
-    }
-//    if (rootProject.ext.compileSdkVersion) {
-//        return rootProject.ext.compileSdkVersion
-//    }
-    return Integer.parseInt("22")
-}
-
-def getGitVersion = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'log', '-1', '--pretty=format:%h'
-            standardOutput = stdout
-        }
-        return stdout.toString()
-    } catch (ignored) {
-        return '0000000';
-    }
-}
-def getBuildToolVersion = { ->
-//    if (rootProject.ext.buildToolsVersion) {
-//        return rootProject.ext.buildToolsVersion
-//    }
-//    return project.ANDROID_BUILD_TOOLS_VERSION
-    return "23.0.2"
-}
-
-def getPrefixName = { ->
-    def prefixName = System.getenv("Prefix_Name")
-    println "prefixName is ${prefixName}"
-    if (prefixName) {
-        return prefixName
-    }
-    return 'OBD'
-}
-
-def getBranchName = { ->
-    def branchName = System.getenv("Branch_Name")
-    println "branchName is ${branchName}"
-    if (branchName) {
-        branchName = branchName.substring(0, branchName.indexOf("/"))
-        return branchName
-    }
-    return null
-}
-
-ext {
-    GET_VERSION = getGitVersion()
-    PREFIX_NAME = getPrefixName()
-    BRANCH_NAME = getBranchName()
-    println 'GitVersion is ' + project.GET_VERSION
-}
+println "test: ************* "+ project.GET_VERSION
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.3'
-    println "getBuildToolVersion" + getBuildToolVersion()
     defaultConfig {
         minSdkVersion 8
-//        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
-//        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
-        targetSdkVersion 22
+        targetSdkVersion 23
         applicationId "com.mapbar.android.obd.rearview"
         versionCode 2
         versionName "1.0.1"
@@ -86,35 +26,30 @@ android {
     buildTypes {
         release {
             debuggable false
-            // 不显示Log
-//            buildConfigField "boolean", "LOG_DEBUG", "false"
-//            minifyEnabled true// 是否混淆
+            minifyEnabled false// 是否混淆
             zipAlignEnabled true
             // 移除无用的resource文件
 //            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
             buildConfigField("String", "FAKE_IMEI", "")
             buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
-        beta{//这个 buildType提供给jenkins使用
-            debuggable true
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
-            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
-            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
-            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
-            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
-
-        }
+//        beta {//这个 buildType提供给jenkins使用
+//            debuggable true
+//            minifyEnabled false
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
+//            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
+//            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
+//            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
+//            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
+//        }
         debug {
             debuggable true
+            minifyEnabled false
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
@@ -141,9 +76,6 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
 //            java.srcDirs = ['src']
-//            java.srcDirs +=['D:\\workspace\\as_work\\dev_sdk\\java\\core']
-            // java.srcDirs += ['D:/obdCode1/dev_sdk/java/core']
-//            java.srcDirs +=['/Users/zhangyunfei/git/dev_sdk/java/core']
             if (rootProject.hasProperty('obd_sdk_source_dir') && rootProject.ext.obd_sdk_source_dir)
                 java.srcDirs += [rootProject.ext.obd_sdk_source_dir]
         }
@@ -166,7 +98,7 @@ android {
 def flavors() {
     def channels = System.getenv("Channels")
     if (channels) {
-        println "channels is ${channels}"
+        println "#channels is ${channels}"
         def separate1 = ':'
 
         def separate2 = '@'
@@ -255,6 +187,7 @@ dependencies {
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/protobuf-java-2.5.0-sources.jar')
     compile files('libs/protobuf-java-format-1.2.jar')
+    compile files('libs/apache-httpcomponents-httpcore.jar')
 }
 
 android.applicationVariants.all { variant ->
