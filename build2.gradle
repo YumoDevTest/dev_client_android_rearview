@@ -238,7 +238,7 @@ def getPrefixName = { ->
 def getBranchName = { ->
     def var1 = System.getenv("Branch_Name")
     if (var1) {
-        var1 = branchName.substring(0, var1.indexOf("/"))
+        var1 = var1.substring(0, var1.indexOf("/"))
         return var1
     }
     return null
