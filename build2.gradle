@@ -237,7 +237,8 @@ def getPrefixName = { ->
 def getBranchName = { ->
     def var1 = System.getenv("Branch_Name")
     if (var1) {
-        var1 = var1.replace('/', '_');// var1.substring(0, var1.indexOf("/"))
+        var1 = var1.substring(var1.lastIndexOf("/") + 1);
+// var1.replace('/', '_');// var1.substring(0, var1.indexOf("/"))
         return var1
     }
     return null
@@ -284,10 +285,14 @@ ext {
     VERSION_CODE = getPara_VERSION_CODE()
 
     IS_ENABLE_PERMISSION = getPara_IS_ENABLE_PERMISSION()
+
+    IS_JENKINS = !(PREFIX_NAME == null || "".equals(PREFIX_NAME));
 }
 
 //ext.compileSdkVersion = highestSdkAvailable(22)
 //ext.buildToolsVersion = latestBuildToolsAvailable("23")
+
+println "#读取环境参数,是否处于Jenkins编译环境： ${IS_JENKINS}"
 
 println "#读取环境参数,prefixName is ${PREFIX_NAME}"
 println "#读取环境参数,branchName is ${BRANCH_NAME}"

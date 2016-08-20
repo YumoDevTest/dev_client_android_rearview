@@ -156,23 +156,23 @@ def flavors() {
 
         def log = project.logger
     }
-//    if (System.getenv("Android_SDK_Version")) {
-    boolean isDebugVersion = true
-    isDebugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
-    println "-----" + isDebugVersion
-    println "debugVersion is ${isDebugVersion}"
-    android.variantFilter { varian ->
-        if (isDebugVersion) {
-            if (varian.buildType.name.equals('release')) {
-                varian.setIgnore(true)
-            }
-        } else {
-            if (varian.buildType.name.equals('debug')) {
-                varian.setIgnore(true)
+    if (project.IS_JENKINS) {
+        boolean isDebugVersion = true
+        isDebugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
+        println "-----" + isDebugVersion
+        println "debugVersion is ${isDebugVersion}"
+        android.variantFilter { varian ->
+            if (isDebugVersion) {
+                if (varian.buildType.name.equals('release')) {
+                    varian.setIgnore(true)
+                }
+            } else {
+                if (varian.buildType.name.equals('debug')) {
+                    varian.setIgnore(true)
+                }
             }
         }
     }
-//    }
 
 }
 
@@ -196,9 +196,9 @@ dependencies {
 android.applicationVariants.all { variant ->
     // 将打包的目录指定出去，对齐生成的apk
     variant.outputs.each { output ->
-//        if (System.getenv("Android_SDK_Version") == null) {
-//            return
-//        }
+        if (!project.IS_JENKINS) {
+            return
+        }
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
             String outPath = System.getProperty('user.dir') + File.separator + 'apk'
