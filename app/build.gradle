@@ -103,71 +103,34 @@ android {
 }
 
 def flavors() {
+    if (!project.IS_JENKINS)
+        return
     def channels = System.getenv("Channels")
     if (channels) {
         println "#环境变量 Channels = ${channels}"
-        def separate1 = ':'
-
-        def separate2 = '@'
-        def first = "first"
-        def indexSeparate1
-        def indexSeparate2
-        def channelName
-        def channelKey
-        def channelFirst
-        channels.toString().tokenize(';').each { line ->
+        channels.toString().tokenize(';').each { channelItem ->
             println "==================== Channel Start ====================="
-            println "# line is ${line}"
-
-            indexSeparate1 = line.indexOf(separate1)
-            indexSeparate2 = line.indexOf(separate2)
-
-            // Groovy的正则匹配不上......
-            /*channelName = (line =~ /(.*):/).group()
-//            channelName = ~/(.*):/.matches(line).group()
-            println "channelName is ${channelName}"
-
-            channelName = channelNameMatcher.group()
-            println "channelName is ${channelName}"
-
-            channelKey = (line =~ /:(.*)@/).group()
-            println "channelKey is ${channelKey}"
-
-            channelFirst = (line =~ /@(.*)/).group()
-            println "channelFirst is ${channelFirst}"*/
-
-            /*channelName = line.substring(0, indexSeparate1)
-            println "channelName is ${channelName}"
-
-            channelKey = line.substring(indexSeparate1 + separate1.length(), indexSeparate2)
-            println "channelKey is ${channelKey}"
-
-            channelFirst = line.substring(indexSeparate2 + separate2.length())
-            println "channelFirst is ${channelFirst}"*/
-
+            println "# channelItem is ${channelItem}"
             //动态创建productFlavor
-            android.productFlavors.create(line, {
+            android.productFlavors.create(channelItem, {
                 // 替换渠道号
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE: line]
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: channelItem]
 
-                // target channel splash
-                /*if (first == channelFirst) {
-                    android.sourceSets."${channelName}".res.srcDirs = ["splash/${channelName}"]
-                }*/
+                println "# create productFlavors [${channelItem}] success"
             })
             println "==================== Channel End ====================="
         }
-
-        def log = project.logger
+//        def log = project.logger
     }
-    if (project.IS_JENKINS) {
-        println "# 环境变量 BUILD_TYPE = ${BUILD_TYPE}"
-        android.variantFilter { varian ->
-            //如果不是这个指定的 BUILD_TYPE,那个其他构建将被 忽略执行
-            if (project.BUILD_TYPE)
-                if (!varian.buildType.name.equals('${BUILD_TYPE}')) {
-                    varian.setIgnore(true)
-                }
+    println "# 环境变量 构建类型 BUILD_TYPE = ${BUILD_TYPE}"
+    if (!project.BUILD_TYPE)
+        return
+    android.variantFilter { varian ->
+        println "遍历 " + varian.buildType.name
+        println "遍历 是否相等" + varian.buildType.name.equals('${BUILD_TYPE}')
+        //如果不是这个指定的 BUILD_TYPE,那个其他构建将被 忽略执行
+        if (!varian.buildType.name.equals('${BUILD_TYPE}')) {
+            varian.setIgnore(true)
         }
     }
 
