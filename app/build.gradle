@@ -13,7 +13,7 @@ android {
         applicationId "com.mapbar.android.obd.rearview"
         versionCode project.VERSION_CODE == null ? 2 : project.VERSION_CODE
         versionName project.VERSION_NAME == null ? "1.0.1" : project.VERSION_NAME
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'xiaomi']
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'mapbar']
     }
     signingConfigs {
         release {
