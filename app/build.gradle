@@ -7,11 +7,11 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
         versionCode 2
         versionName "1.0.1"
@@ -180,7 +180,7 @@ def flavors() {
 dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:22.1.0'
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -190,7 +190,7 @@ dependencies {
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/protobuf-java-2.5.0-sources.jar')
     compile files('libs/protobuf-java-format-1.2.jar')
-    compile files('libs/apache-httpcomponents-httpcore.jar')
+//    compile files('libs/apache-httpcomponents-httpcore.jar')
 }
 
 android.applicationVariants.all { variant ->
