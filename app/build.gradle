@@ -126,12 +126,9 @@ def flavors() {
     if (!project.BUILD_TYPE)
         return
     android.variantFilter { varian ->
-        println "遍历 " + varian.buildType.name
-        println "遍历 是否相等" + varian.buildType.name.equals("${BUILD_TYPE}")
-        println "遍历 是否相等" + varian.buildType.name.equals(project.BUILD_TYPE)
-        println "遍历 是否相等" + varian.buildType.name.toString().equals(project.BUILD_TYPE.toString())
+        println "# 遍历 " + varian.buildType.name
         //如果不是这个指定的 BUILD_TYPE,那个其他构建将被 忽略执行
-        if (!varian.buildType.name.equals("${BUILD_TYPE}")) {
+        if (!varian.buildType.name.equals(project.BUILD_TYPE)) {
             varian.setIgnore(true)
         }
     }
