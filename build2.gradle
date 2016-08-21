@@ -300,16 +300,16 @@ println '#读取环境参数,GitVersion is ' + project.GET_VERSION
 
 //println '#读取环境参数,compileSdkVersion = ' + project.compileSdkVersion
 //println '#读取环境参数,buildToolsVersion =' + project.buildToolsVersion
-
 println '#读取环境参数,串口名：' + project.SERIALPORT_PATH
+println ''
 println '#读取环境参数,是否伪造IMEI：' + project.IS_FAKE_IMEI
 println '#读取环境参数,伪造的MEI：' + project.FAKE_IMEI
-println '#读取环境参数,权限服务基础url：' + project.FAKE_IMEI
+println ''
 println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
 println '#读取环境参数,版本号(名称)：' + project.VERSION_NAME
-
+println ''
 println '#读取环境参数,是否开启 功能收费权限管理：' + project.IS_ENABLE_PERMISSION
-
+println '#读取环境参数,权限服务基础url：' + project.BASE_PERMISSION_URL
 
 
 println '***************设定图吧obd的sdk的源代码路径**************'
