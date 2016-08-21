@@ -271,6 +271,16 @@ def getPara_IS_ENABLE_PERMISSION = { ->
     return false
 }
 
+//构建类型
+def getPara_BUILD_TYPE = { ->
+    def var1 = System.getenv("BUILD_TYPE")
+    if (var1) {
+        return var
+    }
+    return null
+}
+
+
 ext {
     SERIALPORT_PATH = getPara_SERIALPORT_PATH()
     IS_FAKE_IMEI = getPara_IS_FAKE_IMEI()
@@ -285,6 +295,7 @@ ext {
     VERSION_CODE = getPara_VERSION_CODE()
 
     IS_ENABLE_PERMISSION = getPara_IS_ENABLE_PERMISSION()
+    BUILD_TYPE = getPara_BUILD_TYPE()
 
     IS_JENKINS = !(BRANCH_NAME == null || "".equals(BRANCH_NAME));
 }
@@ -293,9 +304,9 @@ ext {
 //ext.buildToolsVersion = latestBuildToolsAvailable("23")
 
 println "#读取环境参数,是否处于Jenkins编译环境： ${IS_JENKINS}"
-println "#读取环境参数,prefixName is ${PREFIX_NAME}"
-println "#读取环境参数,branchName is ${BRANCH_NAME}"
-println '#读取环境参数,GitVersion is ' + project.GET_VERSION
+println "#读取环境参数,PREFIX_NAME is ${PREFIX_NAME}"
+println "#读取环境参数,BRANCH_NAME is ${BRANCH_NAME}"
+println '#读取环境参数,GET_VERSION is ' + project.GET_VERSION
 //println '#读取环境参数,compileSdkVersion = ' + project.compileSdkVersion
 //println '#读取环境参数,buildToolsVersion =' + project.buildToolsVersion
 println '#读取环境参数,串口名：' + project.SERIALPORT_PATH
@@ -305,6 +316,7 @@ println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
 println '#读取环境参数,版本号(名称)：' + project.VERSION_NAME
 println '#读取环境参数,是否开启 功能收费权限管理：' + project.IS_ENABLE_PERMISSION
 println '#读取环境参数,权限服务基础url：' + project.BASE_PERMISSION_URL
+println '#读取环境参数,指定构建类型 BUILD_TYPE ：' + project.BUILD_TYPE
 
 
 println '***************设定图吧obd的sdk的源代码路径**************'
