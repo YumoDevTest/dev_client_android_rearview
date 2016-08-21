@@ -257,7 +257,7 @@ def getPara_VERSION_NAME = { ->
 def getPara_VERSION_CODE = { ->
     def var1 = System.getenv("VERSION_CODE")
     if (var1) {
-        return var1;
+        return Integer.parseInt(var1)
     }
     return null
 }
@@ -266,7 +266,7 @@ def getPara_VERSION_CODE = { ->
 def getPara_IS_ENABLE_PERMISSION = { ->
     def var1 = System.getenv("IS_ENABLE_PERMISSION")
     if (var1) {
-        return Boolean.parseBoolean(var1);
+        return Boolean.parseBoolean(var1)
     }
     return false
 }
@@ -286,7 +286,7 @@ ext {
 
     IS_ENABLE_PERMISSION = getPara_IS_ENABLE_PERMISSION()
 
-    IS_JENKINS = !(PREFIX_NAME == null || "".equals(PREFIX_NAME));
+    IS_JENKINS = !(BRANCH_NAME == null || "".equals(BRANCH_NAME));
 }
 
 //ext.compileSdkVersion = highestSdkAvailable(22)
@@ -300,7 +300,7 @@ println '#读取环境参数,GitVersion is ' + project.GET_VERSION
 //println '#读取环境参数,buildToolsVersion =' + project.buildToolsVersion
 println '#读取环境参数,串口名：' + project.SERIALPORT_PATH
 println '#读取环境参数,是否伪造IMEI：' + project.IS_FAKE_IMEI
-println '#读取环境参数,伪造的MEI：' + project.FAKE_IMEI
+println '#读取环境参数,伪造的IMEI：' + project.FAKE_IMEI
 println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
 println '#读取环境参数,版本号(名称)：' + project.VERSION_NAME
 println '#读取环境参数,是否开启 功能收费权限管理：' + project.IS_ENABLE_PERMISSION

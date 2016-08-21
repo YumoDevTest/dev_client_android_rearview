@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 
-println "test: ************* " + project.GET_VERSION
-
 android {
     lintOptions {
         checkReleaseBuilds false
@@ -13,8 +11,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
-        versionCode 2
-        versionName "1.0.1"
+        versionCode project.VERSION_CODE == null ? 2 : project.VERSION_CODE
+        versionName project.VERSION_NAME == null ? "1.0.1" : project.VERSION_NAME
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'xiaomi']
     }
     signingConfigs {
@@ -29,6 +27,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
+//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
+            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
+            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
+            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
+            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
+            signingConfig signingConfigs.debug
+        }
         release {
             debuggable false
             minifyEnabled false// 是否混淆
@@ -43,27 +54,7 @@ android {
             buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
-//        beta {//这个 buildType提供给jenkins使用
-//            debuggable true
-//            minifyEnabled false
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
-//            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
-//            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
-//            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
-//            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
-//        }
-        debug {
-            debuggable true
-            minifyEnabled false
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
-//            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
-            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
-            buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
-            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
-            buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
-        }
+
     }
 
 
@@ -101,7 +92,7 @@ android {
 def flavors() {
     def channels = System.getenv("Channels")
     if (channels) {
-        println "#channels is ${channels}"
+        println "#环境变量 Channels = ${channels}"
         def separate1 = ':'
 
         def separate2 = '@'
@@ -113,7 +104,7 @@ def flavors() {
         def channelFirst
         channels.toString().tokenize(';').each { line ->
             println "==================== Channel Start ====================="
-            println "line is ${line}"
+            println "# line is ${line}"
 
             indexSeparate1 = line.indexOf(separate1)
             indexSeparate2 = line.indexOf(separate2)
@@ -159,8 +150,7 @@ def flavors() {
     if (project.IS_JENKINS) {
         boolean isDebugVersion = true
         isDebugVersion = Boolean.parseBoolean(System.getenv("Debug_Version"))
-        println "-----" + isDebugVersion
-        println "debugVersion is ${isDebugVersion}"
+        println "# 环境变量 Debug_Version = ${isDebugVersion}"
         android.variantFilter { varian ->
             if (isDebugVersion) {
                 if (varian.buildType.name.equals('release')) {
@@ -190,7 +180,7 @@ dependencies {
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/protobuf-java-2.5.0-sources.jar')
     compile files('libs/protobuf-java-format-1.2.jar')
-//    compile files('libs/apache-httpcomponents-httpcore.jar')
+    //    compile files('libs/apache-httpcomponents-httpcore.jar')
 }
 
 android.applicationVariants.all { variant ->
@@ -201,23 +191,8 @@ android.applicationVariants.all { variant ->
         }
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            //开始准备 存放输出文件的文件夹路径
             String outPath = System.getProperty('user.dir') + File.separator + 'apk'
-//            String outPath = System.getProperty('user.dir') + File.separator + 'app'+ File.separator +"build/outputs/apk"
-            StringBuilder fileNameBuilder = new StringBuilder()
-            fileNameBuilder.append(project.PREFIX_NAME).append('_')
-            if (project.BRANCH_NAME) {
-                fileNameBuilder.append(project.BRANCH_NAME).append('_')
-            }
-            /*if (project.GET_VERSION) {
-                fileNameBuilder.append(project.GET_VERSION).append('_')
-            }*/
-            if (variant.flavorName) {
-                fileNameBuilder.append(variant.flavorName).append('_')
-            }
-            if (variant.buildType.name) {
-                fileNameBuilder.append(variant.buildType.name).append('_')
-            }
-            fileNameBuilder.append(buildTime()).append('.apk')
             File dir = file(outPath)
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -227,13 +202,42 @@ android.applicationVariants.all { variant ->
                     file(outPath + File.separator + fileName).delete()
                 }
             }
+            //开始拼接文件名
+//            String outPath = System.getProperty('user.dir') + File.separator + 'app'+ File.separator +"build/outputs/apk"
+            StringBuilder fileNameBuilder = new StringBuilder()
+            //文件名前加： 前缀 PREFIX_NAME
+            fileNameBuilder.append(project.PREFIX_NAME).append('_')
+            //文件名前加： 分支名
+            if (project.BRANCH_NAME) {
+                fileNameBuilder.append(project.BRANCH_NAME).append('_')
+            }
+            /*if (project.GET_VERSION) {
+                fileNameBuilder.append(project.GET_VERSION).append('_')
+            }*/
+            //文件名前加： channel 渠道名
+            if (variant.flavorName) {
+                println '# variant.flavorName:'+variant.flavorName
+                fileNameBuilder.append(variant.flavorName).append('_')
+            }
+            //文件名前加： buildType
+            if (variant.buildType.name) {
+                println '# variant.buildType.name:'+variant.buildType.name
+                fileNameBuilder.append(variant.buildType.name).append('_')
+            }
+            //文件名前加： versionName
+            if (project.VERSION_NAME) {
+                fileNameBuilder.append("Ver").append(project.VERSION_NAME).append('_')
+            }
+            //文件名前加： 月日时分秒
+            fileNameBuilder.append(getBuildTimeStr()).append('.apk')
+
             output.outputFile = new File(dir, fileNameBuilder.toString())
         }
     }
 
 }
 
-def buildTime() {
-    return new Date().format('yyyyMMdd_HHmm')
+def getBuildTimeStr() {
+    return new Date().format('MMddHHmm')
 }
 
