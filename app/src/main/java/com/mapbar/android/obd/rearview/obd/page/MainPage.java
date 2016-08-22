@@ -101,7 +101,7 @@ public class MainPage extends AppPage {
         fragments.add(vehicleCheckupPage);
         fragments.add(carDataPage);
         fragments.add(carStatePage);
-//        fragments.add(carMaintenancePage);
+        fragments.add(carMaintenancePage);
 //        fragments.add(controlTestPage);
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = carDataPage;
