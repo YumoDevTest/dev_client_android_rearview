@@ -38,7 +38,7 @@ android {
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
             buildConfigField("String", "FAKE_IMEI", "\"\"")
-            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")
+            buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
         }
         if (project.IS_JENKINS) {
@@ -48,7 +48,7 @@ android {
                 buildConfigField("String", "SERIALPORT_PATH", "\"${SERIALPORT_PATH}\"")//串口地址
                 buildConfigField("Boolean", "IS_FAKE_IMEI", "${IS_FAKE_IMEI}")//是否伪造IMEI
                 buildConfigField("String", "FAKE_IMEI", "\"${FAKE_IMEI}\"")//伪造的IMEI
-                buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "${IS_ENABLE_PERMISSION}")
+                buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "${IS_ENABLE_PERMISSION}")
                 //是否 伪造权限管理类
                 buildConfigField("String", "BASE_PERMISSION_URL", "\"${BASE_PERMISSION_URL}\"")
                 signingConfig signingConfigs.debug
@@ -63,7 +63,7 @@ android {
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
             buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
-            buildConfigField("Boolean", "IS_FAKE_PERMISSION_MANAGER", "false")//是否 伪造权限管理类
+            buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "true")//是否 伪造权限管理类
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
             signingConfig signingConfigs.debug
         }

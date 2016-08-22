@@ -28,7 +28,7 @@ public class PermissonCheckerOnStart {
 
     public void downloadPermision(final Context context, PermissionManager.DownloadPermissionCallback callback1) {
         //如果开启了 关闭了权限验证。则不下载
-        if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
+        if (!BuildConfig.IS_ENABLE_PERMISSION)
             return;
         final PermissionManager permissionManager = LogicFactory.createPermissionManager(context);
         permissionManager.downloadPermissionList(callback1);
@@ -36,7 +36,7 @@ public class PermissonCheckerOnStart {
 
     public void downloadPermision(final Context context) {
         //如果开启了 关闭了权限验证。则不下载
-        if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
+        if (!BuildConfig.IS_ENABLE_PERMISSION)
             return;
         final PermissionManager permissionManager = LogicFactory.createPermissionManager(context);
         permissionManager.downloadPermissionList(new PermissionManager.DownloadPermissionCallback() {

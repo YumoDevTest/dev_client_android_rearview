@@ -33,10 +33,11 @@ public class LogicFactory {
      * @return
      */
     public static PermissionManager createPermissionManager(Context context) {
-        if (BuildConfig.IS_FAKE_PERMISSION_MANAGER)
-            return new PermissionManagerFake();
-        else
+        if (BuildConfig.IS_ENABLE_PERMISSION)
             return new PermissionManagerImpl(context);
+        else
+            return new PermissionManagerFake();
+
     }
 
     public static NotificationManager getNotifycationManager() {
