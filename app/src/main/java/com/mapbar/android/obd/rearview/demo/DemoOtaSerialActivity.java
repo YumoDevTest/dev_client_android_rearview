@@ -14,12 +14,11 @@ import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.mapdal.Logger;
 import com.mapbar.obd.CandidateDeviceInfo;
 import com.mapbar.obd.Config;
-import com.mapbar.obd.ExtraTripInfo;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.Upgrade;
 import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
-import com.mapbar.obd.serial.ota.OtaSerailPortManager;
+import com.mapbar.obd.serial.ota.OtaSerailPortConnection;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,12 +111,12 @@ public class DemoOtaSerialActivity extends Activity {
 
         File file = new File(binfile_path);
         if (!file.exists() || file.length() <= 0) {
-            android.util.Log.i(TAG, "FileNotFoundException");
+            android.util.Log.e(TAG, "## FileNotFoundException " + binfile_path);
             return;
         }
 
         FirmwareUpdateManager firmwareUpdateManager;
-        OtaSerailPortManager otaSerailPortManager = new OtaSerailPortManager();
+        OtaSerailPortConnection otaSerailPortManager = new OtaSerailPortConnection();
         otaSerailPortManager.setmSerialportName(Constants.SERIALPORT_PATH);
         firmwareUpdateManager = new FirmwareUpdateManager(otaSerailPortManager);
         try {
