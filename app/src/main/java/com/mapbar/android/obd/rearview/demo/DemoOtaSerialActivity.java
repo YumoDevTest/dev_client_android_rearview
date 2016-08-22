@@ -14,21 +14,21 @@ import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.mapdal.Logger;
 import com.mapbar.obd.CandidateDeviceInfo;
 import com.mapbar.obd.Config;
-import com.mapbar.obd.DeviceService;
 import com.mapbar.obd.ExtraTripInfo;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.Upgrade;
+import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
+import com.mapbar.obd.serial.ota.OtaSerailPortManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
  * Created by zhangyunfei on 16/8/12.
  */
 public class DemoOtaSerialActivity extends Activity {
-    private static final int TAG = DemoOtaSerialActivity.class.getModifiers();
+    private static final String TAG = DemoOtaSerialActivity.class.getSimpleName();
     String binFile;
 
     @Override
@@ -36,30 +36,32 @@ public class DemoOtaSerialActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demo_ota_serial_activity);
 
-        // Initialize SDK
-        try {
-            Manager.getInstance().init(
-                    this,
-                    new Manager.Listener() {
-                        @Override
-                        public void onEvent(int event, Object result) {
-
-                        }
-                    },
-                    Environment.getExternalStorageDirectory().getPath()
-                            + "/mapbar/example/obd", "obdua;channel");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Manager.getInstance().setExtraTripInfo(
-                new ExtraTripInfo("0", "ObdDemo"));
-        if (Config.DEBUG) {
-            Logger.d(TAG, "ExtraTripInfo: "
-                    + Manager.getInstance().getExtraTripInfo());
-        }
-
-        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         ObdContext.getObdContext();
+
+//        // Initialize SDK
+//        try {
+//            Manager.getInstance().init(
+//                    this,
+//                    new Manager.Listener() {
+//                        @Override
+//                        public void onEvent(int event, Object result) {
+//                            android.util.Log.i(TAG, "receive: " + event);
+//                        }
+//                    },
+//                    Environment.getExternalStorageDirectory().getPath()
+//                            + "/mapbar/example/obd", "obdua;channel");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        Manager.getInstance().setExtraTripInfo(
+//                new ExtraTripInfo("0", "ObdDemo"));
+//        if (Config.DEBUG) {
+//            Logger.d(TAG, "ExtraTripInfo: "
+//                    + Manager.getInstance().getExtraTripInfo());
+//        }
+
+
+//        Manager.getInstance().stopReadThreadForUpgrage();
 
         connection();
 
@@ -67,7 +69,6 @@ public class DemoOtaSerialActivity extends Activity {
         binFile = path + "/obdv3h_v1.6.1039_factory.bin";
 
 
-//        Manager.getInstance().stopReadThreadForUpgrage();
         runOTA();
     }
 
@@ -95,13 +96,37 @@ public class DemoOtaSerialActivity extends Activity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    beginUpgradeBox();
+//                    beginUpgradeBox();
+                    beginUpgradeBox2();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
             }
         }.execute();
+    }
+
+    private void beginUpgradeBox2() {
+        String binfile_path = binFile;
+        String sn = "";
+
+        File file = new File(binfile_path);
+        if (!file.exists() || file.length() <= 0) {
+            android.util.Log.i(TAG, "FileNotFoundException");
+            return;
+        }
+
+        FirmwareUpdateManager firmwareUpdateManager;
+        OtaSerailPortManager otaSerailPortManager = new OtaSerailPortManager();
+        otaSerailPortManager.setmSerialportName(Constants.SERIALPORT_PATH);
+        firmwareUpdateManager = new FirmwareUpdateManager(otaSerailPortManager);
+        try {
+            firmwareUpdateManager.updateFirware(file, sn, new FirmwareUpdateManager.FirmwareUpdateCallback() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            android.util.Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     private void beginUpgradeBox() {

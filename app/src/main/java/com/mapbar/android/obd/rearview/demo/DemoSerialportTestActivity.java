@@ -11,10 +11,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.obd.ConnectManager;
-import com.mapbar.obd.utilsppp.OutputStringUtil;
 import com.mapbar.obd.serial.comond.ReadTimeoutException;
 import com.mapbar.obd.serial.comond.CommondSerialPortManager;
+import com.mapbar.obd.serial.utils.OutputStringUtil;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -30,7 +31,7 @@ public class DemoSerialportTestActivity extends Activity {
     private CommondSerialPortManager mSerialPortManager;
     EditText textView2;
 
-    public static final String SERIALPORT_PATH = "/dev/ttyS1";
+    public static final String SERIALPORT_PATH = Constants.SERIALPORT_PATH;
 
 
     @Override
@@ -228,7 +229,7 @@ public class DemoSerialportTestActivity extends Activity {
 
     private void sendAndReceiveCMD(String cmd) throws IOException, ReadTimeoutException {
         String res;
-        res = mSerialPortManager.sendAndReceive(cmd,(byte) 0);
+        res = mSerialPortManager.sendAndReceive(cmd, (byte) 0);
 
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("发送: %s", cmd));
