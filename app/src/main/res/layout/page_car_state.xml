@@ -87,8 +87,8 @@
 
             <LinearLayout
                 android:id="@+id/ll_pop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="40dp"
                 android:background="@drawable/qr_bg"
@@ -97,8 +97,8 @@
 
                 <ImageView
                     android:id="@+id/iv_qr"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:scaleType="fitXY"
                     android:visibility="visible" />
 
