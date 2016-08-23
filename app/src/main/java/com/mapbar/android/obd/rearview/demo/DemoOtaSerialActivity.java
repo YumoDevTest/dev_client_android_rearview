@@ -65,7 +65,8 @@ public class DemoOtaSerialActivity extends Activity {
         connection();
 
         String path = Environment.getExternalStorageDirectory().getPath();
-        binFile = path + "/obdv3h_v1.6.1039_factory.bin";
+//        binFile = path + "/obdv3h_v1.6.1039_factory.bin";
+        binFile = path + "/obd_v3_bin_v1.6.1020.bin";
 
 
         runOTA();
@@ -108,7 +109,7 @@ public class DemoOtaSerialActivity extends Activity {
     private void beginUpgradeBox2() {
         String binfile_path = binFile;
         String sn = "";
-
+        android.util.Log.d(TAG, "## beginUpgradeBox2 " + binfile_path);
         File file = new File(binfile_path);
         if (!file.exists() || file.length() <= 0) {
             android.util.Log.e(TAG, "## FileNotFoundException " + binfile_path);
@@ -122,9 +123,9 @@ public class DemoOtaSerialActivity extends Activity {
         try {
             firmwareUpdateManager.updateFirware(file, sn, new FirmwareUpdateManager.FirmwareUpdateCallback() {
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            android.util.Log.e(TAG, e.getMessage(), e);
+            android.util.Log.e(TAG, "## " + e.getMessage(), e);
         }
     }
 
