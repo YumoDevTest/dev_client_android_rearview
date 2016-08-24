@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import com.mapbar.android.log.Log;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.obd.Constants;
-import com.mapbar.mapdal.Logger;
-import com.mapbar.obd.CandidateDeviceInfo;
-import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.Upgrade;
@@ -21,7 +17,6 @@ import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
 import com.mapbar.obd.serial.ota.OtaSerailPortConnection;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by zhangyunfei on 16/8/12.
@@ -37,58 +32,10 @@ public class DemoOtaSerialActivity extends Activity {
 
         ObdContext.getObdContext();
 
-//        // Initialize SDK
-//        try {
-//            Manager.getInstance().init(
-//                    this,
-//                    new Manager.Listener() {
-//                        @Override
-//                        public void onEvent(int event, Object result) {
-//                            android.util.Log.i(TAG, "receive: " + event);
-//                        }
-//                    },
-//                    Environment.getExternalStorageDirectory().getPath()
-//                            + "/mapbar/example/obd", "obdua;channel");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Manager.getInstance().setExtraTripInfo(
-//                new ExtraTripInfo("0", "ObdDemo"));
-//        if (Config.DEBUG) {
-//            Logger.d(TAG, "ExtraTripInfo: "
-//                    + Manager.getInstance().getExtraTripInfo());
-//        }
-
-
-//        Manager.getInstance().stopReadThreadForUpgrage();
-
-//        connection();
-
         String path = Environment.getExternalStorageDirectory().getPath();
-//        binFile = path + "/obdv3h_v1.6.1039_factory.bin";
-//        binFile = path + "/obd_v3_bin_v1.6.1020.bin";
         binFile = path + "/obdv3h_v1.6.1039.bin";
 
-
         runOTA();
-    }
-
-    private void connection() {
-        CandidateDeviceInfo dis = Manager.getInstance()
-                .getCandidateDeviceInfo();
-        if (dis != null && !TextUtils.isEmpty(dis.mac)) {
-            if (!Manager.getInstance().openDevice(dis.mac)) {
-                Toast.makeText(this,
-                        "当前正在尝试连接 ... ", Toast.LENGTH_LONG)
-                        .show();
-                if (Config.DEBUG) {
-                    Logger.e(TAG, "正在连接中，无法再次发起连接 ... ");
-                }
-            }
-        } else {
-            Toast.makeText(this, "没有设备连接历史",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void runOTA() {
@@ -109,20 +56,19 @@ public class DemoOtaSerialActivity extends Activity {
 
     private void beginUpgradeBox2() {
         String binfile_path = binFile;
-        String sn = "";
         android.util.Log.d(TAG, "## beginUpgradeBox2 " + binfile_path);
         File file = new File(binfile_path);
         if (!file.exists() || file.length() <= 0) {
             android.util.Log.e(TAG, "## FileNotFoundException " + binfile_path);
             return;
         }
-
+        //串口连接
+        OtaSerailPortConnection connection = new OtaSerailPortConnection(Constants.SERIALPORT_PATH);
+        //刷固件的业务类
         FirmwareUpdateManager firmwareUpdateManager;
-        OtaSerailPortConnection otaSerailPortManager = new OtaSerailPortConnection();
-        otaSerailPortManager.setmSerialportName(Constants.SERIALPORT_PATH);
-        firmwareUpdateManager = new FirmwareUpdateManager(otaSerailPortManager);
+        firmwareUpdateManager = new FirmwareUpdateManager(connection);
         try {
-            firmwareUpdateManager.updateFirware(file, sn, new FirmwareUpdateManager.FirmwareUpdateCallback() {
+            firmwareUpdateManager.updateFirware(file, new FirmwareUpdateManager.FirmwareUpdateCallback() {
             });
         } catch (Exception e) {
             e.printStackTrace();
