@@ -141,9 +141,11 @@ public class PermissionManagerImpl implements PermissionManager {
 //        boolean isValid = false;// 有效
 //        boolean isTrial = false;// 试用
         ObdRightBean.ObdRight obdRight = null;
+        ObdRightBean.ObdRight tmp = null;
         for (int i = 0; i < permissonList.size(); i++) {
-            obdRight = permissonList.get(i);
-            if (obdRight != null && obdRight.getProductId().equals(permissionKey + "")) {
+            tmp = permissonList.get(i);
+            if (tmp != null && tmp.getProductId().equals(permissionKey + "")) {
+                obdRight = tmp;
                 break;
             }
         }
