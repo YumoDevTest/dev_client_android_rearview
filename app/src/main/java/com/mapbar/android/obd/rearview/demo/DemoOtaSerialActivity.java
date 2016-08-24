@@ -13,8 +13,9 @@ import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.Upgrade;
+import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
-import com.mapbar.obd.serial.ota.OtaSerailPortConnection;
+import com.mapbar.obd.serial.ota.FirmwareUpdateManagerFactory;
 
 import java.io.File;
 
@@ -39,42 +40,46 @@ public class DemoOtaSerialActivity extends Activity {
     }
 
     private void runOTA() {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-//                    beginUpgradeBox();
-                    beginUpgradeBox2();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute();
+        beginUpgradeBox2();
     }
 
     private void beginUpgradeBox2() {
         String binfile_path = binFile;
         android.util.Log.d(TAG, "## beginUpgradeBox2 " + binfile_path);
-        File file = new File(binfile_path);
+        final File file = new File(binfile_path);
         if (!file.exists() || file.length() <= 0) {
             android.util.Log.e(TAG, "## FileNotFoundException " + binfile_path);
             return;
         }
-        //串口连接
-        OtaSerailPortConnection connection = new OtaSerailPortConnection(Constants.SERIALPORT_PATH);
         //刷固件的业务类
         FirmwareUpdateManager firmwareUpdateManager;
-        firmwareUpdateManager = new FirmwareUpdateManager(connection);
-        try {
-            firmwareUpdateManager.updateFirware(file, new FirmwareUpdateManager.FirmwareUpdateCallback() {
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            android.util.Log.e(TAG, "## " + e.getMessage(), e);
-        }
+        firmwareUpdateManager = FirmwareUpdateManagerFactory.create(Constants.SERIALPORT_PATH);
+        firmwareUpdateManager.updateFirware(file, new FirmwareUpdateCallback() {
+            @Override
+            public void onStart(File filePath) {
+                android.util.Log.i("TAG", "### ============ start!   " + filePath);
+
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                android.util.Log.i("TAG", "### ============ " + progress);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                android.util.Log.e("TAG", "### ============ERROR: " + exception.getMessage());
+
+            }
+
+            @Override
+            public void onComplete() {
+                android.util.Log.i("TAG", "### ============ complete");
+
+            }
+        });
     }
+
 
     private void beginUpgradeBox() {
         android.util.Log.i("TAG", "### ============准备启动beginUpgradeBox");
