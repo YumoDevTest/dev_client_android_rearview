@@ -73,6 +73,8 @@ public class ChangePhoneActivity extends MyBaseActivity {
     private void onWaitUserOperationTimeout() {
         LogUtil.d(TAG, "##等待用户操作Timerout");
         UserCenterManager.getInstance().sdkListener.setActive(true);
+        //设置超时标志
+        UserCenterManager.getInstance().setOutTime(true);
         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getActivity()));
         runOnUiThread(new Runnable() {
             @Override
@@ -136,6 +138,8 @@ public class ChangePhoneActivity extends MyBaseActivity {
         String token = event.token;
         //从新走设备登录
         UserCenterManager.getInstance().sdkListener.setActive(true);
+        //设置超时标志
+        UserCenterManager.getInstance().setOutTime(true);
         UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(ChangePhoneActivity.this));
 
         if (timer != null)
