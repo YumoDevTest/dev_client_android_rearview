@@ -62,11 +62,12 @@ public class DemoOtaSerialActivity extends Activity {
 
 //        Manager.getInstance().stopReadThreadForUpgrage();
 
-        connection();
+//        connection();
 
         String path = Environment.getExternalStorageDirectory().getPath();
 //        binFile = path + "/obdv3h_v1.6.1039_factory.bin";
-        binFile = path + "/obd_v3_bin_v1.6.1020.bin";
+//        binFile = path + "/obd_v3_bin_v1.6.1020.bin";
+        binFile = path + "/obdv3h_v1.6.1039.bin";
 
 
         runOTA();
