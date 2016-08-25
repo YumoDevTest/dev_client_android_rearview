@@ -77,7 +77,7 @@
                 android:layout_toRightOf="@+id/barcode"
                 android:lineSpacingExtra="6dp"
                 android:paddingTop="8dp"
-                android:text="使用期内，可以试用：\n●车辆故障检测\n●轮胎检测预警\n●控制汽车和查看汽车状态" />
+                android:text="试用期内，可以使用：\n●车辆故障检测\n●轮胎检测预警\n●控制汽车和查看汽车状态" />
 
             <Button
                 android:id="@+id/btn_continue_try"
