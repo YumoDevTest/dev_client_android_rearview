@@ -159,7 +159,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
                         if (isFirstDataUpdate) {
                             isFirstDataUpdate = false;
-                            OTAManager.getInstance().checkVinVersion(getContext());
+                            OTAManager.getInstance().checkVinVersion(getActivity());
                         }
 
                         break;

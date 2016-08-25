@@ -28,7 +28,7 @@ public class OTAManager extends OBDManager {
     private Firmware firmware;
     private Firmware.VersionInfo versionInfo;
 
-    protected OTAManager() {
+    public OTAManager() {
         super();
     }
 

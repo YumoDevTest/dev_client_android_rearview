@@ -71,16 +71,16 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan">
-
-        </activity>
-        <!--<activity android:name=".demo.DemoSerialportTestActivity">-->
-        <!--</activity>-->
-        <activity android:name=".demo.DemoOtaSerialActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!--<activity android:name=".demo.DemoSerialportTestActivity">-->
+        <!--</activity>-->
+        <activity android:name=".demo.DemoOtaSerialActivity">
+
         </activity>
         <activity
             android:name=".modules.setting.SettingActivity"
