@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.framework.manager;
+package com.mapbar.android.obd.rearview.lib.ota;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.obd.CarDetail;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalUserCarResult;

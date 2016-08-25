@@ -81,43 +81,6 @@ public class DemoOtaSerialActivity extends Activity {
     }
 
 
-    private void beginUpgradeBox() {
-        android.util.Log.i("TAG", "### ============准备启动beginUpgradeBox");
-        String binfile_path = binFile;
-        File file = new File(binfile_path);
-        if (!file.exists() || file.length() <= 0) {
-            alert("FileNotFoundException");
-            return;
-        }
-        Manager.getInstance().upgradeBox(binfile_path /*testFilePath*/, new Upgrade() {
-            public void onEvent(int event, int progress) {
-                switch (event) {
-                    case Upgrade.Event.started: {
-                        Log.e("zc", "Flash started");
-                    }
-                    break;
-                    case Upgrade.Event.progress: {
-                        Log.e("zc", "progress = " + progress);
-                    }
-                    break;
-                    case Upgrade.Event.succ:
-                        Log.e("zc", "升级成功!");
-                        break;
-                    case Upgrade.Event.failed_readFile:
-                        Log.e("zc", "读取升级文件失败");
-                        break;
-                    case Upgrade.Event.failed:
-                        Log.e("zc", "升级失败");
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        });
-    }
-
-
     public void onClick1(View v) {
         runOTA();
     }

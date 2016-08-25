@@ -9,7 +9,7 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
+import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.lib.push.ChangePhonePushMessageDispatcher;

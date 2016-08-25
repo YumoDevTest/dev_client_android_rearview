@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
+import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.obd.Firmware;
 
 import java.io.File;
@@ -26,7 +26,7 @@ import java.util.TimerTask;
 /**
  * Created by wanghw on 2016/7/27.
  */
-public class FirmwareManager {
+public class FirmwareDialogHandler {
 
     private static final int TYPE_FORCE = 0, TYPE_NORMAL = 1;
     private static int countdown_number = 5;
@@ -51,9 +51,7 @@ public class FirmwareManager {
     private TimerHandler mHandler = null;
     private Timer mTimer = null;
 
-    public static FirmwareManager getInstance() {
-        return SingletonHolder.instance;
-    }
+
 
     public void showAtLocation(View parent, int gravity, int x, int y) {
 
@@ -231,9 +229,6 @@ public class FirmwareManager {
         public void onFlashSucc();
     }
 
-    private static class SingletonHolder {
-        public final static FirmwareManager instance = new FirmwareManager();
-    }
 
     private class TimerHandler extends Handler {
 

@@ -28,15 +28,16 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
-import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
+import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
-import com.mapbar.android.obd.rearview.obd.FirmwareManager;
+import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.ObdContext;
 
 import java.util.ArrayList;
 
@@ -79,6 +80,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private StringBuilder sb = new StringBuilder();
     private boolean isFirstDataUpdate = true;
     private TitleBarView titlebarview1;
+    private FirmwareDialogHandler firmwareDialogHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
 
+        firmwareDialogHandler =  new FirmwareDialogHandler();
     }
 
     @Override
@@ -208,7 +211,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     }
 
     public void showFirmwarePopu() {
-        FirmwareManager.getInstance().showAtLocation(getContentView(), Gravity.CENTER, 0, 0, new FirmwareManager.FlashListener() {
+        firmwareDialogHandler.showAtLocation(getContentView(), Gravity.CENTER, 0, 0, new FirmwareDialogHandler.FlashListener() {
             @Override
             public void onFlashSucc() {
                 tv_state.setText("当前车型支持宝马车辆控制功能");
