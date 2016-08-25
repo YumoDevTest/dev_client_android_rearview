@@ -194,7 +194,6 @@ public class PermissionAlertView extends FrameLayout {
 //                .append("?i=").append("111111-22-333333")
                 .append("?i=").append(Application.getInstance().getImei())
                 .append("&p=").append(Application.getInstance().getPushToken())
-                .append("&t=").append(Application.getInstance().getToken())
                 .append("&b=").append(URLEncoder.encode(pinpai, "UTF-8"))
                 .append("&m=").append(URLEncoder.encode(xinghao, "UTF-8"));
         return sb.toString();
@@ -203,6 +202,9 @@ public class PermissionAlertView extends FrameLayout {
 
 
 /*
+
+//     2016-08-25 张云飞 移除 token   .append("&t=").append(Application.getInstance().getToken())
+
             扫码支付的url参数：
 
             i：imei号

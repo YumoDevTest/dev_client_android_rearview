@@ -38,6 +38,9 @@ public class PermissionManagerImpl implements PermissionManager {
         permissionRepository.setChangedListener(changedListener);
     }
 
+    /**
+     * 本地权限发生了改变后，发出通知
+     */
     private PermissionRepository.ChangedListener changedListener = new PermissionRepository.ChangedListener() {
         @Override
         public void onChanged() {

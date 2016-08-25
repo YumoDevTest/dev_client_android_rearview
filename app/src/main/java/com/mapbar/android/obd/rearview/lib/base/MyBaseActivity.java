@@ -21,7 +21,7 @@ public class MyBaseActivity extends Activity {
 
 
 
-    public Context getActivity() {
+    public Activity getActivity() {
         return this;
     }
 }

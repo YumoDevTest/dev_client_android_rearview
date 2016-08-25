@@ -40,6 +40,7 @@ import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
@@ -486,8 +487,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PermissionBuyEvent permissionBuyResult) {
         //购买成功后，需要重新下载功能权限
-        if (permissionBuyResult.isBuySuccess())
+        if (permissionBuyResult.isBuySuccess()) {
+            //弹窗购买成功
             new PermissonCheckerOnStart().downloadPermision(getActivity());
+            startActivity(new Intent(getActivity(), PermissionBuySuccess.class));
+        }
     }
 
     public Activity getActivity() {
@@ -497,6 +501,7 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 当遇到 http的错误消息时
+     *
      * @param pbHttpErrorEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
