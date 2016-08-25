@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -17,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:text="恭喜您！"
             android:textColor="@color/white"
             android:textSize="40sp" />
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -62,7 +65,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="6dp"
                     android:gravity="center"
-                    android:text="限时特价促销扫描更改"
+                    android:text="限时特价促销扫描购买"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
             </LinearLayout>
