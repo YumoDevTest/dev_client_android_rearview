@@ -30,6 +30,8 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.lib.ota.VinManager;
+import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -101,7 +103,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
 
-        firmwareDialogHandler =  new FirmwareDialogHandler();
+        firmwareDialogHandler = new FirmwareDialogHandler();
     }
 
     @Override
@@ -161,7 +163,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                             isFirstDataUpdate = false;
                             OTAManager.getInstance().checkVinVersion(getActivity());
                         }
-
+                        checkFirmwareVersion();
                         break;
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));
@@ -173,6 +175,28 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         tv_state_record.setOnClickListener(this);
         tv_state.setOnClickListener(this);
         btn_close_QRpop.setOnClickListener(this);
+
+    }
+
+    /**
+     * 检查固件版本,是否需要更新固件
+     */
+    private void checkFirmwareVersion() {
+        //仅在启动时检查一次
+        if (!isFirstDataUpdate) return;
+        VinManager vinManager = new VinManager();
+        if (TextUtils.isEmpty(vinManager.getVin())) {
+            showVinInputDialog();
+            isFirstDataUpdate = false;
+        } else {
+
+        }
+    }
+
+    /**
+     * 显示vin输入的对话框
+     */
+    private void showVinInputDialog() {
 
     }
 
@@ -214,7 +238,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         firmwareDialogHandler.showAtLocation(getContentView(), Gravity.CENTER, 0, 0, new FirmwareDialogHandler.FlashListener() {
             @Override
             public void onFlashSucc() {
-                tv_state.setText("当前车型支持宝马车辆控制功能");
+                tv_state.setText("当前车型支持车辆控制功能");
             }
         });
     }
