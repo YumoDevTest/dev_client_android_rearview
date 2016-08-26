@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.obd.page;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
@@ -109,7 +111,11 @@ public class MainPage extends AppPage implements IMainPageView {
         fragments.add(carDataPage);
         fragments.add(carStatePage);
         fragments.add(carMaintenancePage);
-//        fragments.add(controlTestPage);
+
+        //是否开启 模拟测试车辆控制的页面"
+        if (BuildConfig.IS_ENABLE_TEST_CAR_DEMO)
+            fragments.add(controlTestPage);
+
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = carDataPage;
 
@@ -253,6 +259,9 @@ public class MainPage extends AppPage implements IMainPageView {
      */
     @Override
     public void showNotification(Notification notification) {
+        //是否 开始首页里的提醒对话框，开发人员每次都点很麻烦，就做了个开关
+        if (!BuildConfig.IS_ENABLE_ALERM_ON_MAIN_PAGE)//
+            return;
         if (mAlarmTimerDialog == null || mAlarmTimerDialog.isShowing())
             return;
         if (notification == null) return;

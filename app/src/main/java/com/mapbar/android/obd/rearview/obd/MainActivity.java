@@ -46,6 +46,7 @@ import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEve
 import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
 import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
@@ -73,6 +74,7 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
 
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static MainActivity instance;
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
@@ -152,6 +154,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
+                        LogUtil.d(TAG, String.format("## 准备生成二维码,url = %s", qrInfo.getUrl()));
                         LayoutUtils.showQrPop(qrInfo.getUrl(), qrInfo.getContent(), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

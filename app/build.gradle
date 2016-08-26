@@ -40,6 +40,8 @@ android {
             buildConfigField("String", "FAKE_IMEI", "\"\"")
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
+            buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
+            buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
         }
         if (project.IS_JENKINS) {
             beta {
@@ -51,6 +53,8 @@ android {
                 buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "${IS_ENABLE_PERMISSION}")
                 //是否 伪造权限管理类
                 buildConfigField("String", "BASE_PERMISSION_URL", "\"${BASE_PERMISSION_URL}\"")
+                buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
+                buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
                 signingConfig signingConfigs.debug
             }
         }
@@ -65,6 +69,9 @@ android {
             buildConfigField("String", "FAKE_IMEI", "\"DEVELOP_BY_ZHNGYF_20160826\"")//伪造的IMEI
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")//是否 开启权限管理类
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
+            //是否 开始首页里的提醒对话框，每次都点很麻烦，就做了个开关
+            buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "false")
+            buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
             signingConfig signingConfigs.debug
         }
 

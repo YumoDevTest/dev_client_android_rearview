@@ -126,10 +126,6 @@ public class Utils {
     public static String getImei(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         final String deviceId = tm.getDeviceId();
-        // 日志
-        if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "设备IMEI是: " + deviceId);
-        }
         if (!BuildConfig.IS_FAKE_IMEI) {
             LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
             return deviceId;

@@ -13,6 +13,7 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
 import com.mapbar.obd.Config;
@@ -28,6 +29,7 @@ import com.mapbar.obd.UserCenterError;
  * 用户登录中心管理者
  */
 public class UserCenterManager extends OBDManager {
+    private static final String TAG = UserCenterManager.class.getSimpleName();
     /**
      * 默认密码
      */
@@ -497,6 +499,7 @@ public class UserCenterManager extends OBDManager {
             if (qrInfo == null) {
                 qrInfo = new QRInfo();
             }
+            LogUtil.d(TAG, String.format("## 准备生成二维码,url = %s", qrInfo.getUrl()));
             qrInfo.setUrl(url);
             qrInfo.setContent(content);
             baseObdListener.onEvent(EVENT_OBD_USER_LOGIN_FAILED, qrInfo);
