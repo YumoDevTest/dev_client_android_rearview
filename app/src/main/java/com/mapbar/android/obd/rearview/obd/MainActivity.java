@@ -355,7 +355,7 @@ public class MainActivity extends BaseActivity {
         } else {
             startV3HService();
             Manager.getInstance().cleanup();
-            ObdContext.getObdContext().exit();
+            ObdContext.getInstance().exit();
             android.os.Process.killProcess(android.os.Process.myPid());
 
         }

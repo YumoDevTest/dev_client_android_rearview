@@ -1,21 +1,15 @@
 package com.mapbar.android.obd.rearview.demo;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mapbar.android.log.Log;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.obd.Constants;
-import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
-import com.mapbar.obd.Upgrade;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
-import com.mapbar.obd.serial.ota.FirmwareUpdateManagerFactory;
 
 import java.io.File;
 
@@ -31,7 +25,7 @@ public class DemoOtaSerialActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demo_ota_serial_activity);
 
-        ObdContext.getObdContext();
+        ObdContext.getInstance();
 
         String path = Environment.getExternalStorageDirectory().getPath();
         binFile = path + "/obdv3h_v1.6.1039.bin";
@@ -53,7 +47,7 @@ public class DemoOtaSerialActivity extends Activity {
         }
         //刷固件的业务类
         FirmwareUpdateManager firmwareUpdateManager;
-        firmwareUpdateManager = FirmwareUpdateManagerFactory.create(Constants.SERIALPORT_PATH);
+        firmwareUpdateManager = ObdContext.getInstance().getFirmwareUpdateManager();
         firmwareUpdateManager.updateFirware(file, new FirmwareUpdateCallback() {
             @Override
             public void onStart(File filePath) {

@@ -5,7 +5,6 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
-import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 
@@ -28,6 +27,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         Global.setAppContext(this);
+        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         Manager.onApplicationonCreate(this);
         //捕捉异常注册
 //        CrashHandler crashHandler = CrashHandler.getInstance();
@@ -41,7 +41,7 @@ public class Application extends android.app.Application {
     @Override
     public void onTerminate() {
         // infos 当前应用如果被系统强杀则方法不会被调用
-        ObdContext.getObdContext().exit();
+        ObdContext.getInstance().exit();
         Manager.onApplicationTerminate();
         super.onTerminate();
     }

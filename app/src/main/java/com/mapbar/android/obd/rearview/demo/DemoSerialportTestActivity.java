@@ -14,7 +14,6 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.obd.ConnectManager;
 import com.mapbar.obd.ObdContext;
-import com.mapbar.obd.serial.comond.SerialPortManagerFactory;
 import com.mapbar.obd.serial.comond.ReadTimeoutException;
 import com.mapbar.obd.serial.comond.CommondSerialPortManager;
 import com.mapbar.obd.serial.utils.OutputStringUtil;
@@ -82,7 +81,7 @@ public class DemoSerialportTestActivity extends Activity {
     }
 
     private void start() throws IOException {
-        mSerialPortManager = ObdContext.getObdContext().getSerialPortManager();
+        mSerialPortManager = ObdContext.getInstance().getSerialPortManager();
         mSerialPortManager.init(this, new ConnectManager.Listener() {
             @Override
             public void onEvent(int event, Object data, Object userData) {
