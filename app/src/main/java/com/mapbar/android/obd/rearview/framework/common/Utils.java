@@ -10,8 +10,10 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.text.DecimalFormat;
 
@@ -25,6 +27,7 @@ public class Utils {
     private static final String format2dot2 = "#0.00";
     private static final String format00dot1 = "00.0";
     private static final String format000 = "000";
+    private static final String TAG = Utils.class.getSimpleName();
     private static String channel;
 
     public static String format3dot2(float paramFloat) {
@@ -125,12 +128,19 @@ public class Utils {
         final String deviceId = tm.getDeviceId();
         // 日志
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
-            Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
+            Log.d(LogTag.OBD, "设备IMEI是: " + deviceId);
         }
-//        return deviceId;
+        if (!BuildConfig.IS_FAKE_IMEI) {
+            LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
+            return deviceId;
+        } else {
+            LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
+            return BuildConfig.FAKE_IMEI;
+        }
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
-        return "777296%%%%hh01739!955555555";//外网注册通过
+//        return "777296%%%%hh01739!955555555";//外网注册通过
+//        return "777296%%%%hh01739!55555555";//外网注册通过
 //        return "77726%%fsdffsdfssdfsdfsdfsd";//测试专用，不可外传1；
 //        return "77726%%fsdffsdfssdfsdfsd%%%%%%";//测试专用，不可外传2（艾米黑后视镜沉的）；
 //        return "77726%%fsdffsdfssdfsdfsd%%%%%%wanglong";//072815测试专用
@@ -138,5 +148,7 @@ public class Utils {
 //        return "oooooooofsdfsddwwwwd%%%%%%meiwang444";//王龙内网2
 //        return "12317777777733439943848301";//王龙内网8.5
 //        return "9231777770048302";//王龙外网8.8
+//        return "20160815weishite";//威仕特8.15
+//        return "20160815diruite";//迪瑞特8.15
     }
 }

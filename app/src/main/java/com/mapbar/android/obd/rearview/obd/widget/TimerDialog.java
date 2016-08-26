@@ -9,6 +9,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,7 +42,7 @@ public class TimerDialog extends Dialog implements OnClickListener {
     private TextView mCountdownTextView = null;
     private TextView mContentTextView = null;
     private ImageView mIconImageView = null;
-    private RelativeLayout rela_close = null;
+    private ViewGroup rela_close = null;
 
     public TimerDialog(Context context, TimerDialog.Listener listener,
                        boolean autoClose, int countdown) {
@@ -59,6 +60,19 @@ public class TimerDialog extends Dialog implements OnClickListener {
      */
     public void show(String text) {
         show(text, 0);
+    }
+
+    /**
+     * 弹窗 显示 提醒消息
+     *
+     * @param text
+     */
+    public void showAlerm(String text) {
+        if (getContentTextView() != null) {
+            getContentTextView().setTextColor(getContext().getResources().getColor(R.color.dashboard_red_text));
+        }
+        setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
+        show(text);
     }
 
     /**
@@ -112,7 +126,7 @@ public class TimerDialog extends Dialog implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.layout_timer_dialog);
-        rela_close = (RelativeLayout) findViewById(R.id.rela_close);
+        rela_close = (ViewGroup) findViewById(R.id.rela_close);
         rela_close.setOnClickListener(this);
         this.setOnCancelListener(new OnCancelListener() {
 
@@ -128,7 +142,7 @@ public class TimerDialog extends Dialog implements OnClickListener {
             }
         });
 
-        rela_close = (RelativeLayout) findViewById(R.id.rela_close);
+        rela_close = (ViewGroup) findViewById(R.id.rela_close);
         mCountdownTextView = (TextView) findViewById(R.id.tv_countdown);
         mContentTextView = (TextView) findViewById(R.id.tv_td_content);
         mIconImageView = (ImageView) findViewById(R.id.iv_td_icon);

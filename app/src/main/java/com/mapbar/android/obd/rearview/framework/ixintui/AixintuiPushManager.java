@@ -12,7 +12,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
-import com.mapbar.android.obd.rearview.lib.push.ChangePhonePushMessageDispatcher;
+import com.mapbar.android.obd.rearview.lib.push.PushMessageDispatcher;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.SessionInfo;
@@ -66,7 +66,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
 
     public void setAixintui_token(String aixintui_token) {
-        AixintuiConfigs.push_token = aixintui_token;
+        AixintuiConfigs.setPushToken(aixintui_token);;
         this.aixintui_token = aixintui_token;
     }
 
@@ -91,7 +91,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                     token = jObj1.getString("token");
                 }
                 //“修改手机号”需要监听推送来的消息,判断消息内容，通过eventbus再次分发
-                ChangePhonePushMessageDispatcher.handlePushMessage(type, state, userId, token);
+                PushMessageDispatcher.handlePushMessage(type, state, userId, token);
 //// FIXME: tianff 2016/7/29 AixintuiPushManager onAppearMsg 保持一致
                 if (NativeEnv.isApplicationRunning(context, context.getPackageName())) {
                     UserCenterManager.getInstance().setPushData(type, state, userId, token);
@@ -100,7 +100,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e(LogTag.PUSH, "### 解析推送结果异常:" + e.getMessage(), e);
+                Log.e(LogTag.PUSH, "## 解析推送结果异常:" + e.getMessage(), e);
             }
         }
 

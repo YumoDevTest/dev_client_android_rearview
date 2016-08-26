@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RadioButton
+        android:id="@+id/image_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:button="@null"
+        android:drawableLeft="@drawable/ic_tirepressure_sign_left" />
+
+
+    <LinearLayout
+        android:id="@+id/indicator"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/indicator_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_tirepressure_selector"
+            android:text="胎压"
+            android:textColor="@color/taiya_single_text_color"
+            android:gravity="center"
+            android:textSize="@dimen/cardata_taiya_text"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/indicator_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="正常"
+            android:gravity="center"
+            android:textColor="@color/taiya_single_text_color"
+            android:textSize="@dimen/cardata_taiya_text"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -4,13 +4,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -27,10 +30,11 @@ import java.net.URL;
  * Created by wanghw on 2016/7/8.
  */
 public class UpdateService extends Service {
-
     //下载状态
     private final static int DOWNLOAD_COMPLETE = 0;
     private final static int DOWNLOAD_FAIL = 1;
+    private final Intent installIntent;
+    private final PendingIntent updatePendingIntent;
     //标题
     private int titleId = 0;
     //文件存储
@@ -38,25 +42,34 @@ public class UpdateService extends Service {
     private File updateFile = null;
     //通知栏
     private NotificationManager updateNotificationManager = null;
-    private Notification updateNotification = null;
     //通知栏跳转Intent
-    private Intent updateIntent = null;
     private AppInfo info;
-    private PendingIntent updatePendingIntent = null;
+
+    public UpdateService() {
+
+        //点击安装PendingIntent
+        Uri uri = Uri.fromFile(updateFile);
+        installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent.setDataAndType(uri, "application/vnd.android.package-archive");
+
+        updatePendingIntent = PendingIntent.getActivity(UpdateService.this, 0, installIntent, 0);
+    }
+
+
     private Handler updateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DOWNLOAD_COMPLETE:
-                    //点击安装PendingIntent
-                    Uri uri = Uri.fromFile(updateFile);
-                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(uri, "application/vnd.android.package-archive");
-                    updatePendingIntent = PendingIntent.getActivity(UpdateService.this, 0, installIntent, 0);
+                case DOWNLOAD_COMPLETE: {
 
-                    updateNotification.defaults = Notification.DEFAULT_SOUND;//铃声提醒
-                    updateNotification.setLatestEventInfo(UpdateService.this, getString(R.string.app_name), "下载完成,点击安装。", updatePendingIntent);
-                    updateNotificationManager.notify(0, updateNotification);
+                    Notification notification = new NotificationCompat.Builder(getContext()).
+                            setDefaults(Notification.DEFAULT_SOUND).
+                            setContentTitle(getString(R.string.app_name)).
+                            setContentText("下载完成,点击安装。").
+                            setContentIntent(updatePendingIntent).
+                            build();
+
+                    updateNotificationManager.notify(0, notification);
 
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.fromFile(updateFile), "application/vnd.android.package-archive");
@@ -65,12 +78,23 @@ public class UpdateService extends Service {
 
                     //停止服务
 //                    stopSelf();
-                    break;
-                case DOWNLOAD_FAIL:
+                }
+                break;
+                case DOWNLOAD_FAIL: {
                     //下载失败
-                    updateNotification.setLatestEventInfo(UpdateService.this, getString(R.string.app_name), "下载完成,点击安装。", updatePendingIntent);
-                    updateNotificationManager.notify(0, updateNotification);
+//                    updateNotification.setLatestEventInfo(UpdateService.this, getString(R.string.app_name), "下载完成,点击安装。", updatePendingIntent);
+
+                    PendingIntent updatePendingIntent = PendingIntent.getActivity(UpdateService.this, 0, installIntent, 0);
+                    Notification notification = new NotificationCompat.Builder(getContext()).
+                            setDefaults(Notification.DEFAULT_SOUND).
+                            setContentTitle(getString(R.string.app_name)).
+                            setContentText("下载完成,点击安装。").
+                            setContentIntent(updatePendingIntent).
+                            build();
+
+                    updateNotificationManager.notify(0, notification);
                     break;
+                }
                 default:
             }
             stopSelf();
@@ -98,17 +122,21 @@ public class UpdateService extends Service {
         }
 
         this.updateNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        this.updateNotification = new Notification();
 
         //设置下载过程中，点击通知栏，回到主界面
-        updateIntent = new Intent(this, MainActivity.class);
-        updatePendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+        Intent updateIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
         //设置通知栏显示内容
-        updateNotification.icon = R.drawable.logo;
-        updateNotification.tickerText = "开始下载";
-        updateNotification.setLatestEventInfo(this, getString(R.string.app_name), "0%", updatePendingIntent);
+        Notification notification = new NotificationCompat.Builder(getContext()).
+                setContentTitle(getString(R.string.app_name)).
+                setContentText("0%").
+                setContentIntent(pendingIntent).
+                setSmallIcon(R.drawable.logo).
+                setTicker("开始下载").
+                build();
+
         //发出通知
-        updateNotificationManager.notify(0, updateNotification);
+        updateNotificationManager.notify(0, notification);
 
         //开启一个新的线程下载，如果使用Service同步下载，会导致ANR问题，Service本身也会阻塞
         new Thread(new updateRunnable()).start();//这个是下载的重点，是下载的过程
@@ -143,6 +171,10 @@ public class UpdateService extends Service {
             fos = new FileOutputStream(saveFile, false);
             byte buffer[] = new byte[4096];
             int readsize = 0;
+
+
+            PendingIntent updatePendingIntent = PendingIntent.getActivity(UpdateService.this, 0, installIntent, 0);
+
             while ((readsize = is.read(buffer)) > 0) {
                 fos.write(buffer, 0, readsize);
                 totalSize += readsize;
@@ -150,8 +182,14 @@ public class UpdateService extends Service {
                 if ((downloadCount == 0) || (int) (totalSize * 100 / updateTotalSize) - 10 > downloadCount) {
                     downloadCount += 10;
 //                    Log.e(LogTag.OBD, "whw UpdateService downloadUpdateFile downloadCount==" + downloadCount);
-                    updateNotification.setLatestEventInfo(UpdateService.this, "正在下载", (int) totalSize * 100 / updateTotalSize + "%", updatePendingIntent);
-                    updateNotificationManager.notify(0, updateNotification);
+                    String progressText = (int) totalSize * 100 / updateTotalSize + "%";
+                    Notification notification = new NotificationCompat.Builder(getContext()).
+                            setDefaults(Notification.DEFAULT_SOUND).
+                            setContentTitle("正在下载").
+                            setContentText(progressText).
+                            setContentIntent(updatePendingIntent).
+                            build();
+                    updateNotificationManager.notify(0, notification);
                     //TODO 下载到100弹窗安装
                     if (downloadCount > 7) {
                         Log.e(LogTag.OBD, "whw UpdateService downloadUpdateFile totalSize==" + totalSize);
@@ -206,6 +244,11 @@ public class UpdateService extends Service {
                 updateHandler.sendMessage(message);
             }
         }
+    }
+
+
+    private Context getContext() {
+        return this;
     }
 
     //    private void cheanUpdateFile() {

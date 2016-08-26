@@ -224,7 +224,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="22dp"
                 android:text=""
-                android:textSize="36dp" />
+                android:textSize="36sp" />
         </RelativeLayout>
 
         <!-- 强制升级layout-->

@@ -8,7 +8,7 @@ import android.widget.Toast;
  * Created by zhangyunfei on 16/7/26.
  */
 public class MyBaseFragment extends Fragment {
-    private MyBaseActivity myBaseActivity;
+    private MyBaseFragmentActivity myBaseActivity;
 
     public void alert(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
@@ -21,12 +21,12 @@ public class MyBaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof MyBaseActivity) {
-            myBaseActivity = (MyBaseActivity) activity;
+        if (activity instanceof MyBaseFragmentActivity) {
+            myBaseActivity = (MyBaseFragmentActivity) activity;
         }
     }
 
-    public MyBaseActivity getParentActivity() {
+    public MyBaseFragmentActivity getParentActivity() {
         return myBaseActivity;
     }
 }

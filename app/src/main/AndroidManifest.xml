@@ -77,15 +77,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!--<activity android:name=".demo.DemoSerialportTestActivity">-->
         <!--</activity>-->
-        <activity android:name=".demo.DemoOtaSerialActivity">
+        <activity android:name=".demo.DemoOtaSerialActivity" />
+        <activity android:name=".modules.common.Demo1Activity" />
 
-        </activity>
         <activity
             android:name=".modules.setting.SettingActivity"
             android:label="@string/page_title_setting" />
         <activity android:name=".modules.setting.ChangePhoneActivity" />
+        <activity
+            android:name=".modules.permission.PermissionUpdateFailureActivity"
+            android:label="更新权限失败重试" />
+        <activity
+            android:name=".modules.permission.PermissionTrialAlertDialog"
+            android:label="提醒权限试用或过期" />
+        <activity
+            android:name=".modules.permission.PermissionBuySuccess"
+            android:label="购买成功" />
 
         <receiver android:name=".framework.control.VoiceReceiver">
             <intent-filter>
@@ -231,6 +241,7 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5769e791e0f55a06a8000ed6" />
+
 
     </application>
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/float_background_color"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="恭喜您！"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="您还能免费试用OBD功能30天"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/barcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingTop="8dp">
+
+                <ImageView
+                    android:id="@+id/barcodeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/round_rectangle"
+                    android:padding="8dp"
+                    android:src="@drawable/weixin_barcode" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="限时特价促销扫描购买"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/detail_text"
+                style="@style/setting_about_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@+id/barcode"
+                android:lineSpacingExtra="6dp"
+                android:paddingTop="8dp"
+                android:text="试用期内，可以使用：\n●车辆故障检测\n●轮胎检测预警\n●控制汽车和查看汽车状态" />
+
+            <Button
+                android:id="@+id/btn_continue_try"
+                style="@style/setting_about_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/barcode"
+                android:layout_alignRight="@id/detail_text"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:background="@android:color/transparent"
+                android:lineSpacingExtra="4dp"
+                android:padding="4dp"
+                android:paddingTop="8dp"
+                android:text="继续试用 >" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</FrameLayout>

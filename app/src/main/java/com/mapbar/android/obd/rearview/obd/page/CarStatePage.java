@@ -31,8 +31,11 @@ import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.lib.ota.VinManager;
-import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
+import com.mapbar.android.obd.rearview.modules.carstate.CarStatePresenter;
+import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
@@ -47,7 +50,7 @@ import java.util.ArrayList;
  * 车辆 状态
  * Created by liuyy on 2016/5/7.
  */
-public class CarStatePage extends AppPage implements View.OnClickListener {
+public class CarStatePage extends AppPage implements View.OnClickListener, ICarStateView {
 
     private CarStateView carStateView;
     private CarStatusData data;
@@ -70,6 +73,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private ImageView iv_qr;
     @ViewInject(R.id.tv_qr_info)
     private TextView tv_qr_info;
+    //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
+    @ViewInject(R.id.viewgrounp_stage_record)
+    private ViewGroup viewgrounp_stage_record;
+
 
     private Button btn_state_pop_close;
     private String[] stateNames;
@@ -83,6 +90,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     private boolean isFirstDataUpdate = true;
     private TitleBarView titlebarview1;
     private FirmwareDialogHandler firmwareDialogHandler;
+    private CarStatePresenter presenter;
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +113,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         gvState.setAdapter(adapter);
 
         firmwareDialogHandler = new FirmwareDialogHandler();
+        presenter = new CarStatePresenter(this);
     }
 
     @Override
@@ -130,7 +140,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
 //                        StringUtil.toastStringShort("绑定vin");
 //                        new Handler().postDelayed(new Runnable() {
 //                            @Override
-//                            public void run() {
+//                            public void downloadPermision() {
 //                                OTAManager.getInstance().checkVinVersion(getContext());
 //                            }
 //                        }, 1000);
@@ -246,6 +256,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        if (presenter != null)
+            presenter.checkPermission();
         //判断有无故障
         if (!TextUtils.isEmpty(getPopContent())) {
             tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
@@ -268,7 +280,18 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        if (presenter != null) {
+            presenter.clear();
+            presenter = null;
+        }
+        super.onDestroy();
+    }
 
+    /**
+     * 点击故障码，展示故障码popwindow
+     */
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
         TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
@@ -309,6 +332,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         }
         return sb.toString();
     }
+
 
     class StateAdapter extends BaseAdapter {
         private int[] dataStates;
@@ -383,5 +407,28 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
             ImageView iv;
             TextView tv;
         }
+    }
+
+
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
+    }
+
+    /**
+     * 是否显示 车辆状态错误码 的提示语
+     *
+     * @param isVisiable
+     */
+    @Override
+    public void setCarStateRecordVisiable(boolean isVisiable) {
+        if (viewgrounp_stage_record != null)
+            viewgrounp_stage_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
     }
 }

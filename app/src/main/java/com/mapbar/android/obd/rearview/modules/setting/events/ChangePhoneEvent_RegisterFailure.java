@@ -1,4 +1,6 @@
-package com.mapbar.android.obd.rearview.lib.push.events;
+package com.mapbar.android.obd.rearview.modules.setting.events;
+
+import com.mapbar.android.obd.rearview.lib.eventbus.EventBusEvent;
 
 import java.io.Serializable;
 
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * 更改手机号，eventbus 事件
  * Created by zhangyunfei on 16/7/26.
  */
-public class ChangePhoneEvent_RegisterFailure implements Serializable{
+public class ChangePhoneEvent_RegisterFailure extends EventBusEvent{
     public int type;
     public int state;
     public String userId;

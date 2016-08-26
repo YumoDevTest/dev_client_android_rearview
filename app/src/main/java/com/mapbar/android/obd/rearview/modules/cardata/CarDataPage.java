@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd.page;
+package com.mapbar.android.obd.rearview.modules.cardata;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,24 +26,32 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
+import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
+import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressurePresenter;
+import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
+import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
+import com.mapbar.android.obd.rearview.views.TirePressureViewSimple;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * 车辆 数据 页
  * Created by THINKPAD on 2016/5/6.
  */
-public class CarDataPage extends AppPage implements View.OnClickListener {
+public class CarDataPage extends AppPage implements View.OnClickListener, ICarDataView, ITirePressureView {
     private final int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
 
@@ -92,6 +100,14 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
     private TitleBarView titlebarview1;
+    private CarDataPresenter cardataPresenter;
+    private TirePressurePresenter tirePressurePresenter;
+
+
+    private TirePressureViewSimple[] tirePressureSimpleViewArray;//单一胎压指示视图
+    private TirePressureViewDigital[] tirePressureForeViewArray;//4胎压指示视图
+
+    private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,16 +117,29 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
-        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
         titlebarview1.setButtonRightVisibility(true);
         titlebarview1.setButtonRightImage(R.drawable.ic_settng_selector);
         titlebarview1.setButtonRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),SettingActivity.class));
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
+        //单一胎压
+        TirePressureViewSimple tire_simple_left_top = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_left_top);
+        TirePressureViewSimple tire_simple_right_top = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_right_top);
+        TirePressureViewSimple tire_simple_left_bottom = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_left_bottom);
+        TirePressureViewSimple tire_simple_right_bottom = (TirePressureViewSimple) getContentView().findViewById(R.id.tire_simple_right_bottom);
+        tirePressureSimpleViewArray = new TirePressureViewSimple[]{tire_simple_left_top, tire_simple_right_top, tire_simple_left_bottom, tire_simple_right_bottom};
+        //4胎压
+        TirePressureViewDigital tire_pressure_left_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_top);
+        TirePressureViewDigital tire_pressure_left_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_left_bottom);
+        TirePressureViewDigital tire_pressure_rignt_top = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_top);
+        TirePressureViewDigital tire_pressure_rignt_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_bottom);
+        tirePressureForeViewArray = new TirePressureViewDigital[]{tire_pressure_left_top, tire_pressure_rignt_top, tire_pressure_left_bottom, tire_pressure_rignt_bottom};
+
         sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
         if (isFirst) {
@@ -121,10 +150,10 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
             editor.putBoolean("isFirst", false);
             editor.commit();
         }
-
+        cardataPresenter = new CarDataPresenter(this);
+        tirePressurePresenter = new TirePressurePresenter(this);
         getPopData();
         upDataView();
-
     }
 
     @Override
@@ -158,6 +187,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        if (cardataPresenter != null) cardataPresenter.checkPermission();
+        if (tirePressurePresenter != null) tirePressurePresenter.checkPermission();
         MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
     }
 
@@ -165,6 +196,22 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         MobclickAgentEx.onPageEnd("CarDataPage");
+    }
+
+    @Override
+    public void onDetach() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.clear();
+        super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (tirePressurePresenter != null)
+            tirePressurePresenter.clear();
+        if (cardataPresenter != null)
+            cardataPresenter.clear();
+        super.onDestroy();
     }
 
     @Override
@@ -360,4 +407,96 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
         }
     }
 
+    /**
+     * 显示单一胎压样式
+     */
+    @Override
+    public void showTirePresstureSingle(TirePressure4ViewModel[] tirePressureArray) {
+        if (tirePressureArray == null || tirePressureArray.length != 4) {
+            alert("胎压数据异常");
+            return;
+        }
+        boolean isHasNull = false;
+        for (int i = 0; i < tirePressureArray.length; i++) {
+            if (tirePressureArray[i] == null) {
+                isHasNull = true;
+                break;
+            }
+        }
+        if (isHasNull) {
+            alert("读取胎压数据时发生错误");
+            return;
+        }
+        for (int i = 0; i < tirePressureForeViewArray.length; i++) {
+            tirePressureSimpleViewArray[i].setVisibility(View.VISIBLE);
+            tirePressureSimpleViewArray[i].setWarning(tirePressureArray[i].isWarning);
+        }
+    }
+
+    /**
+     * 隐藏单一胎压样式。
+     */
+    @Override
+    public void hideTirePresstureSingleView() {
+        for (int i = 0; i < tirePressureSimpleViewArray.length; i++) {
+            tirePressureSimpleViewArray[i].setVisibility(View.GONE);
+        }
+    }
+
+
+    /**
+     * 显示四胎压样式。数组里显示4个胎压，分别对应，左上，右上，左下，右下
+     *
+     * @param tirePressureArray
+     */
+    @Override
+    public void showTirePresstureFour(TirePressure4ViewModel[] tirePressureArray) {
+        if (tirePressureArray == null || tirePressureArray.length != 4) {
+            alert("胎压数据异常");
+            return;
+        }
+        boolean isHasNull = false;
+        for (int i = 0; i < tirePressureArray.length; i++) {
+            if (tirePressureArray[i] == null) {
+                isHasNull = true;
+                break;
+            }
+        }
+        if (isHasNull) {
+            alert("读取胎压数据时发生错误");
+            return;
+        }
+        for (int i = 0; i < tirePressureForeViewArray.length; i++) {
+            tirePressureForeViewArray[i].setVisibility(View.VISIBLE);
+            tirePressureForeViewArray[i].setTirePressure(String.format(Locale.US, "%.1f", tirePressureArray[i].tirePressure));
+            tirePressureForeViewArray[i].setTireTemperature(String.format(Locale.US, "%d", (int) tirePressureArray[i].itreTemprature));
+            tirePressureForeViewArray[i].setWarning(tirePressureArray[i].isWarning);
+        }
+    }
+
+    /**
+     * 隐藏 四胎压样式。
+     */
+    @Override
+    public void hideTirePresstureFoureView() {
+        for (int i = 0; i < tirePressureSimpleViewArray.length; i++) {
+            tirePressureForeViewArray[i].setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 根节点是个framentView,可以放入 授权提醒的视图作为浮层
+     *
+     * @param numberOfDay
+     */
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
+    }
 }

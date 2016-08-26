@@ -8,26 +8,28 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.lib.notify.Notification;
+import com.mapbar.android.obd.rearview.lib.tts.TextToSpeechManager;
+import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
+import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
+import com.mapbar.android.obd.rearview.modules.common.MainPagePersenter;
+import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
+import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
+import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
-import com.mapbar.obd.AlarmData;
-import com.mapbar.obd.Manager;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
@@ -36,10 +38,11 @@ import static com.mapbar.android.obd.rearview.framework.control.PageManager.Mana
  * 首页
  * 包含1个viewpager,其下有4个子fragment 页
  */
-public class MainPage extends AppPage {
+public class MainPage extends AppPage implements IMainPageView {
+    private static final String TAG = MainPage.class.getSimpleName();
 
     public static TitleBar title;
-    protected static ArrayList<Object> sAlarmDataList = new ArrayList<Object>();
+
     private TitleBar titleBar;
     @ViewInject(R.id.pager_main)
     private ViewPager pager;
@@ -61,6 +64,9 @@ public class MainPage extends AppPage {
     private Context mContext;
     private Handler mHandlerBuy = new Handler();
     private boolean isPush = true;
+    private PermissonCheckerOnStart permissonCheckerOnStart;
+    private PermissionManager permissionManager;
+    private MainPagePersenter persenter;
 
     private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
 
@@ -103,7 +109,7 @@ public class MainPage extends AppPage {
         fragments.add(carDataPage);
         fragments.add(carStatePage);
         fragments.add(carMaintenancePage);
-        fragments.add(controlTestPage);
+//        fragments.add(controlTestPage);
         pager.setAdapter(fragmentPagerAdapter);
         currentPage = carDataPage;
 
@@ -117,6 +123,13 @@ public class MainPage extends AppPage {
         rg_tabs.check(R.id.page_tab2);
 
         hideMainTitlebar();
+        permissionManager = LogicFactory.createPermissionManager(getActivity());
+
+        //下载权限
+        permissonCheckerOnStart = new PermissonCheckerOnStart();
+        permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
+
+        persenter = new MainPagePersenter(this);
     }
 
     /**
@@ -191,26 +204,6 @@ public class MainPage extends AppPage {
             public void onEvent(int event, Object o) {
                 super.onEvent(event, o);
                 switch (event) {
-                    case Manager.Event.alarm:
-                        if (!sAlarmDataList.contains(o)) {
-                            sAlarmDataList.add(o);
-                        }
-
-                        if (!mAlarmTimerDialog.isShowing()) {
-                            Runnable r = new Runnable() {
-                                @Override
-                                public void run() {
-                                    setAlarmOn(true);
-                                    if (!mAlarmTimerDialog.isShowing() && 0 < sAlarmDataList.size()) {
-                                        showNextTimerDialog();
-                                    }
-                                }
-                            };
-                            mHandlerBuy.postDelayed(r, 500);
-
-                        }
-                        break;
-
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
                         carStatePage.showFirmwarePopu();
                         break;
@@ -221,6 +214,9 @@ public class MainPage extends AppPage {
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
 
+    /**
+     * 初始化通知的对话框
+     */
     private void initDialog() {
         mAlarmTimerDialog = new TimerDialog(mContext, new TimerDialog.Listener() {
 
@@ -236,84 +232,91 @@ public class MainPage extends AppPage {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                showNextTimerDialog();
+                //对话框被关闭，表示这个 通知完成了
+                onNotificationFinished();
             }
-
         }, true, 5);
-
         mAlarmTimerDialog.setCancelable(false);
-
     }
 
-    private void showNextTimerDialog() {
-        if (sAlarmDataList.size() > 0 && sAlarmDataList.get(0) instanceof AlarmData) {
-            AlarmData data = (AlarmData) sAlarmDataList.get(0);
-            sAlarmDataList.remove(0);
-            mAlarmTimerDialog.setCountdown(TimerDialog.DEFAULT_COUNTDOWN_NUMBER);
-
-            String content = "";
-            int type = data.getType();
-            switch (type) {
-                case Manager.AlarmType.errCode: {
-                    // 故障预警
-                    content = data.getString();
-                    mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_errCode, content));
-                    if (Constants.IS_OVERSEAS_EDITION) {
-                        StringBuilder contentEn = new StringBuilder();
-                        if (!TextUtils.isEmpty(content)) {
-                            for (int i = 0; i < content.length(); i++) {
-                                contentEn.append(content.charAt(i)).append(" ");
-                            }
-                        }
-                        content = contentEn.toString();
-                    }
-                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_errCode, content));
-                }
-                break;
-                case Manager.AlarmType.temperature: {
-                    // 水温预警
-                    content = String.format(Locale.getDefault(), "%d", data.getInt());
-                    mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_temperature, content));
-                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_temperature, content));
-                }
-                break;
-                case Manager.AlarmType.voltage: {
-                    // 电压预警
-                    content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
-                    mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_voltage, content));
-                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_voltage, content));
-                }
-                break;
-                case Manager.AlarmType.tired: {
-                    // 疲劳驾驶预警
-                    content = String.format(Locale.getDefault(), "%.1f", data.getFloat());
-                    mAlarmTimerDialog.show(mContext.getResources().getString(R.string.dlg_tired, content));
-                    VoiceManager.getInstance().sendBroadcastTTS(mContext.getResources().getString(R.string.bca_tired, content));
-                }
-                break;
-
-            }
-            if (mAlarmTimerDialog.getContentTextView() != null) {
-                mAlarmTimerDialog.getContentTextView().setTextColor(mContext.getResources().getColor(R.color.dashboard_red_text));
-            }
-
-        }
-    }
-
-
-    /**
-     * @return the mAlarmOn
-     */
-    public boolean isAlarmOn() {
-        return mAlarmOn;
+    @Override
+    public void onDestroy() {
+        if (persenter != null)
+            persenter.clear();
+        super.onDestroy();
     }
 
     /**
-     * @param on the mAlarmOn to set
+     * 展示一个通知
+     *
+     * @param notification
      */
-    public void setAlarmOn(boolean on) {
-        this.mAlarmOn = on;
+    @Override
+    public void showNotification(Notification notification) {
+        if (mAlarmTimerDialog == null || mAlarmTimerDialog.isShowing())
+            return;
+        if (notification == null) return;
+        //弹窗
+        mAlarmTimerDialog.showAlerm(notification.getText());
+        //语音播报
+        TextToSpeechManager.speak(notification.getWord());
     }
 
+    /**
+     * 当完成一个通知后
+     */
+    @Override
+    public void onNotificationFinished() {
+        persenter.startCheckNotifications();//检查是否 还有剩余的通知要显示
+    }
 
+    /**
+     * 是否正在显示一个通知
+     *
+     * @return
+     */
+    @Override
+    public boolean isShowingNotification() {
+        return mAlarmTimerDialog.isShowing();
+    }
+
+//    /**
+//     * 显示权限验证提醒，试用期，过期等
+//     */
+//    public void showPermissionAlert(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
+
+//    /**
+//     * 显示权限验证失败
+//     */
+//    public void showPermissionFailure(){
+//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
+//        dialog.setOnRetryClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //do retry
+//            }
+//        });
+//        dialog.setOnSkipClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+//    }
 }

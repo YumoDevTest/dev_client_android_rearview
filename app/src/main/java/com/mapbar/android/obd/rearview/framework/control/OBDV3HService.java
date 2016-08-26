@@ -294,7 +294,7 @@ public class OBDV3HService extends Service {
             }
         }
 
-        // If the service startup and need to run in the background
+        // If the service startup and need to downloadPermision in the background
         // Attempt to connect the device automatically.
         if (!mNeedWaitForSignal) {
 //            if (Config.DEBUG) {
