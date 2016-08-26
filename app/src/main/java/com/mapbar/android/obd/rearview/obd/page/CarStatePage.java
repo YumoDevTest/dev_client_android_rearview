@@ -1,16 +1,17 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -22,7 +23,6 @@ import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.Global;
-import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -30,7 +30,7 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
-import com.mapbar.android.obd.rearview.lib.ota.VinManager;
+import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
 import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
 import com.mapbar.android.obd.rearview.modules.carstate.CarStatePresenter;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
@@ -40,9 +40,9 @@ import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
+import com.mapbar.android.obd.rearview.views.VinBarcodeView;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.ObdContext;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ import java.util.ArrayList;
  * 车辆 状态
  * Created by liuyy on 2016/5/7.
  */
-public class CarStatePage extends AppPage implements View.OnClickListener, ICarStateView {
+public class CarStatePage extends AppPage implements View.OnClickListener, ICarStateView, IVinChangeView {
 
     private CarStateView carStateView;
     private CarStatusData data;
@@ -63,16 +63,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     @ViewInject(R.id.tv_state)
     private TextView tv_state;
 
-    @ViewInject(R.id.qr_content_view)
-    private View qr_content_view;
-    @ViewInject(R.id.content)
-    private View content;
-    @ViewInject(R.id.btn_close_QRpop)
-    private Button btn_close_QRpop;
-    @ViewInject(R.id.iv_qr)
-    private ImageView iv_qr;
-    @ViewInject(R.id.tv_qr_info)
-    private TextView tv_qr_info;
     //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
     @ViewInject(R.id.viewgrounp_stage_record)
     private ViewGroup viewgrounp_stage_record;
@@ -92,6 +82,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private FirmwareDialogHandler firmwareDialogHandler;
     private CarStatePresenter presenter;
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
+    private VinBarcodeView vinBarcodeView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,33 +129,21 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_NEED_VIN:
-//                        StringUtil.toastStringShort("绑定vin");
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void downloadPermision() {
-//                                OTAManager.getInstance().checkVinVersion(getContext());
-//                            }
-//                        }, 1000);
-                        QRInfo qrInfo = (QRInfo) o;//TODO 设置url
-                        Bitmap bmQR = QRUtils.createQR(qrInfo.getUrl());
-                        iv_qr.setImageBitmap(bmQR);
-                        tv_qr_info.setText(qrInfo.getContent());
-                        setQrViewVisiable(true);
-
                         break;
 
                     case OBDManager.EVENT_OBD_OTA_SCANVIN_SUCC://TODO 扫描成功
-                        QRInfo qrInfo_scan_succ = (QRInfo) o;
-                        tv_qr_info.setText(qrInfo_scan_succ.getContent());
-                        setQrViewVisiable(true);
+                        if (vinBarcodeView != null) {
+                            QRInfo qrInfo_scan_succ = (QRInfo) o;
+                            vinBarcodeView.setText(qrInfo_scan_succ.getContent());
+                        }
                         break;
 
                     case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
-                        setQrViewVisiable(false);
+                        hideVinInputDialog();
                         break;
 
                     case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
-                        setQrViewVisiable(true);
+//                        showVinInputDialog();
                         break;
 
                     case Manager.Event.dataUpdate:
@@ -173,7 +153,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                             isFirstDataUpdate = false;
                             OTAManager.getInstance().checkVinVersion(getActivity());
                         }
-                        checkFirmwareVersion();
+                        presenter.notifyBeginCheckFirmwareVersion();
                         break;
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));
@@ -184,39 +164,53 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
         tv_state.setOnClickListener(this);
-        btn_close_QRpop.setOnClickListener(this);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showVinInputDialog();
+
+            }
+        }, 5000);
     }
 
     /**
-     * 检查固件版本,是否需要更新固件
+     * 显示vin 二维码 的对话框
      */
-    private void checkFirmwareVersion() {
-        //仅在启动时检查一次
-        if (!isFirstDataUpdate) return;
-        VinManager vinManager = new VinManager();
-        if (TextUtils.isEmpty(vinManager.getVin())) {
-            showVinInputDialog();
-            isFirstDataUpdate = false;
-        } else {
-
+    public void showVinInputDialog() {
+        if (getContentView() instanceof FrameLayout) {
+            FrameLayout frameLayout = (FrameLayout) getContentView();
+            if (vinBarcodeView == null)
+                vinBarcodeView = new VinBarcodeView(getActivity());
+            vinBarcodeView.showQrBarcode();
+            frameLayout.addView(vinBarcodeView);
         }
     }
 
     /**
-     * 显示vin输入的对话框
+     * 显示 VIN修改 扫码成功
      */
-    private void showVinInputDialog() {
-
+    public void showVinScanOK() {
+        if (getContentView() instanceof FrameLayout) {
+            FrameLayout frameLayout = (FrameLayout) getContentView();
+            if (vinBarcodeView == null)
+                vinBarcodeView = new VinBarcodeView(getActivity());
+            vinBarcodeView.setText(R.string.vin_alert_dialog_scan_success);
+            vinBarcodeView.showQrBarcode();
+            frameLayout.addView(vinBarcodeView);
+        }
     }
 
-    private void setQrViewVisiable(boolean isVisiable) {
-        if (isVisiable) {
-            content.setVisibility(View.GONE);
-            qr_content_view.setVisibility(View.VISIBLE);
-        } else {
-            content.setVisibility(View.VISIBLE);
-            qr_content_view.setVisibility(View.GONE);
+    /**
+     * 隐藏vin 二维码 的对话框
+     */
+    public void hideVinInputDialog() {
+        if (vinBarcodeView != null) {
+            if (vinBarcodeView.getParent() != null && vinBarcodeView.getParent() == getContentView()
+                    && vinBarcodeView.getParent() instanceof FrameLayout) {
+                FrameLayout frameLayout = (FrameLayout) getContentView();
+                frameLayout.removeView(vinBarcodeView);
+            }
         }
     }
 
@@ -238,9 +232,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                     MainActivity.getInstance().restartApp();
                 }
                 break;
-            case R.id.btn_close_QRpop:
-                setQrViewVisiable(false);
-                break;
+
         }
     }
 

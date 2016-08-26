@@ -311,4 +311,8 @@
     <string name="connect_tireDialog">传感器连接:</string>
     <string name="power_low_tireDialog">低</string>
 
+    <!-- vin填写对话框提示文字 -->
+    <string name="vin_alert_dialog_info">请扫描填写信息，绑定激活后才能使用汽车卫士功能\n如：爱车体检、故障预警、语音升窗落锁等</string>
+    <string name="vin_alert_dialog_scan_success">扫描成功\n请等待绑定激活成功</string>
+    <string name="vin_alert_dialog_ok">您已通过手机\\n成功完善爱车信息</string>
 </resources>

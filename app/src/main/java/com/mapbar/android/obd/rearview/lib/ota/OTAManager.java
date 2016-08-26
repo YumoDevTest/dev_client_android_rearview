@@ -10,6 +10,7 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.obd.CarDetail;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalUserCarResult;
@@ -117,7 +118,7 @@ public class OTAManager extends OBDManager {
         if (((ota != null && TextUtils.isEmpty(ota.vin)) && TextUtils.isEmpty(manualVin)) && !Manager.getInstance().isV3SpecialOta()) {
             QRInfo qrInfo = new QRInfo();
             qrInfo.setContent("请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能");
-            qrInfo.setUrl(Configs.URL_BIND_VIN + AixintuiConfigs.getPushToken());
+            qrInfo.setUrl(Urls.URL_BIND_VIN + AixintuiConfigs.getPushToken());
             baseObdListener.onEvent(EVENT_OBD_OTA_NEED_VIN, qrInfo);
         } else {
             checkVersion(mContext);

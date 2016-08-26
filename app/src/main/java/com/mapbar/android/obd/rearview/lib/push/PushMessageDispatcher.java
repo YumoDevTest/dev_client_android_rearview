@@ -18,8 +18,7 @@ import com.mapbar.android.obd.rearview.obd.util.LogUtil;
  */
 public class PushMessageDispatcher {
 
-    public static void handlePushMessage(int type, int state, String userId, String token) {
-        LogUtil.d("PUSH", String.format("## 收到推送: type=%s, state=%s, userId=%s", type, state, userId));
+    public static void onReceivePushMessage(int type, int state, String userId, String token) {
         if (type == PushType.SCAN_OK && state == PushState.SUCCESS) {
             //收到推送 扫码成功
             //在修改手机号，会订阅 ChangePhoneEvent_ScanOK 类型的 eventbus消息

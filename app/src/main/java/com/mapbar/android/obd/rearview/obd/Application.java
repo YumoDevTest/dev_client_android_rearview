@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.UserCenter;
+
 import java.util.HashMap;
 
 
@@ -37,7 +38,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         //初始化一个会话对象,一个会话对象可以在内存中存储一些变量，仅在app启动时有效
-        mSession =new Session();
+        mSession = new Session();
 
         Global.setAppContext(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
@@ -63,14 +64,16 @@ public class Application extends android.app.Application {
     /**
      * 获得会话对象
      * session是一个会话对象,一个会话对象可以在内存中存储一些变量，仅在app启动时有效
+     *
      * @return
      */
-    public Session getSession(){
+    public Session getSession() {
         return mSession;
     }
 
     /**
      * 获得推送的token
+     *
      * @return
      */
     public String getPushToken() {
@@ -79,6 +82,7 @@ public class Application extends android.app.Application {
 
     /**
      * 获得用户登录后的token
+     *
      * @return
      */
     public String getToken() {
@@ -87,5 +91,16 @@ public class Application extends android.app.Application {
 
     public String getImei() {
         return Utils.getImei(MainActivity.getInstance());
+    }
+
+    /**
+     * 获得 userID
+     *
+     * @return
+     */
+    public String getUserID() {
+        if (UserCenter.getInstance().getCurrentIdAndType() == null)
+            return null;
+        return UserCenter.getInstance().getCurrentIdAndType().userId;
     }
 }

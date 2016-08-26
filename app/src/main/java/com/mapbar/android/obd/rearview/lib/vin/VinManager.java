@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.ota;
+package com.mapbar.android.obd.rearview.lib.vin;
 
 import android.text.TextUtils;
 

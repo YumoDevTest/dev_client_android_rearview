@@ -29,4 +29,5 @@ public abstract class BasePresenter<T extends IMvpView> {
     public abstract void clear();
 
 
+
 }
