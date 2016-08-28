@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.lib.ota.FirmwareWriter;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.obd.Firmware;
 
@@ -176,65 +177,68 @@ public class FirmwareDialogHandler {
 
     private void updateFirmware() {
         showCurrentView(progress_content);
-        OTAManager.getInstance().upgrade(MainActivity.getInstance(), new Firmware.UpgradeCallback() {
-
-            @Override
-            public void onDownResult(int statusCode, File file) {
-                //TODO 下载失败
-            }
-
-            @Override
-            public void onDownProgress(int bytesWritten, int totalSize) {
-
-            }
-
-            @SuppressLint("NewApi")
-            @Override
-            public void onFlashResult(final int statusCode, File file) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress_content.setVisibility(View.GONE);
-                        switch (statusCode) {
-                            case Firmware.UpgradeCallback.STATUSCODE_FLASH_OK:
-//                        Log.d(LogTag.OTA, "whw -->> 升级成功 == ");
-                                //TODO 显示升级成功的ui 点击完成 重启客户端
-                                if (flashListener != null) {
-                                    flashListener.onFlashSucc();
-                                }
-                                showCurrentView(succ_content);
-//                        tv_state.setText("当前车型支持宝马车辆控制功能");//TODO 通过接口回调返回刷固件结果对应改变文案
-                                break;
-                            case Firmware.UpgradeCallback.STATUSCODE_FLASH_FAILED:
-                                //TODO 显示升级失败的ui 点击重试重新升级
-
-                                showCurrentView(fail_content);
-
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-
-
-            }
-
-            @Override
-            public void onFlashProgress(final int progress, final int totalSize) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO 显示刷固件进度
-                        showCurrentView(progress_content);
-//                        int pb = (int) (Float.intBitsToFloat(bytesWritten) / Float.intBitsToFloat(totalSize) * 100f);
-                        progressbar.setProgress(progress);
-                        tv_download_progress.setText(progress + "%");
-                    }
-                });
-            }
-        });
+        OTAManager.getInstance().upgrade(MainActivity.getInstance(), callback1);
     }
+
+
+    private Firmware.UpgradeCallback callback1 = new Firmware.UpgradeCallback() {
+
+        @Override
+        public void onDownResult(int statusCode, File file) {
+            //TODO 下载失败
+        }
+
+        @Override
+        public void onDownProgress(int bytesWritten, int totalSize) {
+
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        public void onFlashResult(final int statusCode, File file) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    progress_content.setVisibility(View.GONE);
+                    switch (statusCode) {
+                        case Firmware.UpgradeCallback.STATUSCODE_FLASH_OK:
+//                        Log.d(LogTag.OTA, "whw -->> 升级成功 == ");
+                            //TODO 显示升级成功的ui 点击完成 重启客户端
+                            if (flashListener != null) {
+                                flashListener.onFlashSucc();
+                            }
+                            showCurrentView(succ_content);
+//                        tv_state.setText("当前车型支持宝马车辆控制功能");//TODO 通过接口回调返回刷固件结果对应改变文案
+                            break;
+                        case Firmware.UpgradeCallback.STATUSCODE_FLASH_FAILED:
+                            //TODO 显示升级失败的ui 点击重试重新升级
+
+                            showCurrentView(fail_content);
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+
+
+        }
+
+        @Override
+        public void onFlashProgress(final int progress, final int totalSize) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //TODO 显示刷固件进度
+                    showCurrentView(progress_content);
+//                        int pb = (int) (Float.intBitsToFloat(bytesWritten) / Float.intBitsToFloat(totalSize) * 100f);
+                    progressbar.setProgress(progress);
+                    tv_download_progress.setText(progress + "%");
+                }
+            });
+        }
+    };
 
     public interface FlashListener {
         public void onFlashSucc();

@@ -1,0 +1,140 @@
+package com.mapbar.android.obd.rearview.modules.ota;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.modules.ota.contract.IOtaAlertView;
+
+/**
+ * 刷新固件 的视图
+ * Created by zhangyunfei on 16/8/27.
+ */
+public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
+    private ViewGroup container1;
+
+    private OtaAlertUpgradeView otaAlertUpgradeView;
+    private OtaAlertForceView otaAlertForceView;
+    private OtaAlertSuccessView otaAlertSuccessView;
+    private OtaAlertFailureView otaAlertFailureView;
+    private OtaAlertProgressView otaAlertProgressView;
+    private OtaAlertPersenter otaAlertPersenter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ota_alert);
+
+        if (getIntent() == null)
+            throw new NullPointerException();
+        Bundle bundle = getIntent().getExtras();
+
+        container1 = (ViewGroup) findViewById(R.id.container1);
+        otaAlertPersenter = new OtaAlertPersenter(this, bundle);
+
+        //提示 是否更新
+        otaAlertUpgradeView = new OtaAlertUpgradeView(getActivity());
+        otaAlertUpgradeView.setUpgradeButtonClick(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //更新按钮 点击
+                otaAlertPersenter.beginUpgrade();
+            }
+        });
+        otaAlertUpgradeView.setCancelButtonClick(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //取消按钮 点击
+                finish();
+            }
+        });
+        //强制更新
+        otaAlertForceView = new OtaAlertForceView(getActivity());
+        otaAlertForceView.setUpgradeButtonClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //更新按钮 点击
+                otaAlertPersenter.beginUpgrade();
+            }
+        });
+        //刷新进度view
+        otaAlertProgressView = new OtaAlertProgressView(getActivity());
+
+        //刷固件成功
+        otaAlertSuccessView = new OtaAlertSuccessView(getActivity());
+        otaAlertSuccessView.setOKButtonClick(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //确定按钮 点击
+                otaAlertPersenter.onUpgradeFinish();
+            }
+        });
+        //刷新失败按钮
+        otaAlertFailureView = new OtaAlertFailureView(getActivity());
+        otaAlertFailureView.setRetryButtonClick(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //重试按钮 点击
+                otaAlertPersenter.onRetryUpgrade();
+            }
+        });
+        otaAlertFailureView.setCancelButtonClick(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //确定按钮 点击
+            }
+        });
+
+    }
+
+    @Override
+    public void showView_alert_ForceUpgrade() {
+        otaAlertUpgradeView.setVisibility(View.VISIBLE);
+        otaAlertForceView.setVisibility(View.GONE);
+        otaAlertSuccessView.setVisibility(View.GONE);
+        otaAlertFailureView.setVisibility(View.GONE);
+        otaAlertProgressView.setVisibility(View.GONE);
+    }
+
+    public void showView_alertUpgrade() {
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        otaAlertForceView.setVisibility(View.VISIBLE);
+        otaAlertSuccessView.setVisibility(View.GONE);
+        otaAlertFailureView.setVisibility(View.GONE);
+        otaAlertProgressView.setVisibility(View.GONE);
+    }
+
+    public void showView_alertSuccess() {
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        otaAlertForceView.setVisibility(View.GONE);
+        otaAlertSuccessView.setVisibility(View.VISIBLE);
+        otaAlertFailureView.setVisibility(View.GONE);
+        otaAlertProgressView.setVisibility(View.GONE);
+    }
+
+    public void showView_alertFailure() {
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        otaAlertForceView.setVisibility(View.GONE);
+        otaAlertSuccessView.setVisibility(View.GONE);
+        otaAlertFailureView.setVisibility(View.VISIBLE);
+        otaAlertProgressView.setVisibility(View.GONE);
+    }
+
+    public void showView_alertProgress(int progress) {
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        otaAlertForceView.setVisibility(View.GONE);
+        otaAlertSuccessView.setVisibility(View.GONE);
+        otaAlertFailureView.setVisibility(View.GONE);
+        otaAlertProgressView.setVisibility(View.VISIBLE);
+        otaAlertProgressView.setProgress(progress);
+    }
+
+
+}

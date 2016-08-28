@@ -39,6 +39,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
 import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -523,4 +524,11 @@ public class MainActivity extends BaseActivity {
             return;
         Toast.makeText(getActivity(), pbHttpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(HttpErrorEvent httpErrorEvent) {
+        Toast.makeText(getActivity(), "网络异常:" + httpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
 }

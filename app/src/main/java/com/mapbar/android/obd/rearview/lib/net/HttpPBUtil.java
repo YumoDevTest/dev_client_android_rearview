@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.net;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.protobuf.AbstractMessageLite;
@@ -34,9 +35,11 @@ public class HttpPBUtil {
      * @param callback
      */
     public static void post(String url, AbstractMessageLite message, final HttpPBCallback callback) {
+        if (TextUtils.isEmpty(url))
+            throw new NullPointerException("url 不能为空");
         if (message == null)
             throw new NullPointerException("message 不能为空");
-        LogUtil.d(TAG, "## HTTP准备发送请求" + message.toString());
+        LogUtil.d(TAG, "## HTTP准备发送请求,url=" + url + ", msg = " + message.toString());
         post(url, message.toByteArray(), callback);
     }
 
@@ -48,6 +51,8 @@ public class HttpPBUtil {
      * @param callback
      */
     public static void post(String url, byte[] pbReqeustBytes, final HttpPBCallback callback) {
+        if (TextUtils.isEmpty(url))
+            throw new NullPointerException("url 不能为空");
         //加密构建消息体
         byte[] btye4Request = null;
         try {

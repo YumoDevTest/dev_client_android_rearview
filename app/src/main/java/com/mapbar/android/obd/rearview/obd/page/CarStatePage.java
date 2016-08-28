@@ -28,6 +28,7 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
+import com.mapbar.android.obd.rearview.lib.ota.FirmwareVersionChecker;
 import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
@@ -165,13 +166,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         tv_state_record.setOnClickListener(this);
         tv_state.setOnClickListener(this);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showVinInputDialog();
-
-            }
-        }, 5000);
     }
 
     /**
