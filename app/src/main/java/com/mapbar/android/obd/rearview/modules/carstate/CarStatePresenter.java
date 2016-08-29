@@ -139,7 +139,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
             @Override
             public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
                 Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
-                intent.putExtra("firewware_bin_finl", binFile.getPath());
+                intent.putExtra("firewware_bin_file", binFile.getPath());
                 intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
                 getView().getContext().startActivity(intent);
 

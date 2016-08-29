@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
+import com.mapbar.android.log.Log;
 import com.mapbar.android.obd.rearview.lib.net.FileDownloader;
 import com.mapbar.android.obd.rearview.lib.net.GsonHttpCallback;
 import com.mapbar.android.obd.rearview.lib.net.HttpParameter;
@@ -195,7 +196,13 @@ public class FirmwareVersionChecker {
 
     @NonNull
     private static File getOTAFilesDir() {
-        return Environment.getDownloadCacheDirectory();//Environment.getExternalStorageDirectory().getAbsolutePath();
+        File dir = new File(Environment.getExternalStorageDirectory(), "mapbar/binfile");//Environment.getExternalStorageDirectory().getAbsolutePath();
+        if (!dir.exists()) {
+            boolean isOk = dir.mkdirs();
+            if (!isOk)
+                LogUtil.e(TAG, "## 创建bin缓存文件夹异常");
+        }
+        return dir;
     }
 
     public static String getLocalVersion() {
