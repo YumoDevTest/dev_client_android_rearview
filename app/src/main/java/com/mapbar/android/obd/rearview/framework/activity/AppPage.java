@@ -102,11 +102,21 @@ public abstract class AppPage extends Fragment implements IMvpView {
     }
 
 
-    public void alert(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    public void alert(final String msg) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void alert(int sourceID) {
-        Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
+    public void alert(final int sourceID) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

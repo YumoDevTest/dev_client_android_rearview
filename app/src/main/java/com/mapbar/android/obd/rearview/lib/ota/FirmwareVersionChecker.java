@@ -165,7 +165,8 @@ public class FirmwareVersionChecker {
 
             @Override
             public void onError(Exception ex) {
-
+                if (versionCheckCallback != null)
+                    versionCheckCallback.onError(ex);
             }
 
             @Override
@@ -190,7 +191,6 @@ public class FirmwareVersionChecker {
         }
         tmp = tmp.substring(index + 1);
         return new File(dir, tmp);
-
     }
 
     @NonNull

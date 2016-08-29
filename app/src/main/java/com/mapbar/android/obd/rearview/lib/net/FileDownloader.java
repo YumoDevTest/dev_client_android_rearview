@@ -68,7 +68,7 @@ public class FileDownloader {
                     callback.onFinish(targetFile);
             } catch (Exception e) {
                 e.printStackTrace();
-                LogUtil.e("HTTP", "## 文件下载失败", e);
+                LogUtil.e("HTTP", "## 文件下载失败," + e.getMessage(), e);
                 if (callback != null)
                     callback.onError(e);
 
