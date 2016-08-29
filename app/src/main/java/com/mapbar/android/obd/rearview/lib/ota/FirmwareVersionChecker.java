@@ -150,13 +150,14 @@ public class FirmwareVersionChecker {
     private void checkLocalOrDownloadBinFile(String binUrl, final CheckVersionBean versionBean, final VersionCheckCallback versionCheckCallback) {
         File targetFile = buildBinFilePath(binUrl);
         if (targetFile.exists()) {
+            LogUtil.d(TAG, "## 检查文件缓存存在，无需再次下载,文件路径=" + targetFile.getPath());
             if (versionCheckCallback != null)
                 versionCheckCallback.onFoundNewVersion(targetFile, versionBean);
+            return;
         }
         FileDownloader.download(binUrl, targetFile, new FileDownloader.FileDownloadCallback() {
             @Override
             public void onStart() {
-
             }
 
             @Override

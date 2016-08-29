@@ -18,6 +18,8 @@ import java.io.InputStream;
  */
 public class FileDownloader {
 
+    private static final String TAG = "HTTP";
+
     public static void download(String url, File targetFile, final FileDownloadCallback callback) {
         if (url == null) {
             throw new NullPointerException();
@@ -27,6 +29,7 @@ public class FileDownloader {
         }
         if (callback != null)
             callback.onStart();
+        LogUtil.d(TAG, "## 启动下载,url=" + url);
         Request request = new Request.Builder().url(url).build();
         MyHttpContext.getOkHttpClient()
                 .newCall(request)
@@ -58,17 +61,17 @@ public class FileDownloader {
                     fos.write(buf, 0, len);
                     sum += len;
                     int progress = (int) (sum * 1.0f / total * 100);
-                    LogUtil.d("HTTP", "## progress=" + progress);
+                    LogUtil.d(TAG, "## progress=" + progress);
                     if (callback != null)
                         callback.onProgress(progress);
                 }
                 fos.flush();
-                LogUtil.d("HTTP", "## 文件下载成功");
+                LogUtil.d(TAG, "## 文件下载成功," + targetFile.getPath());
                 if (callback != null)
                     callback.onFinish(targetFile);
             } catch (Exception e) {
                 e.printStackTrace();
-                LogUtil.e("HTTP", "## 文件下载失败," + e.getMessage(), e);
+                LogUtil.e(TAG, "## 文件下载失败," + e.getMessage(), e);
                 if (callback != null)
                     callback.onError(e);
 
@@ -88,7 +91,7 @@ public class FileDownloader {
 
         @Override
         public void onFailure(Request arg0, IOException e) {
-            LogUtil.d("HTTP", "## ERR:" + e.getMessage());
+            LogUtil.d("HTTP", "## 文件下载异常:" + e.getMessage());
             if (callback != null)
                 callback.onError(e);
         }

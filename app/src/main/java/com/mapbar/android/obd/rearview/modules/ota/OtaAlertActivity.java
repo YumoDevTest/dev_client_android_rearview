@@ -1,8 +1,10 @@
 package com.mapbar.android.obd.rearview.modules.ota;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
@@ -32,7 +34,6 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
         Bundle bundle = getIntent().getExtras();
 
         container1 = (ViewGroup) findViewById(R.id.container1);
-        otaAlertPersenter = new OtaAlertPersenter(this, bundle);
 
         //提示 是否更新
         otaAlertUpgradeView = new OtaAlertUpgradeView(getActivity());
@@ -52,6 +53,8 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
                 finish();
             }
         });
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        addChildView(otaAlertUpgradeView);
         //强制更新
         otaAlertForceView = new OtaAlertForceView(getActivity());
         otaAlertForceView.setUpgradeButtonClick(new View.OnClickListener() {
@@ -61,9 +64,12 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
                 otaAlertPersenter.beginUpgrade();
             }
         });
+        otaAlertForceView.setVisibility(View.GONE);
+        addChildView(otaAlertForceView);
         //刷新进度view
         otaAlertProgressView = new OtaAlertProgressView(getActivity());
-
+        otaAlertProgressView.setVisibility(View.GONE);
+        addChildView(otaAlertProgressView);
         //刷固件成功
         otaAlertSuccessView = new OtaAlertSuccessView(getActivity());
         otaAlertSuccessView.setOKButtonClick(new View.OnClickListener() {
@@ -74,6 +80,8 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
                 otaAlertPersenter.onUpgradeFinish();
             }
         });
+        otaAlertSuccessView.setVisibility(View.GONE);
+        addChildView(otaAlertSuccessView);
         //刷新失败按钮
         otaAlertFailureView = new OtaAlertFailureView(getActivity());
         otaAlertFailureView.setRetryButtonClick(new View.OnClickListener() {
@@ -91,21 +99,30 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
                 //确定按钮 点击
             }
         });
+        otaAlertFailureView.setVisibility(View.GONE);
+        addChildView(otaAlertFailureView);
 
+        otaAlertPersenter = new OtaAlertPersenter(this, bundle);
+    }
+
+    private void addChildView(View view) {
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER;
+        container1.addView(view, layoutParams);
     }
 
     @Override
     public void showView_alert_ForceUpgrade() {
-        otaAlertUpgradeView.setVisibility(View.VISIBLE);
-        otaAlertForceView.setVisibility(View.GONE);
+        otaAlertUpgradeView.setVisibility(View.GONE);
+        otaAlertForceView.setVisibility(View.VISIBLE);
         otaAlertSuccessView.setVisibility(View.GONE);
         otaAlertFailureView.setVisibility(View.GONE);
         otaAlertProgressView.setVisibility(View.GONE);
     }
 
     public void showView_alertUpgrade() {
-        otaAlertUpgradeView.setVisibility(View.GONE);
-        otaAlertForceView.setVisibility(View.VISIBLE);
+        otaAlertUpgradeView.setVisibility(View.VISIBLE);
+        otaAlertForceView.setVisibility(View.GONE);
         otaAlertSuccessView.setVisibility(View.GONE);
         otaAlertFailureView.setVisibility(View.GONE);
         otaAlertProgressView.setVisibility(View.GONE);

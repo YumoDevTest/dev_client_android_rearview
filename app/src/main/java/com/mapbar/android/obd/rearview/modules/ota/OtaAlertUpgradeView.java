@@ -46,4 +46,9 @@ public class OtaAlertUpgradeView extends FrameLayout {
     public void setCancelButtonClick(View.OnClickListener onClickListener) {
         tv_firmware_pop_cancle.setOnClickListener(onClickListener);
     }
+
+    public void show() {
+        this.setVisibility(View.VISIBLE);
+        startTimer();
+    }
 }

@@ -31,9 +31,10 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
         firmwareWriter = new FirmwareWriter();
         //判断是否强制升级
         if (is_fouce_upgreade) {
-            getView().showView_alertUpgrade();
-        } else {
             getView().showView_alert_ForceUpgrade();
+        } else {
+            getView().showView_alertUpgrade();
+
         }
     }
 

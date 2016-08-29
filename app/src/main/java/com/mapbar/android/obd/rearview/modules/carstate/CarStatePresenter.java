@@ -1,13 +1,11 @@
 package com.mapbar.android.obd.rearview.modules.carstate;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.ota.CheckVersionBean;
 import com.mapbar.android.obd.rearview.lib.ota.FirmwareVersionChecker;
-import com.mapbar.android.obd.rearview.lib.vin.VinManager;
 import com.mapbar.android.obd.rearview.lib.vin.events.VinChangeFailureEvent;
 import com.mapbar.android.obd.rearview.lib.vin.events.VinChangeSucccessEvent;
 import com.mapbar.android.obd.rearview.lib.vin.events.VinScanEvent;
@@ -33,10 +31,11 @@ import java.io.File;
  */
 public class CarStatePresenter extends BasePresenter<ICarStateView> {
 
+    private static final String TAG = CarStatePresenter.class.getSimpleName();
     private PermissionManager permissionManager;
     private IVinChangeView vinChangeView;
     private FirmwareVersionChecker firmwareVersionChecker;
-    private boolean isCheckedVersion = false;//是否检查过版本
+    private boolean hasCheckedVersion = false;//是否检查过版本
 
     public CarStatePresenter(ICarStateView view) {
         super(view);
@@ -117,7 +116,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     }
 
     public void notifyBeginCheckFirmwareVersion() {
-        if (isCheckedVersion)
+        if (hasCheckedVersion)
             return;
         LogUtil.d("OTA", "## 准备检查固件版本");
 //        beginCheckFirmwareVersion();
@@ -138,17 +137,18 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         firmwareVersionChecker.checkVersion(new FirmwareVersionChecker.VersionCheckCallback() {
             @Override
             public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
+                LogUtil.d(TAG, "## 页面跳转：发现新的固件版本");
                 Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
                 intent.putExtra("firewware_bin_file", binFile.getPath());
                 intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
                 getView().getContext().startActivity(intent);
 
-                isCheckedVersion = true;
+                hasCheckedVersion = true;
             }
 
             @Override
             public void noNothing() {
-                isCheckedVersion = true;
+                hasCheckedVersion = true;
             }
 
             @Override
