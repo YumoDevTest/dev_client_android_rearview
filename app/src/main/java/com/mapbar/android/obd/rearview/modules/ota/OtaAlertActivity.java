@@ -121,7 +121,7 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
     }
 
     public void showView_alertUpgrade() {
-        otaAlertUpgradeView.setVisibility(View.VISIBLE);
+        otaAlertUpgradeView.show();
         otaAlertForceView.setVisibility(View.GONE);
         otaAlertSuccessView.setVisibility(View.GONE);
         otaAlertFailureView.setVisibility(View.GONE);
