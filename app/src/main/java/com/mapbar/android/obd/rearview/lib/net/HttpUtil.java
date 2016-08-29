@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.protobuf.AbstractMessageLite;
 import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.serial.utils.OutputStringUtil;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -51,7 +52,7 @@ public final class HttpUtil {
             Headers headers = new Headers.Builder().add("token", Application.getInstance().getToken()).build();
 
             StringBuilder sb = new StringBuilder();
-            sb.append("## HTTP准备发送请求,url=").append(url).append(", 参数: ");
+            sb.append("## [HTTP请求]准备发送,url=").append(url).append(", 参数: ");
             FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
             if (para != null) {
                 for (Map.Entry<String, String> item : para.entrySet()) {
@@ -61,7 +62,7 @@ public final class HttpUtil {
                     sb.append(item.getKey()).append(" = ").append(item.getValue()).append(", ");
                 }
             }
-            LogUtil.d(TAG, sb.toString());
+            LogUtil.d(TAG, OutputStringUtil.transferForPrint(sb.toString()));
             //构建请求
             final Request request = new Request.Builder()
                     .headers(headers)
@@ -75,7 +76,7 @@ public final class HttpUtil {
 
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    LogUtil.e(TAG, "## HTTP" + e.getMessage(), e);
+                    LogUtil.e(TAG, "## [HTTP请求]ERROR:" + e.getMessage(), e);
                     if (callback != null)
                         callback.onFailure(e, null);
                     if (progressIndicator != null)
@@ -84,7 +85,9 @@ public final class HttpUtil {
 
                 @Override
                 public void onResponse(final Response response) throws IOException {
-                    LogUtil.d(TAG, "## HTTP收到响应,cod=" + response.code() + ", content length=" + response.body().contentLength());
+                    long bodyLength = response.body().contentLength();
+                    String bodyString = response.body().string();
+                    LogUtil.d(TAG, "##  [HTTP请求]收到响应,code=" + response.code() + ", content length=" + bodyLength + ", content=" + bodyString);
                     if (!response.isSuccessful()) {
                         if (callback != null) {
                             String errStr = "HTTP异常，http code=" + response.code();
@@ -94,23 +97,22 @@ public final class HttpUtil {
                             progressIndicator.onFinish();
                         return;
                     }
-                    String res = response.body().string();
                     JSONObject json = null;
-                    HttpResponse res2 = null;
+                    HttpResponse httpResponse1 = null;
                     try {
-                        json = new JSONObject(res);
+                        json = new JSONObject(bodyString);
                         int code = json.getInt("code");
                         String msg = json.getString("msg");
                         String data = json.getString("data");
-                        res2 = new HttpResponse(code, msg, data);
+                        httpResponse1 = new HttpResponse(code, msg, data);
                         if (callback != null)
-                            callback.onSuccess(data, res2);
+                            callback.onSuccess(data, httpResponse1);
                         if (progressIndicator != null)
                             progressIndicator.onFinish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         if (callback != null)
-                            callback.onFailure(e, res2);
+                            callback.onFailure(e, httpResponse1);
                         if (progressIndicator != null)
                             progressIndicator.onFinish();
                     }

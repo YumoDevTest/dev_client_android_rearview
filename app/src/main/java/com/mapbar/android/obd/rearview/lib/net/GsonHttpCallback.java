@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.net;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
@@ -22,7 +23,7 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
     }
 
     public GsonHttpCallback(Type type) {
-        if (aClass == null)
+        if (type == null)
             throw new NullPointerException();
         this.type = type;
     }
@@ -35,12 +36,17 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
             }
             return;
         }
-        if (aClass != null) {
-            T t = gson.fromJson(data, aClass);
-            onSuccess(t, httpResponse);
-        } else if (type != null) {
-            T t = gson.fromJson(data, type);
-            onSuccess(t, httpResponse);
+        try {
+            if (aClass != null) {
+                T t = gson.fromJson(data, aClass);
+                onSuccess(t, httpResponse);
+            } else if (type != null) {
+                T t = gson.fromJson(data, type);
+                onSuccess(t, httpResponse);
+            }
+        } catch (JsonSyntaxException jsonSyntaxException) {
+            jsonSyntaxException.printStackTrace();
+            onFailure(jsonSyntaxException, httpResponse);
         }
     }
 

@@ -58,17 +58,17 @@ public class FileDownloader {
                     fos.write(buf, 0, len);
                     sum += len;
                     int progress = (int) (sum * 1.0f / total * 100);
-                    LogUtil.d("HTTP", "progress=" + progress);
+                    LogUtil.d("HTTP", "## progress=" + progress);
                     if (callback != null)
                         callback.onProgress(progress);
                 }
                 fos.flush();
-                LogUtil.d("HTTP", "文件下载成功");
+                LogUtil.d("HTTP", "## 文件下载成功");
                 if (callback != null)
                     callback.onFinish(targetFile);
             } catch (Exception e) {
                 e.printStackTrace();
-                LogUtil.d("HTTP", "文件下载失败");
+                LogUtil.e("HTTP", "## 文件下载失败", e);
                 if (callback != null)
                     callback.onError(e);
 
@@ -88,7 +88,7 @@ public class FileDownloader {
 
         @Override
         public void onFailure(Request arg0, IOException e) {
-            LogUtil.d("HTTP", "ERR:" + e.getMessage());
+            LogUtil.d("HTTP", "## ERR:" + e.getMessage());
             if (callback != null)
                 callback.onError(e);
         }

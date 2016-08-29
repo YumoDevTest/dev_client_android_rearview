@@ -19,6 +19,7 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     private PermissionManager permissionManager;
     private IVinChangeView vinChangeView;
     private FirmwareVersionChecker firmwareVersionChecker;
+    private boolean isCheckedVersion = false;//是否检查过版本
 
     public CarStatePresenter(ICarStateView view) {
         super(view);
@@ -45,6 +47,9 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
 
         firmwareVersionChecker = new FirmwareVersionChecker();
         EventBusManager.register(this);
+
+
+        beginCheckFirmwareVersion();
     }
 
     public void clear() {
@@ -112,35 +117,50 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     }
 
     public void notifyBeginCheckFirmwareVersion() {
-        beginCheckFirmwareVersion();
+        if (isCheckedVersion)
+            return;
+        LogUtil.d("OTA", "## 准备检查固件版本");
+//        beginCheckFirmwareVersion();
     }
 
     /**
      * 检查固件版本,是否需要更新固件
      */
     private void beginCheckFirmwareVersion() {
-        VinManager vinManager = new VinManager();
-        //如果 vin为空，则弹窗给用户促使用户录入vin。否则开始启动检测version
-        if (TextUtils.isEmpty(vinManager.getVin())) {
-            if (vinChangeView != null)
-                vinChangeView.showVinInputDialog();
-        } else {
-            //发送请求，检查版本，如果有新版本则默默下载，并通知 。如果已下载过，则通知
-            firmwareVersionChecker.checkVersion(new FirmwareVersionChecker.VersionCheckCallback() {
-                @Override
-                public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
-                    Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
-                    intent.putExtra("firewware_bin_finl", binFile.getPath());
-                    intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
-                    getView().getContext().startActivity(intent);
-                }
+//        try {
+//            VinManager vinManager = new VinManager();
+//            //如果 vin为空，则弹窗给用户促使用户录入vin。否则开始启动检测version
+//            if (TextUtils.isEmpty(vinManager.getVin())) {
+//                if (vinChangeView != null)
+//                    vinChangeView.showVinInputDialog();
+//            } else {
+        //发送请求，检查版本，如果有新版本则默默下载，并通知 。如果已下载过，则通知
+        firmwareVersionChecker.checkVersion(new FirmwareVersionChecker.VersionCheckCallback() {
+            @Override
+            public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
+                Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
+                intent.putExtra("firewware_bin_finl", binFile.getPath());
+                intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
+                getView().getContext().startActivity(intent);
 
-                @Override
-                public void noNothing() {
+                isCheckedVersion = true;
+            }
 
-                }
-            });
-        }
+            @Override
+            public void noNothing() {
+                isCheckedVersion = true;
+            }
+
+            @Override
+            public void onError(Exception e) {
+                getView().alert(e.getMessage());
+            }
+        });
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            getView().alert(ex.getMessage());
+//        }
     }
 
 }

@@ -8,8 +8,10 @@ import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 public class DefalutExceptionHandler {
 
     public static void handleException(Exception ex, HttpResponse httpResponse) {
-        if (httpResponse == null)
+        if (httpResponse == null) {
             EventBusManager.post(new HttpErrorEvent("网络异常", ex));
+            return;
+        }
         if (httpResponse.code == 1401) {
             EventBusManager.post(new HttpErrorEvent("TOKEN失效", ex));
         } else if (httpResponse.code == 1402) {

@@ -50,7 +50,7 @@ public class VinBarcodeView extends FrameLayout {
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 //        this.addView(contentView, lp);
 
-        showQrBarcode();
+//        showQrBarcode();
     }
 
     public void showQrBarcode() {

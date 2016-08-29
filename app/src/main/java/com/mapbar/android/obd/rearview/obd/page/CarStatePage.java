@@ -39,6 +39,7 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAda
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
@@ -148,12 +149,12 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         break;
 
                     case Manager.Event.dataUpdate:
-                        //TODO 当有固件升级时则自动弹出升级或取消的按钮
-                        //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
-                        if (isFirstDataUpdate) {
-                            isFirstDataUpdate = false;
-                            OTAManager.getInstance().checkVinVersion(getActivity());
-                        }
+//                        //TODO 当有固件升级时则自动弹出升级或取消的按钮
+//                        //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
+//                        if (isFirstDataUpdate) {
+//                            isFirstDataUpdate = false;
+//                            OTAManager.getInstance().checkVinVersion(getActivity());
+//                        }
                         presenter.notifyBeginCheckFirmwareVersion();
                         break;
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
@@ -172,13 +173,21 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      * 显示vin 二维码 的对话框
      */
     public void showVinInputDialog() {
-        if (getContentView() instanceof FrameLayout) {
-            FrameLayout frameLayout = (FrameLayout) getContentView();
-            if (vinBarcodeView == null)
-                vinBarcodeView = new VinBarcodeView(getActivity());
-            vinBarcodeView.showQrBarcode();
-            frameLayout.addView(vinBarcodeView);
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (vinBarcodeView != null && vinBarcodeView.getParent() != null)
+                    return;
+                if (getContentView() instanceof FrameLayout) {
+                    FrameLayout frameLayout = (FrameLayout) getContentView();
+                    if (vinBarcodeView == null) {
+                        vinBarcodeView = new VinBarcodeView(getActivity());
+                        frameLayout.addView(vinBarcodeView);
+                    }
+                    vinBarcodeView.showQrBarcode();
+                }
+            }
+        });
     }
 
     /**
@@ -186,12 +195,14 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      */
     public void showVinScanOK() {
         if (getContentView() instanceof FrameLayout) {
+            if (vinBarcodeView != null && vinBarcodeView.getParent() != null)
+                return;
             FrameLayout frameLayout = (FrameLayout) getContentView();
-            if (vinBarcodeView == null)
+            if (vinBarcodeView == null) {
                 vinBarcodeView = new VinBarcodeView(getActivity());
+                frameLayout.addView(vinBarcodeView);
+            }
             vinBarcodeView.setText(R.string.vin_alert_dialog_scan_success);
-            vinBarcodeView.showQrBarcode();
-            frameLayout.addView(vinBarcodeView);
         }
     }
 
