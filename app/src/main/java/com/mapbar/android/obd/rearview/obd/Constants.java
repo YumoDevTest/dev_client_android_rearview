@@ -13,7 +13,7 @@ public class Constants {
      */
     public final static boolean IS_OVERSEAS_EDITION = false;
 
-    public static final String SERIALPORT_PATH = "/dev/ttyS4";//"/dev/ttyMT2";
+    public static final String SERIALPORT_PATH = "/dev/ttyMT0";//"/dev/ttyMT2";
     /**
      * 后台服务行程时默认的的channel名称
      */
