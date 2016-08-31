@@ -37,6 +37,7 @@ public class OtaAlertFailureView extends FrameLayout {
 
         firmware_update_fail_confirm = findViewById(R.id.firmware_update_fail_confirm);
         tv_firmware_pop_fail_cancle = findViewById(R.id.tv_firmware_pop_fail_cancle);
+        tv_firmware_pop_fail_cancle.setVisibility(View.GONE);
     }
 
     public void setRetryButtonClick(OnClickListener onClickListener) {

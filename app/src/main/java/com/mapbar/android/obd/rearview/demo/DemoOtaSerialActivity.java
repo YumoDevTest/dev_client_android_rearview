@@ -14,6 +14,8 @@ import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
 import java.io.File;
 
 /**
+ * 演示刷固件
+ * 可自主刷固件： 步骤：1，拷贝固件文件到sd卡，2.修改本类的binFile路径，3.执行
  * Created by zhangyunfei on 16/8/12.
  */
 public class DemoOtaSerialActivity extends Activity {

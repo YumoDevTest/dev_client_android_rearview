@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -28,18 +27,15 @@ import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
-import com.mapbar.android.obd.rearview.lib.ota.FirmwareVersionChecker;
-import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
-import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
+//import com.mapbar.android.obd.rearview.obd.FirmwareDialogHandler;
 import com.mapbar.android.obd.rearview.modules.carstate.CarStatePresenter;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
@@ -62,8 +58,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private TextView tv_state_record;
     @ViewInject(R.id.iv_state_safe)
     private ImageView iv_state_safe;
-    @ViewInject(R.id.tv_state)
-    private TextView tv_state;
+    @ViewInject(R.id.tv_ota_alert_text)
+    private TextView tv_ota_alert_text;
 
     //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
     @ViewInject(R.id.viewgrounp_stage_record)
@@ -79,12 +75,12 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private PopupWindow popupWindow;
     private PopupWindow firmwarePopu;
     private StringBuilder sb = new StringBuilder();
-    private boolean isFirstDataUpdate = true;
     private TitleBarView titlebarview1;
-    private FirmwareDialogHandler firmwareDialogHandler;
-    private CarStatePresenter presenter;
+    //    private FirmwareDialogHandler firmwareDialogHandler;
+    private CarStatePresenter persenter;
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
     private VinBarcodeView vinBarcodeView;
+    private boolean hasCheckedVersion = false;
 
 
     @Override
@@ -106,8 +102,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
 
-        firmwareDialogHandler = new FirmwareDialogHandler();
-        presenter = new CarStatePresenter(this);
+//        firmwareDialogHandler = new FirmwareDialogHandler();
+        persenter = new CarStatePresenter(this);
     }
 
     @Override
@@ -149,18 +145,58 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         break;
 
                     case Manager.Event.dataUpdate:
+                        if (!hasCheckedVersion) {
+                            //检查是否有新的固件版本
+                            persenter.beginCheckFirmwareVersion();
+                            hasCheckedVersion = true;
+                        }
+                        break;
 
-                        break;
-                    case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
-                        tv_state.setText(getResources().getString(R.string.firmware_update_tip));
-                        break;
                 }
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
-        tv_state.setOnClickListener(this);
+        tv_ota_alert_text.setOnClickListener(this);
 
+    }
+
+
+    /**
+     * 提示有可升级的固件
+     */
+    public void showOtaAlert_can_upgrade() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_ota_alert_text.setText(R.string.firmware_can_upgrade);
+            }
+        });
+    }
+
+    /**
+     * 提示支持车辆控制
+     */
+    public void showOtaAlert_NoSupportControl() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_ota_alert_text.setText(R.string.firmware_no_support_control);
+            }
+        });
+    }
+
+    /**
+     * 提示不支持车辆控制
+     */
+    public void showOtaAlert_SupportControl() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                tv_ota_alert_text.setText(R.string.firmware_support_control);
+            }
+        });
     }
 
     /**
@@ -224,9 +260,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                     popupWindow.dismiss();
                 }
                 break;
-            case R.id.tv_state://提示有固件升级
-                if (tv_state != null && tv_state.getText().toString().trim().equals(getResources().getString(R.string.firmware_update_tip))) {
-                    showFirmwarePopu();
+            case R.id.tv_ota_alert_text://提示有固件升级
+                if (tv_ota_alert_text.getText().toString().equals(getString(R.string.firmware_can_upgrade))) {
+                    persenter.beginCheckFirmwareVersion();
                 } else if (Configs.TEST_SERIALPORT) {
                     MainActivity.getInstance().restartApp();
                 }
@@ -235,20 +271,12 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         }
     }
 
-    public void showFirmwarePopu() {
-        firmwareDialogHandler.showAtLocation(getContentView(), Gravity.CENTER, 0, 0, new FirmwareDialogHandler.FlashListener() {
-            @Override
-            public void onFlashSucc() {
-                tv_state.setText("当前车型支持车辆控制功能");
-            }
-        });
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (presenter != null)
-            presenter.checkPermission();
+        if (persenter != null)
+            persenter.checkPermission();
         //判断有无故障
         if (!TextUtils.isEmpty(getPopContent())) {
             tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
@@ -273,9 +301,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 
     @Override
     public void onDestroy() {
-        if (presenter != null) {
-            presenter.clear();
-            presenter = null;
+        if (persenter != null) {
+            persenter.clear();
+            persenter = null;
         }
         super.onDestroy();
     }

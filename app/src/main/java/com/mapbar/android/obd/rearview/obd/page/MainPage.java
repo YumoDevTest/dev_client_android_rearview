@@ -211,7 +211,7 @@ public class MainPage extends AppPage implements IMainPageView {
                 super.onEvent(event, o);
                 switch (event) {
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE:
-                        carStatePage.showFirmwarePopu();
+//                        carStatePage.showFirmwarePopu();
                         break;
 
                 }

@@ -1,19 +1,17 @@
 package com.mapbar.android.obd.rearview.lib.ota;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.mapbar.android.log.Log;
 import com.mapbar.android.obd.rearview.lib.base.MyEnviroment;
 import com.mapbar.android.obd.rearview.lib.net.FileDownloader;
 import com.mapbar.android.obd.rearview.lib.net.GsonHttpCallback;
 import com.mapbar.android.obd.rearview.lib.net.HttpParameter;
 import com.mapbar.android.obd.rearview.lib.net.HttpResponse;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
-import com.mapbar.android.obd.rearview.lib.vin.VinManager;
+import com.mapbar.android.obd.rearview.modules.vin.VinManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.obd.CarDetail;
@@ -21,8 +19,7 @@ import com.mapbar.obd.FileUtils;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
-
-import org.w3c.dom.Text;
+import com.mapbar.obd.serial.utils.OutputStringUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -41,24 +38,60 @@ public class FirmwareVersionChecker {
     private static final String SELECT_TAG = "9";
     private static final String VIN_CAR = "1";
     private static final String USER_CAR = "2";
-    private MyAsyncTask myAsyncTask;
+    private MyOTAVersionCheckByVin myAsyncTask;
+
+    /**
+     * 是否是专车固件
+     *
+     * @return
+     */
+    public boolean isV3SpecialOta() {
+        boolean isV3SpecialOta = Manager.getInstance().isV3SpecialOta();
+        return isV3SpecialOta;
+    }
 
     /**
      * 检查 版本
      */
     public void checkVersion(final VersionCheckCallback versionCheckCallback) {
+        boolean isV3SpecialOta = isV3SpecialOta();
+        VinManager vinManager = new VinManager();
+        String vin = vinManager.getVin();
+        if (isV3SpecialOta) {//如果是专车专用固件
+            //如果 vin为空 否则开始启动检测version
+            if (!TextUtils.isEmpty(vin)) {
+                LogUtil.d(TAG, "## 专车专用固件，有vin，开始检查固件版本");
+                checkVersionByVin(versionCheckCallback);
+            } else {
+                //do nothing
+                LogUtil.d(TAG, "## 专车专用固件，没有vin，停止检查固件版本");
+            }
+        } else {// 普通固件，直接检查，不管有没有vin
+            LogUtil.d(TAG, "## 普通固件，开始检查固件版本,vin=" + vin);
+            checkVersionByVin(versionCheckCallback);
+        }
+    }
+
+    /**
+     * 启动检查固件版本
+     *
+     * @param versionCheckCallback
+     */
+    private void checkVersionByVin(final VersionCheckCallback versionCheckCallback) {
         if (myAsyncTask != null)
             return;
-        myAsyncTask = new MyAsyncTask(versionCheckCallback);
+        myAsyncTask = new MyOTAVersionCheckByVin(versionCheckCallback);
         myAsyncTask.execute();
     }
 
-
-    private class MyAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    /**
+     * 检查固件版本。允许vin为空
+     */
+    private class MyOTAVersionCheckByVin extends AsyncTask<Void, Void, Boolean> {
         private Exception exception;
         private VersionCheckCallback versionCheckCallback;
 
-        public MyAsyncTask(VersionCheckCallback versionCheckCallback) {
+        public MyOTAVersionCheckByVin(VersionCheckCallback versionCheckCallback) {
             this.versionCheckCallback = versionCheckCallback;
         }
 
@@ -71,7 +104,7 @@ public class FirmwareVersionChecker {
                 if (result.userCars == null || result.userCars.length == 0)
                     throw new Exception("获得本地车辆信息失败");
 
-                String vin = new VinManager().getVin();
+                String vin = new VinManager().getVin();//vin 可能为空
                 UserCar car = result.userCars[0];
                 CarDetail cur = Manager.getInstance().getCarDetailByCarInfo(car);
                 String firstBrand = cur.firstBrand.trim();//firstCar
@@ -81,6 +114,8 @@ public class FirmwareVersionChecker {
                 String localVersion = getLocalVersion();//
 //                TODO  测试用，记得删除此行代码
 //                localVersion = "ELM327 v1.5\rMAPBAR627H v1.6.1020\rBMW.5.E60.0000.0001";
+
+                LogUtil.d(TAG, "## 本地固件版本是：" + OutputStringUtil.transferForPrint(localVersion));
                 if (TextUtils.isEmpty(localVersion))
                     throw new Exception("无法获得硬件固件版本");
                 if (!localVersion.contains("BLV") && !localVersion.contains("MAPBAR627")) {
@@ -150,6 +185,7 @@ public class FirmwareVersionChecker {
      *
      * @param binUrl
      */
+
     private void checkLocalOrDownloadBinFile(String binUrl, final CheckVersionBean versionBean, final VersionCheckCallback versionCheckCallback) {
         File targetFile = buildBinFilePath(binUrl);
         if (targetFile.exists()) {

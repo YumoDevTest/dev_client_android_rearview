@@ -9,11 +9,10 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.lib.ota.OTAManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.lib.push.PushMessageDispatcher;
-import com.mapbar.android.obd.rearview.lib.vin.VinPushDispatcher;
+import com.mapbar.android.obd.rearview.modules.vin.VinPushDispatcher;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
 import com.mapbar.mapdal.NativeEnv;
@@ -102,7 +101,8 @@ public class AixintuiPushManager implements AixintuiCallBack {
 //// FIXME: tianff 2016/7/29 AixintuiPushManager onAppearMsg 保持一致
                 if (NativeEnv.isApplicationRunning(context, context.getPackageName())) {
                     UserCenterManager.getInstance().setPushData(type, state, userId, token);
-                    OTAManager.getInstance().setPushData(type, state, userId, token);
+
+//                    OTAManager.getInstance().setPushData(type, state, userId, token);
                 }
 
             } catch (JSONException e) {

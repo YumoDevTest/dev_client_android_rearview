@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.carstate.contract;
 
+import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 
@@ -10,8 +11,24 @@ public interface ICarStateView extends IMvpView, IPermissionAlertViewAble {
 
     /**
      * 是否显示 车辆状态错误码 的提示语
+     *
      * @param isVisiable
      */
     void setCarStateRecordVisiable(boolean isVisiable);
 
+
+    /**
+     * 提示有可升级的固件
+     */
+    public void showOtaAlert_can_upgrade();
+
+    /**
+     * 提示支持车辆控制
+     */
+    public void showOtaAlert_NoSupportControl();
+
+    /**
+     * 提示不支持车辆控制
+     */
+    public void showOtaAlert_SupportControl();
 }
