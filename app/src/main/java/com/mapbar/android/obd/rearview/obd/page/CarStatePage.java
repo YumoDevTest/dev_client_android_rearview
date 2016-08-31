@@ -225,8 +225,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      */
     public void showVinScanOK() {
         if (getContentView() instanceof FrameLayout) {
-            if (vinBarcodeView != null && vinBarcodeView.getParent() != null)
-                return;
             FrameLayout frameLayout = (FrameLayout) getContentView();
             if (vinBarcodeView == null) {
                 vinBarcodeView = new VinBarcodeView(getActivity());

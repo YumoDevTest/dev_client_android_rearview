@@ -7,7 +7,7 @@ import com.mapbar.android.obd.rearview.BuildConfig;
  * Created by zhangyunfei on 16/8/9.
  */
 public class Urls {
-    public static final boolean IS_USE_TEST_HOST = true;
+    public static final boolean IS_USE_TEST_HOST = BuildConfig.IS_USE_TEST_HOST;
 
     //权限接口对应的服务端的 URL 的基础地址
     public static final String PERMISSION_BASE_URL = BuildConfig.BASE_PERMISSION_URL;

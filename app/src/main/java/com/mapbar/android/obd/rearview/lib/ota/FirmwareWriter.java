@@ -37,33 +37,4 @@ public class FirmwareWriter {
     }
 
 
-//    FirmwareUpdateCallback mFirmwareUpdateCallback = new FirmwareUpdateCallback() {
-//        @Override
-//        public void onStart(File filePath) {
-//            android.util.Log.i("TAG", "### ============ start!   " + filePath);
-//            if (null != mUpgradeCallback)
-//                mUpgradeCallback.onFlashProgress(1, 100);
-//        }
-//
-//        @Override
-//        public void onProgress(int progress) {
-//            android.util.Log.i("TAG", "### ============ " + progress);
-//            if (null != mUpgradeCallback)
-//                mUpgradeCallback.onFlashProgress(progress, 100);
-//        }
-//
-//        @Override
-//        public void onError(Exception exception) {
-//            android.util.Log.e("TAG", "### ============ERROR: " + exception.getMessage());
-//            if (mUpgradeCallback != null)
-//                mUpgradeCallback.onFlashResult(Firmware.UpgradeCallback.STATUSCODE_FLASH_FAILED, file);
-//        }
-//
-//        @Override
-//        public void onComplete() {
-//            android.util.Log.i("TAG", "### ============ complete");
-//            if (null != mUpgradeCallback)
-//                mUpgradeCallback.onFlashResult(Firmware.UpgradeCallback.STATUSCODE_FLASH_OK, file);
-//        }
-//    };
 }

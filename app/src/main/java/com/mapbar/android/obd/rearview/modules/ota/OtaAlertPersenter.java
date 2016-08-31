@@ -51,22 +51,26 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
 
             @Override
             public void onStart(File filePath) {
+                android.util.Log.i("TAG", "### ============ start!   " + filePath);
                 getView().showView_alertProgress(0);
             }
 
             @Override
             public void onProgress(int progress) {
+                android.util.Log.i("TAG", "### ============ " + progress);
                 getView().showView_alertProgress(progress);
             }
 
             @Override
             public void onError(Exception exception) {
+                android.util.Log.e("TAG", "### ============ERROR: " + exception.getMessage());
 //                getView().alert(exception.getMessage());
                 getView().showView_alertFailure();
             }
 
             @Override
             public void onComplete() {
+                android.util.Log.i("TAG", "### ============ complete");
                 getView().showView_alertSuccess();
             }
         });

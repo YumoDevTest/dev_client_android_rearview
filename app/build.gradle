@@ -42,6 +42,7 @@ android {
             buildConfigField("String", "BASE_PERMISSION_URL", "\"http://119.255.37.167\"")
             buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
             buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
+            buildConfigField("Boolean", "IS_USE_TEST_HOST", "false")//是否 使用内网测试服务器
         }
         if (project.IS_JENKINS) {
             beta {
@@ -54,6 +55,7 @@ android {
                 buildConfigField("String", "BASE_PERMISSION_URL", "\"${BASE_PERMISSION_URL}\"")
                 buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
                 buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "${getPara_IS_ENABLE_TEST_CAR_DEMO}")
+                buildConfigField("Boolean", "IS_USE_TEST_HOST", "${IS_USE_TEST_HOST}")//是否 使用内网测试服务器
                 signingConfig signingConfigs.debug
             }
         }
@@ -73,6 +75,7 @@ android {
             buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "false")
             //是否开启 模拟测试车辆控制的页面
             buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
+            buildConfigField("Boolean", "IS_USE_TEST_HOST", "false")//是否 使用内网测试服务器
             signingConfig signingConfigs.debug
         }
 

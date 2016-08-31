@@ -57,7 +57,7 @@ public class VinManager {
         String vinFromCar = getVinFromCar();
         if (!TextUtils.isEmpty(vinFromCar))
             return vinFromCar;
-        return null;//getVinFromManual();
+        return getVinFromManual();
     }
 
 }
