@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.mapbar.android.log.Log;
+import com.mapbar.android.obd.rearview.lib.base.MyEnviroment;
 import com.mapbar.android.obd.rearview.lib.net.FileDownloader;
 import com.mapbar.android.obd.rearview.lib.net.GsonHttpCallback;
 import com.mapbar.android.obd.rearview.lib.net.HttpParameter;
@@ -186,7 +187,7 @@ public class FirmwareVersionChecker {
             // 解压至ota目录下
             String zipFileName = binZipFile1.getName();
             zipFileName = zipFileName.substring(0, zipFileName.lastIndexOf("."));
-            File binUnzipDir = new File(getOTAFilesDir(), zipFileName);
+            File binUnzipDir = new File(MyEnviroment.getOTAFilesDir(), zipFileName);
             if (!binUnzipDir.exists()) {
                 binUnzipDir.mkdirs();
             } else {//如果已经存在，则尝试查找
@@ -199,7 +200,7 @@ public class FirmwareVersionChecker {
                 }
             }
             try {
-                FileUtils.upZipFile(binZipFile1, getOTAFilesDir().getPath(), true);// 解压成功
+                FileUtils.upZipFile(binZipFile1, MyEnviroment.getOTAFilesDir().getPath(), true);// 解压成功
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new Exception("解压缩失败,下载到的文件无法被解压");
@@ -231,7 +232,7 @@ public class FirmwareVersionChecker {
     }
 
     private File buildBinFilePath(@NonNull String binUrl) {
-        File dir = getOTAFilesDir();
+        File dir = MyEnviroment.getOTAFilesDir();
         String tmp = binUrl;
         if (tmp.endsWith("/"))
             tmp = tmp.substring(0, binUrl.length() - 1);
@@ -243,16 +244,6 @@ public class FirmwareVersionChecker {
         return new File(dir, tmp);
     }
 
-    @NonNull
-    private static File getOTAFilesDir() {
-        File dir = new File(Environment.getExternalStorageDirectory(), "mapbar/binfile");//Environment.getExternalStorageDirectory().getAbsolutePath();
-        if (!dir.exists()) {
-            boolean isOk = dir.mkdirs();
-            if (!isOk)
-                LogUtil.e(TAG, "## 创建bin缓存文件夹异常");
-        }
-        return dir;
-    }
 
     public static String getLocalVersion() {
         String version = Manager.getInstance().getOBDVersion();

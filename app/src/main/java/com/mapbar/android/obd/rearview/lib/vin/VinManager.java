@@ -2,6 +2,8 @@ package com.mapbar.android.obd.rearview.lib.vin;
 
 import android.text.TextUtils;
 
+import com.mapbar.android.log.Log;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.OtaSpecial;
 
@@ -11,6 +13,8 @@ import com.mapbar.obd.OtaSpecial;
  */
 public class VinManager {
 
+    private static final String TAG = "VinManager";
+
     /**
      * 从车辆串口读取VIN
      *
@@ -18,9 +22,14 @@ public class VinManager {
      */
     public String getVinFromCar() {
         OtaSpecial ota = Manager.getInstance().getOtaSpecial();
-        if (ota == null)
-            return null;
-        return ota.vin;
+        String vin = null;
+        if (ota == null) {
+            vin = null;
+        } else {
+            vin = ota.vin;
+        }
+        LogUtil.d(TAG, String.format("## 从车辆读取 VIN = %s", vin));
+        return vin;
     }
 
     /**
@@ -30,6 +39,7 @@ public class VinManager {
      */
     public String getVinFromManual() {
         String manualVin = Manager.getInstance().getGetObdVinManual();
+        LogUtil.d(TAG, String.format("## 获得用户自己填写的VIN = %s", manualVin));
         return manualVin;
     }
 
