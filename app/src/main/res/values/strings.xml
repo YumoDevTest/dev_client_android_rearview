@@ -286,5 +286,5 @@
     <string name="firmware_force_update_tip">由于现有硬件版本可能会导致使用不正常,请升级固件操作:点升级进入升级流程;不操作5s自动执行升级。 </string>
     <string name="tv_firmware_pop_content_tip">有新的固件可升级,升级后,可实现远程查看车辆状态远程控制等功能,不操作10s后取消升级提示。 </string>
     <!--声明页-->
-    <string name="tv_declare_content">\t\t在汽车驾驶过程中操作后视镜软件系统，可能会导致严重的交通事故。为了避免事故发生，请在停车后进行操作。由于具体车型的车载电脑协议和车辆状况的变化，检测结果仅供参考，如有疑问请咨询专业检测机构。</string>
+    <string name="tv_declare_content">\t\t\t在汽车驾驶过程中操作后视镜软件系统，可能会导致严重的交通事故。为了避免事故发生，请在停车后进行操作。由于具体车型的车载电脑协议和车辆状况的变化，检测结果仅供参考，如有疑问请咨询专业检测机构。</string>
 </resources>

@@ -30,14 +30,14 @@
 
     <Button
         android:id="@+id/btn_declare_known"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/tv_declare_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:background="#32a357"
+        android:background="@drawable/update_confirm"
         android:text="知道了"
-        android:textSize="28sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tv_declare_test"
