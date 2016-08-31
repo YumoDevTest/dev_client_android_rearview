@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
+import com.mapbar.android.obd.rearview.views.CountDownTextViewWrapper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +24,9 @@ public class OtaAlertUpgradeView extends FrameLayout {
     public static final String CANCEL_TEXT = "取消";
     private View tv_firmware_pop_update;
     private TextView tv_firmware_pop_cancle;
-    private Handler handler;
+    private CountDownTextViewWrapper countDownTextViewWrapper;
+    private View.OnClickListener onUpgradeClickListener1;
+    private View.OnClickListener onCancelClickListener1;
 
     public OtaAlertUpgradeView(Context context) {
         super(context);
@@ -45,26 +48,42 @@ public class OtaAlertUpgradeView extends FrameLayout {
         layoutInflater.inflate(R.layout.ota_alert_upgrade, this);
 
         tv_firmware_pop_update = findViewById(R.id.tv_firmware_pop_update);
+        tv_firmware_pop_update.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countDownTextViewWrapper.stopCountDown();
+                if (onUpgradeClickListener1 != null)
+                    onUpgradeClickListener1.onClick(view);
+            }
+        });
         tv_firmware_pop_update.setClickable(true);
         tv_firmware_pop_cancle = (TextView) findViewById(R.id.tv_firmware_pop_cancle);
+        tv_firmware_pop_cancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countDownTextViewWrapper.stopCountDown();
+                if (onCancelClickListener1 != null)
+                    onCancelClickListener1.onClick(view);
+            }
+        });
         tv_firmware_pop_cancle.setClickable(true);
 
-        handler = new MyHandler(this);
+        countDownTextViewWrapper = new CountDownTextViewWrapper(tv_firmware_pop_cancle, 10);
     }
 
     public void setUpgradeButtonClick(View.OnClickListener onClickListener) {
-        tv_firmware_pop_update.setOnClickListener(onClickListener);
+        this.onUpgradeClickListener1 = onClickListener;
     }
 
+
     public void setCancelButtonClick(View.OnClickListener onClickListener) {
-        tv_firmware_pop_cancle.setOnClickListener(onClickListener);
+        this.onCancelClickListener1 = onClickListener;
     }
 
     public void show() {
         this.setVisibility(View.VISIBLE);
-        handler.obtainMessage(MyHandler.BEGIN).sendToTarget();
+        countDownTextViewWrapper.startCountDown();
     }
-
 
 
 }

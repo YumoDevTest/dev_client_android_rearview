@@ -1,9 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.mvp;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.mapbar.obd.TPMSAlarmData;
 
 /**
  * 基础 MVP 视图。一般情况下，MVP模式下的视图需要继承自这个类

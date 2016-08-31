@@ -52,7 +52,7 @@ public final class HttpUtil {
             Headers headers = new Headers.Builder().add("token", Application.getInstance().getToken()).build();
 
             StringBuilder sb = new StringBuilder();
-            sb.append("## [HTTP请求]准备发送,url=").append(url).append(", 参数: ");
+            sb.append("## [HTTP] 准备发送,url=").append(url).append(", 参数: ");
             FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
             if (para != null) {
                 for (Map.Entry<String, String> item : para.entrySet()) {
@@ -76,22 +76,23 @@ public final class HttpUtil {
 
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    LogUtil.e(TAG, "## [HTTP请求]ERROR:" + e.getMessage(), e);
+                    LogUtil.e(TAG, "## [HTTP]Failure:" + e.getMessage(), e);
                     if (callback != null)
-                        callback.onFailure(e, null);
+                        callback.onFailure(0, e, null);
                     if (progressIndicator != null)
                         progressIndicator.onFinish();
                 }
 
                 @Override
                 public void onResponse(final Response response) throws IOException {
-                    long bodyLength = response.body().contentLength();
-                    String bodyString = response.body().string();
-                    LogUtil.d(TAG, "##  [HTTP请求]收到响应,code=" + response.code() + ", content length=" + bodyLength + ", content=" + bodyString);
+                    final long bodyLength = response.body().contentLength();
+                    final String bodyString = response.body().string();
+                    final int httpCode = response.code();
+                    LogUtil.d(TAG, "## [HTTP] 收到响应,HTTP Code=" + httpCode + ", content length=" + bodyLength + ", content=" + bodyString);
                     if (!response.isSuccessful()) {
                         if (callback != null) {
                             String errStr = "HTTP异常，http code=" + response.code();
-                            callback.onFailure(new Exception(errStr), null);
+                            callback.onFailure(httpCode, new Exception(errStr), null);
                         }
                         if (progressIndicator != null)
                             progressIndicator.onFinish();
@@ -103,16 +104,17 @@ public final class HttpUtil {
                         json = new JSONObject(bodyString);
                         int code = json.getInt("code");
                         String msg = json.getString("msg");
-                        String data = json.getString("data");
+                        String data = json.isNull("data") ? null : json.getString("data");
                         httpResponse1 = new HttpResponse(code, msg, data);
                         if (callback != null)
-                            callback.onSuccess(data, httpResponse1);
+                            callback.onSuccess(httpCode, data, httpResponse1);
                         if (progressIndicator != null)
                             progressIndicator.onFinish();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        LogUtil.e(TAG, "## [HTTP]解析ERROR:" + e.getMessage(), e);
                         if (callback != null)
-                            callback.onFailure(e, httpResponse1);
+                            callback.onFailure(httpCode, e, httpResponse1);
                         if (progressIndicator != null)
                             progressIndicator.onFinish();
                     }

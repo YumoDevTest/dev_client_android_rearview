@@ -5,13 +5,14 @@ import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 /**
  * Created by zhangyunfei on 16/8/27.
  */
-public class DefalutExceptionHandler {
+public class DefalutHttpExceptionHandler {
 
-    public static void handleException(Exception ex, HttpResponse httpResponse) {
+    public static void handleException(int httpCode, Exception ex, HttpResponse httpResponse) {
         if (httpResponse == null) {
             EventBusManager.post(new HttpErrorEvent("网络异常", ex));
             return;
         }
+        //业务响应的异常 httpResponse
         if (httpResponse.code == 1401) {
             EventBusManager.post(new HttpErrorEvent("TOKEN失效", ex));
         } else if (httpResponse.code == 1402) {
@@ -22,6 +23,8 @@ public class DefalutExceptionHandler {
             EventBusManager.post(new HttpErrorEvent("没有版本更新", ex));
         } else if (httpResponse.code == 504) {
             EventBusManager.post(new HttpErrorEvent("查询错误", ex));
+        } else {
+            EventBusManager.post(new HttpErrorEvent(httpResponse.msg, ex));
         }
     }
 

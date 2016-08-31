@@ -47,7 +47,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         firmwareVersionChecker = new FirmwareVersionChecker();
         EventBusManager.register(this);
 
-
+        //检查是否有新的固件版本
         beginCheckFirmwareVersion();
     }
 
@@ -115,17 +115,13 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         if (vinChangeView != null) vinChangeView.showVinScanOK();
     }
 
-    public void notifyBeginCheckFirmwareVersion() {
-        if (hasCheckedVersion)
-            return;
-        LogUtil.d("OTA", "## 准备检查固件版本");
-//        beginCheckFirmwareVersion();
-    }
 
     /**
      * 检查固件版本,是否需要更新固件
      */
-    private void beginCheckFirmwareVersion() {
+    public void beginCheckFirmwareVersion() {
+        LogUtil.d("OTA", "## 准备检查固件版本");
+
 //        try {
 //            VinManager vinManager = new VinManager();
 //            //如果 vin为空，则弹窗给用户促使用户录入vin。否则开始启动检测version

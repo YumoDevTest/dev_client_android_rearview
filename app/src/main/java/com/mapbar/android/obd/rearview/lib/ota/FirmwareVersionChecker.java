@@ -24,6 +24,8 @@ import com.mapbar.obd.UserCar;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -76,8 +78,8 @@ public class FirmwareVersionChecker {
                 String generation = cur.generation.trim();//thirdCar
 
                 String localVersion = getLocalVersion();//
-                //TODO  测试用，记得删除此行代码
-                localVersion = "ELM327 v1.5\rMAPBAR627H v1.6.1020\rBMW.5.E60.0000.0001";
+//                TODO  测试用，记得删除此行代码
+//                localVersion = "ELM327 v1.5\rMAPBAR627H v1.6.1020\rBMW.5.E60.0000.0001";
                 if (TextUtils.isEmpty(localVersion))
                     throw new Exception("无法获得硬件固件版本");
                 if (!localVersion.contains("BLV") && !localVersion.contains("MAPBAR627")) {
@@ -114,7 +116,7 @@ public class FirmwareVersionChecker {
                     @Override
                     protected boolean onFailure(int code, HttpResponse httpResponse) {
                         if (code == 206) {//没有版本更新
-                            LogUtil.d(TAG, "没有版本更新");
+                            LogUtil.d(TAG, "## 没有可更新的版本");
                             if (versionCheckCallback != null)
                                 versionCheckCallback.noNothing();
                         }
@@ -151,8 +153,7 @@ public class FirmwareVersionChecker {
         File targetFile = buildBinFilePath(binUrl);
         if (targetFile.exists()) {
             LogUtil.d(TAG, "## 检查文件缓存存在，无需再次下载,文件路径=" + targetFile.getPath());
-            if (versionCheckCallback != null)
-                versionCheckCallback.onFoundNewVersion(targetFile, versionBean);
+            raiseOnFoundNewVersion(targetFile, versionBean, versionCheckCallback);
             return;
         }
         FileDownloader.download(binUrl, targetFile, new FileDownloader.FileDownloadCallback() {
@@ -174,10 +175,57 @@ public class FirmwareVersionChecker {
             @Override
             public void onFinish(File file1) {
                 LogUtil.d(TAG, "## bin文件下载成功,len=" + file1.length() + ", 存放路径=" + file1.getPath());
-                // 解压至ota目录下
-//                FileUtils.upZipFile(file, getOTAPath(), true);// 解压成功
-                if (versionCheckCallback != null)
-                    versionCheckCallback.onFoundNewVersion(file1, versionBean);
+
+                raiseOnFoundNewVersion(file1, versionBean, versionCheckCallback);
+            }
+        });
+    }
+
+    private static void raiseOnFoundNewVersion(File binZipFile1, final CheckVersionBean versionBean, final VersionCheckCallback versionCheckCallback) {
+        try {
+            // 解压至ota目录下
+            String zipFileName = binZipFile1.getName();
+            zipFileName = zipFileName.substring(0, zipFileName.lastIndexOf("."));
+            File binUnzipDir = new File(getOTAFilesDir(), zipFileName);
+            if (!binUnzipDir.exists()) {
+                binUnzipDir.mkdirs();
+            } else {//如果已经存在，则尝试查找
+                File[] foundFiles = findBinFile(binUnzipDir);
+                if (foundFiles.length != 0) {
+                    LogUtil.d(TAG, "## 以前解压过bin文件，直接使用");
+                    if (versionCheckCallback != null)
+                        versionCheckCallback.onFoundNewVersion(foundFiles[0], versionBean);
+                    return;
+                }
+            }
+            try {
+                FileUtils.upZipFile(binZipFile1, getOTAFilesDir().getPath(), true);// 解压成功
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new Exception("解压缩失败,下载到的文件无法被解压");
+            }
+            LogUtil.d(TAG, "## bin文件解压成功");
+            File[] foundFiles = findBinFile(binUnzipDir);
+
+            if (foundFiles.length == 0)
+                throw new Exception("下载到的zip中不包含bin文件");
+            if (versionCheckCallback != null)
+                versionCheckCallback.onFoundNewVersion(foundFiles[0], versionBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (versionCheckCallback != null)
+                versionCheckCallback.onError(e);
+        }
+    }
+
+    private static File[] findBinFile(File binDir) {
+        //找到解压后的 bin文件
+        return binDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith(".bin"))
+                    return true;
+                return false;
             }
         });
     }

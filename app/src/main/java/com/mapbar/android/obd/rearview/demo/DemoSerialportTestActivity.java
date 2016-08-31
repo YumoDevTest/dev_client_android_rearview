@@ -98,14 +98,14 @@ public class DemoSerialportTestActivity extends Activity {
     }
 
 
-    static final String CMD_1 = "03\r";
-    static final String CMD_2 = "0100\r";
-    static final String CMD_3 = "010c\r";
-    static final String CMD_4 = "010d\r";
+    static final String CMD_03 = "03\r";
+    static final String CMD_0100 = "0100\r";
+    static final String CMD_010C = "010c\r";
+    static final String CMD_010D = "010d\r";
 
 
     private void testReadAndReceive1() {
-        testReadAndReceiveArg(CMD_1);
+        testReadAndReceiveArg(CMD_03);
     }
 
     private void testReadAndReceiveArg(final String cmd) {
@@ -131,7 +131,7 @@ public class DemoSerialportTestActivity extends Activity {
 
 
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
-    final String[] cmds = new String[]{CMD_1, CMD_2, CMD_3, CMD_4};
+    final String[] cmds = new String[]{CMD_03, CMD_0100, CMD_010C, CMD_010D};
     final Random random = new Random();
 
     private void testReadAndReceiveMore() {
@@ -154,27 +154,27 @@ public class DemoSerialportTestActivity extends Activity {
                     String res1 = mSerialPortManager.sendAndReceive(cmd, (byte) 0);
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append(String.format("发送: %s", cmd));
+                    sb.append(String.format("发送: %s, ", cmd));
                     if (TextUtils.isEmpty(res1))
                         sb.append(" => ERROR: 收到空!!!!!!!!!!");
                     else
-                        sb.append(String.format(" => 收到: %s", res1));
+                        sb.append(String.format(" => 收到: %s,", res1));
 
                     String err = " OK ";
-                    if (cmd.equals(CMD_1)) {
-                        if (res1.length() != 40) {
+                    if (cmd.equals(CMD_03)) {
+                        if (res1.length() < 4) {
                             err = "指令错误!!!!" + cmd;
                         }
-                    } else if (cmd.equals(CMD_2)) {
-                        if (res1.length() != 16) {
+                    } else if (cmd.equals(CMD_0100)) {
+                        if (res1.length() < 5) {
                             err = "指令错误!!!!" + cmd;
                         }
-                    } else if (cmd.equals(CMD_3)) {
-                        if (res1.length() != 12) {
+                    } else if (cmd.equals(CMD_010C)) {
+                        if (res1.length() < 5) {
                             err = "指令错误!!!!" + cmd;
                         }
-                    } else if (cmd.equals(CMD_4)) {
-                        if (res1.length() != 10) {
+                    } else if (cmd.equals(CMD_010D)) {
+                        if (res1.length() < 5) {
                             err = "指令错误!!!!" + cmd;
                         }
                     } else {
@@ -182,7 +182,7 @@ public class DemoSerialportTestActivity extends Activity {
                     }
 
                     String str = OutputStringUtil.transferForPrint(sb.toString());
-                    str += " 结果" + err;
+                    str += ", 结果 = " + err;
                     print(str);
 
                     print(str);

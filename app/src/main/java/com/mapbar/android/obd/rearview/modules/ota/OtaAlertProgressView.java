@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 
@@ -15,6 +16,7 @@ import com.mapbar.android.obd.rearview.R;
  */
 public class OtaAlertProgressView extends FrameLayout {
     private ProgressBar progressbar;
+    private TextView tv_download_progress;
 
     public OtaAlertProgressView(Context context) {
         super(context);
@@ -36,10 +38,12 @@ public class OtaAlertProgressView extends FrameLayout {
         layoutInflater.inflate(R.layout.ota_alert_progress, this);
 
         progressbar = (ProgressBar) findViewById(R.id.progressbar);
+        tv_download_progress = (TextView) findViewById(R.id.tv_download_progress);
     }
 
     public void setProgress(int progress) {
         progressbar.setProgress(progress);
+        tv_download_progress.setText(String.format("%s%%", progress));
     }
 
 }

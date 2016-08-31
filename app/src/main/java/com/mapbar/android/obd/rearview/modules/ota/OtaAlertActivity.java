@@ -103,6 +103,8 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
         addChildView(otaAlertFailureView);
 
         otaAlertPersenter = new OtaAlertPersenter(this, bundle);
+
+
     }
 
     private void addChildView(View view) {
@@ -113,45 +115,74 @@ public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
 
     @Override
     public void showView_alert_ForceUpgrade() {
-        otaAlertUpgradeView.setVisibility(View.GONE);
-        otaAlertForceView.setVisibility(View.VISIBLE);
-        otaAlertSuccessView.setVisibility(View.GONE);
-        otaAlertFailureView.setVisibility(View.GONE);
-        otaAlertProgressView.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaAlertUpgradeView.setVisibility(View.GONE);
+                otaAlertForceView.setVisibility(View.VISIBLE);
+                otaAlertForceView.show();
+                otaAlertSuccessView.setVisibility(View.GONE);
+                otaAlertFailureView.setVisibility(View.GONE);
+                otaAlertProgressView.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void showView_alertUpgrade() {
-        otaAlertUpgradeView.show();
-        otaAlertForceView.setVisibility(View.GONE);
-        otaAlertSuccessView.setVisibility(View.GONE);
-        otaAlertFailureView.setVisibility(View.GONE);
-        otaAlertProgressView.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaAlertUpgradeView.show();
+                otaAlertForceView.setVisibility(View.GONE);
+                otaAlertSuccessView.setVisibility(View.GONE);
+                otaAlertFailureView.setVisibility(View.GONE);
+                otaAlertProgressView.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void showView_alertSuccess() {
-        otaAlertUpgradeView.setVisibility(View.GONE);
-        otaAlertForceView.setVisibility(View.GONE);
-        otaAlertSuccessView.setVisibility(View.VISIBLE);
-        otaAlertFailureView.setVisibility(View.GONE);
-        otaAlertProgressView.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaAlertUpgradeView.setVisibility(View.GONE);
+                otaAlertForceView.setVisibility(View.GONE);
+                otaAlertSuccessView.setVisibility(View.VISIBLE);
+                otaAlertFailureView.setVisibility(View.GONE);
+                otaAlertProgressView.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void showView_alertFailure() {
-        otaAlertUpgradeView.setVisibility(View.GONE);
-        otaAlertForceView.setVisibility(View.GONE);
-        otaAlertSuccessView.setVisibility(View.GONE);
-        otaAlertFailureView.setVisibility(View.VISIBLE);
-        otaAlertProgressView.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaAlertUpgradeView.setVisibility(View.GONE);
+                otaAlertForceView.setVisibility(View.GONE);
+                otaAlertSuccessView.setVisibility(View.GONE);
+                otaAlertFailureView.setVisibility(View.VISIBLE);
+                otaAlertProgressView.setVisibility(View.GONE);
+            }
+        });
     }
 
-    public void showView_alertProgress(int progress) {
-        otaAlertUpgradeView.setVisibility(View.GONE);
-        otaAlertForceView.setVisibility(View.GONE);
-        otaAlertSuccessView.setVisibility(View.GONE);
-        otaAlertFailureView.setVisibility(View.GONE);
-        otaAlertProgressView.setVisibility(View.VISIBLE);
-        otaAlertProgressView.setProgress(progress);
+    public void showView_alertProgress(final int progress) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaAlertUpgradeView.setVisibility(View.GONE);
+                otaAlertForceView.setVisibility(View.GONE);
+                otaAlertSuccessView.setVisibility(View.GONE);
+                otaAlertFailureView.setVisibility(View.GONE);
+                otaAlertProgressView.setVisibility(View.VISIBLE);
+                otaAlertProgressView.setProgress(progress);
+            }
+        });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }

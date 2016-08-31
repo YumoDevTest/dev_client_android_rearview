@@ -2,7 +2,6 @@ package com.mapbar.android.obd.rearview.lib.net;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.lang.reflect.Type;
@@ -29,10 +28,10 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
     }
 
     @Override
-    public void onSuccess(String data, HttpResponse httpResponse) {
+    public void onSuccess(int httpCode, String data, HttpResponse httpResponse) {
         if (httpResponse.code != 200) {
             if (!onFailure(httpResponse.code, httpResponse)) {
-                onFailure(new Exception("HTTP异常，服务器响应" + httpResponse.code), httpResponse);
+                onFailure(httpCode, new Exception("HTTP异常，服务器响应" + httpResponse.code), httpResponse);
             }
             return;
         }
@@ -45,8 +44,9 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
                 onSuccess(t, httpResponse);
             }
         } catch (JsonSyntaxException jsonSyntaxException) {
+            LogUtil.e("GsonHttpCallback", String.format("## GSON序列化异常,json=%s, exception=%s", data, jsonSyntaxException));
             jsonSyntaxException.printStackTrace();
-            onFailure(jsonSyntaxException, httpResponse);
+            onFailure(httpCode, jsonSyntaxException, httpResponse);
         }
     }
 
@@ -65,9 +65,9 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
     }
 
     @Override
-    public void onFailure(Exception e, HttpResponse httpResponse) {
+    public void onFailure(int httpCode, Exception e, HttpResponse httpResponse) {
         LogUtil.e("HTTP", e.getMessage(), e);
-        DefalutExceptionHandler.handleException(e, httpResponse);
+        DefalutHttpExceptionHandler.handleException(httpCode, e, httpResponse);
     }
 
 

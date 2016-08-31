@@ -149,13 +149,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         break;
 
                     case Manager.Event.dataUpdate:
-//                        //TODO 当有固件升级时则自动弹出升级或取消的按钮
-//                        //当没有vin则在车辆状态页弹出vin二维码并且能够左右滑动
-//                        if (isFirstDataUpdate) {
-//                            isFirstDataUpdate = false;
-//                            OTAManager.getInstance().checkVinVersion(getActivity());
-//                        }
-                        presenter.notifyBeginCheckFirmwareVersion();
+
                         break;
                     case OBDManager.EVENT_OBD_OTA_HAS_NEWFIRMEWARE://TODO 弹窗 到处都可以弹
                         tv_state.setText(getResources().getString(R.string.firmware_update_tip));

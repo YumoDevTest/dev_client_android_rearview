@@ -5,7 +5,7 @@ package com.mapbar.android.obd.rearview.lib.net;
  */
 public interface HttpCallback {
 
-    void onFailure(Exception e, HttpResponse httpResponse);
+    void onFailure(int httpCode, Exception e, HttpResponse httpResponse);
 
-    void onSuccess(String data, HttpResponse httpResponse);
+    void onSuccess(int httpCode, String data, HttpResponse httpResponse);
 }

@@ -77,10 +77,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".demo.DemoOtaSerialActivity">
 
-        <!--<activity android:name=".demo.DemoSerialportTestActivity">-->
-        <!--</activity>-->
-        <activity android:name=".demo.DemoOtaSerialActivity" />
+        </activity>
+        <activity android:name=".demo.DemoSerialportTestActivity">
+
+        </activity>
+
         <activity android:name=".modules.common.Demo1Activity" />
 
         <activity
