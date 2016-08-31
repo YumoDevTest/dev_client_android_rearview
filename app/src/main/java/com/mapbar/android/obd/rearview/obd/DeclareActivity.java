@@ -5,19 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
+import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.obd.SerialPortManager;
 
-import java.io.IOException;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class DeclareActivity extends Activity {
+public class DeclareActivity extends Activity implements View.OnClickListener {
     public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     private final int DEFAULT_CLICK_NUM = 5;
     private long firstTime = 0;
@@ -30,11 +38,27 @@ public class DeclareActivity extends Activity {
     private SharedPreferences sp;
     private boolean isGoDeclareActivity = true;
     private SerialPortConnection connection;
+    private Timer timer;
+    private RelativeLayout rl_declare_containt;
+    private TextView tv_declare_test;
+    private String[] result;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            tv_declare_result.setVisibility(View.VISIBLE);
+            btn_declare_known.setVisibility(View.GONE);
+            String time = TimeUtils.getDateHHMMss(System.currentTimeMillis());
+            tv_declare_result.setText(String.format(Locale.getDefault(), "转速:%s;车速:%s;时间:%s", result[0], result[1], time));
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare);
+        initView();
         sp = DeclareActivity.this.getSharedPreferences("DeclareActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
         if (!isGoDeclareActivity) {
@@ -42,7 +66,7 @@ public class DeclareActivity extends Activity {
             finish();
             return;
         }
-        initView();
+
 
     }
 
@@ -50,8 +74,14 @@ public class DeclareActivity extends Activity {
     private void initView() {
         tv_declare_result = (TextView) findViewById(R.id.tv_declare_result);
         btn_declare_known = (Button) findViewById(R.id.btn_declare_known);
+        rl_declare_containt = (RelativeLayout) findViewById(R.id.rl_declare_containt);
+        btn_declare_known = ((Button) findViewById(R.id.btn_declare_known));
+        tv_declare_test = ((TextView) findViewById(R.id.tv_declare_test));
+        tv_declare_test.setOnClickListener(this);
+        btn_declare_known.setOnClickListener(this);
     }
 
+    @Override
     public void onClick(View view) {
         if (view != null) {
             switch (view.getId()) {
@@ -88,16 +118,25 @@ public class DeclareActivity extends Activity {
                     connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
                     try {
                         connection.start();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        Toast.makeText(DeclareActivity.this, "串口不通", Toast.LENGTH_SHORT).show();
                     }
                 }
+                if (timer != null) {
+                    timer.cancel();
+                }
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        result = FactoryTest.testSerialPortConnection(connection);
+                        mHandler.sendEmptyMessage(0);
 
-                //测试
-                String[] result = FactoryTest.testSerialPortConnection(connection);
-                tv_declare_result.setVisibility(View.VISIBLE);
-                btn_declare_known.setVisibility(View.GONE);
-                tv_declare_result.setText("转速" + result[0] + "车速" + result[1]);
+                    }
+                }, 1000, 1000);
+
+
             }
         }
     }
@@ -107,6 +146,9 @@ public class DeclareActivity extends Activity {
         super.onPause();
         if (connection != null)
             connection.stop();
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     @Override
@@ -117,18 +159,16 @@ public class DeclareActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    finish();
-//                    System.exit(0);
-//                }
-//            });
-//            }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    System.exit(0);
+                }
+            }, rl_declare_containt);
+        }
 
-        finish();
-        System.exit(0);
         return true;
 
     }

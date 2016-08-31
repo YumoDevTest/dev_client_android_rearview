@@ -42,7 +42,7 @@ class SerailPortChannel {
         LogHelper.d(tag, str);
     }
 
-    public synchronized void open(String serialportName, int baudrate) throws IOException {
+    public synchronized void open(String serialportName, int baudrate) throws IOException, SecurityException {
         if (TextUtils.isEmpty(serialportName)) {
             throw new InvalidParameterException("未设置串口名称");
         }

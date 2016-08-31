@@ -57,7 +57,7 @@ class SerialPortConnectionImpl extends SerialPortConnection {
      * @throws IOException
      */
     @Override
-    public void start() throws IOException {
+    public void start() throws IOException, SecurityException {
         if (getBaudrate() < 0) {
             throw new InvalidParameterException("未设置波特率");
         }
