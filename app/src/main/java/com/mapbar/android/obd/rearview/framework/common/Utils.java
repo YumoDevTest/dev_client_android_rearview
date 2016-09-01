@@ -127,7 +127,7 @@ public class Utils {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
-//        return deviceId;
+        return deviceId;
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
 //        return "777296%%%%hh01739!55555555";//外网注册通过
@@ -137,7 +137,7 @@ public class Utils {
 //        return "oooooooofsdfsd%%%%%%meiwang";//王龙内网1
 //        return "oooooooofsdfsddwwwwd%%%%%%meiwang444";//王龙内网2
 //        return "12317777777733439943848301";//王龙内网8.5
-        return "9231777770048302";//王龙外网8.8
+//        return "9231777770048302";//王龙外网8.8
 //        return "20160815weishite";//威仕特8.15
 //        return "20160815diruite";//迪瑞特8.15
 //        return "20160830mt2";//
