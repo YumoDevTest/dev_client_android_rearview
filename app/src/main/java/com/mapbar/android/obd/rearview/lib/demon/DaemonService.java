@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.autostart;
+package com.mapbar.android.obd.rearview.lib.demon;
 
 import android.app.Service;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.mapbar.android.obd.rearview.lib.autostart.contract.DelayAutoStartServiceFactory;
-import com.mapbar.android.obd.rearview.lib.autostart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.demon.delaystart.DelayAutoStartServiceFactory;
+import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
 
 /**
  * 守护 服务
@@ -46,9 +46,11 @@ public class DaemonService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         android.util.Log.d(TAG, " ## onStartCommand, action = " + intent.getAction());
 
-        //发送延迟启动消息
-        Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_DELAY_START_APP);
-        sendBroadcast(intentDelayStart);
+        if (delayAutoStartService != null) {
+            //发送延迟启动消息
+            Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_DELAY_START_APP);
+            sendBroadcast(intentDelayStart);
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }

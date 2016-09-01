@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.autostart.impl;
+package com.mapbar.android.obd.rearview.lib.demon.delaystart.impl;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.mapbar.android.obd.rearview.lib.autostart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 
 /**
@@ -17,13 +17,14 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
     //    public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
     private static final String TAG = "DelayAutoStartService";
     private static final boolean DEBUG = true;
-    private static final long DELAY_SECOND = 10;// 延迟时间,单位分钟
+    private static final float DELAY_SECOND = 10f;// 延迟时间,单位分钟
     private static final long DELAY_HEARTBEAT = 2000;//毫秒
 
     private static final int MSG_START_APP = 1;
     private static final int MSG_ALERT = 2;
     private static final int MSG_HEARTBEAT = 3;
     private Handler handler;
+    private boolean isDelayTimeStarted = false;
 
     public DiruiteDelayAutoStartService() {
         handler = new MyHandler(this);
@@ -48,8 +49,8 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
     @Override
     public void start(Context context) {
         super.start(context);
-//        if (DEBUG)//触发心跳检测
-//            handler.sendMessageDelayed(handler.obtainMessage(MSG_HEARTBEAT), DELAY_HEARTBEAT);
+        if (DEBUG)//触发心跳检测
+            handler.sendMessageDelayed(handler.obtainMessage(MSG_HEARTBEAT), DELAY_HEARTBEAT);
     }
 
     /**
@@ -59,15 +60,20 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
+        android.util.Log.i(TAG, "## 迪瑞特自启动程序收到action " + intent.getAction());// );
         if (intent.getAction().equals(DelayAutoStartService.ACTION_DELAY_START_APP)) {
-            android.util.Log.i(TAG, String.format("## 将在%s分钟后启动图吧汽车卫士", DELAY_SECOND));
-            android.util.Log.i(TAG, "## 迪瑞特自启动程序收到action " + intent.getAction());// );
-            handler.obtainMessage(MSG_ALERT).sendToTarget();
-            handler.sendMessageDelayed(handler.obtainMessage(MSG_START_APP), DELAY_SECOND * 60 * 1000);
-
+            if (isDelayTimeStarted) return;//确保只启动一次
+            startDelayTime();
+            isDelayTimeStarted = true;
         } else if (intent.getAction().equals(DelayAutoStartService.ACTION_STOP_START_APP)) {
             clearAllMessage();
         }
+    }
+
+    private void startDelayTime() {
+        android.util.Log.i(TAG, String.format("## 将在%s分钟后启动图吧汽车卫士", DELAY_SECOND));
+        handler.obtainMessage(MSG_ALERT).sendToTarget();
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_START_APP), (int) (DELAY_SECOND * 60 * 1000));
     }
 
     /**

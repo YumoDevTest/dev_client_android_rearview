@@ -1,11 +1,10 @@
-package com.mapbar.android.obd.rearview.lib.autostart.contract;
+package com.mapbar.android.obd.rearview.lib.demon.delaystart.contract;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import java.io.InvalidObjectException;
 import java.lang.ref.WeakReference;
 
 /**

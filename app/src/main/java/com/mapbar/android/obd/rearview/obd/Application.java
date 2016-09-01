@@ -4,6 +4,7 @@ import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Manager;
@@ -28,6 +29,8 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         android.util.Log.d(TAG, "## [application] 启动");
+        CustomMadeType.printLog();
+
         Global.setAppContext(this);
         Manager.onApplicationonCreate(this);
         //捕捉异常注册

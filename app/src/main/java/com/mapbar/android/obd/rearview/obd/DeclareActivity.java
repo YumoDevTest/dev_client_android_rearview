@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
-import com.mapbar.android.obd.rearview.lib.autostart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.obd.SerialPortManager;

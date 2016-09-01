@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.autostart;
+package com.mapbar.android.obd.rearview.lib.demon;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +16,10 @@ public class DaemonReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         android.util.Log.d(TAG, "## DaemonReceiver收到action: " + intent.getAction());
-        Intent intentService = new Intent(ACTION_DAEMON_SERVICE);
-        context.startService(intentService);
+
+        if (ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Intent intentService = new Intent(ACTION_DAEMON_SERVICE);
+            context.startService(intentService);
+        }
     }
 }

@@ -142,7 +142,7 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 receiver，自启动监听 -->
-        <receiver android:name=".lib.autostart.DaemonReceiver">
+        <receiver android:name=".lib.demon.DaemonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
@@ -150,7 +150,7 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 service，自启动监听 -->
-        <service android:name=".lib.autostart.DaemonService">
+        <service android:name=".lib.demon.DaemonService">
             <intent-filter>
                 <action android:name="com.mapbar.android.obd.rearview.action.DEAMON" />
 
@@ -214,7 +214,7 @@
 
         <!-- 爱心推end -->
 
-        后台登录service
+        <!--后台登录service-->
         <service
             android:name=".framework.control.OBDV3HService"
             android:process="obd.service.login">
@@ -249,8 +249,8 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".lib.autostart.DemoAutoActivity">-->
-            <!---->
+        <!--<activity android:name=".lib.demon.DemoAutoActivity">-->
+        <!---->
         <!--</activity>-->
     </application>
 
