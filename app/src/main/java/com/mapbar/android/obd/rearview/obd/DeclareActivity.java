@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
+import com.mapbar.android.obd.rearview.lib.autostart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.obd.SerialPortManager;
@@ -57,6 +58,11 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //发送停止延迟启动消息
+        Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_START_APP);
+        sendBroadcast(intentDelayStart);
+
         setContentView(R.layout.activity_declare);
         initView();
         sp = DeclareActivity.this.getSharedPreferences("DeclareActivity", Context.MODE_PRIVATE);

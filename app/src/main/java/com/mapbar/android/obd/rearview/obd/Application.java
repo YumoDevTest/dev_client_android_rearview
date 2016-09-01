@@ -13,6 +13,7 @@ import com.mapbar.obd.Manager;
  * Created by yun on 16/1/7.
  */
 public class Application extends android.app.Application {
+    private static final String TAG = "Application";
     private static Application instance;
 
     public Application() {
@@ -26,6 +27,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        android.util.Log.d(TAG, "## [application] 启动");
         Global.setAppContext(this);
         Manager.onApplicationonCreate(this);
         //捕捉异常注册
@@ -39,6 +41,7 @@ public class Application extends android.app.Application {
 
     @Override
     public void onTerminate() {
+        android.util.Log.d(TAG, "## [application] 停止");
         // infos 当前应用如果被系统强杀则方法不会被调用
         Manager.onApplicationTerminate();
         super.onTerminate();
