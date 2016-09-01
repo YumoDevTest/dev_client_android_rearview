@@ -49,8 +49,9 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
     @Override
     public void start(Context context) {
         super.start(context);
-        if (DEBUG)//触发心跳检测
-            handler.sendMessageDelayed(handler.obtainMessage(MSG_HEARTBEAT), DELAY_HEARTBEAT);
+//        if (DEBUG) {//触发心跳检测
+//            handler.sendMessageDelayed(handler.obtainMessage(MSG_HEARTBEAT), DELAY_HEARTBEAT);
+//        }
     }
 
     /**
@@ -110,7 +111,7 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
                 getInnerObject().alert();
             } else if (MSG_HEARTBEAT == msg.what) {
                 removeMessages(MSG_HEARTBEAT);
-                android.util.Log.i(TAG, "##[心跳]");
+                android.util.Log.i(TAG, "##[心跳],是否已经执行过延迟自启动=" + getInnerObject().isDelayTimeStarted);
                 sendMessageDelayed(obtainMessage(MSG_HEARTBEAT), DELAY_HEARTBEAT);
             }
         }
