@@ -51,6 +51,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             btn_declare_known.setVisibility(View.GONE);
             String time = TimeUtils.getDateHHMMss(System.currentTimeMillis());
             if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
+                Toast.makeText(DeclareActivity.this, "串口不通", Toast.LENGTH_SHORT).show();
                 tv_declare_result.setText(String.format(Locale.getDefault(), "车速:-- 转速:-- 刷新时间:%s", time));
             } else {
                 tv_declare_result.setText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  刷新时间:%s", result[1], result[0], time));
@@ -126,7 +127,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
                         connection.start();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Toast.makeText(DeclareActivity.this, "串口不通", Toast.LENGTH_SHORT).show();
+
                     }
                 }
                 if (timer != null) {
