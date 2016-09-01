@@ -20,6 +20,7 @@ import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.obd.SerialPortManager;
+import com.ta.utdid2.android.utils.StringUtils;
 
 import java.util.Locale;
 import java.util.Timer;
@@ -49,7 +50,12 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             tv_declare_result.setVisibility(View.VISIBLE);
             btn_declare_known.setVisibility(View.GONE);
             String time = TimeUtils.getDateHHMMss(System.currentTimeMillis());
-            tv_declare_result.setText(String.format(Locale.getDefault(), "转速:%s;车速:%s;时间:%s", result[0], result[1], time));
+            if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
+                tv_declare_result.setText(String.format(Locale.getDefault(), "车速:-- 转速:-- 刷新时间:%s", time));
+            } else {
+                tv_declare_result.setText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  刷新时间:%s", result[1], result[0], time));
+            }
+
         }
     };
 
