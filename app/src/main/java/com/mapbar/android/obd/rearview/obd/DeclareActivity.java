@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import java.util.TimerTask;
 public class DeclareActivity extends Activity implements View.OnClickListener {
     public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     private final int DEFAULT_CLICK_NUM = 5;
+    private final String TAG = DeclareActivity.class.getSimpleName();
     private long firstTime = 0;
     /**
      * 点击次数
@@ -61,6 +63,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     };
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +76,15 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             finish();
             return;
         }
-
+        Log.d(TAG, "onCreate");
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onCreate");
+    }
 
     private void initView() {
         tv_declare_result = (TextView) findViewById(R.id.tv_declare_result);
@@ -139,7 +147,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
                     public void run() {
                         result = FactoryTest.testSerialPortConnection(connection);
                         mHandler.sendEmptyMessage(0);
-
+                        Log.d(TAG, "刷新数据");
                     }
                 }, 1000, 1000);
 
@@ -151,17 +159,20 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-        if (connection != null)
-            connection.stop();
-        if (timer != null) {
-            timer.cancel();
-        }
+
+
+        Log.d(TAG, "onPause()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        if (connection != null)
+            connection.stop();
+        if (timer != null) {
+            timer.cancel();
+        }
+        Log.d(TAG, "onDestroy()");
     }
 
     @Override
