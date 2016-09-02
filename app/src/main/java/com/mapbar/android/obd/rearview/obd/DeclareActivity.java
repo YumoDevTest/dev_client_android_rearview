@@ -54,7 +54,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             btn_declare_known.setVisibility(View.GONE);
             String time = TimeUtils.getDateHHMMss(System.currentTimeMillis());
             if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
-                Toast.makeText(DeclareActivity.this, "串口不通", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DeclareActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                 tv_declare_result.setText(String.format(Locale.getDefault(), "车速:-- 转速:-- 刷新时间:%s", time));
             } else {
                 tv_declare_result.setText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  刷新时间:%s", result[1], result[0], time));
@@ -62,7 +62,6 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
 
         }
     };
-
 
 
     @Override
@@ -133,33 +132,48 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             clickNum++;
             if (clickNum == DEFAULT_CLICK_NUM - 1) {
                 clickNum = 0;
-                SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
-                //打开串口
-                if (connection == null) {
-                    connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
-                    try {
-                        connection.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-                }
-                if (timer != null) {
-                    timer.cancel();
-                }
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        result = FactoryTest.testSerialPortConnection(connection);
-                        mHandler.sendEmptyMessage(0);
-                        Log.d(TAG, "刷新数据");
-                    }
-                }, 1000, 1000);
+                entryFactoryMode();
 
 
             }
         }
+    }
+
+    private void entryFactoryMode() {
+        alert("进入工厂测试模式");
+        SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
+        //打开串口
+        if (connection == null) {
+            connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
+            try {
+                connection.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+                alert("串口打开失败," + e.getMessage());
+                return;
+            }
+        }
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                result = FactoryTest.testSerialPortConnection(connection);
+                mHandler.sendEmptyMessage(0);
+                Log.d(TAG, "刷新数据");
+            }
+        }, 1000, 1000);
+    }
+
+    private void alert(final String msg) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DeclareActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

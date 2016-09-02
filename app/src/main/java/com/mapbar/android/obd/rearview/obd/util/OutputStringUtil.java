@@ -24,8 +24,9 @@ public final class OutputStringUtil {
     public static String transferForPrint(String str) {
         if (TextUtils.isEmpty(str))
             return str;
-        str = str.replace('\r', ' ');
-        str = str.replace('\n', ' ');
+        str = str.replace("\r", "");
+        str = str.replace("\n", "");
+        str = str.replace(" ", "");
         if (str.endsWith(">")) {
             str = str.substring(0, str.length() - 1);
         }

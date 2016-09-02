@@ -32,8 +32,9 @@ public class FactoryTest {
             String cmdRequest2 = "010D\r";//车速
 
             String response1 = new String(connection.sendAndReceive(cmdRequest1.getBytes()));
+            response1 = OutputStringUtil.transferForPrint(response1);
             String response2 = new String(connection.sendAndReceive(cmdRequest2.getBytes()));
-
+            response2 = OutputStringUtil.transferForPrint(response2);
 
             resultArray[0] = "" + parseZhuansu(response1);
             resultArray[1] = "" + parseSpeed(response2);
@@ -56,7 +57,11 @@ public class FactoryTest {
             throw new NullPointerException();
         if (cmd.length() < 4)
             throw new InvalidParameterException("字符长度不合法");
-        int index = cmd.indexOf("410C") + 4;
+
+        int index = cmd.indexOf("410C");
+        if (cmd.length() < 0)
+            throw new InvalidParameterException("数据不合法");
+        index = index + 4;
         if (index < 0)
             throw new InvalidParameterException("字符长度不合法");
         String s1 = cmd.substring(index, index + 2);
