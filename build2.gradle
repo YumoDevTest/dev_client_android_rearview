@@ -280,6 +280,23 @@ def getPara_BUILD_TYPE = { ->
     return null
 }
 
+//构建类型
+def getPara_IS_ENABLE_TEST_CAR_DEMO = { ->
+    def var1 = System.getenv("IS_ENABLE_TEST_CAR_DEMO")
+    if (var1) {
+        return Boolean.parseBoolean(var1)
+    }
+    return null
+}
+
+//是否使用内网测试服务器
+def getPara_IS_USE_TEST_HOST = { ->
+    def var1 = System.getenv("IS_USE_TEST_HOST")
+    if (var1) {
+        return Boolean.parseBoolean(var1)
+    }
+    return false
+}
 
 ext {
     SERIALPORT_PATH = getPara_SERIALPORT_PATH()
@@ -298,6 +315,10 @@ ext {
     BUILD_TYPE = getPara_BUILD_TYPE()
 
     IS_JENKINS = !(BRANCH_NAME == null || "".equals(BRANCH_NAME));
+
+    IS_ENABLE_TEST_CAR_DEMO = getPara_IS_ENABLE_TEST_CAR_DEMO()
+
+    IS_USE_TEST_HOST = getPara_IS_USE_TEST_HOST()
 }
 
 //ext.compileSdkVersion = highestSdkAvailable(22)
@@ -316,7 +337,9 @@ println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
 println '#读取环境参数,版本号(名称)：' + project.VERSION_NAME
 println '#读取环境参数,是否开启 功能收费权限管理：' + project.IS_ENABLE_PERMISSION
 println '#读取环境参数,权限服务基础url：' + project.BASE_PERMISSION_URL
-println '#读取环境参数,指定构建类型 BUILD_TYPE ：' + project.BUILD_TYPE
+println '#读取环境参数,指定构建类型 BUILD_TYPE：' + project.BUILD_TYPE
+println '#读取环境参数,是否开启模拟测试车辆控制的页面：' + project.IS_ENABLE_TEST_CAR_DEMO
+println '#读取环境参数,是否使用内网测试服务器：' + project.IS_USE_TEST_HOST
 
 
 println '***************设定图吧obd的sdk的源代码路径**************'

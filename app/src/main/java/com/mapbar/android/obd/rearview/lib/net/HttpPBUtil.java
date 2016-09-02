@@ -23,7 +23,7 @@ import security.OBD2Security;
  */
 public class HttpPBUtil {
     private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
-    public static final String TAG = "HTTP";
+    public static final String TAG = "HttpPBUtil";
 
 
     /**
@@ -36,7 +36,7 @@ public class HttpPBUtil {
     public static void post(String url, AbstractMessageLite message, final HttpPBCallback callback) {
         if (message == null)
             throw new NullPointerException("message 不能为空");
-        LogUtil.d(TAG, "## HTTP准备发送请求" + message.toString());
+        LogUtil.d(TAG, String.format("## HTTP准备发送请求, url=%s, content=%s", url, message.toString()));
         post(url, message.toByteArray(), callback);
     }
 
