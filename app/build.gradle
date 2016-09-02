@@ -51,7 +51,7 @@ android {
                 buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "${IS_ENABLE_PERMISSION}")
                 //是否 伪造权限管理类
                 buildConfigField("Boolean", "IS_USE_TEST_HOST", "${IS_USE_TEST_HOST}")//是否 使用内网测试服务器
-                // signingConfig signingConfigs.debug
+                signingConfig signingConfigs.debug
             }
         }
         debug {
@@ -65,7 +65,7 @@ android {
             buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55555555\"")//伪造的IMEI
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "true")//是否 伪造权限管理类
             buildConfigField("Boolean", "IS_USE_TEST_HOST", "true")//是否 使用内网测试服务器
-            // signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
         }
 
     }
