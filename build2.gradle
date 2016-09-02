@@ -190,15 +190,6 @@ def getPara_FAKE_IMEI = {
     return null
 }
 
-//获得 功能收费的服务器URL
-def getPara_BASE_PERMISSION_URL = {
-    def var1 = System.getenv('BASE_PERMISSION_URL')
-    if (var1) {
-        return var1
-    }
-    return null
-}
-
 //
 //def getBuildSDKVersion = { ->
 //    def buildSDKVersion = System.getenv("Android_SDK_Version")
@@ -302,7 +293,6 @@ ext {
     SERIALPORT_PATH = getPara_SERIALPORT_PATH()
     IS_FAKE_IMEI = getPara_IS_FAKE_IMEI()
     FAKE_IMEI = getPara_FAKE_IMEI()
-    BASE_PERMISSION_URL = getPara_BASE_PERMISSION_URL()
 
     GET_VERSION = getGitVersion()
     PREFIX_NAME = getPrefixName()
@@ -336,7 +326,6 @@ println '#读取环境参数,伪造的IMEI：' + project.FAKE_IMEI
 println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
 println '#读取环境参数,版本号(名称)：' + project.VERSION_NAME
 println '#读取环境参数,是否开启 功能收费权限管理：' + project.IS_ENABLE_PERMISSION
-println '#读取环境参数,权限服务基础url：' + project.BASE_PERMISSION_URL
 println '#读取环境参数,指定构建类型 BUILD_TYPE：' + project.BUILD_TYPE
 println '#读取环境参数,是否开启模拟测试车辆控制的页面：' + project.IS_ENABLE_TEST_CAR_DEMO
 println '#读取环境参数,是否使用内网测试服务器：' + project.IS_USE_TEST_HOST
