@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
@@ -24,15 +22,20 @@ import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.obd.SerialPortManager;
 import com.ta.utdid2.android.utils.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DeclareActivity extends Activity implements View.OnClickListener {
     public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
+    public static final int MSG_SHOW_SPEED = 1;
+    public static final int MSG_APPEND_TEXT = 2;
     private final int DEFAULT_CLICK_NUM = 5;
     private final String TAG = DeclareActivity.class.getSimpleName();
     private long firstTime = 0;
+    private final SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     /**
      * 点击次数
      */
@@ -45,19 +48,29 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     private Timer timer;
     private RelativeLayout rl_declare_containt;
     private TextView tv_declare_test;
-    private String[] result;
     private Handler mHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            tv_declare_result.setVisibility(View.VISIBLE);
-            btn_declare_known.setVisibility(View.GONE);
-            String time = TimeUtils.getDateHHMMss(System.currentTimeMillis());
-            if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
-                Toast.makeText(DeclareActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
-                tv_declare_result.setText(String.format(Locale.getDefault(), "车速:-- 转速:-- 刷新时间:%s", time));
-            } else {
-                tv_declare_result.setText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  刷新时间:%s", result[1], result[0], time));
+            if (msg.what == MSG_SHOW_SPEED) {
+                if (msg.obj == null) {
+                    appendLineText("无法获得数据，请检查串口");
+                    return;
+                }
+                String[] result = (String[]) msg.obj;
+                if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
+                    appendLineText("无法获得数据，请检查串口");
+                } else {
+                    appendLineText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  ", result[1], result[0]));
+                }
+            } else if (msg.what == MSG_APPEND_TEXT) {
+                if (msg.obj != null) {
+                    String str = msg.obj.toString();
+                    if (tv_declare_result.getText().length() > 900) {
+                        tv_declare_result.setText("");
+                    }
+                    tv_declare_result.append(str + "\r\n");
+                }
             }
 
         }
@@ -139,17 +152,28 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
     private void entryFactoryMode() {
         alert("进入工厂测试模式");
+        appendLineText("进入工厂测试模式");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_declare_result.setVisibility(View.VISIBLE);
+                btn_declare_known.setVisibility(View.GONE);
+            }
+        });
+
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         //打开串口
         if (connection == null) {
-            connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
             try {
+                connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
                 connection.start();
+                appendLineText("串口打开成功,串口名称=" + Constants.SERIALPORT_PATH);
             } catch (Exception e) {
                 e.printStackTrace();
-                alert("串口打开失败," + e.getMessage());
+                appendLineText("串口打开失败,串口名称=" + Constants.SERIALPORT_PATH + ", 异常=" + e.getMessage());
                 return;
             }
         }
@@ -160,15 +184,24 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                result = FactoryTest.testSerialPortConnection(connection);
-                mHandler.sendEmptyMessage(0);
-                Log.d(TAG, "刷新数据");
+                String[] result = FactoryTest.testSerialPortConnection(connection);
+                mHandler.obtainMessage(MSG_SHOW_SPEED, result).sendToTarget();
             }
         }, 1000, 1000);
     }
 
+    /**
+     * 展示 工厂测试模式的测试结果
+     *
+     * @param str
+     */
+    private void appendLineText(String str) {
+        String msg = String.format(Locale.getDefault(), "[%s] %s", MySimpleDateFormat.format(new Date()), str);
+        mHandler.obtainMessage(MSG_APPEND_TEXT, msg).sendToTarget();
+    }
+
     private void alert(final String msg) {
-        mHandler.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(DeclareActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -179,8 +212,6 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-
-
         Log.d(TAG, "onPause()");
     }
 
@@ -195,19 +226,4 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "onDestroy()");
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                    System.exit(0);
-                }
-            }, rl_declare_containt);
-        }
-
-        return true;
-
-    }
 }

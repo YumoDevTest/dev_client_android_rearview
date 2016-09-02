@@ -15,7 +15,7 @@ import java.util.Calendar;
  */
 class SerialPortConnectionImpl extends SerialPortConnection {
     private static final String TAG = SerialPortConnectionImpl.class.getSimpleName();
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final Object LOCK = new Object();
     private static final int TIMEOUT_INTEVAL = 30000;//超时时间
     private SerailPortChannel mSerailPortChannel;
