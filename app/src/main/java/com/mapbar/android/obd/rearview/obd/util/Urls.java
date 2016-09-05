@@ -7,10 +7,12 @@ import com.mapbar.android.obd.rearview.BuildConfig;
  * Created by zhangyunfei on 16/8/9.
  */
 public class Urls {
+
+    //权限接口对应的服务端的 URL 的基础地址
     public static final boolean IS_USE_TEST_HOST = BuildConfig.IS_USE_TEST_HOST;
 
     //权限接口对应的服务端的 URL 的基础地址
-    public static final String PERMISSION_BASE_URL = BuildConfig.BASE_PERMISSION_URL;
+    public static final String PERMISSION_BASE_URL = IS_USE_TEST_HOST ? "http://119.255.37.167" : "http://box.mapbar.com";
 
     //微信服务的基础URL
     public static final String WEIXIN_BASE_URL = IS_USE_TEST_HOST ? "http://weixintest.mapbar.com/obdWechat" : "http://weixin.mapbar.com/obd";
@@ -41,5 +43,4 @@ public class Urls {
      * OTA，通过vin检测固件版本，发送本地固件版本，请求是否需要更新
      */
     public final static String OTA_QUERYUPGRADEFILE = OTA_BASE_URL + "/newVersion/queryUpgradeFile";
-
 }

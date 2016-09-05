@@ -55,6 +55,7 @@ android {
                 buildConfigField("String", "BASE_PERMISSION_URL", "\"${BASE_PERMISSION_URL}\"")
                 buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
                 buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "${getPara_IS_ENABLE_TEST_CAR_DEMO}")
+                //是否 伪造权限管理类
                 buildConfigField("Boolean", "IS_USE_TEST_HOST", "${IS_USE_TEST_HOST}")//是否 使用内网测试服务器
                 signingConfig signingConfigs.debug
             }
@@ -64,7 +65,7 @@ android {
             minifyEnabled false
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")//串口地址
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
             buildConfigField("String", "FAKE_IMEI", "\"DEVELOP_BY_ZHNGYF_20160826\"")//伪造的IMEI
