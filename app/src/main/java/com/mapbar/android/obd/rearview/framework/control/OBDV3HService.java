@@ -79,6 +79,7 @@ public class OBDV3HService extends Service {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
+            android.util.Log.d("OBDV3HService","## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
             Manager.getInstance().stopTrip(true);
             Manager.getInstance().cleanup();
@@ -257,6 +258,7 @@ public class OBDV3HService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        android.util.Log.d("OBDV3HService","## 开启了V3服务 onStartCommand");
         openDevice();
         Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
 
