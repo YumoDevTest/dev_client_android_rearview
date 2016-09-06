@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.demon.delaystart.impl;
+package com.mapbar.android.obd.rearview.lib.daemon.delaystart.impl;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 
 /**
@@ -66,7 +66,7 @@ public class DiruiteDelayAutoStartService extends DelayAutoStartService {
             if (isDelayTimeStarted) return;//确保只启动一次
             startDelayTime();
             isDelayTimeStarted = true;
-        } else if (intent.getAction().equals(DelayAutoStartService.ACTION_STOP_START_APP)) {
+        } else if (intent.getAction().equals(DelayAutoStartService.ACTION_STOP_DELAY_RUN)) {
             clearAllMessage();
         }
     }

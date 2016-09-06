@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.demon;
+package com.mapbar.android.obd.rearview.lib.daemon;
 
 import android.app.Service;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.DelayAutoStartServiceFactory;
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.DelayAutoStartServiceFactory;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 
 /**
  * 守护 服务

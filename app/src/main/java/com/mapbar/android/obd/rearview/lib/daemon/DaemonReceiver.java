@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.demon;
+package com.mapbar.android.obd.rearview.lib.daemon;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

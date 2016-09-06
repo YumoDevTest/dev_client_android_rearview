@@ -1,8 +1,8 @@
-package com.mapbar.android.obd.rearview.lib.demon.delaystart;
+package com.mapbar.android.obd.rearview.lib.daemon.delaystart;
 
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.impl.DiruiteDelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.impl.DiruiteDelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.Constants;
 
 /**
@@ -25,7 +25,7 @@ public class DelayAutoStartServiceFactory {
 
     private static DelayAutoStartService createDelayAutoStartService() {
         if (Constants.CUSTOM_MADE_TYPE == CustomMadeType.CUSTOM_MADE_TYPE_DIRUITE) {
-            autostartHandler = new DiruiteDelayAutoStartService();
+//            autostartHandler = new DiruiteDelayAutoStartService();
         }
         return autostartHandler;
     }

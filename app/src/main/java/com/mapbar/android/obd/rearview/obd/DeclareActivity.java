@@ -15,11 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
-import com.mapbar.android.obd.rearview.lib.demon.delaystart.contract.DelayAutoStartService;
+import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
+import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.TripSyncService;
 import com.ta.utdid2.android.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -80,9 +81,10 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stopBackgroundService();
 
         //发送停止延迟启动消息
-        Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_START_APP);
+        Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_DELAY_RUN);
         sendBroadcast(intentDelayStart);
 
         setContentView(R.layout.activity_declare);
@@ -96,6 +98,16 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
         }
         Log.d(TAG, "onCreate");
 
+    }
+
+
+    private void stopBackgroundService() {
+        Intent intent = new Intent("com.mapbar.obd.stopservice");
+        sendBroadcast(intent);
+        if (!NativeEnv.isServiceRunning(TripSyncService.class.getName())) {
+            Intent intent1 = new Intent(this, TripSyncService.class);
+            stopService(intent1);
+        }
     }
 
     @Override

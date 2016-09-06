@@ -26,5 +26,5 @@ public class Constants {
      * ---迪瑞特专版特点：开机延迟10分钟自启动app
      */
 //    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
-    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_DIRUITE;
+    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
 }

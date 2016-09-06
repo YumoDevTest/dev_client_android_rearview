@@ -142,7 +142,7 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 receiver，自启动监听 -->
-        <receiver android:name=".lib.demon.DaemonReceiver">
+        <receiver android:name=".lib.daemon.DaemonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
@@ -150,7 +150,7 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 service，自启动监听 -->
-        <service android:name=".lib.demon.DaemonService">
+        <service android:name=".lib.daemon.DaemonService">
             <intent-filter>
                 <action android:name="com.mapbar.android.obd.rearview.action.DEAMON" />
 

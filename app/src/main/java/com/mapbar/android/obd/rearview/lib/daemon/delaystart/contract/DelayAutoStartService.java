@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.lib.demon.delaystart.contract;
+package com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class DelayAutoStartService {
     public static final String ACTION_DELAY_START_APP = "ACTION_DELAY_START_APP";//延迟启动app
-    public static final String ACTION_STOP_START_APP = "ACTION_STOP_START_APP";//停止启动app
+    public static final String ACTION_STOP_DELAY_RUN = "ACTION_STOP_DELAY_RUN";//停止启动app
 
     private WeakReference<Context> contextWeakReference;
 
@@ -25,7 +25,7 @@ public abstract class DelayAutoStartService {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DelayAutoStartService.ACTION_DELAY_START_APP);
-        filter.addAction(DelayAutoStartService.ACTION_STOP_START_APP);
+        filter.addAction(DelayAutoStartService.ACTION_STOP_DELAY_RUN);
         getContext().registerReceiver(myBroadcastReceiver, filter);
     }
 
