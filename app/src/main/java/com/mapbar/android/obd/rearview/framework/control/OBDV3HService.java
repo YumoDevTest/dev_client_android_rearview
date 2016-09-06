@@ -383,7 +383,7 @@ public class OBDV3HService extends Service {
             public void run() {
                 Intent startIntent = new Intent();
                 startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.DeclareActivity");
                 startIntent.setComponent(cName);
                 startActivity(startIntent);
             }
