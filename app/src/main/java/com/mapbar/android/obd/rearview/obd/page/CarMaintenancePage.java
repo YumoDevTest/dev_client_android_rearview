@@ -32,6 +32,7 @@ import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.views.CustomLinearLayoutManager;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.LocalUserCarResult;
@@ -170,7 +171,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
             }
         });
 //
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
+        CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rl_view.setLayoutManager(layoutManager);
 

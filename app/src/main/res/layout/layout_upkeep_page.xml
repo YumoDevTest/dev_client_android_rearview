@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#1a1a1a"
-              android:gravity="center_horizontal"
+              android:gravity="center"
               android:orientation="vertical">
 
     <LinearLayout
@@ -24,38 +24,40 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 />
-
-            <TextView
-                android:id="@+id/tv"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
-                android:text="@string/upkeep_next_upkeep_mileage"
-                android:textColor="#00d4b9"
-                android:textSize="13sp"/>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                >
+                <TextView
+                    android:id="@+id/tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upkeep_next_upkeep_mileage"
+                    android:textColor="#00d4b9"
+                    android:textSize="13sp"
+                    android:layout_marginTop="15dp"
+                    />
 
-            <TextView
-                android:id="@+id/tv_next_mileage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="4dp"
-                android:text="0"
-                android:textColor="#00d4b9"
-                android:textSize="40sp"
-                />
+                <TextView
+                    android:id="@+id/tv_next_mileage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#00d4b9"
+                    android:textSize="40sp"
+                    />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_next_mileage"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                android:text="公里"
-                android:textColor="#00d4b9"
-                android:textSize="15sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="公里"
+                    android:textColor="#00d4b9"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout

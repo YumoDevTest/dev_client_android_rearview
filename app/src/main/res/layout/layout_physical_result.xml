@@ -8,40 +8,46 @@
 
     <LinearLayout
         android:id="@+id/line"
-        android:layout_width="90dp"
+        android:layout_width="100dp"
         android:layout_height="220dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="89dp"
+        android:layout_marginLeft="80dp"
         android:background="@drawable/img_physical_result_normal"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
             android:text="@string/vehicle_checkup_score"
             android:textColor="#35bdb2"
-            android:textSize="20sp"/>
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            />
 
         <TextView
             android:id="@+id/tv_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="36"
             android:textColor="#35bdb2"
-            android:textSize="60sp"/>
-
+            android:textSize="50sp"/>
         <TextView
             android:id="@+id/tv_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="健康"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="亚健康"
             android:textColor="#35bdb2"
-            android:textSize="35sp"/>
+            android:textSize="30sp"
+            android:layout_marginBottom="30dp"
+            />
     </LinearLayout>
 
     <GridView

@@ -16,12 +16,14 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
+import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.control.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
+import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.framework.widget.CircleDrawable;
 import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
 import com.mapbar.android.obd.rearview.modules.checkup.contract.IVehicleCheckupView;
@@ -82,7 +84,8 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     private TextView tvLastLevel;
     @ViewInject(R.id.btn_last_check)
     private Button btnLastCheck;
-
+    @ViewInject(R.id.tv_last_check_time)
+    private TextView tvLastTime;
     //本次体检结果
     @ViewInject(R.id.rela_result)
     private RelativeLayout rela_result;
@@ -177,6 +180,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     private void initPage() {
         ReportHead head = PhysicalManager.getInstance().getReportHead();
         if (head != null) {
+            tvLastTime.setText(PreferencesConfig.PHYSICAL_CHECKEND_DATE.get());
             rela_physicaling.setVisibility(View.GONE);
             rela_no_physical.setVisibility(View.GONE);
             line_last_result.setVisibility(View.VISIBLE);
@@ -184,13 +188,16 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
             int score = head.getScore();
             tvLastScore.setText("" + score);
             if (score >= 0 && score <= 50) {
-                tvLastLevel.setText("高危级别");
+                tvLastLevel.setText("高危");
+                tvLastLevel.setTextColor(Color.RED);
                 tvLastScore.setTextColor(Color.RED);
             } else if (score > 50 && score <= 70) {
-                tvLastLevel.setText("亚健康级别");
+                tvLastLevel.setText("亚健康");
+                tvLastLevel.setTextColor(Color.YELLOW);
                 tvLastScore.setTextColor(Color.YELLOW);
             } else {
-                tvLastLevel.setText("健康级别");
+                tvLastLevel.setText("健康");
+                tvLastLevel.setTextColor(Color.GREEN);
                 tvLastScore.setTextColor(Color.GREEN);
             }
         } else {
@@ -265,21 +272,21 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                                 grid.setAdapter(checkupGridAdapter);
                                 ReportHead reportHead = PhysicalManager.getInstance().getReportHead();
                                 if (reportHead != null) {
+                                    PreferencesConfig.PHYSICAL_CHECKEND_DATE.set(TimeUtils.getmDateYYYYMMDD2(System.currentTimeMillis()));
                                     int score = reportHead.getScore();
-
                                     checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
                                         tv_score.setTextColor(Color.RED);
                                         checkupVoiceResut.append("高危级别");
-                                        tv_level.setText("高危级别");
+                                        tv_level.setText("高危");
                                         tv_level.setTextColor(Color.RED);
                                     } else if (score > 50 && score <= 70) {
-                                        tv_level.setText("亚健康级别");
+                                        tv_level.setText("亚健康");
                                         tv_score.setTextColor(Color.YELLOW);
                                         checkupVoiceResut.append("亚健康级别");
                                         tv_level.setTextColor(Color.YELLOW);
                                     } else {
-                                        tv_level.setText("健康级别");
+                                        tv_level.setText("健康");
                                         checkupVoiceResut.append("健康级别");
                                         tv_score.setTextColor(Color.GREEN);
                                         tv_level.setTextColor(Color.GREEN);
