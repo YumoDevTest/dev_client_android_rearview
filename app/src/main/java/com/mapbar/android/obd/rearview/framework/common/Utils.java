@@ -127,7 +127,14 @@ public class Utils {
         if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
             Log.d(LogTag.OBD, "IMEI -->> " + deviceId);
         }
-        return deviceId;
+        if (TextUtils.isEmpty("deviceId")) {
+            android.util.Log.e("IMEI", "## *************************************");
+            android.util.Log.e("IMEI", "## 无IMEI，无法启动！");
+            android.util.Log.e("IMEI", "## *************************************");
+        }
+//        return deviceId;
+        return "20160815weishite";
+
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
 //        return "777296%%%%hh01739!55555555";//外网注册通过
