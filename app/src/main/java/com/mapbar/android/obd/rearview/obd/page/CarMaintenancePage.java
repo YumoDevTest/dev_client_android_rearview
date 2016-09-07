@@ -171,7 +171,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
             }
         });
 //
-        CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(MainActivity.getInstance());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rl_view.setLayoutManager(layoutManager);
 
