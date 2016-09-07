@@ -62,7 +62,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
                 if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
                     appendLineText("无法获得数据，请检查串口");
                 } else {
-                    appendLineText(String.format(Locale.getDefault(), "车速:%skm/h  转速:%sr/min  ", result[1], result[0]));
+                    appendLineText(String.format(Locale.getDefault(), "车速: %s km/h  转速: %s r/min  ", result[1], result[0]));
                 }
             } else if (msg.what == MSG_APPEND_TEXT) {
                 if (msg.obj != null) {

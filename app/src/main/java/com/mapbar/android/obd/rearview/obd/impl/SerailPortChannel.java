@@ -25,7 +25,7 @@ class SerailPortChannel {
     public static byte TEMINAL_CMD = 0x3E;// 符号">" ，整数是62
     public static byte TEMINAL_OTA = 0x0A;//换行键 ，整数是10
     public static byte TEMINAL_R = 0x0d;//回车键 /r，整数是13,//发送指令时终结符， 回车键 ，整数是13
-    private static boolean DEBUG = false;//是否开启日志
+    private static boolean DEBUG = true;//是否开启日志
     protected OutputStream mOutputStream;
     protected SerialPort mSerialPort;
     protected InputStream mInputStream;

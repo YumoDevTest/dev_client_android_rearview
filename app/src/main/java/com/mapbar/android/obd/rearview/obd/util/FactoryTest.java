@@ -35,9 +35,15 @@ public class FactoryTest {
             response1 = OutputStringUtil.transferForPrint(response1);
             String response2 = new String(connection.sendAndReceive(cmdRequest2.getBytes()));
             response2 = OutputStringUtil.transferForPrint(response2);
+            if (response1.equals("NODATA") || response1.equals("?"))
+                resultArray[0] = "NODATA";
+            else
+                resultArray[0] = "" + parseZhuansu(response1);
 
-            resultArray[0] = "" + parseZhuansu(response1);
-            resultArray[1] = "" + parseSpeed(response2);
+            if (response2.equals("NODATA") || response1.equals("?"))
+                resultArray[1] = "NODATA";
+            else
+                resultArray[1] = "" + parseSpeed(response2);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -53,6 +59,7 @@ public class FactoryTest {
      * @return
      */
     private static int parseZhuansu(String cmd) {
+        Log.d("parseZhuansu 转换前 ", cmd);
         if (TextUtils.isEmpty(cmd))
             throw new NullPointerException();
         if (cmd.length() < 4)
@@ -68,7 +75,10 @@ public class FactoryTest {
         String s2 = cmd.substring(index + 2, index + 4);
         int b1 = Integer.parseInt(s1, 16);
         int b2 = Integer.parseInt(s2, 16);
-        return b1 * 256 + b2;
+        int res = b1 * 256 + b2;
+
+        Log.d("parseZhuansu 转换后 ", res + "");
+        return res;
     }
 
     /**
@@ -80,7 +90,7 @@ public class FactoryTest {
      * @return
      */
     private static int parseSpeed(String cmd) {
-        Log.e("parseSpeed", cmd);
+        Log.d("parseSpeed 转换前", cmd);
         if (TextUtils.isEmpty(cmd))
             throw new NullPointerException();
         if (cmd.length() < 4)
@@ -90,7 +100,7 @@ public class FactoryTest {
             throw new InvalidParameterException("字符长度不合法");
         String str = cmd.substring(index, index + 2);
         int b1 = Integer.parseInt(str, 16);
-        Log.e("parseSpeed", b1 + "");
+        Log.d("parseSpeed 转换后", b1 + "");
         return b1;
     }
 
