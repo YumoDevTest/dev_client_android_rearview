@@ -27,6 +27,7 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -101,14 +102,14 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
 
     @Override
     public void initView() {
-        titlebarview1 = (TitleBarView)getContentView().findViewById(R.id.titlebarview1);
+        titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
         titlebarview1.setButtonRightVisibility(true);
         titlebarview1.setButtonRightImage(R.drawable.ic_settng_selector);
         titlebarview1.setButtonRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),SettingActivity.class));
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
         sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
@@ -147,6 +148,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener {
                         realTimeData = (RealTimeData) o;
                         if (realTimeData != null) {
                             upData();
+                            //发送广播，传出实时数据
+                            ExternalManager.postRealTimeData(getContext(), realTimeData);
                         }
                         break;
                 }

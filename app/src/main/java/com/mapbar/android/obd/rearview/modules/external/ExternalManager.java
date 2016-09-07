@@ -1,47 +1,25 @@
 package com.mapbar.android.obd.rearview.modules.external;
 
 import android.content.Context;
-import android.content.Intent;
+
+import com.mapbar.obd.RealTimeData;
 
 /**
  * 外部消息管理器。发送实时数据，车辆状态给外部的app使用
- * Created by zhangyunfei on 16/9/5.
+ * Created by zhangyunfei on 16/9/7.
  */
 public class ExternalManager {
-    /**
-     * 车辆数据,实时数据
-     */
-    public static final String ACTION_EXTERNAL_REALTIMEDATA = "com.mapbar.android.obd.rearview.action.exernal.CARDATA";
-
-    /**
-     * 车辆状态
-     */
-    public static final String ACTION_EXTERNAL_CARSTATE = "com.mapbar.android.obd.rearview.action.exernal.CARSTATE";
-
 
     /**
      * post实时数据广播
      *
      * @param context
      */
-    public static void postReal(Context context) {
+    public static void postRealTimeData(Context context, RealTimeData realTimeData) {
         if (context == null)
             throw new NullPointerException();
-        Intent intent = new Intent(ACTION_EXTERNAL_REALTIMEDATA);
-        context.sendBroadcast(intent);
-    }
-
-
-    /**
-     * post车辆状态
-     *
-     * @param context
-     */
-    public static void postCarstate(Context context) {
-        if (context == null)
+        if (realTimeData == null)
             throw new NullPointerException();
-        Intent intent = new Intent(ACTION_EXTERNAL_CARSTATE);
-        context.sendBroadcast(intent);
+        ExternalBroadcast.postRealTimeData(context, RealTimeDataConverter.convertFrom(realTimeData));
     }
-
 }
