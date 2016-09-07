@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ExternalDataDemoActivity extends AppCompatActivity {
+    public static final String TAG = "ExternalDataDemoActivity";
+
     /**
      * Action,车辆数据,实时数据
      */
@@ -54,6 +56,7 @@ public class ExternalDataDemoActivity extends AppCompatActivity {
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_EXTERNAL_REALTIMEDATA)) {
@@ -78,6 +81,7 @@ public class ExternalDataDemoActivity extends AppCompatActivity {
                 sb.append(String.format("行程里程，单位：m: %s， ", tripLength));
                 sb.append(String.format("行程花销，单位：元: %s， ", driveCost));
 
+//                android.util.Log.i(TAG, "## " + sb.toString());
                 appendLineText(sb.toString());
             } else if (intent.getAction().equals(ACTION_EXTERNAL_CARSTATE)) {
 
