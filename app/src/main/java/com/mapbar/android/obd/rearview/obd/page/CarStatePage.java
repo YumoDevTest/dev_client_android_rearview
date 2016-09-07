@@ -1,18 +1,23 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,12 +42,14 @@ import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAl
 import com.mapbar.android.obd.rearview.obd.FirmwareManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 车辆 状态
@@ -74,9 +81,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
     @ViewInject(R.id.viewgrounp_stage_record)
     private ViewGroup viewgrounp_stage_record;
-
-
-    private Button btn_state_pop_close;
+    private MyHandler myHandler = new MyHandler(this);
+    private List<String> state_list;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
     private int[] stateResOpenIds = {R.drawable.car_light_open, R.drawable.car_window_open, R.drawable.car_lock_open, R.drawable.car_door_open, R.drawable.car_trunk_open, R.drawable.car_sunroof_open};
@@ -89,6 +95,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private TitleBarView titlebarview1;
     private CarStatePresenter presenter;
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
+    private int screenWidth;
+    private int screenHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,8 +108,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void initView() {
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_state);
-
-
+        WindowManager windowManager = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        screenWidth = windowManager.getDefaultDisplay().getWidth();
+        screenHeight = windowManager.getDefaultDisplay().getHeight();
         carStateView = new CarStateView(getContentView(), R.id.v_carstate);
         carStateView.setData(data);
         stateNames = getContext().getResources().getStringArray(R.array.state_names);
@@ -179,7 +189,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
             }
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
-        tv_state_record.setOnClickListener(this);
+        viewgrounp_stage_record.setOnClickListener(this);
         tv_state.setOnClickListener(this);
         btn_close_QRpop.setOnClickListener(this);
 
@@ -198,12 +208,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_state_record://查看不良状态记录
-                showPopupWindow();
-                break;
-            case R.id.btn_state_pop_close://关闭不良状态记录
-                if (popupWindow != null) {
-                    popupWindow.dismiss();
+            case R.id.viewgrounp_stage_record://查看不良状态记录
+                if (state_list.size()>0){
+                    showPopupWindow();
                 }
                 break;
             case R.id.tv_state://提示有固件升级
@@ -233,28 +240,29 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         super.onResume();
         if (presenter != null)
             presenter.checkPermission();
-        //判断有无故障
-        if (!TextUtils.isEmpty(getPopContent())) {
-            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
-            tv_state_record.setText("车辆存在故障码");
-
-            iv_state_safe.setBackgroundResource(R.drawable.trouble);
-        }
-
+            getPopContent();
         if (isUmenngWorking) {
             MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
         }
     }
-
     @Override
     public void onPause() {
         super.onPause();
+
         CarStateManager.getInstance().stopRefreshCarState();
         if (isUmenngWorking) {
             MobclickAgentEx.onPageEnd("CarStatePage");
         }
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            myHandler.sendEmptyMessageDelayed(0, 10000);
+        } else {
+            myHandler.removeCallbacksAndMessages(null);
+        }
+    }
     @Override
     public void onDestroy() {
         if (presenter != null) {
@@ -269,43 +277,56 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      */
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
-        TextView tv_state_pop_content = (TextView) popupView.findViewById(R.id.tv_state_pop_content);
-        btn_state_pop_close = (Button) popupView.findViewById(R.id.btn_state_pop_close);
-        btn_state_pop_close.setOnClickListener(this);
-        String popContent = getPopContent();
-        if (!TextUtils.isEmpty(popContent)) {
-            tv_state_pop_content.setText(popContent);
-        }
-        popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        ListView lv_state_pop_content = (ListView) popupView.findViewById(R.id.lv_state_pop_content);
+        lv_state_pop_content.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.item_state_pop,R.id.tv_item_state,state_list));
+        lv_state_pop_content.setScrollbarFadingEnabled(false);
+        TextView textView = new TextView(getContext());
+        textView.setText("有"+state_list.size()+"个预警信息");
+        textView.setTextColor(Color.WHITE);
+        textView.setTextSize(22);
+        textView.setGravity(Gravity.CENTER);
+        textView.setPadding(0,0,0,5);
+        lv_state_pop_content.addHeaderView(textView);
+        popupWindow = new PopupWindow(popupView, screenWidth/2,screenHeight/2);
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
 
-    public String getPopContent() {
-        sb.setLength(0);
+    public void getPopContent() {
+        if (state_list == null) {
+            state_list = new ArrayList<String>();
+        }
+        state_list.clear();
         ArrayList<String> alarmDatas = CarStateManager.getInstance().alarmDatas;
-        if (alarmDatas.size() > 3) {
-            sb.append("故障码:");
-            for (int i = 3; i < alarmDatas.size(); i++) {
-                if (i == alarmDatas.size() - 1) {
-                    sb.append(alarmDatas.get(i) + "；\n");
-                } else {
-                    sb.append(alarmDatas.get(i) + "、");
+        if (alarmDatas != null) {
+            if (alarmDatas.size() > 3) {
+//            sb.append("故障码:");
+                for (int i = 3; i < alarmDatas.size(); i++) {
+                    state_list.add(alarmDatas.get(i));
                 }
             }
+            if (!"水温".equals(alarmDatas.get(0))) {
+                state_list.add("当前水温:" + alarmDatas.get(0) + "℃");
+            }
+            if (!"电压".equals(alarmDatas.get(1))) {
+                state_list.add("当前电压:" + alarmDatas.get(1) + "v");
+            }
+            if (!"疲劳".equals(alarmDatas.get(2))) {
+                state_list.add("您已驾驶:" + alarmDatas.get(2) + "小时");
+            }
         }
-        if (!"水温".equals(alarmDatas.get(0))) {
-            sb.append("当前水温:" + alarmDatas.get(0) + "℃；\n");
+        //判断有无故障
+        if (state_list.size()>0) {
+            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
+            tv_state_record.setText("车辆存在故障码");
+            iv_state_safe.setBackgroundResource(R.drawable.trouble);
+        }else{
+            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.white));
+            tv_state_record.setText("车辆无不良状态");
+            iv_state_safe.setBackgroundResource(R.drawable.car_state_safe);
         }
-        if (!"电压".equals(alarmDatas.get(1))) {
-            sb.append("当前电压:" + alarmDatas.get(1) + "v；\n");
-        }
-        if (!"疲劳".equals(alarmDatas.get(2))) {
-            sb.append("您已驾驶:" + alarmDatas.get(2) + "小时。");
-        }
-        return sb.toString();
     }
 
 
@@ -405,5 +426,22 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void setCarStateRecordVisiable(boolean isVisiable) {
         if (viewgrounp_stage_record != null)
             viewgrounp_stage_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
+    }
+    public static class MyHandler extends SafeHandler<CarStatePage> {
+
+        public MyHandler(CarStatePage object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            CarStatePage innerObject = getInnerObject();
+            if (getInnerObject() == null)
+                return;
+            if(msg.what==0){
+                innerObject.getPopContent();
+                innerObject.myHandler.sendEmptyMessageDelayed(0, 10000);
+            }
+        }
     }
 }

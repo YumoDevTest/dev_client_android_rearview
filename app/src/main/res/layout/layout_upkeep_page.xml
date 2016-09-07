@@ -64,45 +64,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp">
-
             <ImageView
                 android:id="@+id/view_upkeep_time"
                 style="@style/upkeep"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 />
-
-            <TextView
-                android:id="@+id/tv2"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
-                android:text="@string/upkeep_next_upkeep_time"
-                android:textColor="#00d4b9"
-                android:textSize="13sp"/>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                >
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/upkeep_next_upkeep_time"
+                    android:textColor="#00d4b9"
+                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/tv_next_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv2"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="4dp"
-                android:text="0"
-                android:textColor="#00d4b9"
-                android:textSize="40sp"
-                />
+                <TextView
+                    android:id="@+id/tv_next_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#00d4b9"
+                    android:textSize="40sp"
+                    />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_next_time"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                android:text="天"
-                android:textColor="#00d4b9"
-                android:textSize="15sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天"
+                    android:textColor="#00d4b9"
+                    android:textSize="15sp"/>
+             </LinearLayout>
+
         </RelativeLayout>
     </LinearLayout>
 
