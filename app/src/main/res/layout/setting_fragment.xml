@@ -11,5 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#2B2B2B"
-        android:dividerHeight="2dp" />
+        android:dividerHeight="2dp"
+        android:listSelector="@color/bg_page"
+        />
 </LinearLayout>

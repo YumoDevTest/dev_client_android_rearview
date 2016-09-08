@@ -263,6 +263,7 @@
     <string name="page_title_setting">设置</string>
     <string name="page_title_about_us">关于我们</string>
     <string name="page_title_change_phone">修改手机号或车型</string>
+    <string name="page_title_change_vin">修改VIN</string>
 
     <!--预警信息-->
     <string name="bca_instantGasConsume">瞬时油耗%1$s，请注意。</string>
@@ -317,4 +318,6 @@
     <string name="vin_alert_dialog_info">请扫描填写信息，绑定激活后才能使用汽车卫士功能\n如：爱车体检、故障预警、语音升窗落锁等</string>
     <string name="vin_alert_dialog_scan_success">扫描成功\n请等待绑定激活成功</string>
     <string name="vin_alert_dialog_ok">您已通过手机\\n成功完善爱车信息</string>
+    <string name="vinalert_content">如果您的汽车卫士是专车固件\n修改VIN后将先为您恢复到普通固件</string>
+
 </resources>
