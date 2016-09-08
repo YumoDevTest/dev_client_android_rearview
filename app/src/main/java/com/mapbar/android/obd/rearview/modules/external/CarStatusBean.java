@@ -16,7 +16,7 @@ public class CarStatusBean {
     public boolean is_open_trunk;//是否 打开后备箱
 
     public boolean is_support_lights;//是否支持 灯
-    public boolean is_support_windows;//是否支持 车窗
+//    public boolean is_support_windows;//是否支持 车窗
 
     public boolean is_on_light_small;//小灯
     public boolean is_on_light_near;//近光灯
@@ -66,7 +66,7 @@ public class CarStatusBean {
         is_open_trunk = false;
 
         is_support_lights = false;
-        is_support_windows = false;
+//        is_support_windows = false;
 
         is_on_light_small = false;
         is_on_light_near = false;
