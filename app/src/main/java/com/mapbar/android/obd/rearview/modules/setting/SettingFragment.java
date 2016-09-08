@@ -1,7 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.setting;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -70,7 +69,7 @@ public class SettingFragment extends MyBaseFragment {
                     if (myMenuItem == null) return;
                     if (myMenuItem.index == MY_MENU_ITEM_MODIFY_VIN && isGetVinFromCar) {
                         //跳转到修改VIN界面
-                        startActivity(new Intent(getActivity(), ChangeVinActivity.class));
+                        startActivity(new Intent(getActivity(), ChangeVINActivity.class));
                     } else if (myMenuItem.index == MY_MENU_ITEM_MODIFY_PHONE_NUMER) {
                         //跳转到 修改手机号
                         startActivity(new Intent(getActivity(), ChangePhoneActivity.class));
