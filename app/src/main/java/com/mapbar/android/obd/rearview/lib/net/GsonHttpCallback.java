@@ -66,7 +66,7 @@ public abstract class GsonHttpCallback<T> implements HttpCallback {
 
     @Override
     public void onFailure(int httpCode, Exception e, HttpResponse httpResponse) {
-        LogUtil.e("HTTP", e.getMessage(), e);
+        LogUtil.e("HTTP", "HTTP Error: "+e.getMessage(), e);
         DefalutHttpExceptionHandler.handleException(httpCode, e, httpResponse);
     }
 

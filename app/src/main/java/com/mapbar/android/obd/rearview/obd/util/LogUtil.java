@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.util;
 
+import android.text.TextUtils;
+
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -11,26 +13,30 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 public class LogUtil {
 
     public static boolean isEnable = BuildConfig.DEBUG;//是否开启日志
-//    private static LogPersenter logPersenter = new FileLogPersentoer();
+    //    private static LogPersenter logPersenter = new FileLogPersentoer();
     private static LogPersenter logPersenter = new TomCatPersenter();
 
     public static void d(String tag, String msg) {
         if (!isEnable) return;
+        if (TextUtils.isEmpty(msg)) return;
         logPersenter.d(tag, msg);
     }
 
     public static void i(String tag, String msg) {
         if (!isEnable) return;
+        if (TextUtils.isEmpty(msg)) return;
         logPersenter.i(tag, msg);
     }
 
     public static void e(String tag, String msg) {
         if (!isEnable) return;
+        if (TextUtils.isEmpty(msg)) return;
         logPersenter.e(tag, msg);
     }
 
     public static void e(String tag, String msg, Exception ex) {
         if (!isEnable) return;
+        if (TextUtils.isEmpty(msg)) return;
         logPersenter.e(tag, msg, ex);
     }
 
@@ -49,22 +55,22 @@ public class LogUtil {
 
         @Override
         public void d(String tag, String msg) {
-            android.util.Log.d(tag,msg);
+            android.util.Log.d(tag, msg);
         }
 
         @Override
         public void i(String tag, String msg) {
-            android.util.Log.i(tag,msg);
+            android.util.Log.i(tag, msg);
         }
 
         @Override
         public void e(String tag, String msg) {
-            android.util.Log.e(tag,msg);
+            android.util.Log.e(tag, msg);
         }
 
         @Override
         public void e(String tag, String msg, Exception ex) {
-            android.util.Log.e(tag,msg);
+            android.util.Log.e(tag, msg);
         }
     }
 
