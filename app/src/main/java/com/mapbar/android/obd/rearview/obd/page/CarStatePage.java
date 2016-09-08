@@ -30,6 +30,7 @@ import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.OTAManager;
 import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.obd.FirmwareManager;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
@@ -117,6 +118,8 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
                         carStateView.setData(data);
                         adapter.updateData();
                         adapter.notifyDataSetChanged();
+                        //发送外部消息广播
+                        ExternalManager.postCarStatus(getContext(), data);
                         break;
                     case Manager.Event.obdCarStatusgetFailed:
                         break;

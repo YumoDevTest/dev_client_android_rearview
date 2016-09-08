@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.RealTimeData;
 
 /**
@@ -11,6 +12,7 @@ import com.mapbar.obd.RealTimeData;
  * Created by zhangyunfei on 16/9/5.
  */
 class ExternalBroadcast {
+    private static final String TAG = "ExternalBroadcast";
     /**
      * 车辆数据,实时数据
      */
@@ -33,6 +35,7 @@ class ExternalBroadcast {
         Intent intent = new Intent(ACTION_EXTERNAL_REALTIMEDATA);
         intent.putExtras(arguments);
         context.sendBroadcast(intent);
+//        LogUtil.d(TAG, "## 准备发送外部广播（实时数据）： " + arguments);
     }
 
 
@@ -41,11 +44,14 @@ class ExternalBroadcast {
      *
      * @param context
      */
-    public static void postCarstate(Context context) {
+    public static void postCarStatus(Context context, Bundle arguments) {
         if (context == null)
             throw new NullPointerException();
         Intent intent = new Intent(ACTION_EXTERNAL_CARSTATE);
+        intent.putExtras(arguments);
         context.sendBroadcast(intent);
+        LogUtil.d(TAG, "## 发送外部广播（车辆状态）： " + arguments);
+
     }
 
 }

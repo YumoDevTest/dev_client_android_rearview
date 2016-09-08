@@ -1,12 +1,12 @@
 package com.mapbar.demo;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ExternalDataDemoActivity extends AppCompatActivity {
-    public static final String TAG = "ExternalDataDemoActivity";
+public class External_broadcast_car_statusActivity extends Activity {
+    public static final String TAG = "External_broadcast_car_statusActivity";
 
     /**
      * Action,车辆数据,实时数据
@@ -36,7 +36,7 @@ public class ExternalDataDemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.externaldata_demo_activity);
 
         textview1 = (TextView) findViewById(R.id.textview1);
 
@@ -60,34 +60,22 @@ public class ExternalDataDemoActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_EXTERNAL_REALTIMEDATA)) {
-                int speed = intent.getIntExtra("speed", 0);//车速，单位：km/h
-                int rpm = intent.getIntExtra("rpm", 0);//转速，单位: r/min
-                float voltage = intent.getFloatExtra("voltage", 0);//电池电压，单位：V。
-                int engineCoolantTemperature = intent.getIntExtra("engineCoolantTemperature", 0);//水温”)，单位：℃。
-                float gasConsumInLPerHour = intent.getFloatExtra("gasConsumInLPerHour", 0);//瞬时油耗，单位：L/h
-                float averageGasConsum = intent.getFloatExtra("averageGasConsum", 0);//平均油耗，单位：L/100km
-                long tripTime = intent.getLongExtra("tripTime", 0);//行程耗时，单位：毫秒
-                int tripLength = intent.getIntExtra("tripLength", 0);//行程里程，单位：m
-                float driveCost = intent.getFloatExtra("driveCost", 0);//行程花销，单位：元
-
-                StringBuilder sb = new StringBuilder("\r\n");
-                sb.append(String.format("车速，单位：km/h: %s， ", speed));
-                sb.append(String.format("转速，单位: r/min: %s， ", rpm));
-                sb.append(String.format("电池电压，单位：V: %s， ", voltage));
-                sb.append(String.format("水温”)，单位：℃。: %s， ", engineCoolantTemperature));
-                sb.append(String.format("瞬时油耗，单位：L/h: %s， ", gasConsumInLPerHour));
-                sb.append(String.format("平均油耗，单位：L/100km: %s， ", averageGasConsum));
-                sb.append(String.format("行程耗时，单位：分钟: %s， ", tripTime / 1000 / 60));
-                sb.append(String.format("行程里程，单位：m: %s， ", tripLength));
-                sb.append(String.format("行程花销，单位：元: %s， ", driveCost));
-
-//                android.util.Log.i(TAG, "## " + sb.toString());
-                appendLineText(sb.toString());
             } else if (intent.getAction().equals(ACTION_EXTERNAL_CARSTATE)) {
-
+                showCarRealTimeData(intent);
             }
         }
+
     };
+
+    private void showCarRealTimeData(Intent intent) {
+        boolean is_support_lock = intent.getBooleanExtra("is_support_lock", false);//是否支持中控锁
+        boolean is_locked = intent.getBooleanExtra("is_locked", false);//是否锁了中控锁
+
+        StringBuilder sb = new StringBuilder("\r\n");
+        sb.append(String.format("是否支持中控锁: %s， ", is_support_lock));
+        sb.append(String.format("是否锁了中控锁: %s， ", is_locked));
+        appendLineText(sb.toString());
+    }
 
 
     private Handler mHandler = new Handler() {
