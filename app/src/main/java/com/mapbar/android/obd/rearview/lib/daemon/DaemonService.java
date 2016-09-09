@@ -44,14 +44,14 @@ public class DaemonService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        android.util.Log.d(TAG, " ## onStartCommand, action = " + intent.getAction());
-
-        if (delayAutoStartService != null) {
-            //发送延迟启动消息
-            Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_DELAY_START_APP);
-            sendBroadcast(intentDelayStart);
+        if (intent != null) {
+            android.util.Log.d(TAG, " ## onStartCommand, action = " + intent.getAction());
+            if (delayAutoStartService != null) {
+                //发送延迟启动消息
+                Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_DELAY_START_APP);
+                sendBroadcast(intentDelayStart);
+            }
         }
-
         return super.onStartCommand(intent, flags, startId);
     }
 

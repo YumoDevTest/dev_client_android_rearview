@@ -150,13 +150,13 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 service，自启动监听 -->
-        <service android:name=".lib.daemon.DaemonService">
-            <intent-filter>
-                <action android:name="com.mapbar.android.obd.rearview.action.DEAMON" />
+        <!--<service android:name=".lib.daemon.DaemonService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.mapbar.android.obd.rearview.action.DEAMON" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
         <!-- 爱心推start -->
         <!-- 定义接收器，用来接收透传、api结果以及点击事件 -->
         <receiver android:name=".framework.ixintui.AixintuiBroadcastReceiver">
