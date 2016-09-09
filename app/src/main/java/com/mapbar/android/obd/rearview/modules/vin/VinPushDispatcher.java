@@ -24,16 +24,16 @@ public class VinPushDispatcher {
         if (type == PushType.SCAN_BIND_VIN_CODE) {
             if (state == PushState.SUCCESS) {
                 LogUtil.d("PUSH", "## 收到推送：扫描VIN");
-                EventBusManager.post(new VinScanEvent());
+                EventBusManager.post(new VinScanEvent(type,state,userId,token));
             }
         } else if (type == PushType.SCAN_BIND_VIN) {
             if (state == PushState.SUCCESS) {
                 LogUtil.d("PUSH", "## 收到推送：绑定VIN成功");
-                EventBusManager.post(new VinChangeSucccessEvent());
-//                Manager.getInstance().queryRemoteUserCar();
+                EventBusManager.post(new VinChangeSucccessEvent(type,state,userId,token));
+//                Manager.getInstance().queryRemoteUserCar();//更新车辆信息
             } else {
                 LogUtil.d("PUSH", "## 收到推送：绑定VIN失败");
-                EventBusManager.post(new VinChangeFailureEvent());
+                EventBusManager.post(new VinChangeFailureEvent(type,state,userId,token));
             }
         }
     }

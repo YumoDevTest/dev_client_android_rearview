@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:id="@+id/ll_pop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
         android:layout_centerInParent="true"
         android:layout_marginBottom="40dp"
         android:background="@drawable/qr_bg"
@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/iv_qr"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="fitXY"
             android:visibility="visible" />
 
@@ -30,11 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:text="请扫描填写车辆识别号来扩展此页\r的车辆状态和控制功能"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btn_close_QRpop"

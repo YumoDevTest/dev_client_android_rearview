@@ -248,7 +248,7 @@
             android:name="UMENG_APPKEY"
             android:value="5769e791e0f55a06a8000ed6" />
 
-
+        <activity android:name=".modules.setting.ChangeVINActivity"></activity>
     </application>
 
 </manifest>
