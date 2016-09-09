@@ -228,6 +228,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener {
         }
 
         if (isUmenngWorking) {
+            CarStateManager.getInstance().startRefreshCarState();//保证在当前界面时,刷新车辆状态界面
             MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
         }
     }
