@@ -54,7 +54,10 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         checkVinIsNull();
     }
 
-    private void showOtaAlertText() {
+    /**
+     * 检查提示 “当前车型是否支持车辆控制功能”
+     */
+    public void showOtaAlertText() {
         if (firmwareVersionChecker.isV3SpecialOta()) {
             getView().showOtaAlert_SupportControl();
         } else {
@@ -77,11 +80,17 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
         }
     }
 
+    /**
+     * 清理
+     */
     public void clear() {
         permissionManager = null;
         EventBusManager.unregister(this);
     }
 
+    /**
+     * 检查权限
+     */
     public void checkPermission() {
         //是否具有 车辆状态权限
         PermissionManager.PermissionResult permission4State = permissionManager.checkPermission(PermissionKey.PERMISSION_CAR_STATE);

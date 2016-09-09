@@ -5,15 +5,19 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.views.CountDownTextViewWrapper;
 
 /**
  * 提示用户升级成功
  * Created by zhangyunfei on 16/8/27.
  */
 public class OtaAlertSuccessView extends FrameLayout {
-    private View firmware_update_succ_confirm;
+    private TextView firmware_update_succ_confirm;
+    private CountDownTextViewWrapper countDownTextViewWrapper;
+    private OnClickListener onOKClickListener;
 
     public OtaAlertSuccessView(Context context) {
         super(context);
@@ -34,11 +38,19 @@ public class OtaAlertSuccessView extends FrameLayout {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.ota_alert_success, this);
 
-        firmware_update_succ_confirm = findViewById(R.id.firmware_update_succ_confirm);
+        firmware_update_succ_confirm = (TextView) findViewById(R.id.firmware_update_succ_confirm);
+        firmware_update_succ_confirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onOKClickListener != null)
+                    onOKClickListener.onClick(view);
+            }
+        });
+        countDownTextViewWrapper = new CountDownTextViewWrapper(firmware_update_succ_confirm, 5);
     }
 
     public void setOKButtonClick(OnClickListener onClickListener) {
-        firmware_update_succ_confirm.setOnClickListener(onClickListener);
+        this.onOKClickListener = onClickListener;
     }
 
 }

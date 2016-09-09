@@ -55,9 +55,11 @@
                     <LinearLayout
                         android:id="@+id/viewgrounp_stage_record"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_below="@id/gv_state"
-                        android:gravity="center">
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="5dp"
+                        >
 
                         <ImageView
                             android:id="@+id/iv_state_safe"
@@ -71,6 +73,7 @@
                             android:layout_height="wrap_content"
                             android:text="车辆无不良状态"
                             android:textColor="@color/white"
+                            android:layout_marginLeft="5dp"
                             android:textSize="12sp" />
                     </LinearLayout>
 

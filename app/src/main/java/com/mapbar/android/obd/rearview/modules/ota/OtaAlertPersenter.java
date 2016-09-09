@@ -34,7 +34,6 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
             getView().showView_alert_ForceUpgrade();
         } else {
             getView().showView_alertUpgrade();
-
         }
     }
 
