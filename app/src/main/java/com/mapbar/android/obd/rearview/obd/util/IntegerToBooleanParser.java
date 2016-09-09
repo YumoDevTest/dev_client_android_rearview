@@ -1,13 +1,21 @@
-package com.mapbar.demo;
+package com.mapbar.android.obd.rearview.obd.util;
 
 import junit.framework.Assert;
 
 /**
+ * 将 int 中的bit位转成 boolean
  * Created by zhangyunfei on 16/9/8.
  */
-public class TestParseBooleanBit {
+public class IntegerToBooleanParser {
 
 
+    /**
+     * 转成 boolean
+     *
+     * @param value  一个整数
+     * @param offset 第几位,从0开始
+     * @return
+     */
     public static boolean parseBoolean(int value, int offset) {
         if (offset < 0)
             throw new IndexOutOfBoundsException("offset 必须大于等于0");

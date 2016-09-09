@@ -71,9 +71,100 @@ public class External_broadcast_car_statusActivity extends Activity {
         boolean is_support_lock = intent.getBooleanExtra("is_support_lock", false);//是否支持中控锁
         boolean is_locked = intent.getBooleanExtra("is_locked", false);//是否锁了中控锁
 
+        boolean is_support_sunroof = intent.getBooleanExtra("is_support_sunroof", false);//
+        boolean is_open_sunroof = intent.getBooleanExtra("is_open_sunroof", false);//
+
+        boolean is_support_trunk = intent.getBooleanExtra("is_support_trunk", false);//
+        boolean is_open_trunk = intent.getBooleanExtra("is_open_trunk", false);//
+        boolean is_support_lights = intent.getBooleanExtra("is_support_lights", false);//
+
+        boolean is_on_light_small = intent.getBooleanExtra("is_on_light_small", false);//
+        boolean is_on_light_near = intent.getBooleanExtra("is_on_light_near", false);//
+        boolean is_on_light_far = intent.getBooleanExtra("is_on_light_far", false);//
+        boolean is_on_light_fog_front = intent.getBooleanExtra("is_on_light_fog_front", false);//
+        boolean is_on_light_fog_back = intent.getBooleanExtra("is_on_light_fog_back", false);//
+        boolean is_on_light_turn_left = intent.getBooleanExtra("is_on_light_turn_left", false);//
+        boolean is_on_light_turn_right = intent.getBooleanExtra("is_on_light_turn_right", false);//
+        boolean is_on_light_dangerous = intent.getBooleanExtra("is_on_light_dangerous", false);//
+        boolean is_on_light_switch = intent.getBooleanExtra("is_on_light_switch", false);//
+
+        boolean is_support_left_front_lock = intent.getBooleanExtra("is_support_left_front_lock", false);//
+        boolean is_on_left_front_lock = intent.getBooleanExtra("is_on_left_front_lock", false);//
+        boolean is_support_right_front_lock = intent.getBooleanExtra("is_support_right_front_lock", false);//
+        boolean is_on_righ_front_lock = intent.getBooleanExtra("is_on_righ_front_lock", false);//
+        boolean is_support_left_back_lock = intent.getBooleanExtra("is_support_left_back_lock", false);//
+        boolean is_on_left_back_lock = intent.getBooleanExtra("is_on_left_back_lock", false);//
+        boolean is_support_right_back_lock = intent.getBooleanExtra("is_support_right_back_lock", false);//
+        boolean is_on_right_back_lock = intent.getBooleanExtra("is_on_right_back_lock", false);//
+
+        boolean is_support_left_front_door = intent.getBooleanExtra("is_support_left_front_door", false);//
+        boolean is_on_left_front_door = intent.getBooleanExtra("is_on_left_front_door", false);//
+        boolean is_support_right_front_door = intent.getBooleanExtra("is_support_right_front_door", false);//
+        boolean is_on_righ_front_door = intent.getBooleanExtra("is_on_righ_front_door", false);//
+        boolean is_support_left_back_door = intent.getBooleanExtra("is_support_left_back_door", false);//
+        boolean is_on_left_back_door = intent.getBooleanExtra("is_on_left_back_door", false);//
+        boolean is_support_right_back_door = intent.getBooleanExtra("is_support_right_back_door", false);//
+        boolean is_on_right_back_door = intent.getBooleanExtra("is_on_right_back_door", false);//
+
+        boolean is_support_left_front_window = intent.getBooleanExtra("is_support_left_front_window", false);//
+        boolean is_on_left_front_window = intent.getBooleanExtra("is_on_left_front_window", false);//
+        boolean is_support_right_front_window = intent.getBooleanExtra("is_support_right_front_window", false);//
+        boolean is_on_righ_front_window = intent.getBooleanExtra("is_on_righ_front_window", false);//
+        boolean is_support_left_back_window = intent.getBooleanExtra("is_support_left_back_window", false);//
+        boolean is_on_left_back_window = intent.getBooleanExtra("is_on_left_back_window", false);//
+        boolean is_support_right_back_window = intent.getBooleanExtra("is_support_right_back_window", false);//
+        boolean is_on_right_back_window = intent.getBooleanExtra("is_on_right_back_window", false);//
+
         StringBuilder sb = new StringBuilder("\r\n");
-        sb.append(String.format("是否支持中控锁: %s， ", is_support_lock));
-        sb.append(String.format("是否锁了中控锁: %s， ", is_locked));
+        sb.append(String.format("中控锁是否支持: %s， ", is_support_lock));
+        sb.append(String.format("中控锁是否锁: %s， ", is_locked));
+
+        sb.append(String.format("是否支持天窗: %s， ", is_support_sunroof));
+        sb.append(String.format("是否打开天窗: %s， ", is_open_sunroof));
+
+        sb.append(String.format("是否支持后备箱: %s， ", is_support_trunk));
+        sb.append(String.format("是否打开后备箱: %s， ", is_open_trunk));
+
+        sb.append(String.format("是否支持 灯: %s， ", is_support_lights));
+
+        sb.append(String.format("小灯: %s， ", is_on_light_small));
+        sb.append(String.format("近光灯: %s， ", is_on_light_near));
+        sb.append(String.format("远光灯: %s， ", is_on_light_far));
+        sb.append(String.format("前雾灯: %s， ", is_on_light_fog_front));
+        sb.append(String.format("后雾灯: %s， ", is_on_light_fog_back));
+        sb.append(String.format("左转灯: %s， ", is_on_light_turn_left));
+        sb.append(String.format("右转灯: %s， ", is_on_light_turn_right));
+        sb.append(String.format("危险报警双闪: %s， ", is_on_light_dangerous));
+        sb.append(String.format("总开关: %s， ", is_on_light_switch));
+
+//        sb.append(String.format(": %s， ", is_support_left_front_lock));
+        sb.append(String.format("是否支持 左前门锁状态: %s， ", is_support_left_front_lock));
+        sb.append(String.format("是否锁 左前门锁: %s， ", is_on_left_front_lock));
+        sb.append(String.format("是否支持 右前门锁状态: %s， ", is_support_right_front_lock));
+        sb.append(String.format("是否锁 右前门锁: %s， ", is_on_righ_front_lock));
+        sb.append(String.format("是否支持 左后门锁状态: %s， ", is_support_left_back_lock));
+        sb.append(String.format("是否锁 左后门锁: %s， ", is_on_left_back_lock));
+        sb.append(String.format("是否支持 右后门锁状态: %s， ", is_support_right_back_lock));
+        sb.append(String.format("是否锁 右后门锁: %s， ", is_on_right_back_lock));
+
+        sb.append(String.format("是否支持 左前门开关状态: %s， ", is_support_left_front_door));
+        sb.append(String.format("是否打开 左前门: %s， ", is_on_left_front_door));
+        sb.append(String.format("是否支持 右前开关状态: %s， ", is_support_right_front_door));
+        sb.append(String.format("是否打开 右前门: %s， ", is_on_righ_front_door));
+        sb.append(String.format("是否支持 左后门开关状态: %s， ", is_support_left_back_door));
+        sb.append(String.format("是否打开 左后门: %s， ", is_on_left_back_door));
+        sb.append(String.format("是否支持 右后门开关状态: %s， ", is_support_right_back_door));
+        sb.append(String.format("是否打开 右后门: %s， ", is_on_right_back_door));
+
+        sb.append(String.format("是否支持 左前门车窗状态: %s， ", is_support_left_front_window));
+        sb.append(String.format("是否打开 左前门车窗: %s， ", is_on_left_front_window));
+        sb.append(String.format("是否支持 右前车窗状态: %s， ", is_support_right_front_window));
+        sb.append(String.format("是否打开 右前门车窗: %s， ", is_on_righ_front_window));
+        sb.append(String.format("是否支持 左后门车窗状态: %s， ", is_support_left_back_window));
+        sb.append(String.format("是否打开 左后门车窗: %s， ", is_on_left_back_window));
+        sb.append(String.format("是否支持 右后门车窗状态: %s， ", is_support_right_back_window));
+        sb.append(String.format("是否打开 右后门车窗: %s， ", is_on_right_back_window));
+
         appendLineText(sb.toString());
     }
 
