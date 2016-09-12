@@ -11,8 +11,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
-        versionCode project.VERSION_CODE == null ? 2 : project.VERSION_CODE
-        versionName project.VERSION_NAME == null ? "1.0.1" : project.VERSION_NAME
+        versionCode project.VERSION_CODE == null ? 3 : project.VERSION_CODE
+        versionName project.VERSION_NAME == null ? "1.0.3" : project.VERSION_NAME
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'mapbar']
     }
     signingConfigs {
@@ -63,7 +63,7 @@ android {
             minifyEnabled false
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")//串口地址
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
             buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
             buildConfigField("String", "FAKE_IMEI", "\"777296%%%%hh01739!55558555\"")//伪造的IMEI

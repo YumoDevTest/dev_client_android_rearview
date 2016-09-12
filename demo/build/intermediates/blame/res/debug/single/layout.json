@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/res/merged/debug/layout/externaldata_demo_activity.xml",
+        "source": "/Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/res/layout/externaldata_demo_activity.xml"
+    },
+    {
+        "merged": "/Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/res/layout/activity_main.xml"
+    }
+]
