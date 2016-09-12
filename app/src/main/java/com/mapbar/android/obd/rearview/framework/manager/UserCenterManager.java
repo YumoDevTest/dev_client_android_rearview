@@ -372,9 +372,11 @@ public class UserCenterManager extends OBDManager {
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
 
-                int c = (int) o;
-
-                StringUtil.toastStringShort(c + "");
+                Integer c = (Integer) o;
+                if (c == null) {
+                    StringUtil.toastStringShort("错误码为空了");
+                }
+                StringUtil.toastStringShort(c+"");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

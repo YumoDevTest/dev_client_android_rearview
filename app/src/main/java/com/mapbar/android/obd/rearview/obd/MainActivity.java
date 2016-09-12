@@ -85,6 +85,7 @@ public class MainActivity extends BaseActivity {
     private PopupWindow updatePopu;
     private Handler handler;
     private String logFilePath = "";
+    private boolean isGoDeclareActivity = false;
 
     public static MainActivity getInstance() {
         return instance;
@@ -93,12 +94,13 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         instance = this;
         stopBackgroundService();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
+
+
         LayoutUtils_ui.proportional();
         LogManager.getInstance().init(MainActivity.this);
         logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
@@ -176,12 +178,6 @@ public class MainActivity extends BaseActivity {
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
                         StringUtil.toastStringShort("token失效");
 
-//                        PageManager.getInstance().finishAll();
-//
-//                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                        final AppPage page = pageManager.createPage(SplashPage.class, null);
-//                        transaction.replace(R.id.content_view, page);
-//                        transaction.commit();
                         UserCenterManager.getInstance().sdkListener.setActive(true);
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -192,7 +188,9 @@ public class MainActivity extends BaseActivity {
 
 
                         break;
+                    case Manager.Event.dataCollectSucc:
 
+                        break;
                 }
 
             }

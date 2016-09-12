@@ -132,9 +132,12 @@ public class LayoutUtils {
      * @param confirmListener 确定事件
      */
     public static void showPopWindow(String title, String msg, View.OnClickListener confirmListener) {
-        showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener);
+        showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener, null);
     }
 
+    public static void showPopWindow(String title, String msg, View.OnClickListener confirmListener, View containt) {
+        showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener, containt);
+    }
     /**
      * 弹出对话框
      *
@@ -145,7 +148,7 @@ public class LayoutUtils {
      * @param type            按钮类型
      * @param confirmListener 确定事件
      */
-    public static void showPopWindow(String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener) {
+    public static void showPopWindow(String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener, View containt) {
         View view = View.inflate(Global.getAppContext(), R.layout.layout_dialog, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_tips_title);
         TextView tv_msg = (TextView) view.findViewById(R.id.tv_tips_info);
@@ -175,9 +178,13 @@ public class LayoutUtils {
                 break;
         }
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        ArrayList<AppPage> pages = PageManager.getInstance().getPages();
-//        if (pages.size() > 0) {
-        popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+
+        if (containt == null) {
+            popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+        } else {
+            popupWindow.showAtLocation(containt, Gravity.CENTER, 0, 0);
+        }
+
 //        }
 
         final View.OnClickListener listener = new View.OnClickListener() {

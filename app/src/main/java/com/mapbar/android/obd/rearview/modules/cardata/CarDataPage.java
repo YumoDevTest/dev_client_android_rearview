@@ -251,7 +251,22 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         tv_carData_unit_2.setText(units[spv1]);
         tv_carData_unit_3.setText(units[spv2]);
         tv_carData_unit_4.setText(units[spv3]);
-        //当车速低于10时,更改单位
+    }
+
+    /**
+     * 设置时实数据
+     */
+    public void upData() {// 日志
+        if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+            Log.v(LogTag.FRAMEWORK, "upData+++++++");
+            Log.v(LogTag.FRAMEWORK, "ThreadId:" + Thread.currentThread().getId());
+            Log.v(LogTag.FRAMEWORK, "speed:" + realTimeData.rpm);
+        }
+        tv_carData_value_1.setText(transform(spv0));
+        tv_carData_value_2.setText(transform(spv1));
+        tv_carData_value_3.setText(transform(spv2));
+        tv_carData_value_4.setText(transform(spv3));
+        //当车速低于10时,更改瞬时油耗单位,每次更新数据的时候都检测更新这个数据
         if (realTimeData != null && realTimeData.speed <= 10) {
             if (spv0 == 0) tv_carData_unit_1.setText("L/H");
             else if (spv1 == 0) tv_carData_unit_2.setText("L/H");
@@ -266,23 +281,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     }
 
     /**
-     * 设置时实数据
-     */
-    public void upData() {// 日志
-        if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-            Log.v(LogTag.FRAMEWORK, "upData+++++++");
-            Log.v(LogTag.FRAMEWORK, "ThreadId:" + Thread.currentThread().getId());
-            Log.v(LogTag.FRAMEWORK, "speed:" + realTimeData.rpm);
-        }
-
-        tv_carData_value_1.setText(transform(spv0));
-        tv_carData_value_2.setText(transform(spv1));
-        tv_carData_value_3.setText(transform(spv2));
-        tv_carData_value_4.setText(transform(spv3));
-
-    }
-
-    /**
      * 通过数组索引获取时实数据
      *
      * @param index {@link #dataNames} 数组索引
@@ -291,7 +289,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     public String transform(int index) {
         switch (index) {
             case 0:
-                return DecFormatUtil.format2dot1(realTimeData.gasConsum);
+                //如果车速小于10获取小时单位的瞬时油耗,反之获取100KM油耗;
+                return realTimeData.speed < 10 ? DecFormatUtil.format2dot1(realTimeData.gasConsumInLPerHour):DecFormatUtil.format2dot1(realTimeData.gasConsum);
             case 1:
                 return TimeUtils.parseTime(realTimeData.tripTime);
             case 2:

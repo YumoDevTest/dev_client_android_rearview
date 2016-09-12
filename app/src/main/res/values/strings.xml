@@ -3,12 +3,12 @@
     <string name="action_settings">Settings</string>
     <string name="main_title">主界面</string>
 
-
     <!-- 时间 -->
     <string name="date_format_hhmm">HH:mm</string>
     <string name="date_format_mmdd">M月d日</string>
     <string name="date_format_mmddhhmm">M月d日 HH:mm</string>
     <string name="date_format_MMddHHmmssSSS">MM-dd HH:mm:ss.SSS</string>
+    <string name="data_format_HHmmss">HH:mm:ss</string>
     <string name="date_format_yyyymmdd">yyyy年M月d日</string>
     <string name="date_format_yyyymmdd2">yyyy-MM-dd</string>
     <string name="date_format_yyyymmdd3">yyyy.MM.dd</string>
@@ -320,4 +320,6 @@
     <string name="vin_alert_dialog_ok">您已通过手机\\n成功完善爱车信息</string>
     <string name="vinalert_content">如果您的汽车卫士是专车固件\n修改VIN后将先为您恢复到普通固件</string>
 
+    <!--声明页-->
+    <string name="tv_declare_content">在汽车驾驶过程中操作后视镜软件系统，可能会导致严重的交通事故。为了避免事故发生，请在停车后进行操作。由于具体车型的车载电脑协议和车辆状况的变化，检测结果仅供参考，如有疑问请咨询专业检测机构。</string>
 </resources>

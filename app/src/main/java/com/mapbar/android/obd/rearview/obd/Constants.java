@@ -2,6 +2,12 @@ package com.mapbar.android.obd.rearview.obd;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 
+<<<<<<<HEAD
+import com.mapbar.android.obd.rearview.BuildConfig;
+=======
+import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
+>>>>>>>develop
+
 /**
  * Created by THINKPAD on 2016/2/23.
  */
@@ -21,4 +27,11 @@ public class Constants {
      * 后台服务行程时默认的的channel名称
      */
     public static final String COMAPCT_SERVICE_CHANNEL_NAME = "ObdCompactService";
+
+    /**
+     * 定制模式。通用版，或者定制版。
+     * ---迪瑞特专版特点：开机延迟10分钟自启动app
+     */
+//    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
+    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
 }

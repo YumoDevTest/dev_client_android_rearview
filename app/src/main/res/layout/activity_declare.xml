@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_declare_containt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:context=".obd.DeclareActivity">
+
+    <TextView
+        android:id="@+id/tv_declare_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="安全提示"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_declare_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_declare_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="100dp"
+        android:paddingRight="100dp"
+        android:text="@string/tv_declare_content"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_declare_known"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_declare_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/update_confirm"
+        android:text="知道了"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_declare_test"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/tv_declare_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="#99000000"
+        android:gravity="bottom"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

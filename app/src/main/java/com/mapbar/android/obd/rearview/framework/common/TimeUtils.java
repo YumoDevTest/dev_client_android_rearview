@@ -126,6 +126,11 @@ public class TimeUtils {
                 .format(time);
     }
 
+    public static String getDateHHMMss(long time) {
+        return new SimpleDateFormat(getResources().getString(R.string.data_format_HHmmss), Locale.CHINA)
+                .format(time);
+    }
+
     public static String getDateMMDD(long time) {
         return new SimpleDateFormat(getResources().getString(R.string.date_format_mmdd), Locale.CHINA)
                 .format(time);

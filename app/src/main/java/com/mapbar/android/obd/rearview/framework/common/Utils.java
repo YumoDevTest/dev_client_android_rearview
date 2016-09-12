@@ -124,15 +124,25 @@ public class Utils {
     }
 
     public static String getImei(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        final String deviceId = tm.getDeviceId();
+        String deviceId = null;
         if (!BuildConfig.IS_FAKE_IMEI) {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            final String realReviceId = tm.getDeviceId();
             LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
-            return deviceId;
+            deviceId = realReviceId;
         } else {
             LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
-            return BuildConfig.FAKE_IMEI;
+            deviceId = BuildConfig.FAKE_IMEI;
         }
+
+        if (TextUtils.isEmpty("deviceId")) {
+            android.util.Log.e("IMEI", "## *************************************");
+            android.util.Log.e("IMEI", "## 无IMEI，无法启动！");
+            android.util.Log.e("IMEI", "## *************************************");
+        }
+        return deviceId;
+//        return "20160815weishite";
+//        return "20160909neiwang";
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
 //        return "777296%%%%hh01739!955555555";//外网注册通过
@@ -146,5 +156,6 @@ public class Utils {
 //        return "9231777770048302";//王龙外网8.8
 //        return "20160815weishite";//威仕特8.15
 //        return "20160815diruite";//迪瑞特8.15
+//        return "20160830mt2";//
     }
 }

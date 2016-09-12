@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
+import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
@@ -63,13 +64,13 @@ public class CommandControl {
             final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
             switch (command) {
                 case 102000://车速
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.speed));
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.speed) + "千米每小时");
                     break;
                 case 102001://转速
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.rpm));
+                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.rpm) + "转每分钟");
                     break;
                 case 102002://电压
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.voltage));
+                    voiceManager.sendBroadcastTTS(DecFormatUtil.format2dot1(realTimeData.voltage) + "伏");
                     break;
                 case 102003://水温
                     voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.engineCoolantTemperature));
