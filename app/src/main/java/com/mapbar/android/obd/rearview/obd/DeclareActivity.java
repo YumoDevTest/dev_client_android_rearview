@@ -19,7 +19,7 @@ import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoS
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.mapdal.NativeEnv;
-import com.mapbar.obd.SerialPortManager;
+import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
 import com.ta.utdid2.android.utils.StringUtils;
 
@@ -176,7 +176,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
             }
         });
 
-        SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
+        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         //打开串口
         if (connection == null) {
             try {

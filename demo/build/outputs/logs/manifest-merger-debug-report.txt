@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:2:1-20:12
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:2:1-32:12
 	package
 		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:3:5-30
 		INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml
@@ -13,38 +13,50 @@ ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/Andr
 	android:versionCode
 		INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml
 		INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml
+uses-permission#com.mapbar.android.obd.rearview.permission.REALTIMEDATA
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:6:5-95
+	android:name
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:6:22-92
+uses-permission#com.mapbar.android.obd.rearview.permission.CARSTATE
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:8:5-91
+	android:name
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:8:22-88
 application
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:5:5-18:19
-MERGED from [com.android.support:appcompat-v7:22.2.0] /Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-v4:22.2.0] /Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/AndroidManifest.xml:22:5-20
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:10:5-30:19
 	android:label
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:8:9-41
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:13:9-41
 	android:supportsRtl
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:9:9-35
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:14:9-35
 	android:allowBackup
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:6:9-35
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:11:9-35
 	android:icon
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:7:9-43
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:12:9-43
 	android:theme
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:10:9-40
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:15:9-40
+activity#com.mapbar.demo.External_broadcast_car_statusActivity
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:16:9-18:20
+	android:name
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:16:19-72
+activity#com.mapbar.demo.External_broadcast_realtime2Activity
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:19:9-21:20
+	android:name
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:19:19-71
 activity#com.mapbar.demo.MainActivity
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:11:9-17:20
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:22:9-29:20
 	android:name
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:11:19-47
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:22:19-47
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:12:13-16:29
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:24:13-28:29
 action#android.intent.action.MAIN
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:13:17-69
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:25:17-69
 	android:name
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:13:25-66
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:25:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:15:17-77
+ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:27:17-77
 	android:name
-		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:15:27-74
+		ADDED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml:27:27-74
 uses-sdk
 INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml reason: use-sdk injection requested
-MERGED from [com.android.support:appcompat-v7:22.2.0] /Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-v4:22.2.0] /Users/zhangyunfei/git/dev_client_android_rearview/demo/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/AndroidManifest.xml:20:5-43
 	android:targetSdkVersion
 		INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml
 		INJECTED from /Users/zhangyunfei/git/dev_client_android_rearview/demo/src/main/AndroidManifest.xml

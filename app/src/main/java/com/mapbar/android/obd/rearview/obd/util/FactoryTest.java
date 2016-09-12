@@ -59,7 +59,7 @@ public class FactoryTest {
      * @return
      */
     private static int parseZhuansu(String cmd) {
-        Log.d("parseZhuansu 转换前 ", cmd);
+//        Log.d("parseZhuansu 转换前 ", cmd);
         if (TextUtils.isEmpty(cmd))
             throw new NullPointerException();
         if (cmd.length() < 4)
@@ -77,7 +77,7 @@ public class FactoryTest {
         int b2 = Integer.parseInt(s2, 16);
         int res = b1 * 256 + b2;
 
-        Log.d("parseZhuansu 转换后 ", res + "");
+//        Log.d("parseZhuansu 转换后 ", res + "");
         return res;
     }
 
@@ -90,7 +90,7 @@ public class FactoryTest {
      * @return
      */
     private static int parseSpeed(String cmd) {
-        Log.d("parseSpeed 转换前", cmd);
+//        Log.d("parseSpeed 转换前", cmd);
         if (TextUtils.isEmpty(cmd))
             throw new NullPointerException();
         if (cmd.length() < 4)
@@ -100,7 +100,7 @@ public class FactoryTest {
             throw new InvalidParameterException("字符长度不合法");
         String str = cmd.substring(index, index + 2);
         int b1 = Integer.parseInt(str, 16);
-        Log.d("parseSpeed 转换后", b1 + "");
+//        Log.d("parseSpeed 转换后", b1 + "");
         return b1;
     }
 

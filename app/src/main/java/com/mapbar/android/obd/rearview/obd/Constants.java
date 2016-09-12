@@ -1,12 +1,7 @@
 package com.mapbar.android.obd.rearview.obd;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
-
-<<<<<<<HEAD
-import com.mapbar.android.obd.rearview.BuildConfig;
-=======
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
->>>>>>>develop
 
 /**
  * Created by THINKPAD on 2016/2/23.

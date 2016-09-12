@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mapbar.android.obd.rearview">
 
+    <!-- 可以接收实时数据的广播，自定义权限 -->
+    <permission android:name="com.mapbar.android.obd.rearview.permission.REALTIMEDATA" />
+    <permission android:name="com.mapbar.android.obd.rearview.permission.CARSTATE" />
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />

@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -17,7 +18,10 @@ import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
+import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Firmware;
@@ -39,6 +43,9 @@ import java.io.IOException;
  * Created by liuyy on 2016/5/26.
  */
 public class OBDV3HService extends Service {
+    private static final int MSG_GET_CAR_STATUS_DATA = 1;
+    private static final long INTERVAL_GET_CAR_STATUS = 3000;
+
     /**
      * 精简版后台服务ACTION名称
      */
@@ -81,7 +88,7 @@ public class OBDV3HService extends Service {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
-            android.util.Log.d("OBDV3HService","## 关闭V3服务,onReceive action " + intent.getAction());
+            android.util.Log.d("OBDV3HService", "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
             Manager.getInstance().stopTrip(true);
             Manager.getInstance().cleanup();
@@ -106,7 +113,8 @@ public class OBDV3HService extends Service {
 //        CrashHandler crashHandler = CrashHandler.getInstance();
 //        crashHandler.init(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
-        mHandler = new Handler();
+
+        mHandler = new MyHandler(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         sdkListener = new Manager.Listener() {
 
@@ -232,6 +240,9 @@ public class OBDV3HService extends Service {
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData gasConsumInLPerHour:" + data.gasConsumInLPerHour);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData driveCost:" + data.driveCost);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData rpm:" + data.rpm);
+
+                        //发送广播，传出实时数据
+                        ExternalManager.postRealTimeData(self(), data);
                         break;
 
                     case Manager.Event.dataCollectSucc:
@@ -246,8 +257,16 @@ public class OBDV3HService extends Service {
                             }
                         }, 500);
                         break;
+                    case Manager.Event.obdCarStatusgetSucc: {
+                        CarStatusData carStatusData = (CarStatusData) o;
+                        //发送外部消息广播
+                        ExternalManager.postCarStatus(self(), carStatusData);
+                    }
+                    break;
                 }
             }
+
+
         };
         String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
         try {
@@ -265,7 +284,7 @@ public class OBDV3HService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        android.util.Log.d("OBDV3HService","## 开启了V3服务 onStartCommand");
+        android.util.Log.d("OBDV3HService", "## 开启了V3服务 onStartCommand");
         openDevice();
         Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
 
@@ -376,6 +395,7 @@ public class OBDV3HService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopLoopGetCarStatus();
         Manager.getInstance().cleanup();
         System.exit(0);
     }
@@ -466,6 +486,7 @@ public class OBDV3HService extends Service {
             Log.d(LogTag.OBD, " -->> 启动业务");
         }
         Manager.getInstance().startReadThread();
+        startLoopGetCarStatus();
     }
 
     /**
@@ -508,4 +529,38 @@ public class OBDV3HService extends Service {
     }
 
 
+    private OBDV3HService self() {
+        return this;
+    }
+
+
+    private void startLoopGetCarStatus() {
+        if (mHandler == null) return;
+        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_GET_CAR_STATUS_DATA), INTERVAL_GET_CAR_STATUS);
+    }
+
+    private void stopLoopGetCarStatus() {
+        if (mHandler == null) return;
+        mHandler.removeMessages(MSG_GET_CAR_STATUS_DATA);
+    }
+
+    private static class MyHandler extends SafeHandler<OBDV3HService> {
+        private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
+
+
+        public MyHandler(OBDV3HService object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (getInnerObject() == null)
+                return;
+            if (msg.what == MSG_GET_CAR_STATUS_DATA) {//获得车辆实施数据
+                Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
+                removeMessages(MSG_GET_CAR_STATUS_DATA);
+                sendMessageDelayed(obtainMessage(MSG_GET_CAR_STATUS_DATA), INTERVAL_GET_CAR_STATUS);
+            }
+        }
+    }
 }

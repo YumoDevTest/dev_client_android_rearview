@@ -29,6 +29,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressurePresenter;
 import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
@@ -176,6 +177,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
                         realTimeData = (RealTimeData) o;
                         if (realTimeData != null) {
                             upData();
+                            //发送广播，传出实时数据
+                            ExternalManager.postRealTimeData(getContext(), realTimeData);
                         }
                         break;
                 }
@@ -290,7 +293,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         switch (index) {
             case 0:
                 //如果车速小于10获取小时单位的瞬时油耗,反之获取100KM油耗;
-                return realTimeData.speed < 10 ? DecFormatUtil.format2dot1(realTimeData.gasConsumInLPerHour):DecFormatUtil.format2dot1(realTimeData.gasConsum);
+                return realTimeData.speed < 10 ? DecFormatUtil.format2dot1(realTimeData.gasConsumInLPerHour) : DecFormatUtil.format2dot1(realTimeData.gasConsum);
             case 1:
                 return TimeUtils.parseTime(realTimeData.tripTime);
             case 2:
