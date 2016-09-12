@@ -33,7 +33,16 @@ import security.OBD2Security;
 public final class HttpUtil {
     private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
     public static final String TAG = "HTTP";
+    private static final Object DEFAULT_TAG = "DEFAULT_TAG";
 
+    /**
+     * 清理所有的请求
+     */
+    public static void clear() {
+        MyHttpContext.getOkHttpClient().cancel(DEFAULT_TAG);
+        MyHttpContext.getOkHttpClient().cancel(null);
+        android.util.Log.d(TAG, "## [HTTP] 清理全部HTTP请求");
+    }
 
     /**
      * 发送请求
@@ -68,6 +77,7 @@ public final class HttpUtil {
                     .headers(headers)
                     .url(url)
                     .post(formEncodingBuilder.build())
+                    .tag(DEFAULT_TAG)
                     .build();
             //new call
             Call call = MyHttpContext.getOkHttpClient().newCall(request);

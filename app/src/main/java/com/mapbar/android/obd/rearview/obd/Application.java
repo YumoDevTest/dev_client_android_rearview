@@ -4,6 +4,7 @@ import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
@@ -58,6 +59,7 @@ public class Application extends android.app.Application {
 
     @Override
     public void onTerminate() {
+        HttpUtil.clear();
         android.util.Log.d(TAG, "## [application] 停止");
         // infos 当前应用如果被系统强杀则方法不会被调用
         ObdContext.getInstance().exit();

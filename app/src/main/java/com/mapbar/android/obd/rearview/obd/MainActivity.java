@@ -40,6 +40,7 @@ import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
+import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -357,6 +358,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         LayoutUtils.disQrPop();//防止popupwindow泄露
+        HttpUtil.clear();
         EventBusManager.unregister(this);
         super.onDestroy();
         if (restart) {
