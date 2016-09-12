@@ -52,7 +52,7 @@ android {
                 buildConfigField("String", "FAKE_IMEI", "\"${FAKE_IMEI}\"")//伪造的IMEI
                 buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "${IS_ENABLE_PERMISSION}")
                 buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
-                buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "${getPara_IS_ENABLE_TEST_CAR_DEMO}")
+                buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "${IS_ENABLE_TEST_CAR_DEMO}")
                 //是否 伪造权限管理类
                 buildConfigField("Boolean", "IS_USE_TEST_HOST", "${IS_USE_TEST_HOST}")//是否 使用内网测试服务器
                 signingConfig signingConfigs.debug
