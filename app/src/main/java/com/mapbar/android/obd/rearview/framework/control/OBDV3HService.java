@@ -23,7 +23,6 @@ import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
-import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;

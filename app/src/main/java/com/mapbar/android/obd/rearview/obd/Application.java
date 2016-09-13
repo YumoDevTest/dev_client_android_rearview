@@ -7,6 +7,7 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
+import com.mapbar.android.obd.rearview.obd.util.MyCrashLoger;
 import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
@@ -48,9 +49,8 @@ public class Application extends android.app.Application {
         Global.setAppContext(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         Manager.onApplicationonCreate(this);
-        //捕捉异常注册
-//        CrashHandler crashHandler = CrashHandler.getInstance();
-//        crashHandler.init(this, 3);
+//        捕捉异常注册
+//        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
         //禁用默认页面统计

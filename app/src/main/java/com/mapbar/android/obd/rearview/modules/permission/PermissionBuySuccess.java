@@ -14,7 +14,7 @@ public class PermissionBuySuccess extends MyBaseActivity {
     View btn_start;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.permission_buy_success);
 

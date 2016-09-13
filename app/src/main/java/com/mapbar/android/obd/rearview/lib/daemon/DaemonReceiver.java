@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.daemon;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
@@ -19,6 +20,7 @@ public class DaemonReceiver extends BroadcastReceiver {
 
         if (ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Intent intentService = new Intent(ACTION_DAEMON_SERVICE);
+            intentService.setPackage(context.getPackageName());
             context.startService(intentService);
         }
     }
