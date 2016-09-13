@@ -16,11 +16,12 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
-import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
+import com.mapbar.obd.serial.comond.SerialPortConnection;
+import com.mapbar.obd.serial.comond.impl.SerialPortConnectionCreator;
 import com.ta.utdid2.android.utils.StringUtils;
 
 import java.text.SimpleDateFormat;

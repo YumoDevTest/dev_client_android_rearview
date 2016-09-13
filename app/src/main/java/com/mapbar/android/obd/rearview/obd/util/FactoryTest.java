@@ -1,9 +1,8 @@
 package com.mapbar.android.obd.rearview.obd.util;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.mapbar.android.obd.rearview.obd.SerialPortConnection;
+import com.mapbar.obd.serial.comond.SerialPortConnection;
 
 import java.security.InvalidParameterException;
 
