@@ -65,4 +65,9 @@ public class PermissionTrialAlertDialog extends Activity {
             finish();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
