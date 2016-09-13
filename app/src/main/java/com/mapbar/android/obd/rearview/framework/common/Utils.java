@@ -135,7 +135,6 @@ public class Utils {
 //        return deviceId;
 //        return "20160815weishite";
         return "20160909neiwang";
-
 //        return "jjsadhfjksd5452dr4g3$$$$$$$$$$$$$$$";//6.17王龙测试填写\
 //        return "7772qqqqqqqqqqqqqqqqqqqqqqqqqweishite";//此号已提供其他厂商
 //        return "777296%%%%hh01739!55555555";//外网注册通过
