@@ -49,8 +49,8 @@ public class Application extends android.app.Application {
         Global.setAppContext(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         Manager.onApplicationonCreate(this);
-//        捕捉异常注册
-//        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        //捕捉异常注册
+        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
         //禁用默认页面统计
