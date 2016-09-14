@@ -131,8 +131,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         carStateView.setData(data);
                         adapter.updateData();
                         adapter.notifyDataSetChanged();
-                        //发送外部消息广播
-                        ExternalManager.postCarStatus(getActivity(), data);
+                        if (getActivity() != null && !getActivity().isFinishing()) {
+                            //发送外部消息广播
+                            ExternalManager.postCarStatus(getActivity(), data);
+                        }
                         break;
                     case Manager.Event.obdCarStatusgetFailed:
                         break;

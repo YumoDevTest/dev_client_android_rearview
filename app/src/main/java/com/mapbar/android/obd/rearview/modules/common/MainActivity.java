@@ -31,15 +31,11 @@ import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.control.ServicManager;
-import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
-import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
-import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -74,36 +70,52 @@ import java.util.Calendar;
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEW_CONTAINER_ID = R.id.content_view;
-    private boolean isFinishInitView = false;
     private RelativeLayout contentView;
     private OBDSDKListenerManager.SDKListener sdkListener;
-    private boolean restart;
     private boolean testAppUpdate = false;
     private PopupWindow updatePopu;
     private Handler handler;
-    private String logFilePath = "";
-    private boolean isGoDeclareActivity = false;
     private MainPage mainPage;
-
-    static MainActivity instance;
-
-
-    public static MainActivity getInstance() {
-        return instance;
-    }
+    private PopupWindow qrPopupWindow;
+    private PopupWindow exitAlertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
         MyApplication.getInstance().setMainActivity(this);
+        //构建闪屏页
+        goPage(new SplashPage(), false);
+
         stopBackgroundService();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        handler = new MyHandler(this);
+
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
 
         LayoutUtils_ui.proportional();
         LogManager.getInstance().init(MainActivity.this);
+        initLogFile();
+
+        try {
+            OBDSDKListenerManager.getInstance().init();
+        } catch (IOException e) {
+            e.printStackTrace();
+            alert("初始化串口失败");
+        }
+
+        //构建mainpage
+        mainPage = new MainPage();
+
+        //执行登录
+        login();
+        //监听登录结果
+        registerSDKListener();
+        EventBusManager.register(this);
+    }
+
+    private void initLogFile() {
+        String logFilePath = "";
         logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
         String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
 
@@ -132,24 +144,9 @@ public class MainActivity extends BaseActivity {
                 }
             LogManager.getInstance().setLogFile(logFile);
         }
+    }
 
-        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
-        try {
-            OBDSDKListenerManager.getInstance().init();
-        } catch (IOException e) {
-            e.printStackTrace();
-            alert("初始化串口失败");
-        }
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //构建mainpage
-        mainPage = new MainPage();
-        //构建闪屏页
-        final AppPage page = new SplashPage();
-        transaction.replace(R.id.content_view, page);
-        transaction.commit();
-        onFinishedInit();
-        //监听登录结果
+    private void registerSDKListener() {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
@@ -161,23 +158,11 @@ public class MainActivity extends BaseActivity {
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
-                        LogUtil.d(TAG, String.format("## 准备生成二维码,url = %s", qrInfo.getUrl()));
-                        LayoutUtils.showQrPop(qrInfo.getUrl(), qrInfo.getContent(), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        finish();
-                                        MyApplication.getInstance().exitApplication();
-                                    }
-                                });
-                            }
-                        });
+                        showQrDialog(qrInfo);
                         break;
                     case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
                         MobclickAgentEx.onEvent(getActivity(), UmengConfigs.REGISTER_SUCC);
-                        LayoutUtils.disQrPop();//关闭二维码
+                        dismissQrPopwindow();//关闭二维码
                         break;
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
                         StringUtil.toastStringShort("token失效");
@@ -200,8 +185,48 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
-        handler = new MyHandler(this);
-        EventBusManager.register(this);
+    }
+
+    private void showQrDialog(QRInfo qrInfo) {
+        LogUtil.d(TAG, String.format("## 准备生成二维码,url = %s", qrInfo.getUrl()));
+        dismissQrPopwindow();
+        qrPopupWindow = LayoutUtils.showQrPop(self(), qrInfo.getUrl(), qrInfo.getContent(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExitAlertDialog();
+            }
+        });
+    }
+
+    private void showExitAlertDialog() {
+        dismissExitAlertDialog();
+        exitAlertDialog = LayoutUtils.showPopWindow(self(), "退出", "您确定退出吗？", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (exitAlertDialog != null)
+                    exitAlertDialog.dismiss();
+                finish();
+                MyApplication.getInstance().exitApplication();
+            }
+        });
+    }
+
+    private void dismissExitAlertDialog() {
+        if (exitAlertDialog != null && exitAlertDialog.isShowing()) {
+            exitAlertDialog.dismiss();
+            exitAlertDialog = null;
+        }
+    }
+
+    private void dismissQrPopwindow() {
+        if (qrPopupWindow != null && qrPopupWindow.isShowing()) {
+            qrPopupWindow.dismiss();
+            qrPopupWindow = null;
+        }
+    }
+
+    private MainActivity self() {
+        return this;
     }
 
     private void alert(String msg) {
@@ -360,63 +385,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        LayoutUtils.disQrPop();//防止popupwindow泄露
-        HttpUtil.clear();
+        dismissQrPopwindow();
+        dismissExitAlertDialog();
+        //防止popupwindow泄露
         EventBusManager.unregister(this);
         super.onDestroy();
-        if (restart) {
-            restart = false;
-            MyApplication.getInstance().restartApplication();
-        } else {
-            startV3HService();
-            Manager.getInstance().cleanup();
-            ObdContext.getInstance().exit();
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
         MyApplication.getInstance().setMainActivity(null);
-    }
-
-    private void startV3HService() {
-        //// FIXME: tianff 2016/7/25 关闭上传进程
-//        stopService(new Intent(MainActivity.this, SyncService.class));
-//        if (NativeEnv.isServiceRunning(MainActivity.create(), "obd.service.process")) {
-//            ActivityManager activityManager = (ActivityManager) MainActivity.create().getSystemService(Context.ACTIVITY_SERVICE);
-//            activityManager.killBackgroundProcesses("obd.service.process");
-//        }
-//        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
-//        sendBroadcast(i);
-
-//        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
-//        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-//        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-//        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-//        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-//        ComponentName cName = startService(i);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void downloadPermision() {
-//                Looper.prepare();
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void downloadPermision() {
-//                        Intent i = new Intent(MainActivity.this, OBDV3HService.class);
-//                        i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-//                        i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-//                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-//                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-//                        ComponentName cName = startService(i);
-//                        MyApplication.create().exitApplication();
-
-////                        android.os.Process.killProcess(android.os.Process.myPid());
-//                    }
-//                }, 20 * 1000);
-//                Looper.loop();
-//            }
-//
-//        }).start();
-
-        Intent intent = new Intent(this, ServicManager.class);
-        startService(intent);
     }
 
     @Override
@@ -425,20 +399,15 @@ public class MainActivity extends BaseActivity {
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 return false;
             }
-
-            if (LayoutUtils.getPopupWindow() != null && LayoutUtils.getPopupWindow().isShowing()) {
-                LayoutUtils.getPopupWindow().dismiss();
+            if (exitAlertDialog != null && exitAlertDialog.isShowing()) {
+                dismissExitAlertDialog();
                 return true;
             }
-
-            LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-//                      MyApplication.create().exitApplication();
-
-                }
-            });
+            if (qrPopupWindow != null && qrPopupWindow.isShowing()) {
+                dismissQrPopwindow();
+                return true;
+            }
+            showExitAlertDialog();
             return true;
         } else {
             return false;
@@ -446,19 +415,15 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    public void onFinishedInit() {
-        if (!isFinishInitView) {
-            isFinishInitView = true;
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    //登录
-                    Log.d(LogTag.OBD, "whw -->> UserCenterManager.create().login() ==");
-                    UserCenterManager.getInstance().login();
-                }
-            });
-
-        }
+    public void login() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                //登录
+                LogUtil.d(TAG, "## 登录,UserCenterManager.getInstance().login()");
+                UserCenterManager.getInstance().login();
+            }
+        });
     }
 
     public RelativeLayout getContentView() {
@@ -466,8 +431,13 @@ public class MainActivity extends BaseActivity {
     }
 
     public void goPage(AppPage page) {
+        goPage(page, true);
+    }
+
+    public void goPage(AppPage page, boolean useAnimation) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+        if (useAnimation)
+            transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
         transaction.replace(VIEW_CONTAINER_ID, page);
         transaction.commit();
     }

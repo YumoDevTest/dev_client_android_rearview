@@ -43,8 +43,6 @@ import java.util.ArrayList;
  */
 public class LayoutUtils {
     private static ProgressView pView;
-    private static PopupWindow popupWindow;
-    private static PopupWindow popupQR;
     private static String url;
     private static TextView tv;
 
@@ -95,9 +93,9 @@ public class LayoutUtils {
         return (int) (pxValue / scale + 0.5f);
     }
 
-    public static void showDialog(Activity activity,int resIdTitle, int resIdText, int icon) {
+    public static void showDialog(Activity activity, int resIdTitle, int resIdText, int icon) {
         Resources resources = MyApplication.getInstance().getResources();
-        showDialog(activity,resources.getString(resIdTitle), resources.getString(resIdText), icon);
+        showDialog(activity, resources.getString(resIdTitle), resources.getString(resIdText), icon);
     }
 
     /**
@@ -107,7 +105,7 @@ public class LayoutUtils {
      * @param msg
      * @param icon
      */
-    public static void showDialog(Activity activity,String title, String msg, int icon) {
+    public static void showDialog(Activity activity, String title, String msg, int icon) {
         AlertDialog.Builder tDialog = new AlertDialog.Builder(activity);
         tDialog.setIcon(icon);
         tDialog.setTitle(title);
@@ -132,17 +130,16 @@ public class LayoutUtils {
 
     /**
      * 弹出对话框
-     *
-     * @param title           标题
+     *  @param title           标题
      * @param msg             信息
      * @param confirmListener 确定事件
      */
-    public static void showPopWindow(String title, String msg, View.OnClickListener confirmListener) {
-        showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener, null);
+    public static PopupWindow showPopWindow(MainActivity activity, String title, String msg, View.OnClickListener confirmListener) {
+        return showPopWindow(activity, title, msg, null, null, TipsType.OK_CANCEL, confirmListener, null);
     }
 
-    public static void showPopWindow(String title, String msg, View.OnClickListener confirmListener, View containt) {
-        showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener, containt);
+    public static PopupWindow showPopWindow(MainActivity activity, String title, String msg, View.OnClickListener confirmListener, View containt) {
+        return showPopWindow(activity, title, msg, null, null, TipsType.OK_CANCEL, confirmListener, containt);
     }
 
     /**
@@ -155,9 +152,9 @@ public class LayoutUtils {
      * @param type            按钮类型
      * @param confirmListener 确定事件
      */
-    public static void showPopWindow(String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener, View containt) {
-        MainActivity activity = MyApplication.getInstance().getMainActivity();
-        if (activity == null) throw new NullPointerException();
+    public static PopupWindow showPopWindow(MainActivity activity, String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener, View containt) {
+//        MainActivity activity = MyApplication.getInstance().getMainActivity();
+//        if (activity == null) throw new NullPointerException();
         View view = View.inflate(MyApplication.getInstance(), R.layout.layout_dialog, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_tips_title);
         TextView tv_msg = (TextView) view.findViewById(R.id.tv_tips_info);
@@ -167,6 +164,7 @@ public class LayoutUtils {
         if (!TextUtils.isEmpty(title)) {
             tv_title.setText(title);
         }
+
         if (!TextUtils.isEmpty(msg)) {
             tv_msg.setText(msg);
         }
@@ -186,7 +184,7 @@ public class LayoutUtils {
                 v_mid.setVisibility(View.GONE);
                 break;
         }
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
         if (containt == null) {
             popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
@@ -199,7 +197,8 @@ public class LayoutUtils {
         final View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.dismiss();
+                if (popupWindow != null)
+                    popupWindow.dismiss();
             }
         };
         tv_cancel.setOnClickListener(listener);
@@ -207,41 +206,29 @@ public class LayoutUtils {
         if (confirmListener != null) {
             tv_confirm.setOnClickListener(confirmListener);
         }
+        return popupWindow;
     }
 
-    public static void showQrPop(String content, String info, View.OnClickListener onClickListener) {
-        MainActivity activity = MyApplication.getInstance().getMainActivity();
-        if (activity == null) throw new NullPointerException();
-        if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null && popupQR.isShowing()) {
-            tv.setText(info);
-        } else {
-            url = content;
-            if (popupQR != null) {
-                popupQR.dismiss();
-                popupQR = null;
-            }
-            View view = View.inflate(MyApplication.getInstance(), R.layout.layout_qr_dialog, null);
-            ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
-            Button btn_state_pop_close = (Button) view.findViewById(R.id.btn_close_QRpop);
-            btn_state_pop_close.setOnClickListener(onClickListener);
-            Bitmap bmQR = QRUtils.createQR(content);
-            iv.setImageBitmap(bmQR);
-            tv = (TextView) view.findViewById(R.id.tv_qr_info);
-            tv.setText(info);
-            popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+    public static PopupWindow showQrPop(MainActivity activity, String content, String info, View.OnClickListener onClickListener) {
+
+        url = content;
+
+        View view = View.inflate(MyApplication.getInstance(), R.layout.layout_qr_dialog, null);
+        ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
+        Button btn_state_pop_close = (Button) view.findViewById(R.id.btn_close_QRpop);
+        btn_state_pop_close.setOnClickListener(onClickListener);
+        Bitmap bmQR = QRUtils.createQR(content);
+        iv.setImageBitmap(bmQR);
+        tv = (TextView) view.findViewById(R.id.tv_qr_info);
+        tv.setText(info);
+        PopupWindow popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
 //            ArrayList<AppPage> pages = PageManager.create().getPages();
 //            if (pages.size() > 0) {
-            popupQR.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
+        popupQR.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
 
 //            }
-        }
 
-    }
-
-    public static void disQrPop() {
-        if (popupQR != null) {
-            popupQR.dismiss();
-        }
+        return popupQR;
 
     }
 
@@ -295,10 +282,6 @@ public class LayoutUtils {
     public static void disHud() {
         if (pView != null)
             pView.dismiss();
-    }
-
-    public static PopupWindow getPopupWindow() {
-        return popupWindow;
     }
 
     public static Rect reduceRect(Rect rect) {

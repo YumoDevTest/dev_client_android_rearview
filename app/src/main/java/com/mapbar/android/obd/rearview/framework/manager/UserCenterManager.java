@@ -107,17 +107,17 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "推送的userId -->> " + userId + " token--->" + token);
                             Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
+                            Log.d(LogTag.OBD, "当前imei -->>" + MyApplication.getInstance().getImei());
                         }
 
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                        UserCenter.getInstance().DeviceLoginlogin(MyApplication.getInstance().getImei());
                     }
 
                 } else if (state == 2 || state == 3) {
                     //友盟注册失败统计
                     MobclickAgentEx.onEvent(MyApplication.getInstance(), UmengConfigs.REGISTR_FAILED);
                     //微信注册失败，从新走设备注册
-                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                    UserCenter.getInstance().DeviceLoginlogin(MyApplication.getInstance().getImei());
                 }
                 break;
         }
@@ -259,12 +259,12 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> 设备登录失败");
                 }
                 LayoutUtils.disHud();
-                LayoutUtils.showHud( MainActivity.getInstance(), "网络问题，无法连接");
+                LayoutUtils.showHud(MyApplication.getInstance().getMainActivity(), "网络问题，无法连接");
                 //延迟，设备登录
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                        UserCenter.getInstance().DeviceLoginlogin(MyApplication.getInstance().getImei());
                     }
                 }, 5 * 1000);
                 break;
@@ -409,7 +409,7 @@ public class UserCenterManager extends OBDManager {
 
             }
 
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+            UserCenter.getInstance().DeviceLoginlogin(MyApplication.getInstance().getImei());
         }
     }
 
@@ -486,7 +486,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
+            sb.append(Configs.URL_REG_INFO).append("imei=").append(MyApplication.getInstance().getImei()).append("&");
             sb.append("pushToken=").append(MyApplication.getInstance().getPushToken()).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 
@@ -524,7 +524,7 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, "推送超时 -->> ");
                 }
-                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                UserCenter.getInstance().DeviceLoginlogin(MyApplication.getInstance().getImei());
             }
         }, 1000 * 60 * 5);
 
@@ -589,7 +589,8 @@ public class UserCenterManager extends OBDManager {
             Log.d(LogTag.OBD, "连接设备openDevice -->> ");
         }
         StringUtil.toastStringLong("数据准备中,请稍后");
-        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
+        //注意，这个参数本应传入mac（兼容蓝牙），实际传入imei，必须不能为空，否则异常
+        Manager.getInstance().openDevice(MyApplication.getInstance().getImei());
     }
 
     /**

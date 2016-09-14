@@ -186,8 +186,10 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
                 RealTimeData realTimeData = (RealTimeData) o;
                 if (realTimeData != null) {
                     myHandler.obtainMessage(MSG_GET_A_CAR_DATA, realTimeData).sendToTarget();
-                    //发送广播，传出实时数据
-                    ExternalManager.postRealTimeData(getActivity(), realTimeData);
+                    if (getActivity() != null && !getActivity().isFinishing()) {
+                        //发送广播，传出实时数据
+                        ExternalManager.postRealTimeData(getActivity(), realTimeData);
+                    }
                 }
 
             }

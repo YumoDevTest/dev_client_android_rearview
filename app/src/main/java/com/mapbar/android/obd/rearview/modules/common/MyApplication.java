@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
@@ -58,6 +59,7 @@ public class MyApplication extends android.app.Application {
 
     @Override
     public void onTerminate() {
+        setMainActivity(null);
         //配置umeng统计分析
         MobclickAgentEx.onTerminal();
         HttpUtil.clear();
@@ -112,10 +114,18 @@ public class MyApplication extends android.app.Application {
         return UserCenter.getInstance().getCurrentIdAndType().userId;
     }
 
+
+    private void startV3HService() {
+        Intent intent = new Intent(this, ServicManager.class);
+        startService(intent);
+    }
+
     /**
      * 退出当前app
      */
     public void exitApplication() {
+
+        setMainActivity(null);
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
             getMainActivity().finish();
         }
@@ -123,6 +133,10 @@ public class MyApplication extends android.app.Application {
         Manager.getInstance().cleanup();
         //umeng统计，在杀死进程是需要调用用来保存统计数据。
         MobclickAgentEx.onKillProcess(this);
+
+        //启动后台服务
+        startV3HService();
+
         System.exit(0);
     }
 
@@ -131,9 +145,8 @@ public class MyApplication extends android.app.Application {
      */
     public void restartApplication() {
         startService(new Intent(getMainActivity(), RestartService.class));
-        MyApplication.getInstance().exitApplication();
+        exitApplication();
     }
-
 
     /**
      * 获得 首页 Activity

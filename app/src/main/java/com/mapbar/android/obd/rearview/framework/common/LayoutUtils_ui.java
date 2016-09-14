@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 /**
  * 布局工具类
@@ -57,7 +58,7 @@ public class LayoutUtils_ui {
     public static void proportional() {
 
         float currentEnvironmentDensity = MyApplication.getInstance().getResources().getDisplayMetrics().density;// 当前环境密度
-        Log.e("Layout", MyApplication.getInstance().getResources().getDisplayMetrics().toString());
+        LogUtil.d("proportional", MyApplication.getInstance().getResources().getDisplayMetrics().toString());
         if (adjustedDensity == currentEnvironmentDensity) {// 如果已经正确
             return;
         }
