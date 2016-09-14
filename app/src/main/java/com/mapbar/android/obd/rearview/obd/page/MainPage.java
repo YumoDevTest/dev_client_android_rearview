@@ -13,7 +13,6 @@ import android.widget.RadioGroup;
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
@@ -82,12 +81,12 @@ public class MainPage extends AppPage implements IMainPageView {
         titleBar = new TitleBar(this, R.id.title_main);
         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
 
-        PageManager pageManager = MyApplication.getInstance().getMainActivity().getPageManager();
-        vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
-        carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
-        carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
-        carMaintenancePage = (CarMaintenancePage) pageManager.createPage(CarMaintenancePage.class);
-        controlTestPage = (ControlTestPage) pageManager.createPage(ControlTestPage.class);
+        vehicleCheckupPage = new VehicleCheckupPage();
+        carDataPage = new CarDataPage();
+        carStatePage = new CarStatePage();
+        carMaintenancePage = new CarMaintenancePage();
+        controlTestPage = new ControlTestPage();
+
         fragments = new ArrayList<>();
         fragments.add(vehicleCheckupPage);
         fragments.add(carDataPage);

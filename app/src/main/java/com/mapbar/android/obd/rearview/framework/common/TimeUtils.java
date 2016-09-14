@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.common;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
@@ -95,8 +96,8 @@ public class TimeUtils {
                 && day1.get(Calendar.DAY_OF_MONTH) == dayOfMonth;
     }
 
-    public static String getDayOfWeek(int dayOfWeek) {
-        return getResources().getStringArray(R.array.day_of_week1)[dayOfWeek - 1];
+    public static String getDayOfWeek(Context context,int dayOfWeek) {
+        return getResources(context).getStringArray(R.array.day_of_week1)[dayOfWeek - 1];
     }
 
 
@@ -106,9 +107,9 @@ public class TimeUtils {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    public static String getDayOfWeekText(long time) {
-        return getDayOfWeek(getDayOfWeekInt(time));
-    }
+//    public static String getDayOfWeekText(long time) {
+//        return getDayOfWeek(getDayOfWeekInt(time));
+//    }
 
     private static int getDayOfMonthInt(long time) {
         Calendar calendar = Calendar.getInstance();
@@ -116,80 +117,80 @@ public class TimeUtils {
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    public static String getDateHHMM(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_hhmm), Locale.CHINA)
-                .format(time);
-    }
+//    public static String getDateHHMM(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_hhmm), Locale.CHINA)
+//                .format(time);
+//    }
 
-    public static String getDateHHMMssSSS(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_MMddHHmmssSSS), Locale.CHINA)
-                .format(time);
-    }
+//    public static String getDateHHMMssSSS(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_MMddHHmmssSSS), Locale.CHINA)
+//                .format(time);
+//    }
+//
+//    public static String getDateHHMMss(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.data_format_HHmmss), Locale.CHINA)
+//                .format(time);
+//    }
 
-    public static String getDateHHMMss(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.data_format_HHmmss), Locale.CHINA)
-                .format(time);
-    }
+//    public static String getDateMMDD(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_mmdd), Locale.CHINA)
+//                .format(time);
+//    }
 
-    public static String getDateMMDD(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_mmdd), Locale.CHINA)
-                .format(time);
-    }
+//    public static String getDataMMDDHHMM(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_mmddhhmm),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getDateAll(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd),
+//                Locale.CHINA).format(time);
+//    }
 
-    public static String getDataMMDDHHMM(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_mmddhhmm),
+//    public static String getDateYYMMDDHHMM(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmm),
+//                Locale.CHINA).format(time);
+//    }
+
+//    public static String getDateYYMMDDHHMM2(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmm2),
+//                Locale.CHINA).format(time);
+//    }
+
+    public static String getmDateYYYYMMDD2(Context context, long time) {
+        return new SimpleDateFormat(getResources(context).getString(R.string.date_format_yyyymmdd2),
                 Locale.CHINA).format(time);
     }
 
-    public static String getDateAll(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDateYYMMDDHHMM(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmm),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDateYYMMDDHHMM2(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmm2),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getmDateYYYYMMDD2(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd2),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDateYYYYMMDD5(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd5),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDataYYYYMMDDSS(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDataYYYYMMDDSS2(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss2),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getDataYYYYMMDDSS3(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss3),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getmDateYYYYMMDD3(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd3),
-                Locale.CHINA).format(time);
-    }
-
-    public static String getmDateYYYYMMDD4(long time) {
-        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd4),
-                Locale.CHINA).format(time);
-    }
+//    public static String getDateYYYYMMDD5(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd5),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getDataYYYYMMDDSS(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getDataYYYYMMDDSS2(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss2),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getDataYYYYMMDDSS3(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmddhhmmss3),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getmDateYYYYMMDD3(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd3),
+//                Locale.CHINA).format(time);
+//    }
+//
+//    public static String getmDateYYYYMMDD4(long time) {
+//        return new SimpleDateFormat(getResources().getString(R.string.date_format_yyyymmdd4),
+//                Locale.CHINA).format(time);
+//    }
 
     public static Calendar birthdayToCalendar(String birthday) {
         final Calendar c = Calendar.getInstance();
@@ -206,8 +207,8 @@ public class TimeUtils {
         return null;
     }
 
-    private static Resources getResources() {
-        return Global.getAppContext().getResources();
+    private static Resources getResources(Context context) {
+        return context.getResources();
     }
 
     public static long parseStringToLong(String dateStr, String pattern) {

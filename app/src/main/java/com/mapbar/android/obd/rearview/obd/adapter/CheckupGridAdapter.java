@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;
 
@@ -28,8 +27,10 @@ public class CheckupGridAdapter extends BaseAdapter {
     private int[] ids = {R.drawable.ic_1, R.drawable.ic_2, R.drawable.ic_3, R.drawable.ic_4, R.drawable.ic_5, R.drawable.ic_6, R.drawable.ic_7};
     private int[] idss = {R.drawable.ic_11, R.drawable.ic_22, R.drawable.ic_33, R.drawable.ic_44, R
             .drawable.ic_55, R.drawable.ic_66, R.drawable.ic_77};
+    private Context context;
 
     public CheckupGridAdapter(Context context, List<PhysicalData> physicalList) {
+        this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.physicalList = physicalList;
     }
@@ -66,10 +67,9 @@ public class CheckupGridAdapter extends BaseAdapter {
         }
         HashMap<String, Integer> statuses = PhysicalManager.getInstance().getStatuses();
         if (statuses.get(String.valueOf(position + 1)) == PhysicalData.Status.OBDCHECK_ERROE.ordinal()) {
-            holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), ids[position]));
+            holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), ids[position]));
         } else {
-            holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(Global
-                    .getAppContext().getResources(), idss[position]));
+            holder.iv_item_checkUp_icon.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), idss[position]));
         }
         holder.tv_itemCheckup_name.setText(physicalList.get(position).getName());
         return view;

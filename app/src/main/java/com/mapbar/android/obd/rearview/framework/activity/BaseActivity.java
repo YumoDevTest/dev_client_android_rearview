@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
@@ -41,11 +40,6 @@ public abstract class BaseActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogUtil.d(TAG, String.format("## %s onActivityResult", getThisClassName()));
         super.onActivityResult(requestCode, resultCode, data);
-        final ArrayList<AppPage> pages = MyApplication.getInstance().getMainActivity().getPageManager().getPages();
-        int size = pages.size();
-        if (size > 0) {
-            pages.get(pages.size() - 1).onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override

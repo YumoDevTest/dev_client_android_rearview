@@ -4,6 +4,8 @@ package com.mapbar.android.obd.rearview.framework.common;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -15,15 +17,15 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
     public static String getString(int resId) {
-        return Global.getAppContext().getString(resId);
+        return MyApplication.getInstance().getString(resId);
     }
 
     public static String getString(int resId, Object... formatArgs) {
-        return Global.getAppContext().getString(resId, formatArgs);
+        return MyApplication.getInstance().getString(resId, formatArgs);
     }
 
     public static String[] getStringArray(int resId) {
-        return Global.getAppContext().getResources().getStringArray(resId);
+        return MyApplication.getInstance().getResources().getStringArray(resId);
     }
 
     public static String getStringFromAssets(Context context, String fileName) {
@@ -58,11 +60,11 @@ public class StringUtil {
      * @param content
      */
     public static void toastStringShort(String content) {
-        Toast.makeText(Global.getAppContext(), content, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getInstance(), content, Toast.LENGTH_SHORT).show();
     }
 
     public static void toastStringShort(int id) {
-        Context appContext = Global.getAppContext();
+        Context appContext = MyApplication.getInstance();
         Toast.makeText(appContext, appContext.getResources().getString(id), Toast.LENGTH_SHORT)
                 .show();
     }
@@ -73,11 +75,11 @@ public class StringUtil {
      * @param content
      */
     public static void toastStringLong(String content) {
-        Toast.makeText(Global.getAppContext(), content, Toast.LENGTH_LONG).show();
+        Toast.makeText(MyApplication.getInstance(), content, Toast.LENGTH_LONG).show();
     }
 
     public static void toastStringLong(int id) {
-        Context appContext = Global.getAppContext();
+        Context appContext = MyApplication.getInstance();
         Toast.makeText(appContext, appContext.getResources().getString(id), Toast.LENGTH_LONG).show();
     }
 

@@ -56,8 +56,8 @@ public class LayoutUtils_ui {
      */
     public static void proportional() {
 
-        float currentEnvironmentDensity = Global.getAppContext().getResources().getDisplayMetrics().density;// 当前环境密度
-        Log.e("Layout", Global.getAppContext().getResources().getDisplayMetrics().toString());
+        float currentEnvironmentDensity = MyApplication.getInstance().getResources().getDisplayMetrics().density;// 当前环境密度
+        Log.e("Layout", MyApplication.getInstance().getResources().getDisplayMetrics().toString());
         if (adjustedDensity == currentEnvironmentDensity) {// 如果已经正确
             return;
         }
@@ -100,7 +100,7 @@ public class LayoutUtils_ui {
      */
     private static void changeDensity(float density) {
 
-        DisplayMetrics displayMetrics = Global.getAppContext().getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = MyApplication.getInstance().getResources().getDisplayMetrics();
 
         if (density == displayMetrics.density) {// 如果已经正确
             adjustedDensity = density;
@@ -146,13 +146,13 @@ public class LayoutUtils_ui {
 
     public static int dp2px(float dipValue) {
         // INFO 工具/dip转px
-        final float scale = Global.getAppContext().getResources().getDisplayMetrics().density;
+        final float scale = MyApplication.getInstance().getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
     public static int px2dp(float pxValue) {
         // INFO 工具/px转dip
-        final float scale = Global.getAppContext().getResources().getDisplayMetrics().density;
+        final float scale = MyApplication.getInstance().getResources().getDisplayMetrics().density;
 
         return (int) (pxValue / scale + 0.5f);
     }
@@ -164,7 +164,7 @@ public class LayoutUtils_ui {
      * @return
      */
     public static int px2sp(float pxValue) {
-        final float fontScale = Global.getAppContext().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = MyApplication.getInstance().getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
@@ -175,7 +175,7 @@ public class LayoutUtils_ui {
      * @return
      */
     public static int sp2px(float spValue) {
-        final float fontScale = Global.getAppContext().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = MyApplication.getInstance().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -271,7 +271,7 @@ public class LayoutUtils_ui {
      * @return 像素值
      */
     public static int getPxByDimens(int id) {
-        return Global.getAppContext().getResources().getDimensionPixelSize(id);
+        return MyApplication.getInstance().getResources().getDimensionPixelSize(id);
     }
 
     /**
@@ -292,7 +292,7 @@ public class LayoutUtils_ui {
      * @return 颜色值
      */
     public static int getColorById(int id) {
-        return Global.getAppContext().getResources().getColor(id);
+        return MyApplication.getInstance().getResources().getColor(id);
     }
 
     /**
@@ -343,7 +343,7 @@ public class LayoutUtils_ui {
      * @return
      */
     public static boolean isLandscape() {
-        return Global.getAppContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        return MyApplication.getInstance().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**

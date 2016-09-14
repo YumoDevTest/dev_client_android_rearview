@@ -5,13 +5,13 @@ import android.text.TextUtils;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
 import com.mapbar.android.obd.rearview.framework.preferences.PreferencesConfig;
 import com.mapbar.android.obd.rearview.lib.push.PushMessageDispatcher;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.vin.VinPushDispatcher;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.URLconfigs;
@@ -131,7 +131,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
             PreferencesConfig.IXINTUI_TOKEN.set(aixintui_token);
             String userId = SessionInfo.getCurrent().userId;
             String token2 = SessionInfo.getCurrent().token;
-            HttpHandler http = new OBDHttpHandler(Global.getAppContext());
+            HttpHandler http = new OBDHttpHandler(MyApplication.getInstance());
             http.setRequest(URLconfigs.BIND_PUSH, HttpHandler.HttpRequestType.POST);
             http.setCache(HttpHandler.CacheType.NOCACHE);
             http.addPostParamete("aitoken", TextUtils.isEmpty(token) ? aixintui_token : token);

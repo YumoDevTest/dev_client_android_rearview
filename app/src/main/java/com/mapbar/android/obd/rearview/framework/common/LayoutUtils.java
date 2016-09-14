@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.hud.ProgressView;
@@ -83,11 +82,11 @@ public class LayoutUtils {
     }
 
     public static int getDimenPx(int id) {
-        return (int) Global.getAppContext().getResources().getDimension(id);
+        return (int) MyApplication.getInstance().getResources().getDimension(id);
     }
 
     public static int dip2px(float dipValue) {
-        final float scale = Global.getAppContext().getResources().getDisplayMetrics().density;
+        final float scale = MyApplication.getInstance().getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
@@ -97,7 +96,7 @@ public class LayoutUtils {
     }
 
     public static void showDialog(Activity activity,int resIdTitle, int resIdText, int icon) {
-        Resources resources = Global.getAppContext().getResources();
+        Resources resources = MyApplication.getInstance().getResources();
         showDialog(activity,resources.getString(resIdTitle), resources.getString(resIdText), icon);
     }
 
@@ -113,23 +112,23 @@ public class LayoutUtils {
         tDialog.setIcon(icon);
         tDialog.setTitle(title);
         tDialog.setMessage(msg);
-        tDialog.setPositiveButton(Global.getAppContext().getResources().getString(R.string.ok), null);
+        tDialog.setPositiveButton(MyApplication.getInstance().getResources().getString(R.string.ok), null);
         tDialog.show();
     }
 
-    /**
-     * 弹出自定义的PopupWindow
-     *
-     * @param view    弹出的内容view
-     * @param gravity {@link Gravity#TOP 等等}
-     */
-    public static void showPopWindow(PageManager pageManager,View view, int gravity) {
-        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        ArrayList<AppPage> pages = pageManager.getPages();
-        if (pages.size() > 0) {
-            popupWindow.showAtLocation(pages.get(pages.size() - 1).getContentView(), gravity, 0, 0);
-        }
-    }
+//    /**
+//     * 弹出自定义的PopupWindow
+//     *
+//     * @param view    弹出的内容view
+//     * @param gravity {@link Gravity#TOP 等等}
+//     */
+//    public static void showPopWindow(PageManager pageManager,View view, int gravity) {
+//        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//        ArrayList<AppPage> pages = pageManager.getPages();
+//        if (pages.size() > 0) {
+//            popupWindow.showAtLocation(pages.get(pages.size() - 1).getContentView(), gravity, 0, 0);
+//        }
+//    }
 
     /**
      * 弹出对话框
@@ -159,7 +158,7 @@ public class LayoutUtils {
     public static void showPopWindow(String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener, View containt) {
         MainActivity activity = MyApplication.getInstance().getMainActivity();
         if (activity == null) throw new NullPointerException();
-        View view = View.inflate(Global.getAppContext(), R.layout.layout_dialog, null);
+        View view = View.inflate(MyApplication.getInstance(), R.layout.layout_dialog, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_tips_title);
         TextView tv_msg = (TextView) view.findViewById(R.id.tv_tips_info);
         TextView tv_confirm = (TextView) view.findViewById(R.id.tv_tips_confirm);
@@ -221,7 +220,7 @@ public class LayoutUtils {
                 popupQR.dismiss();
                 popupQR = null;
             }
-            View view = View.inflate(Global.getAppContext(), R.layout.layout_qr_dialog, null);
+            View view = View.inflate(MyApplication.getInstance(), R.layout.layout_qr_dialog, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv_qr);
             Button btn_state_pop_close = (Button) view.findViewById(R.id.btn_close_QRpop);
             btn_state_pop_close.setOnClickListener(onClickListener);

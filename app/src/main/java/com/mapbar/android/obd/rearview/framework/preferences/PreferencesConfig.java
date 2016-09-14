@@ -2,12 +2,11 @@ package com.mapbar.android.obd.rearview.framework.preferences;
 
 
 import android.content.Context;
-
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.preferences.item.BooleanPreferences;
 import com.mapbar.android.obd.rearview.framework.preferences.item.IntPreferences;
 import com.mapbar.android.obd.rearview.framework.preferences.item.LongPreferences;
 import com.mapbar.android.obd.rearview.framework.preferences.item.StringPreferences;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 
 
 /**
@@ -16,7 +15,7 @@ import com.mapbar.android.obd.rearview.framework.preferences.item.StringPreferen
 public class PreferencesConfig {
 
 
-    private static final SharedPreferencesWrapper SHARED_PREFERENCES_INIT = new SharedPreferencesWrapper(Global.getAppContext(), "init", Context.MODE_PRIVATE);
+    private static final SharedPreferencesWrapper SHARED_PREFERENCES_INIT = new SharedPreferencesWrapper(MyApplication.getInstance(), "init", Context.MODE_PRIVATE);
     public static final IntPreferences MESSAGE_COUNT = new IntPreferences(SHARED_PREFERENCES_INIT, "message_count", 4);
     public static final StringPreferences UTIME = new StringPreferences(SHARED_PREFERENCES_INIT, "utime", "");
     public static final StringPreferences TITLE = new StringPreferences(SHARED_PREFERENCES_INIT, "title", "");
@@ -86,6 +85,6 @@ public class PreferencesConfig {
     //体检完成时间
     public static final StringPreferences PHYSICAL_CHECKEND_DATE = new StringPreferences(SHARED_PREFERENCES_INIT, "physical_checkend_date", "");
     public static final StringPreferences USERCAR_BTTYPE = new StringPreferences(SHARED_PREFERENCES_INIT, "bt_type", "");
-    private static final SharedPreferencesWrapper SHARED_PREFERENCES_INIT_CONFIG_NAME = new SharedPreferencesWrapper(Global.getAppContext(), "navi_config", Context.MODE_PRIVATE);
+    private static final SharedPreferencesWrapper SHARED_PREFERENCES_INIT_CONFIG_NAME = new SharedPreferencesWrapper(MyApplication.getInstance(), "navi_config", Context.MODE_PRIVATE);
 
 }

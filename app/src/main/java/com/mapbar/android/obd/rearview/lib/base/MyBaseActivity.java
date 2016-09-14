@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
-
-import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;

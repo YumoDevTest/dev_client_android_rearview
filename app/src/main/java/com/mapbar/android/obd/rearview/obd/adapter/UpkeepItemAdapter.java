@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.Global;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.obd.MaintenanceTask;
 
 import java.util.Arrays;
@@ -59,7 +59,7 @@ public class UpkeepItemAdapter<VH extends RecyclerView.ViewHolder> extends Recyc
 
         Holder holder = (Holder) arg0;
         int i = nameList.indexOf(tasks[position].name);
-        holder.img_icon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), icons[i]));
+        holder.img_icon.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), icons[i]));
         holder.tv_name.setText(String.valueOf(tasks[position].name));
     }
 

@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -31,7 +32,6 @@ import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.control.ServicManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
@@ -75,6 +75,7 @@ import java.util.Calendar;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int VIEW_CONTAINER_ID = R.id.content_view;
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
     private OBDSDKListenerManager.SDKListener sdkListener;
@@ -84,12 +85,19 @@ public class MainActivity extends BaseActivity {
     private Handler handler;
     private String logFilePath = "";
     private boolean isGoDeclareActivity = false;
-    private PageManager pageManager;
+    private MainPage mainPage;
+
+    static MainActivity instance;
+
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageManager = PageManager.create(this);
+        instance = this;
         MyApplication.getInstance().setMainActivity(this);
         stopBackgroundService();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -136,7 +144,10 @@ public class MainActivity extends BaseActivity {
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        final AppPage page = pageManager.createPage(SplashPage.class, null);
+        //构建mainpage
+        mainPage = new MainPage();
+        //构建闪屏页
+        final AppPage page = new SplashPage();
         transaction.replace(R.id.content_view, page);
         transaction.commit();
         onFinishedInit();
@@ -147,9 +158,8 @@ public class MainActivity extends BaseActivity {
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
 
-                        if (!pageManager.getCurrentPageName().equals(MainPage.class.getName())) {
-                            pageManager.goPage(MainPage.class);
-                        }
+                        goPage(mainPage);
+
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         QRInfo qrInfo = (QRInfo) o;
@@ -414,14 +424,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            final ArrayList<AppPage> pages = pageManager.getPages();
-            boolean flag = false;
-            if (pages.size() > 0) {
-                flag = pages.get(pages.size() - 1).onKeyDown(keyCode, event);
-            }
-
-            if (flag) {
-                return flag;
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                return false;
             }
 
             if (LayoutUtils.getPopupWindow() != null && LayoutUtils.getPopupWindow().isShowing()) {
@@ -429,17 +433,14 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
 
-            boolean isBack = pageManager.goBack();
-            if (!isBack) {
-                LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
+            LayoutUtils.showPopWindow("退出", "您确定退出吗？", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
 //                      MyApplication.create().exitApplication();
 
-                    }
-                });
-            }
+                }
+            });
             return true;
         } else {
             return false;
@@ -466,12 +467,15 @@ public class MainActivity extends BaseActivity {
         return contentView;
     }
 
-    public void goPage(Class<? extends AppPage> clazz) {
-        pageManager.goPage(clazz);
+    public void goPage(AppPage page) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+        transaction.replace(VIEW_CONTAINER_ID, page);
+        transaction.commit();
     }
 
-    public PageManager getPageManager() {
-        return pageManager;
+    public void goMainPage() {
+        goPage(mainPage);
     }
 
     private static class MyHandler extends SafeHandler<MainActivity> {

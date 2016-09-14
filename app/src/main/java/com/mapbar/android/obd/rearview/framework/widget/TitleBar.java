@@ -1,12 +1,12 @@
 package com.mapbar.android.obd.rearview.framework.widget;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 
@@ -83,7 +83,7 @@ public class TitleBar {
     }
 
     public void setText(int id, TitleArea area) {
-        String text = Global.getAppContext().getResources().getString(id);
+        String text =contentView.getContext().getResources().getString(id);
         setText(text, area);
     }
 
@@ -101,8 +101,8 @@ public class TitleBar {
         }
     }
 
-    public void setBackground(int resId) {
-        contentView.setBackgroundDrawable(Global.getAppContext().getResources().getDrawable(resId));
+    public void setBackground(Context context, int resId) {
+        contentView.setBackgroundDrawable(context.getResources().getDrawable(resId));
     }
 
     public View getContentView() {

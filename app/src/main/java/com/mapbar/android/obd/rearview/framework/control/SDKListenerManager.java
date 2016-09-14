@@ -3,10 +3,10 @@ package com.mapbar.android.obd.rearview.framework.control;
 import android.os.Environment;
 
 import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
@@ -79,7 +79,7 @@ public class SDKListenerManager {
             }
         };
         String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
-        manager.init(Global.getAppContext(), listener, sdPath, null);
+        manager.init(MyApplication.getInstance(), listener, sdPath, null);
     }
 
     /**

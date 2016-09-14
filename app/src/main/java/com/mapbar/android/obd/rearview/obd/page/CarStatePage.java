@@ -23,7 +23,6 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -322,7 +321,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
      * 点击故障码，展示故障码popwindow
      */
     public void showPopupWindow() {
-        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
+        final View popupView = View.inflate(getContext(), R.layout.layout_state_pop, null);
         ListView lv_state_pop_content = (ListView) popupView.findViewById(R.id.lv_state_pop_content);
         lv_state_pop_content.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.item_state_pop, R.id.tv_item_state, state_list));
         lv_state_pop_content.setScrollbarFadingEnabled(false);

@@ -254,7 +254,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
 
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
-                        MobclickAgentEx.onEvent(getActivity(),UmengConfigs.CHECKSUCC);
+                        MobclickAgentEx.onEvent(getActivity(), UmengConfigs.CHECKSUCC);
                         isCheckupFinish = true;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
@@ -272,7 +272,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                                 grid.setAdapter(checkupGridAdapter);
                                 ReportHead reportHead = PhysicalManager.getInstance().getReportHead();
                                 if (reportHead != null) {
-                                    PreferencesConfig.PHYSICAL_CHECKEND_DATE.set(TimeUtils.getmDateYYYYMMDD2(System.currentTimeMillis()));
+                                    PreferencesConfig.PHYSICAL_CHECKEND_DATE.set(TimeUtils.getmDateYYYYMMDD2(getContext(), System.currentTimeMillis()));
                                     int score = reportHead.getScore();
                                     checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
@@ -299,7 +299,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                                 }
                                 CarDataManager.getInstance().restartTrip();
                                 //语音播报
-                                VoiceManager.getInstance().sendBroadcastTTS(getActivity(),checkupVoiceResut.toString());
+                                VoiceManager.getInstance().sendBroadcastTTS(getActivity(), checkupVoiceResut.toString());
                             }
                         });
 
@@ -331,7 +331,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                 }
 
                 PhysicalManager.getInstance().startExam();
-                MobclickAgentEx.onEvent(getActivity(),UmengConfigs.STARTEXAM);
+                MobclickAgentEx.onEvent(getActivity(), UmengConfigs.STARTEXAM);
                 // 日志
                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                     Log.v(LogTag.TEMP, "btn_start_physical -->>");

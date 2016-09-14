@@ -1,8 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
 import android.content.Intent;
-
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -84,7 +82,7 @@ public class OBDSDKListenerManager {
             i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, true);
             i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, false);
 
-            boolean cName = Global.getAppContext().stopService(i);
+            boolean cName = MyApplication.getInstance().stopService(i);
             android.util.Log.e("[OBDBusiness]", "-------------------" + cName + "-------------------");
 
         }

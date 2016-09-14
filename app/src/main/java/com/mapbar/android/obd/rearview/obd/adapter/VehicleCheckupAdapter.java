@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;
 
@@ -93,7 +92,7 @@ public class VehicleCheckupAdapter<VH extends RecyclerView.ViewHolder> extends R
         }
         holder.tv_checkName.setText(physicalList.get(position).getName());
 
-        holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(Global.getAppContext().getResources(), idss[position]));
+        holder.iv_checkIcon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), idss[position]));
         holder.tv_checkResult.setVisibility(View.VISIBLE);
 
     }

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
@@ -95,8 +94,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private int number = -1;//显示数据空间的编号
     private PopupWindow popupWindow;
     private RealTimeData realTimeData;
-    private String[] dataNames = getActivity().getResources().getStringArray(R.array.data_names);
-    private String[] units = getActivity().getResources().getStringArray(R.array.units);
+    private String[] dataNames;// = getActivity().getResources().getStringArray(R.array.data_names);
+    private String[] units;// = getActivity().getResources().getStringArray(R.array.units);
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
     private TitleBarView titlebarview1;
@@ -113,6 +112,9 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_car_data);
+
+        dataNames = getActivity().getResources().getStringArray(R.array.data_names);
+        units = getActivity().getResources().getStringArray(R.array.units);
     }
 
     @Override
@@ -221,19 +223,19 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         switch (v.getId()) {
             case R.id.ll_car_data_1:
                 number = 0;
-                showPopupWindow();
+                showPopupWindow(getContext());
                 break;
             case R.id.ll_car_data_2:
                 number = 1;
-                showPopupWindow();
+                showPopupWindow(getContext());
                 break;
             case R.id.ll_car_data_3:
                 number = 2;
-                showPopupWindow();
+                showPopupWindow(getContext());
                 break;
             case R.id.ll_car_data_4:
                 number = 3;
-                showPopupWindow();
+                showPopupWindow(getContext());
                 break;
             case R.id.iv_pop_close://关闭popupWindow
                 popupWindow.dismiss();
@@ -334,8 +336,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     }
 
 
-    public void showPopupWindow() {
-        final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_car_data_pop, null);
+    public void showPopupWindow(Context context) {
+        final View popupView = View.inflate(context, R.layout.layout_car_data_pop, null);
         popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
         popupWindow.setOutsideTouchable(true);

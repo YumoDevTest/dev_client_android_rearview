@@ -3,9 +3,7 @@ package com.mapbar.android.obd.rearview.modules.common;
 import android.content.Intent;
 
 import com.ixintui.pushsdk.PushSdkApi;
-import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
@@ -47,7 +45,6 @@ public class MyApplication extends android.app.Application {
         android.util.Log.d(TAG, "## [application] 启动");
         CustomMadeType.printLog();
 
-        Global.setAppContext(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         Manager.onApplicationonCreate(this);
         //配置umeng统计分析
