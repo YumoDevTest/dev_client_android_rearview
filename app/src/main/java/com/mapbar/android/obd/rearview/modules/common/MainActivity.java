@@ -108,11 +108,12 @@ public class MainActivity extends BaseActivity {
         //构建mainpage
         mainPage = new MainPage();
 
-        //执行登录
-        login();
         //监听登录结果
         registerSDKListener();
         EventBusManager.register(this);
+
+        //执行登录
+        login();
     }
 
     private void initLogFile() {

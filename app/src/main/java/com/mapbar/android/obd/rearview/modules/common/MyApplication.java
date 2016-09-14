@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.obd.util.MyCrashLoger;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.UserCenter;
@@ -51,7 +52,7 @@ public class MyApplication extends android.app.Application {
         //配置umeng统计分析
         MobclickAgentEx.onStart();
 //        捕捉异常注册
-//        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
 
@@ -59,11 +60,11 @@ public class MyApplication extends android.app.Application {
 
     @Override
     public void onTerminate() {
+        android.util.Log.d(TAG, "## [application] 停止");
         setMainActivity(null);
         //配置umeng统计分析
         MobclickAgentEx.onTerminal();
         HttpUtil.clear();
-        android.util.Log.d(TAG, "## [application] 停止");
         // infos 当前应用如果被系统强杀则方法不会被调用
         ObdContext.getInstance().exit();
         Manager.onApplicationTerminate();
@@ -116,6 +117,7 @@ public class MyApplication extends android.app.Application {
 
 
     private void startV3HService() {
+        android.util.Log.d(TAG, "## [application] invoke startV3HService");
         Intent intent = new Intent(this, ServicManager.class);
         startService(intent);
     }
@@ -124,6 +126,7 @@ public class MyApplication extends android.app.Application {
      * 退出当前app
      */
     public void exitApplication() {
+        android.util.Log.d(TAG, "## [application] exitApplication");
 
         setMainActivity(null);
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
@@ -144,6 +147,7 @@ public class MyApplication extends android.app.Application {
      * 重启这个app
      */
     public void restartApplication() {
+        android.util.Log.d(TAG, "## [application] 重启");
         startService(new Intent(getMainActivity(), RestartService.class));
         exitApplication();
     }

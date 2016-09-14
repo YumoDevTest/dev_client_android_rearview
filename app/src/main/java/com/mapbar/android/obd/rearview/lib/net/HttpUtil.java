@@ -81,7 +81,7 @@ public final class HttpUtil {
 
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    LogUtil.e(TAG, "## [HTTP]Failure:" + e.getMessage(), e);
+                    LogUtil.e(TAG, String.format("## [HTTP]onFailure exception type = %s, msg = %s", e.getClass(), e.getMessage()), e);
                     if (callback != null)
                         callback.onFailure(0, e, null);
                     if (progressIndicator != null)
