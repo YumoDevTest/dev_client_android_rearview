@@ -245,7 +245,9 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                                 ReportHead reportHead = PhysicalManager.getInstance().getReportHead();
                                 if (reportHead != null) {
                                     int score = reportHead.getScore();
-
+                                    if(checkupVoiceResut.length() > 4){
+                                        checkupVoiceResut.delete(4, checkupVoiceResut.length()-1);
+                                    }
                                     checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
                                         tv_score.setTextColor(Color.RED);
@@ -311,4 +313,5 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener 
                 break;
         }
     }
+
 }
