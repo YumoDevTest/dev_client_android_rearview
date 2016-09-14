@@ -263,7 +263,8 @@
         <!-- 启动页 -->
         <activity
             android:name=".modules.common.LauncherActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

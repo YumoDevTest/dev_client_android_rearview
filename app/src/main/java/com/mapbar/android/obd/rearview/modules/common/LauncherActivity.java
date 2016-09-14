@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
@@ -50,45 +51,20 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
     private Timer timer;
     private RelativeLayout rl_declare_containt;
     private TextView tv_declare_test;
-    private Handler mHandler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == MSG_SHOW_SPEED) {
-                if (msg.obj == null) {
-                    appendLineText("无法获得数据，请检查串口");
-                    return;
-                }
-                String[] result = (String[]) msg.obj;
-                if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
-                    appendLineText("无法获得数据，请检查串口");
-                } else {
-                    appendLineText(String.format(Locale.getDefault(), "车速: %s km/h  转速: %s r/min  ", result[1], result[0]));
-                }
-            } else if (msg.what == MSG_APPEND_TEXT) {
-                if (msg.obj != null) {
-                    String str = msg.obj.toString();
-                    if (tv_declare_result.getText().length() > 900) {
-                        tv_declare_result.setText("");
-                    }
-                    tv_declare_result.append(str + "\r\n");
-                }
-            }
-
-        }
-    };
+    private Handler mHandler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stopBackgroundService();
+        setContentView(R.layout.activity_declare);
 
         //发送停止延迟启动消息
         Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_DELAY_RUN);
         sendBroadcast(intentDelayStart);
 
-        setContentView(R.layout.activity_declare);
+        mHandler = new MyHandler(this);
         initView();
         sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
@@ -239,4 +215,39 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "onDestroy()");
     }
 
+
+    private static class MyHandler extends SafeHandler<LauncherActivity> {
+
+        public MyHandler(LauncherActivity object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (getInnerObject() == null) return;
+            if (msg.what == MSG_SHOW_SPEED) {
+                if (msg.obj == null) {
+                    getInnerObject().appendLineText("无法获得数据，请检查串口");
+                    return;
+                }
+                String[] result = (String[]) msg.obj;
+                if (StringUtils.isEmpty(result[0]) || StringUtils.isEmpty(result[1])) {
+                    getInnerObject().appendLineText("无法获得数据，请检查串口");
+                } else {
+                    getInnerObject().appendLineText(String.format(Locale.getDefault(), "车速: %s km/h  转速: %s r/min  ", result[1], result[0]));
+                }
+            } else if (msg.what == MSG_APPEND_TEXT) {
+                if (msg.obj != null) {
+                    String str = msg.obj.toString();
+                    if (getInnerObject().tv_declare_result.getText().length() > 900) {
+                        getInnerObject().tv_declare_result.setText("");
+                    }
+                    getInnerObject().tv_declare_result.append(str + "\r\n");
+                }
+            }
+
+        }
+    }
+
+    ;
 }
