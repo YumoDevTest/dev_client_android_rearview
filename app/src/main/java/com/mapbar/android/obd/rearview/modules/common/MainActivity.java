@@ -519,13 +519,13 @@ public class MainActivity extends BaseActivity {
     public void onEvent(PBHttpErrorEvent pbHttpErrorEvent) {
         if (pbHttpErrorEvent.getException() == null)
             return;
-        Toast.makeText(getActivity(), pbHttpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), pbHttpErrorEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HttpErrorEvent httpErrorEvent) {
-        Toast.makeText(getActivity(), "网络异常:" + httpErrorEvent.getException().getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), httpErrorEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
     }
 
 }

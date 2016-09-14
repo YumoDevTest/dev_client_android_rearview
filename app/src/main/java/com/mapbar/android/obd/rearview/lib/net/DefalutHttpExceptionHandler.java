@@ -2,12 +2,18 @@ package com.mapbar.android.obd.rearview.lib.net;
 
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 
+import java.net.UnknownHostException;
+
 /**
  * Created by zhangyunfei on 16/8/27.
  */
 public class DefalutHttpExceptionHandler {
 
     public static void handleException(int httpCode, Exception ex, HttpResponse httpResponse) {
+        if(ex instanceof UnknownHostException){
+            EventBusManager.post(new HttpErrorEvent("网络连接失败，请检查网络是否通畅", ex));
+            return;
+        }
         if (httpResponse == null) {
             EventBusManager.post(new HttpErrorEvent("网络异常", ex));
             return;

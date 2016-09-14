@@ -127,7 +127,6 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                 }
                 switch (event) {
                     case Manager.Event.obdCarStatusgetSucc:
-                        LogUtil.d("TAG", "## when CarStatusData :" + event);
                         data = (CarStatusData) o;
                         carStateView.setData(data);
                         adapter.updateData();

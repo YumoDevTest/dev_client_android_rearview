@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.net;
 
+import android.text.TextUtils;
+
 import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
@@ -12,7 +14,7 @@ public abstract class HttpPBCallbackCooool implements HttpPBCallback {
     @Override
     public void onFailure(Exception e) {
         LogUtil.e(HttpPBUtil.TAG, "分发PB HTTP Exception: " + e.getMessage());
-        EventBusManager.post(new PBHttpErrorEvent(e));
+        EventBusManager.post(new PBHttpErrorEvent(TextUtils.isEmpty(e.getMessage()) ? "网络异常" : e.getMessage(), e));
     }
 
 }

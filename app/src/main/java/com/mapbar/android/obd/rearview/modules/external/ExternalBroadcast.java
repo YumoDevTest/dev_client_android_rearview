@@ -35,7 +35,7 @@ class ExternalBroadcast {
         Intent intent = new Intent(ACTION_EXTERNAL_REALTIMEDATA);
         intent.putExtras(arguments);
         context.sendBroadcast(intent);
-        LogUtil.d(TAG, "## 准备发送外部广播（实时数据）： " + arguments);
+//        LogUtil.d(TAG, "## 准备发送外部广播（实时数据）： " + arguments);
     }
 
 
@@ -50,8 +50,7 @@ class ExternalBroadcast {
         Intent intent = new Intent(ACTION_EXTERNAL_CARSTATE);
         intent.putExtras(arguments);
         context.sendBroadcast(intent);
-        LogUtil.d(TAG, "## 发送外部广播（车辆状态）： " + arguments);
-
+//        LogUtil.d(TAG, "## 发送外部广播（车辆状态）： " + arguments);
     }
 
 }

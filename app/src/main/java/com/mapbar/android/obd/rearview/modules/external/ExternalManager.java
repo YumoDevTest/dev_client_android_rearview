@@ -55,7 +55,7 @@ public class ExternalManager {
             throw new NullPointerException();
         if (carStatusBean == null)
             throw new NullPointerException();
-        android.util.Log.d(TAG, "## " + carStatusBean.toString());
+//        android.util.Log.d(TAG, "## " + carStatusBean.toString());
         ExternalBroadcast.postCarStatus(context, CarStatusBeanConvert.convertToBundle(carStatusBean));
     }
 }

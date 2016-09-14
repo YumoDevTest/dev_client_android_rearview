@@ -183,7 +183,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
             }
             super.onEvent(event, o);
             if (event == Manager.Event.dataUpdate) {
-                LogUtil.d("TAG", "## when realTimeData :" + event);
                 RealTimeData realTimeData = (RealTimeData) o;
                 if (realTimeData != null) {
                     myHandler.obtainMessage(MSG_GET_A_CAR_DATA, realTimeData).sendToTarget();
