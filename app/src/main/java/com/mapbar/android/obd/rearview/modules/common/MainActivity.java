@@ -82,12 +82,15 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyApplication.getInstance().setMainActivity(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         //构建闪屏页
         goPage(new SplashPage(), false);
 
+        MyApplication.getInstance().setMainActivity(this);
+        //停止后台服务
         stopBackgroundService();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         handler = new MyHandler(this);
 
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
