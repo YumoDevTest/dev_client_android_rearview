@@ -18,6 +18,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.impl.SerialPortConnectionCreator;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
+import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.SerialPortManager;
 import com.mapbar.obd.TripSyncService;
@@ -82,6 +83,8 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stopBackgroundService();
+
+        TraceUtil.start();
 
         //发送停止延迟启动消息
         Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_DELAY_RUN);

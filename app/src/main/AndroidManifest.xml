@@ -6,6 +6,10 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
 
+    <!-- 可以接收实时数据的广播，自定义权限 -->
+    <permission android:name="com.mapbar.android.obd.rearview.permission.REALTIMEDATA" />
+    <permission android:name="com.mapbar.android.obd.rearview.permission.CARSTATE" />
+
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
     <uses-permission android:name="android.permission.BATTERY_STATS" />
@@ -48,6 +52,8 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- trace需要 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <supports-screens
         android:anyDensity="true"

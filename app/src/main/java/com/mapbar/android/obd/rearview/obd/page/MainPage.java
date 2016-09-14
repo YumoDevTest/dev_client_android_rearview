@@ -21,6 +21,7 @@ import com.mapbar.android.obd.rearview.framework.widget.TitleBar;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.MainActivity;
 import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.Manager;
@@ -116,6 +117,14 @@ public class MainPage extends AppPage {
         rg_tabs.check(R.id.page_tab2);
 
         hideMainTitlebar();
+
+        mHandlerBuy.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TraceUtil.stop();
+
+            }
+        }, 1000);
     }
 
     /**
