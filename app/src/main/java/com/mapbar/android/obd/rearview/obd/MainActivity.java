@@ -50,8 +50,8 @@ import com.mapbar.android.obd.rearview.obd.page.MainPage;
 import com.mapbar.android.obd.rearview.obd.page.SplashPage;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
-import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
@@ -139,6 +139,10 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
             alert("初始化串口失败");
         }
+//        int i = 0;
+//        if(i == 0)
+//            throw new NullPointerException();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);
         transaction.replace(R.id.content_view, page);
@@ -165,7 +169,10 @@ public class MainActivity extends BaseActivity {
                                     @Override
                                     public void onClick(View v) {
                                         finish();
+                                        //umeng统计，在杀死进程是需要调用用来保存统计数据。
+                                        MobclickAgentEx.onKillProcess(getActivity());
                                         System.exit(0);
+
                                     }
                                 });
                             }
@@ -416,6 +423,8 @@ public class MainActivity extends BaseActivity {
 
     private void restartmyapp() {
         startService(new Intent(MainActivity.this, RestartService.class));
+        //umeng统计，在杀死进程是需要调用用来保存统计数据。
+        MobclickAgentEx.onKillProcess(this);
         System.exit(0);
     }
 

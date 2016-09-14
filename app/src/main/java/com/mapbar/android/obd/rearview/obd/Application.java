@@ -5,15 +5,14 @@ import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
+import com.mapbar.android.obd.rearview.lib.umeng.UmengUnitTest;
 import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.obd.util.MyCrashLoger;
-import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.UserCenter;
-
-import java.util.HashMap;
 
 
 /**
@@ -41,6 +40,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //初始化一个会话对象,一个会话对象可以在内存中存储一些变量，仅在app启动时有效
         mSession = new Session();
         android.util.Log.d(TAG, "## [application] 启动");
@@ -49,16 +49,19 @@ public class Application extends android.app.Application {
         Global.setAppContext(this);
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         Manager.onApplicationonCreate(this);
-        //捕捉异常注册
-        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        //配置umeng统计分析
+        MobclickAgentEx.onStart();
+//        捕捉异常注册
+//        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
-        //禁用默认页面统计
-        MobclickAgentEx.openActivityDurationTrack(false);
+
     }
 
     @Override
     public void onTerminate() {
+        //配置umeng统计分析
+        MobclickAgentEx.onTerminal();
         HttpUtil.clear();
         android.util.Log.d(TAG, "## [application] 停止");
         // infos 当前应用如果被系统强杀则方法不会被调用

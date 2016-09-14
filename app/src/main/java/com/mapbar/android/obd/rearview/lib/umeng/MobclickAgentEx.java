@@ -1,14 +1,17 @@
-package com.mapbar.android.obd.rearview.umeng;
+package com.mapbar.android.obd.rearview.lib.umeng;
 
 import android.content.Context;
 
 import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by THINKPAD on 2016/3/22.
  */
 public class MobclickAgentEx {
+    private static final String TAG = "MobclickAgentEx";
+
     public static void onEvent(String eventId) {
         MobclickAgent.onEvent(MainActivity.getInstance(), eventId);
     }
@@ -18,11 +21,15 @@ public class MobclickAgentEx {
         MobclickAgent.reportError(ctx, arg1);
     }
 
-    public static void onPause(Context context) {
+    public static void reportError(Context ctx, Throwable arg1) {
+        MobclickAgent.reportError(ctx, arg1);
+    }
+
+    public static void onActivityPause(Context context) {
         MobclickAgent.onPause(context);
     }
 
-    public static void onResume(Context context) {
+    public static void onActivityResume(Context context) {
         MobclickAgent.onResume(context);
     }
 
@@ -35,6 +42,7 @@ public class MobclickAgentEx {
     }
 
     public static void onKillProcess(Context context) {
+        LogUtil.d(TAG,"## 出发umeng onKillProcess");
         MobclickAgent.onKillProcess(context);
     }
 
@@ -45,7 +53,7 @@ public class MobclickAgentEx {
      *
      * @param interval
      */
-    public static void setSessionContinueMillis(long interval) {
+    public static void setSessionKillProcessonContinueMillis(long interval) {
         MobclickAgent.setSessionContinueMillis(interval);
     }
 
@@ -59,4 +67,19 @@ public class MobclickAgentEx {
         MobclickAgent.openActivityDurationTrack(arg0);
     }
 
+    public static void onStart() {
+        //打开uemng的 debug
+        MobclickAgent.setDebugMode(true);
+        //禁用默认页面统计
+        MobclickAgentEx.openActivityDurationTrack(false);
+        //日志加密
+        MobclickAgent.enableEncrypt(false);//6.0.0版本及以后
+        //如不需要错误统计功能，可通过此方法关闭
+//        MobclickAgent.setCatchUncaughtExceptions(false);
+    }
+
+
+    public static void onTerminal() {
+
+    }
 }

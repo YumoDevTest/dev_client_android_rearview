@@ -112,8 +112,8 @@ public class ChangeVinBarcodeFragment extends MyBaseFragment {
 
     @Override
     public void onStart() {
-        EventBusManager.register(this);
         super.onStart();
+        EventBusManager.register(this);
     }
 
     @Override

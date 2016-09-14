@@ -1,10 +1,9 @@
 package com.mapbar.android.obd.rearview.obd.util;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.mapbar.android.obd.rearview.obd.Application;
-import com.umeng.analytics.MobclickAgent;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +24,7 @@ public class MyCrashLoger implements UncaughtExceptionHandler {
         //打印异常
         exception.printStackTrace();
         //上报umeng
-        MobclickAgent.reportError(Application.getInstance(), exception);
+        MobclickAgentEx.reportError(Application.getInstance(), exception);
         //保存到本地日志
         String str = getExceptionString(exception);
         android.util.Log.e(TAG, "## uncaughtException: " + str);

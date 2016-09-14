@@ -1,10 +1,13 @@
 package com.mapbar.android.obd.rearview.framework.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.util.ArrayList;
@@ -66,12 +69,18 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgentEx.onActivityResume(getActivity());
         LogUtil.d(TAG, String.format("## %s onResume", getThisClassName()));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgentEx.onActivityPause(getActivity());
         LogUtil.d(TAG, String.format("## %s onPause", getThisClassName()));
+    }
+
+    public Activity getActivity() {
+        return this;
     }
 }

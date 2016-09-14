@@ -18,6 +18,7 @@ import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.obd.Constants;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
@@ -91,6 +92,8 @@ public class OBDV3HService extends Service {
             stopSelf();
             Manager.getInstance().stopTrip(true);
             Manager.getInstance().cleanup();
+            //umeng统计，在杀死进程是需要调用用来保存统计数据。
+            MobclickAgentEx.onKillProcess(OBDV3HService.this);
             System.exit(0);
         }
     };
@@ -396,6 +399,9 @@ public class OBDV3HService extends Service {
         super.onDestroy();
         stopLoopGetCarStatus();
         Manager.getInstance().cleanup();
+
+        //umeng统计，在杀死进程是需要调用用来保存统计数据。
+        MobclickAgentEx.onKillProcess(this);
         System.exit(0);
     }
 

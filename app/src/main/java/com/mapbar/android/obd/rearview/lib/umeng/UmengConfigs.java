@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.umeng;
+package com.mapbar.android.obd.rearview.lib.umeng;
 
 
 /**

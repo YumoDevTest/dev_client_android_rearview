@@ -6,8 +6,8 @@ import android.content.Intent;
 
 import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
-import com.mapbar.android.obd.rearview.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.MaintenanceInfo;
 import com.mapbar.obd.MaintenanceResult;

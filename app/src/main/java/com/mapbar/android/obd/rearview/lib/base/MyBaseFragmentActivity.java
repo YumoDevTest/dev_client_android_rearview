@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 
@@ -90,12 +91,14 @@ public class MyBaseFragmentActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgentEx.onActivityResume(getActivity());
         LogUtil.d(TAG, String.format("## %s onResume", getThisClassName()));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgentEx.onActivityPause(getActivity());
         LogUtil.d(TAG, String.format("## %s onPause", getThisClassName()));
     }
 

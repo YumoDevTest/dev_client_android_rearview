@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 /**
@@ -44,11 +45,6 @@ public class MyBaseFragment extends Fragment {
         return myBaseActivity;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        LogUtil.d(TAG, String.format("## %s onPause", getThisClassName()));
-    }
 
     @Override
     public void onStop() {
@@ -76,8 +72,16 @@ public class MyBaseFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgentEx.onPageStart(getThisClassName());
+        LogUtil.d(TAG, String.format("## %s onPause", getThisClassName()));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        MobclickAgentEx.onPageEnd(getThisClassName());
         LogUtil.d(TAG, String.format("## %s onResume", getThisClassName()));
     }
 
