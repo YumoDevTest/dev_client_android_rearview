@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,10 +13,9 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.QRUtils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
-import com.mapbar.obd.UserCenter;
 
 /**
  * Vin 二维码的 view
@@ -60,8 +58,8 @@ public class VinBarcodeView extends FrameLayout {
         String content = "请扫描填写车辆识别号来扩展此页的\r车辆状态和控制功能";
         StringBuilder sb = new StringBuilder();
         sb.append(Urls.URL_BIND_VIN);
-        sb.append("?pushToken=" + Application.getInstance().getPushToken());
-        sb.append("&userId=" + Application.getInstance().getUserID());
+        sb.append("?pushToken=" + MyApplication.getInstance().getPushToken());
+        sb.append("&userId=" + MyApplication.getInstance().getUserID());
         LogUtil.d("TAG", "## 准备生成 绑定VIN的URL " + sb.toString());
         if (iv_qr.getDrawable() == null) {
             Bitmap bmQR = QRUtils.createQR(sb.toString());

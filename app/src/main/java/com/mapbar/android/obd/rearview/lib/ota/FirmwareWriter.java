@@ -15,16 +15,16 @@ import java.io.File;
 public class FirmwareWriter {
 
     public void writeFirmware(File file, final FirmwareUpdateCallback firmwareUpdateCallback) {
-//        if (Manager.getInstance().isBluetoothConnected()) {
+//        if (Manager.create().isBluetoothConnected()) {
         if (Manager.getInstance().isDataReaderThreadRunning()) {
             Manager.getInstance().stopReadThreadForUpgrage();
         }
         ObdContext.getInstance().getSerialPortManager().cleanup();
         beginUpgradeBox(file, firmwareUpdateCallback);
 //        } else {
-//            Manager.getInstance().prepareUpgradeBox();
+//            Manager.create().prepareUpgradeBox();
 //            final SessionInfo info = SessionInfo.getCurrent();
-//            if (!Manager.getInstance().openDevice(info.obdMac)) {
+//            if (!Manager.create().openDevice(info.obdMac)) {
 //                //
 //            }
 //        }

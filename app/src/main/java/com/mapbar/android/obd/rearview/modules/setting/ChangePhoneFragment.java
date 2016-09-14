@@ -15,8 +15,10 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseFragment;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.obd.UserCenter;
 
 /**
@@ -60,10 +62,10 @@ public class ChangePhoneFragment extends MyBaseFragment {
      */
     private String buildQrURL() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
+        sb.append(Configs.URL_REG_INFO).append("imei=").append(MyApplication.getInstance().getImei()).append("&");
         sb.append("pushToken=").append(AixintuiConfigs.getPushToken()).append("&");
         sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
-//        sb.append("&").append("userid=").append(UserCenter.getInstance().getCurrentIdAndType().userId); //少了userid
+//        sb.append("&").append("userid=").append(UserCenter.create().getCurrentIdAndType().userId); //少了userid
 
         String url = sb.toString();
         // 日志

@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 
 public class LoginPage extends AppPage {
     @ViewInject(R.id.tv_login_goPage)
@@ -30,7 +31,7 @@ public class LoginPage extends AppPage {
         tv_goPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PageManager.getInstance().goPage(MainPage.class);
+                MyApplication.getInstance().getMainActivity().goPage(MainPage.class);
             }
         });
 

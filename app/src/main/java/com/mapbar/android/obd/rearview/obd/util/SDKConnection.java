@@ -1,6 +1,6 @@
 package com.mapbar.android.obd.rearview.obd.util;
 
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 
 /**
  * 建立和obd sdk的连接，注册回调

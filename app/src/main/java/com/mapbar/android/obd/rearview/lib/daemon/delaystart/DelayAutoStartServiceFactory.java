@@ -2,8 +2,7 @@ package com.mapbar.android.obd.rearview.lib.daemon.delaystart;
 
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
-import com.mapbar.android.obd.rearview.lib.daemon.delaystart.impl.DiruiteDelayAutoStartService;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 
 /**
  * 根据当前编译环境构建不同对应的 自启动处理器

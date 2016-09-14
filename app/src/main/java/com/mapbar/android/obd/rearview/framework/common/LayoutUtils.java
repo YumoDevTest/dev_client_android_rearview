@@ -30,7 +30,8 @@ import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.hud.ProgressView;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,14 +50,18 @@ public class LayoutUtils {
     private static TextView tv;
 
     public static Rect getScreenArea() {
-        WindowManager wm = (WindowManager) MainActivity.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        Context context = MyApplication.getInstance().getMainActivity();
+        if (context == null) throw new NullPointerException();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
         int height = wm.getDefaultDisplay().getHeight();
         return new Rect(0, 0, width, height);
     }
 
     public static float getDpi() {
-        Resources resources = MainActivity.getInstance().getResources();
+        Context context = MyApplication.getInstance().getMainActivity();
+        if (context == null) throw new NullPointerException();
+        Resources resources = context.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         // 日志
         if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
@@ -66,7 +71,9 @@ public class LayoutUtils {
     }
 
     public static float getDensity() {
-        Resources resources = MainActivity.getInstance().getResources();
+        Context context = MyApplication.getInstance().getMainActivity();
+        if (context == null) throw new NullPointerException();
+        Resources resources = context.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         // 日志
         if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
@@ -89,9 +96,9 @@ public class LayoutUtils {
         return (int) (pxValue / scale + 0.5f);
     }
 
-    public static void showDialog(int resIdTitle, int resIdText, int icon) {
+    public static void showDialog(Activity activity,int resIdTitle, int resIdText, int icon) {
         Resources resources = Global.getAppContext().getResources();
-        showDialog(resources.getString(resIdTitle), resources.getString(resIdText), icon);
+        showDialog(activity,resources.getString(resIdTitle), resources.getString(resIdText), icon);
     }
 
     /**
@@ -101,8 +108,8 @@ public class LayoutUtils {
      * @param msg
      * @param icon
      */
-    public static void showDialog(String title, String msg, int icon) {
-        AlertDialog.Builder tDialog = new AlertDialog.Builder(MainActivity.getInstance());
+    public static void showDialog(Activity activity,String title, String msg, int icon) {
+        AlertDialog.Builder tDialog = new AlertDialog.Builder(activity);
         tDialog.setIcon(icon);
         tDialog.setTitle(title);
         tDialog.setMessage(msg);
@@ -116,9 +123,9 @@ public class LayoutUtils {
      * @param view    弹出的内容view
      * @param gravity {@link Gravity#TOP 等等}
      */
-    public static void showPopWindow(View view, int gravity) {
+    public static void showPopWindow(PageManager pageManager,View view, int gravity) {
         PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+        ArrayList<AppPage> pages = pageManager.getPages();
         if (pages.size() > 0) {
             popupWindow.showAtLocation(pages.get(pages.size() - 1).getContentView(), gravity, 0, 0);
         }
@@ -138,6 +145,7 @@ public class LayoutUtils {
     public static void showPopWindow(String title, String msg, View.OnClickListener confirmListener, View containt) {
         showPopWindow(title, msg, null, null, TipsType.OK_CANCEL, confirmListener, containt);
     }
+
     /**
      * 弹出对话框
      *
@@ -149,6 +157,8 @@ public class LayoutUtils {
      * @param confirmListener 确定事件
      */
     public static void showPopWindow(String title, String msg, String confirm, String cancel, TipsType type, View.OnClickListener confirmListener, View containt) {
+        MainActivity activity = MyApplication.getInstance().getMainActivity();
+        if (activity == null) throw new NullPointerException();
         View view = View.inflate(Global.getAppContext(), R.layout.layout_dialog, null);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_tips_title);
         TextView tv_msg = (TextView) view.findViewById(R.id.tv_tips_info);
@@ -180,7 +190,7 @@ public class LayoutUtils {
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
         if (containt == null) {
-            popupWindow.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+            popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
         } else {
             popupWindow.showAtLocation(containt, Gravity.CENTER, 0, 0);
         }
@@ -201,6 +211,8 @@ public class LayoutUtils {
     }
 
     public static void showQrPop(String content, String info, View.OnClickListener onClickListener) {
+        MainActivity activity = MyApplication.getInstance().getMainActivity();
+        if (activity == null) throw new NullPointerException();
         if (!TextUtils.isEmpty(url) && url.equals(content) && popupQR != null && popupQR.isShowing()) {
             tv.setText(info);
         } else {
@@ -218,9 +230,9 @@ public class LayoutUtils {
             tv = (TextView) view.findViewById(R.id.tv_qr_info);
             tv.setText(info);
             popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-//            ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+//            ArrayList<AppPage> pages = PageManager.create().getPages();
 //            if (pages.size() > 0) {
-                popupQR.showAtLocation(MainActivity.getInstance().getContentView(), Gravity.CENTER, 0, 0);
+            popupQR.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
 
 //            }
         }
@@ -385,9 +397,11 @@ public class LayoutUtils {
     }
 
     public static void closeInput() {
+        Activity context = MyApplication.getInstance().getMainActivity();
+        if (context == null) throw new NullPointerException();
         try {
             //没有弹出输入法时，报空指针，临时解决方案 FIXME 以后再研究
-            ((InputMethodManager) MainActivity.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(MainActivity.getInstance().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         } catch (Exception e) {
             e.printStackTrace();
         }

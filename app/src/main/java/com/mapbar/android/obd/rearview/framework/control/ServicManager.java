@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.TripSyncService;
 
@@ -47,9 +48,7 @@ public class ServicManager extends Service {
                     i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
                     ComponentName cName = startService(i);
                     stopSelf();
-                    //umeng统计，在杀死进程是需要调用用来保存统计数据。
-                    MobclickAgentEx.onKillProcess(ServicManager.this);
-                    System.exit(0);
+                    MyApplication.getInstance().exitApplication();
 
                 }
             }

@@ -1,12 +1,10 @@
 package com.mapbar.android.obd.rearview.obd.page;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.RadioGroup;
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
@@ -24,16 +23,14 @@ import com.mapbar.android.obd.rearview.lib.tts.TextToSpeechManager;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.common.MainPagePersenter;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
 
 import java.util.ArrayList;
-
-import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
 
 
 /**
@@ -63,36 +60,20 @@ public class MainPage extends AppPage implements IMainPageView {
      * 报警
      */
     private boolean mAlarmOn = false;
-    private Context mContext;
     private Handler mHandlerBuy = new Handler();
     private boolean isPush = true;
     private PermissonCheckerOnStart permissonCheckerOnStart;
     private PermissionManager permissionManager;
     private MainPagePersenter persenter;
 
-    private FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(MainActivity.getInstance().getSupportFragmentManager()) {
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
-    };
+    private FragmentPagerAdapter fragmentPagerAdapter;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_main);
+        fragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager());
     }
 
     @Override
@@ -101,6 +82,7 @@ public class MainPage extends AppPage implements IMainPageView {
         titleBar = new TitleBar(this, R.id.title_main);
         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
 
+        PageManager pageManager = MyApplication.getInstance().getMainActivity().getPageManager();
         vehicleCheckupPage = (VehicleCheckupPage) pageManager.createPage(VehicleCheckupPage.class);
         carDataPage = (CarDataPage) pageManager.createPage(CarDataPage.class);
         carStatePage = (CarStatePage) pageManager.createPage(CarStatePage.class);
@@ -120,7 +102,6 @@ public class MainPage extends AppPage implements IMainPageView {
         currentPage = carDataPage;
 
         pager.setOffscreenPageLimit(3);
-        mContext = MainActivity.getInstance();
         initDialog();
         title = titleBar;
         //默认进入页面为数据页面
@@ -133,7 +114,7 @@ public class MainPage extends AppPage implements IMainPageView {
 
         //下载权限
         permissonCheckerOnStart = new PermissonCheckerOnStart();
-        permissonCheckerOnStart.downloadPermision(MainActivity.getInstance());
+        permissonCheckerOnStart.downloadPermision(getActivity());
 
         persenter = new MainPagePersenter(this);
     }
@@ -224,7 +205,7 @@ public class MainPage extends AppPage implements IMainPageView {
      * 初始化通知的对话框
      */
     private void initDialog() {
-        mAlarmTimerDialog = new TimerDialog(mContext, new TimerDialog.Listener() {
+        mAlarmTimerDialog = new TimerDialog(getActivity(), new TimerDialog.Listener() {
 
             @Override
             public void onClick(View view) {
@@ -268,7 +249,7 @@ public class MainPage extends AppPage implements IMainPageView {
         //弹窗
         mAlarmTimerDialog.showAlerm(notification.getText());
         //语音播报
-        TextToSpeechManager.speak(notification.getWord());
+        TextToSpeechManager.speak(getActivity(), notification.getWord());
     }
 
     /**
@@ -287,6 +268,29 @@ public class MainPage extends AppPage implements IMainPageView {
     @Override
     public boolean isShowingNotification() {
         return mAlarmTimerDialog.isShowing();
+    }
+
+
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments == null ? null : fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments == null ? 0 : fragments.size();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.getItemPosition(object);
+        }
     }
 
 //    /**

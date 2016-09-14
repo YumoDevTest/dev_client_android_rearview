@@ -2,8 +2,7 @@ package com.mapbar.android.obd.rearview.lib.net;
 
 import android.text.TextUtils;
 
-import com.google.protobuf.AbstractMessageLite;
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.serial.utils.OutputStringUtil;
 import com.squareup.okhttp.Call;
@@ -12,18 +11,14 @@ import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-
-import security.OBD2Security;
 
 /**
  * 发送和接收请求
@@ -58,7 +53,7 @@ public final class HttpUtil {
             if (progressIndicator != null)
                 progressIndicator.onStart();
             //加密构建消息体
-            Headers headers = new Headers.Builder().add("token", Application.getInstance().getToken()).build();
+            Headers headers = new Headers.Builder().add("token", MyApplication.getInstance().getToken()).build();
 
             StringBuilder sb = new StringBuilder();
             sb.append("## [HTTP] 准备发送,url=").append(url).append(", 参数: ");

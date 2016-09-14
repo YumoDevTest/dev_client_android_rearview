@@ -16,23 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.common.QRUtils;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
-import com.mapbar.android.obd.rearview.framework.log.Log;
-import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.obd.Application;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.QrBarcodeUtils;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.obd.CarDetail;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
-import com.mapbar.obd.UserCenter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -192,8 +183,8 @@ public class PermissionAlertView extends FrameLayout {
         StringBuilder sb = new StringBuilder();
         sb.append(Urls.PERMISSION_BUY)
 //                .append("?i=").append("111111-22-333333")
-                .append("?i=").append(Application.getInstance().getImei())
-                .append("&p=").append(Application.getInstance().getPushToken())
+                .append("?i=").append(MyApplication.getInstance().getImei())
+                .append("&p=").append(MyApplication.getInstance().getPushToken())
                 .append("&b=").append(URLEncoder.encode(pinpai, "UTF-8"))
                 .append("&m=").append(URLEncoder.encode(xinghao, "UTF-8"));
         return sb.toString();
@@ -203,7 +194,7 @@ public class PermissionAlertView extends FrameLayout {
 
 /*
 
-//     2016-08-25 张云飞 移除 token   .append("&t=").append(Application.getInstance().getToken())
+//     2016-08-25 张云飞 移除 token   .append("&t=").append(MyApplication.create().getToken())
 
             扫码支付的url参数：
 

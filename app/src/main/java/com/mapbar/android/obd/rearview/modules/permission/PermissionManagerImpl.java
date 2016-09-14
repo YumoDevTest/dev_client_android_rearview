@@ -12,7 +12,7 @@ import com.mapbar.android.obd.rearview.lib.net.PBErrorCode;
 import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
 import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.Urls;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
@@ -263,7 +263,7 @@ public class PermissionManagerImpl implements PermissionManager {
 
     private String getImei() {
 //        return "311111-22-333333";
-        return Utils.getImei(Application.getInstance());
+        return Utils.getImei(MyApplication.getInstance());
     }
 }
 

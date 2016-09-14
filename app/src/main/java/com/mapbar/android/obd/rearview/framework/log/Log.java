@@ -299,7 +299,7 @@ public class Log {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.e(LogTag.GLOBAL, "uncaughtException", ex);
-                // MapNaviAnalysis.reportError(NaviApplication.getInstance(),
+                // MapNaviAnalysis.reportError(NaviApplication.create(),
                 // ex);//umeng错误统计
                 defaultUncaughtExceptionHandler.uncaughtException(thread, ex);
             }

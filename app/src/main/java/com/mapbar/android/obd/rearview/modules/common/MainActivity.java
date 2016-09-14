@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -72,12 +72,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.mapbar.android.obd.rearview.framework.control.PageManager.ManagerHolder.pageManager;
-
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static MainActivity instance;
     private boolean isFinishInitView = false;
     private RelativeLayout contentView;
     private OBDSDKListenerManager.SDKListener sdkListener;
@@ -87,15 +84,13 @@ public class MainActivity extends BaseActivity {
     private Handler handler;
     private String logFilePath = "";
     private boolean isGoDeclareActivity = false;
-
-    public static MainActivity getInstance() {
-        return instance;
-    }
+    private PageManager pageManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
+        pageManager = PageManager.create(this);
+        MyApplication.getInstance().setMainActivity(this);
         stopBackgroundService();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
@@ -139,9 +134,6 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
             alert("初始化串口失败");
         }
-//        int i = 0;
-//        if(i == 0)
-//            throw new NullPointerException();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final AppPage page = pageManager.createPage(SplashPage.class, null);
@@ -155,7 +147,7 @@ public class MainActivity extends BaseActivity {
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
 
-                        if (!PageManager.getInstance().getCurrentPageName().equals(MainPage.class.getName())) {
+                        if (!pageManager.getCurrentPageName().equals(MainPage.class.getName())) {
                             pageManager.goPage(MainPage.class);
                         }
                         break;
@@ -169,17 +161,14 @@ public class MainActivity extends BaseActivity {
                                     @Override
                                     public void onClick(View v) {
                                         finish();
-                                        //umeng统计，在杀死进程是需要调用用来保存统计数据。
-                                        MobclickAgentEx.onKillProcess(getActivity());
-                                        System.exit(0);
-
+                                        MyApplication.getInstance().exitApplication();
                                     }
                                 });
                             }
                         });
                         break;
                     case OBDManager.EVENT_OBD_USER_REGISTER_SUCC:
-                        MobclickAgentEx.onEvent(UmengConfigs.REGISTER_SUCC);
+                        MobclickAgentEx.onEvent(getActivity(), UmengConfigs.REGISTER_SUCC);
                         LayoutUtils.disQrPop();//关闭二维码
                         break;
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
@@ -189,7 +178,7 @@ public class MainActivity extends BaseActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(getActivity()));
                             }
                         }, 5000);
 
@@ -225,7 +214,7 @@ public class MainActivity extends BaseActivity {
      */
     private void checkAppVersion() {
 
-        HttpHandler http = new OBDHttpHandler(MainActivity.getInstance());
+        HttpHandler http = new OBDHttpHandler(getActivity());
         http.addParamete("package_name", getPackageName());
 
         String url = "http://wdservice.mapbar.com/appstorewsapi/checkexistlist/" + Build.VERSION.SDK_INT;//接口14.1
@@ -369,21 +358,21 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         if (restart) {
             restart = false;
-            restartmyapp();
+            MyApplication.getInstance().restartApplication();
         } else {
             startV3HService();
             Manager.getInstance().cleanup();
             ObdContext.getInstance().exit();
             android.os.Process.killProcess(android.os.Process.myPid());
-
         }
+        MyApplication.getInstance().setMainActivity(null);
     }
 
     private void startV3HService() {
         //// FIXME: tianff 2016/7/25 关闭上传进程
 //        stopService(new Intent(MainActivity.this, SyncService.class));
-//        if (NativeEnv.isServiceRunning(MainActivity.getInstance(), "obd.service.process")) {
-//            ActivityManager activityManager = (ActivityManager) MainActivity.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
+//        if (NativeEnv.isServiceRunning(MainActivity.create(), "obd.service.process")) {
+//            ActivityManager activityManager = (ActivityManager) MainActivity.create().getSystemService(Context.ACTIVITY_SERVICE);
 //            activityManager.killBackgroundProcesses("obd.service.process");
 //        }
 //        Intent i = new Intent("com.mapbar.obd.OBDV3HService");
@@ -408,7 +397,8 @@ public class MainActivity extends BaseActivity {
 //                        i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
 //                        i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
 //                        ComponentName cName = startService(i);
-//                        System.exit(0);
+//                        MyApplication.create().exitApplication();
+
 ////                        android.os.Process.killProcess(android.os.Process.myPid());
 //                    }
 //                }, 20 * 1000);
@@ -421,17 +411,10 @@ public class MainActivity extends BaseActivity {
         startService(intent);
     }
 
-    private void restartmyapp() {
-        startService(new Intent(MainActivity.this, RestartService.class));
-        //umeng统计，在杀死进程是需要调用用来保存统计数据。
-        MobclickAgentEx.onKillProcess(this);
-        System.exit(0);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            final ArrayList<AppPage> pages = PageManager.getInstance().getPages();
+            final ArrayList<AppPage> pages = pageManager.getPages();
             boolean flag = false;
             if (pages.size() > 0) {
                 flag = pages.get(pages.size() - 1).onKeyDown(keyCode, event);
@@ -452,7 +435,8 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-//                        System.exit(0);
+//                      MyApplication.create().exitApplication();
+
                     }
                 });
             }
@@ -470,7 +454,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void run() {
                     //登录
-                    Log.d(LogTag.OBD, "whw -->> UserCenterManager.getInstance().login() ==");
+                    Log.d(LogTag.OBD, "whw -->> UserCenterManager.create().login() ==");
                     UserCenterManager.getInstance().login();
                 }
             });
@@ -482,9 +466,12 @@ public class MainActivity extends BaseActivity {
         return contentView;
     }
 
-    public void restartApp() {
-        this.restart = true;
-        finish();
+    public void goPage(Class<? extends AppPage> clazz) {
+        pageManager.goPage(clazz);
+    }
+
+    public PageManager getPageManager() {
+        return pageManager;
     }
 
     private static class MyHandler extends SafeHandler<MainActivity> {

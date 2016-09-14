@@ -1,6 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.base;
 
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 
 /**
  * 定制模式

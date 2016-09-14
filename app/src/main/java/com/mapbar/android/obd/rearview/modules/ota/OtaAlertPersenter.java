@@ -4,8 +4,9 @@ import android.os.Bundle;
 
 import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.ota.FirmwareWriter;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.ota.contract.IOtaAlertView;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 
 import java.io.File;
@@ -79,7 +80,7 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
      * 当点击了 更新完成 按钮
      */
     public void onUpgradeFinish() {
-        MainActivity.getInstance().restartApp();
+        MyApplication.getInstance().restartApplication();
     }
 
     public void onRetryUpgrade() {

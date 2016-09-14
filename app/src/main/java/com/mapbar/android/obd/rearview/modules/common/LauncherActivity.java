@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,12 +30,12 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DeclareActivity extends Activity implements View.OnClickListener {
+public class LauncherActivity extends Activity implements View.OnClickListener {
     public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     public static final int MSG_SHOW_SPEED = 1;
     public static final int MSG_APPEND_TEXT = 2;
     private final int DEFAULT_CLICK_NUM = 5;
-    private final String TAG = DeclareActivity.class.getSimpleName();
+    private final String TAG = LauncherActivity.class.getSimpleName();
     private long firstTime = 0;
     private final SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     /**
@@ -90,7 +90,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
 
         setContentView(R.layout.activity_declare);
         initView();
-        sp = DeclareActivity.this.getSharedPreferences("DeclareActivity", Context.MODE_PRIVATE);
+        sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
         if (!isGoDeclareActivity) {
             startActivity(new Intent(this, MainActivity.class));
@@ -217,7 +217,7 @@ public class DeclareActivity extends Activity implements View.OnClickListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(DeclareActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LauncherActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.PhysicalData;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class VehicleCheckupAdapter1 extends BaseAdapter {
 
             holder = (Holder1) convertView.getTag();
         } else {
-            convertView = View.inflate(MainActivity.getInstance(), R.layout.item_recycler_checkup, null);
+            convertView = View.inflate(mContext, R.layout.item_recycler_checkup, null);
             holder = new Holder1();
             holder.tv_checkName = (TextView) convertView.findViewById(R.id.tv_itemCheckup_name);
             holder.tv_checkResult = (TextView) convertView.findViewById(R.id.tv_itemCheckup_result);

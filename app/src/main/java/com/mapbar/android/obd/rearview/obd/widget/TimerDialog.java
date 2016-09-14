@@ -12,11 +12,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;

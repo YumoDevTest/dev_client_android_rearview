@@ -1,5 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.tts;
 
+import android.content.Context;
+
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 /**
@@ -24,9 +26,9 @@ public final class TextToSpeechManager {
      *
      * @param word 要播放的文字
      */
-    public static void speak(String word) {
+    public static void speak(Context context, String word) {
         LogUtil.i(TAG, "## 准备播放语音: " + word);
         if (textToSpeechPlayer != null)
-            textToSpeechPlayer.play(word);
+            textToSpeechPlayer.play(context,word);
     }
 }

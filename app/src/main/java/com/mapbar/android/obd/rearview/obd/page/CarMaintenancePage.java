@@ -27,8 +27,8 @@ import com.mapbar.android.obd.rearview.modules.maintenance.MaintenancePresenter;
 import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenanceView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
@@ -163,14 +163,14 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         titlebarview1.setButtonRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MobclickAgentEx.onEvent(UmengConfigs.SETMAINTENANCE);
+                MobclickAgentEx.onEvent(getActivity(), UmengConfigs.SETMAINTENANCE);
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
                 setButtonRightVisiable(false);
             }
         });
 //
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.getInstance());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rl_view.setLayoutManager(layoutManager);
 
@@ -195,7 +195,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                 et_lastMaintenanceDate.setText("未设置");
             }
             if (userCar.totalMileage > 0)
-            et_totalMileage.setText(userCar.totalMileage / 1000 + "");
+                et_totalMileage.setText(userCar.totalMileage / 1000 + "");
             et_lastMaintenanceMileage.setText(userCar.lastMaintenanceMileage / 1000 + "");
         } else {
         }
@@ -423,9 +423,9 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                     int year = Integer.parseInt(time[0]);
                     int monty = (Integer.parseInt(time[1]) - 1);
                     int date = Integer.parseInt(time[2]);
-                    new MyDatePickerDialog(getContext(), mBuyDateListener, year, monty, date).show();
+                    new MyDatePickerDialog(getActivity(), mBuyDateListener, year, monty, date).show();
                 } else {
-                    new MyDatePickerDialog(getContext(), mBuyDateListener, mCalendar.get(Calendar.YEAR),
+                    new MyDatePickerDialog(getActivity(), mBuyDateListener, mCalendar.get(Calendar.YEAR),
                             mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE)).show();
                 }
                 break;
@@ -436,15 +436,15 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                     int year = Integer.parseInt(time[0]);
                     int monty = (Integer.parseInt(time[1]) - 1);
                     int date = Integer.parseInt(time[2]);
-                    new MyDatePickerDialog(getContext(), mUpKeepDateListener, year, monty, date).show();
+                    new MyDatePickerDialog(getActivity(), mUpKeepDateListener, year, monty, date).show();
                 } else {
-                    new DatePickerDialog(getContext(), mUpKeepDateListener, mCalendar.get(Calendar.YEAR),
+                    new DatePickerDialog(getActivity(), mUpKeepDateListener, mCalendar.get(Calendar.YEAR),
                             mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
                 break;
             case R.id.btn_save:
-                if (et_purchaseDate.getText().toString().trim().equals(getContext().getResources().getString(R.string.isnotset)) ||
-                        et_lastMaintenanceDate.getText().toString().trim().equals(getContext().getResources().getString(R.string.isnotset))
+                if (et_purchaseDate.getText().toString().trim().equals(getActivity().getResources().getString(R.string.isnotset)) ||
+                        et_lastMaintenanceDate.getText().toString().trim().equals(getActivity().getResources().getString(R.string.isnotset))
                         || TextUtils.isEmpty(et_totalMileage.getText().toString()) || TextUtils
                         .isEmpty(et_lastMaintenanceMileage.getText().toString())) {
                     StringUtil.toastStringShort("信息不完整");
@@ -463,7 +463,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                 line_upkeep_revise.setVisibility(View.VISIBLE);
                 line_upkeep.setVisibility(View.GONE);
                 setButtonRightVisiable(false);
-                MobclickAgentEx.onEvent(UmengConfigs.MAINTENANCED);
+                MobclickAgentEx.onEvent(getActivity(), UmengConfigs.MAINTENANCED);
                 break;
 
         }
@@ -479,7 +479,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
 
         final MaintenanceTask[] tasks = maintenanceState.getTasks();
         if (0 < tasks.length) {
-            upkeepItemAdapter = new UpkeepItemAdapter(getContext(), tasks);
+            upkeepItemAdapter = new UpkeepItemAdapter(getActivity(), tasks);
             rl_view.setAdapter(upkeepItemAdapter);
             rl_view.post(new Runnable() {
                 @Override
@@ -499,8 +499,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         tv_next_time.setText(String.valueOf(nextDay));
         tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
         tv_upkeep_totle_cost.setText("预计费用 " + maintenanceState.getTotalPrice() + " 元");
-        circleDrawable = new CircleDrawable(getContext());
-        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable = new CircleDrawable(getActivity());
+        circleDrawable.setCricleProgressColor(getActivity().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
         circleDrawable.setProgress((int) maintenanceState.getProgressPercentage());
         view_upkeep_time.setImageDrawable(circleDrawable);
@@ -518,7 +518,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         setButtonRightVisiable(true);
         final MaintenanceTask[] tasks = maintenanceState.getTasks();
         if (0 < tasks.length) {
-            upkeepItemAdapter = new UpkeepItemAdapter(getContext(), tasks);
+            upkeepItemAdapter = new UpkeepItemAdapter(getActivity(), tasks);
             rl_view.setAdapter(upkeepItemAdapter);
             rl_view.post(new Runnable() {
                 @Override
@@ -536,8 +536,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         tv_next_time.setText(String.valueOf(overdueTime));
         tv_upkeep_totle_item.setText("下次保养项目 共" + maintenanceState.getTasks().length + "项");
         tv_upkeep_totle_cost.setText("预计费用 " + maintenanceState.getTotalPrice() + " 元");
-        circleDrawable = new CircleDrawable(getContext());
-        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable = new CircleDrawable(getActivity());
+        circleDrawable.setCricleProgressColor(getActivity().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
         circleDrawable.setProgress((int) maintenanceState.getProgressPercentage());
         view_upkeep_time.setImageDrawable(circleDrawable);

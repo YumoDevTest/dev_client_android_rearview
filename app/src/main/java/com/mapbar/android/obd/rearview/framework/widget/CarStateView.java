@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.widget;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,20 +12,28 @@ import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.CarStatusData;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by liuyy on 2016/5/11.
  */
 public class CarStateView {
-    MainActivity context = MainActivity.getInstance();
     private View view;
     private CarStatusData data;
     private StateDrawable drawable;
     private Bitmap bmCar;
+    private WeakReference<Context> contextWeakReference;
 
-    public CarStateView(View parent, int id) {
+    public Context getContext() {
+        return contextWeakReference == null ? null : contextWeakReference.get();
+    }
+
+    public CarStateView(Context context, View parent, int id) {
+        if (context == null) throw new NullPointerException();
+        contextWeakReference = new WeakReference<Context>(context);
         view = parent.findViewById(id);
         drawable = new StateDrawable();
         bmCar = BitmapFactory.decodeResource(context.getResources(), R.drawable.car_normal);
@@ -59,6 +68,8 @@ public class CarStateView {
         @Override
         public void draw(Canvas canvas) {
             bounds = getBounds();
+            Context context = getContext();
+            if (context == null) return;
             canvas.drawBitmap(bmCar, null, bounds, paint);
             if (data != null) {
                 switch (data.lights) {

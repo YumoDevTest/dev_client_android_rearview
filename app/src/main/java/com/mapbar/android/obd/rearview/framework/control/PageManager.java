@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 
 import java.util.ArrayList;
 
@@ -23,15 +23,15 @@ public class PageManager {
     private ArrayList<AppPage> pages;
     private String currentPageName = "";
 
-    private PageManager() {
-        mContext = MainActivity.getInstance();
+    private PageManager(BaseActivity baseActivity) {
+        mContext = baseActivity;
         fManager = mContext.getSupportFragmentManager();
         pages = new ArrayList<>();
     }
 
-    public static PageManager getInstance() {
+    public static PageManager create(BaseActivity baseActivity) {
         if (manager == null) {
-            manager = new PageManager();
+            manager = new PageManager(baseActivity);
         }
         return manager;
     }
@@ -173,7 +173,7 @@ public class PageManager {
      */
     public void finishAll() {
         pages.clear();
-//        SDKListenerManager.getInstance().clearListener();
+//        SDKListenerManager.create().clearListener();
     }
 
     public Context getmContext() {
@@ -188,7 +188,4 @@ public class PageManager {
         return currentPageName;
     }
 
-    public static class ManagerHolder {
-        public static PageManager pageManager = getInstance();
-    }
 }

@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -14,7 +15,7 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 
 /**
  * 布局工具类
@@ -184,14 +185,15 @@ public class LayoutUtils_ui {
      * @return 宽总是短的，高总是长的
      */
     public static synchronized int[] getScreenWH() {
-
+        Activity context = MyApplication.getInstance().getMainActivity();
+        if (context == null) throw new NullPointerException();
         if (null != wh) {
             return wh;
         }
 
         wh = new int[2];
 
-        WindowManager windowManager = MainActivity.getInstance().getWindowManager();
+        WindowManager windowManager = context.getWindowManager();
 
         Display display = windowManager.getDefaultDisplay();
         mergeWH(display.getWidth(), display.getHeight());
@@ -359,8 +361,8 @@ public class LayoutUtils_ui {
      *
      * @param isFull
      */
-    public static void setFullScreen(boolean isFull) {
-        Window window = MainActivity.getInstance().getWindow();
+    public static void setFullScreen(Activity activity, boolean isFull) {
+        Window window = activity.getWindow();
         if (isFull) {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;

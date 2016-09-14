@@ -21,7 +21,7 @@ public class CarDataManager extends OBDManager {
 //                onSDKEvent(event, o);
 //            }
 //        };
-//        SDKListenerManager.getInstance().setSdkListener(sdkListener);
+//        SDKListenerManager.create().setSdkListener(sdkListener);
     }
 
     /**

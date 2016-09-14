@@ -79,9 +79,9 @@
 //
 //    private void initView() {
 //        if (views == null) {
-//            firmware_force_update_tip = MainActivity.getInstance().getString(R.string.firmware_force_update_tip) + countdown_number + "s";
+//            firmware_force_update_tip = MainActivity.create().getString(R.string.firmware_force_update_tip) + countdown_number + "s";
 //            views = new ArrayList<View>();
-//            popupView = View.inflate(MainActivity.getInstance(), R.layout.layout_firmware_pop, null);
+//            popupView = View.inflate(MainActivity.create(), R.layout.layout_firmware_pop, null);
 //
 //            prompt_content = popupView.findViewById(R.id.firmware_update_prompt_content);
 //            force_content = popupView.findViewById(R.id.firmware_update_force_content);
@@ -122,7 +122,7 @@
 //            firmware_update_fail_confirm.setOnClickListener(listener);//失败后的重试
 //            tv_firmware_pop_fail_cancle.setOnClickListener(listener);//失败后的取消
 //
-//            if (Firmware.getInstance(MainActivity.getInstance()).isForceUpdate()) {
+//            if (Firmware.create(MainActivity.create()).isForceUpdate()) {
 //                showCurrentView(force_content);
 //                startTimer(TYPE_FORCE);
 //            } else {
@@ -145,7 +145,7 @@
 //                countdown_number = 5;
 //                break;
 //        }
-//        tv_firmware_pop_content.setText(MainActivity.getInstance().getString(R.string.tv_firmware_pop_content_tip) + countdown_number + "s");
+//        tv_firmware_pop_content.setText(MainActivity.create().getString(R.string.tv_firmware_pop_content_tip) + countdown_number + "s");
 //        if (mHandler == null)
 //            mHandler = new TimerHandler();
 //
@@ -175,7 +175,7 @@
 //
 //    private void updateFirmware() {
 //        showCurrentView(progress_content);
-//        OTAManager.getInstance().upgrade(MainActivity.getInstance(), callback1);
+//        OTAManager.create().upgrade(MainActivity.create(), callback1);
 //    }
 //
 //
@@ -270,10 +270,10 @@
 //            } else {
 //                switch (msg.what) {
 //                    case TYPE_NORMAL:
-//                        tv_firmware_pop_content.setText(MainActivity.getInstance().getString(R.string.tv_firmware_pop_content_tip) + countdown_number + "s");
+//                        tv_firmware_pop_content.setText(MainActivity.create().getString(R.string.tv_firmware_pop_content_tip) + countdown_number + "s");
 //                        break;
 //                    case TYPE_FORCE:
-//                        tv_firmware_force_content.setText(MainActivity.getInstance().getString(R.string.firmware_force_update_tip) + countdown_number + "s");
+//                        tv_firmware_force_content.setText(MainActivity.create().getString(R.string.firmware_force_update_tip) + countdown_number + "s");
 //                        break;
 //                }
 //            }
@@ -306,7 +306,7 @@
 //                case R.id.firmware_update_succ_confirm://升级成功,点击完成按钮,重启客户端
 //                    stopTimer();
 //                    firmwarePopu.dismiss();
-//                    MainActivity.getInstance().restartApp();
+//                    MainActivity.create().restartApp();
 //                    break;
 //
 //                case R.id.firmware_update_fail_confirm://点击重试

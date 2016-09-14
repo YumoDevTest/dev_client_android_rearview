@@ -57,14 +57,14 @@
         android:smallScreens="true" />
 
     <application
-        android:name=".obd.Application"
+        android:name=".modules.common.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".obd.MainActivity"
+            android:name=".modules.common.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -117,9 +117,9 @@
         <service
             android:name="com.mapbar.obd.SyncService"
             android:process="obd.service.process"></service>
-        <service android:name=".obd.UpdateService" />
+        <service android:name=".modules.common.UpdateService" />
         <service
-            android:name=".obd.RestartService"
+            android:name=".modules.common.RestartService"
             android:process="obd.service.restart.process" />
         <service android:name="com.mapbar.obd.TripSyncService" />
         <!-- 后台上传进程自动唤醒广播接收器注册 -->
@@ -260,8 +260,9 @@
             android:value="5769e791e0f55a06a8000ed6" />
 
         <activity android:name=".modules.setting.ChangeVINActivity" />
+        <!-- 启动页 -->
         <activity
-            android:name=".obd.DeclareActivity"
+            android:name=".modules.common.LauncherActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -99,7 +99,7 @@ public class QRUtils {
 //        StringBuilder sb = new StringBuilder();
 //        sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei()).append("&");
 //        sb.append("pushToken=").append(AixintuiConfigs.push_token).append("&");
-//        sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
+//        sb.append("token=").append(UserCenter.create().getCurrentUserToken());
 //
 ////        String url = Configs.URL_REG1 + "&redirect_uri=" + Uri.encode(sb.toString()) + Configs.URL_REG2;
 //        String url = sb.toString();

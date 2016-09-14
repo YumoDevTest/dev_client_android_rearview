@@ -9,8 +9,7 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TireAlermMessageBuilder;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressureAlermEventDispatcher;
-import com.mapbar.android.obd.rearview.obd.Application;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.TPMSAlarmData;
 
@@ -32,8 +31,8 @@ public final class NotificationManager {
 
     public NotificationManager() {
         notificationQueue = new LinkedList<>();
-        mContext = Application.getInstance();
-        permissionManager = LogicFactory.createPermissionManager(Application.getInstance());
+        mContext = MyApplication.getInstance();
+        permissionManager = LogicFactory.createPermissionManager(MyApplication.getInstance());
     }
 
     /**

@@ -1,14 +1,14 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
+
+import android.content.Intent;
 
 import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
-import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
-import com.mapbar.android.obd.rearview.lib.umeng.UmengUnitTest;
-import com.mapbar.android.obd.rearview.modules.common.Session;
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
-import com.mapbar.android.obd.rearview.obd.util.MyCrashLoger;
+import com.mapbar.android.obd.rearview.lib.net.HttpUtil;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
@@ -19,22 +19,23 @@ import com.mapbar.obd.UserCenter;
  * 应用
  * Created by yun on 16/1/7.
  */
-public class Application extends android.app.Application {
-    private static final String TAG = "Application";
-    private static Application instance;
+public class MyApplication extends android.app.Application {
+    private static final String TAG = "MyApplication";
+    private static MyApplication instance;
     //构建一个session，会话概念，该 session仅仅在app启动后有效，在app停止后销毁。
     // 用于临时在内存防止一些变量.仅建议存放 数据载体模型(model,entity,基础数据类型）
     // 不建议存放 业务操作类，比如manager等，以防止内存泄漏
     // 自己放的，自己用，用完清理
     private Session mSession;
     private boolean imei;
+    private MainActivity mainActivity;//主页面
 
-    public Application() {
+    public MyApplication() {
         instance = this;
     }
 
-    public static Application getInstance() {
-        return Application.instance;
+    public static MyApplication getInstance() {
+        return MyApplication.instance;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class Application extends android.app.Application {
     }
 
     public String getImei() {
-        return Utils.getImei(MainActivity.getInstance());
+        return Utils.getImei(getMainActivity());
     }
 
     /**
@@ -113,4 +114,47 @@ public class Application extends android.app.Application {
             return null;
         return UserCenter.getInstance().getCurrentIdAndType().userId;
     }
+
+    /**
+     * 退出当前app
+     */
+    public void exitApplication() {
+        if (getMainActivity() != null && !getMainActivity().isFinishing()) {
+            getMainActivity().finish();
+        }
+        Manager.getInstance().stopTrip(true);
+        Manager.getInstance().cleanup();
+        //umeng统计，在杀死进程是需要调用用来保存统计数据。
+        MobclickAgentEx.onKillProcess(this);
+        System.exit(0);
+    }
+
+    /**
+     * 重启这个app
+     */
+    public void restartApplication() {
+        startService(new Intent(getMainActivity(), RestartService.class));
+        MyApplication.getInstance().exitApplication();
+    }
+
+
+    /**
+     * 获得 首页 Activity
+     *
+     * @return
+     */
+    public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    /**
+     * 设置 主页 Activity
+     *
+     * @param mainActivity 主页
+     */
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
+
 }

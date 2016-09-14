@@ -34,8 +34,7 @@ import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressurePresenter;
 import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
 import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
@@ -96,8 +95,8 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private int number = -1;//显示数据空间的编号
     private PopupWindow popupWindow;
     private RealTimeData realTimeData;
-    private String[] dataNames = getContext().getResources().getStringArray(R.array.data_names);
-    private String[] units = getContext().getResources().getStringArray(R.array.units);
+    private String[] dataNames = getActivity().getResources().getStringArray(R.array.data_names);
+    private String[] units = getActivity().getResources().getStringArray(R.array.units);
     private boolean isFirst = true;
     private int spv0, spv1, spv2, spv3;
     private TitleBarView titlebarview1;
@@ -141,7 +140,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         TirePressureViewDigital tire_pressure_rignt_bottom = (TirePressureViewDigital) getContentView().findViewById(R.id.tire_pressure_rignt_bottom);
         tirePressureForeViewArray = new TirePressureViewDigital[]{tire_pressure_left_top, tire_pressure_rignt_top, tire_pressure_left_bottom, tire_pressure_rignt_bottom};
 
-        sharedPreferences = MainActivity.getInstance().getSharedPreferences("car_data", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("car_data", Context.MODE_PRIVATE);
         isFirst = sharedPreferences.getBoolean("isFirst", true);
         if (isFirst) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -178,7 +177,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
                         if (realTimeData != null) {
                             upData();
                             //发送广播，传出实时数据
-                            ExternalManager.postRealTimeData(getContext(), realTimeData);
+                            ExternalManager.postRealTimeData(getActivity(), realTimeData);
                         }
                         break;
                 }
@@ -346,7 +345,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));//使gridView点击每个item没有颜色变化；进而可以自定义点击变化颜色；
         ImageView tv_pop_close = (ImageView) popupView.findViewById(R.id.iv_pop_close);
         tv_pop_close.setOnClickListener(this);
-        SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.getInstance(), datas, R.layout.item_grid_car_data, new String[]{"name", "icon"}, new int[]{R.id.tv_item_state, R.id.iv_item_state});
+        SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), datas, R.layout.item_grid_car_data, new String[]{"name", "icon"}, new int[]{R.id.tv_item_state, R.id.iv_item_state});
         gridView.setAdapter(simpleAdapter);
         //gridView监听点击事件
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -358,7 +357,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
                 if (!(value1 == -1 || value2 == -1)) {
                     editor.putInt(number + "", value1);
                     editor.putInt((4 + position) + "", value2).commit();
-                    uMeng(number, value1);
+                    uMeng(getActivity(), number, value1);
                 }
 
                 //更新数据
@@ -377,34 +376,34 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
      * @param number
      * @param value1
      */
-    private void uMeng(int number, int value1) {
+    private void uMeng(Context context, int number, int value1) {
         switch (value1) {
             case 0:
-                MobclickAgentEx.onEvent(UmengConfigs.GASCONSUM);
+                MobclickAgentEx.onEvent(context, UmengConfigs.GASCONSUM);
                 break;
             case 1:
-                MobclickAgentEx.onEvent(UmengConfigs.TRIPTIME);
+                MobclickAgentEx.onEvent(context, UmengConfigs.TRIPTIME);
                 break;
             case 2:
-                MobclickAgentEx.onEvent(UmengConfigs.TRIPLENGTH);
+                MobclickAgentEx.onEvent(context, UmengConfigs.TRIPLENGTH);
                 break;
             case 3:
-                MobclickAgentEx.onEvent(UmengConfigs.DRIVECOST);
+                MobclickAgentEx.onEvent(context, UmengConfigs.DRIVECOST);
                 break;
             case 4:
-                MobclickAgentEx.onEvent(UmengConfigs.SPEED);
+                MobclickAgentEx.onEvent(context, UmengConfigs.SPEED);
                 break;
             case 5:
-                MobclickAgentEx.onEvent(UmengConfigs.RPM);
+                MobclickAgentEx.onEvent(context, UmengConfigs.RPM);
                 break;
             case 6:
-                MobclickAgentEx.onEvent(UmengConfigs.VOLTAGE);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOLTAGE);
                 break;
             case 7:
-                MobclickAgentEx.onEvent(UmengConfigs.ENGINECOOLANTTEMPERATURE);
+                MobclickAgentEx.onEvent(context, UmengConfigs.ENGINECOOLANTTEMPERATURE);
                 break;
             case 8:
-                MobclickAgentEx.onEvent(UmengConfigs.AVERAGEGASCONSUM);
+                MobclickAgentEx.onEvent(context, UmengConfigs.AVERAGEGASCONSUM);
                 break;
         }
     }

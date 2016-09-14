@@ -102,7 +102,7 @@ public class AixintuiPushManager implements AixintuiCallBack {
                 if (NativeEnv.isApplicationRunning(context, context.getPackageName())) {
                     UserCenterManager.getInstance().setPushData(type, state, userId, token);
 
-//                    OTAManager.getInstance().setPushData(type, state, userId, token);
+//                    OTAManager.create().setPushData(type, state, userId, token);
                 }
 
             } catch (JSONException e) {

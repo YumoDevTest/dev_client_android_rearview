@@ -11,7 +11,8 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
@@ -60,11 +61,19 @@ public class UserCenterManager extends OBDManager {
      * 推送是否超时
      */
     private boolean isOutTime = false;
-
+    private static String mIMEI;
 
     public UserCenterManager() {
         super();
 
+    }
+
+    public static String getImei() {
+        if (mIMEI == null)
+            mIMEI = MyApplication.getInstance().getImei();
+        if(mIMEI == null)
+            throw new NullPointerException();
+        return mIMEI;
     }
 
     /**
@@ -109,17 +118,17 @@ public class UserCenterManager extends OBDManager {
                             Log.d(LogTag.OBD, "推送的userId -->> " + userId + " token--->" + token);
                             Log.d(LogTag.OBD, "当前userId -->>" + UserCenter.getInstance().getCurrentIdAndType().userId);
                             Log.d(LogTag.OBD, "当前token -->>" + UserCenter.getInstance().getCurrentUserToken());
-                            Log.d(LogTag.OBD, "当前imei -->>" + Utils.getImei(MainActivity.getInstance()));
+                            Log.d(LogTag.OBD, "当前imei -->>" + mIMEI);
                         }
 
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                        UserCenter.getInstance().DeviceLoginlogin(mIMEI);
                     }
 
                 } else if (state == 2 || state == 3) {
                     //友盟注册失败统计
-                    MobclickAgentEx.onEvent(UmengConfigs.REGISTR_FAILED);
+                    MobclickAgentEx.onEvent(MyApplication.getInstance().getMainActivity(), UmengConfigs.REGISTR_FAILED);
                     //微信注册失败，从新走设备注册
-                    UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                    UserCenter.getInstance().DeviceLoginlogin(mIMEI);
                 }
                 break;
         }
@@ -261,12 +270,12 @@ public class UserCenterManager extends OBDManager {
                     Log.d(LogTag.OBD, " -->> 设备登录失败");
                 }
                 LayoutUtils.disHud();
-                LayoutUtils.showHud(MainActivity.getInstance(), "网络问题，无法连接");
+                LayoutUtils.showHud(MyApplication.getInstance().getMainActivity(), "网络问题，无法连接");
                 //延迟，设备登录
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                        UserCenter.getInstance().DeviceLoginlogin(mIMEI);
                     }
                 }, 5 * 1000);
                 break;
@@ -375,7 +384,7 @@ public class UserCenterManager extends OBDManager {
                 if (c == null) {
                     StringUtil.toastStringShort("错误码为空了");
                 }
-                StringUtil.toastStringShort(c+"");
+                StringUtil.toastStringShort(c + "");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -411,7 +420,7 @@ public class UserCenterManager extends OBDManager {
 
             }
 
-            UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+            UserCenter.getInstance().DeviceLoginlogin(mIMEI);
         }
     }
 
@@ -488,7 +497,7 @@ public class UserCenterManager extends OBDManager {
                 Log.d(LogTag.OBD, " -->> 弹出二维码");
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(Configs.URL_REG_INFO).append("imei=").append(Utils.getImei(MainActivity.getInstance())).append("&");
+            sb.append(Configs.URL_REG_INFO).append("imei=").append(mIMEI).append("&");
             sb.append("pushToken=").append(AixintuiConfigs.getPushToken()).append("&");
             sb.append("token=").append(UserCenter.getInstance().getCurrentUserToken());
 
@@ -527,7 +536,7 @@ public class UserCenterManager extends OBDManager {
                 if (Log.isLoggable(LogTag.OBD, Log.DEBUG)) {
                     Log.d(LogTag.OBD, "推送超时 -->> ");
                 }
-                UserCenter.getInstance().DeviceLoginlogin(Utils.getImei(MainActivity.getInstance()));
+                UserCenter.getInstance().DeviceLoginlogin(mIMEI);
             }
         }, 1000 * 60 * 5);
 
@@ -592,7 +601,7 @@ public class UserCenterManager extends OBDManager {
             Log.d(LogTag.OBD, "连接设备openDevice -->> ");
         }
         StringUtil.toastStringLong("数据准备中,请稍后");
-        Manager.getInstance().openDevice(Utils.getImei(MainActivity.getInstance()));
+        Manager.getInstance().openDevice(mIMEI);
     }
 
     /**
@@ -621,6 +630,7 @@ public class UserCenterManager extends OBDManager {
     public void setOutTime(boolean outTime) {
         isOutTime = outTime;
     }
+
     /**
      * 手动填写手机号，或者carGenerationId和vin信息；
      *

@@ -5,12 +5,8 @@ import android.content.Intent;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.common.Session;
-import com.mapbar.android.obd.rearview.obd.Application;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
-import com.mapbar.obd.OBDFuncRightData;
-import com.mapbar.obd.UserCenterError;
 
 import java.util.List;
 
@@ -62,7 +58,7 @@ public class PermissonCheckerOnStart {
     public void checkLocalPermissionSummary(Context context) {
         LogUtil.d(TAG, "## 准备 判断本地权限摘要");
         //判断 是否在启动时 检查过权限
-//        final Session session = Application.getInstance().getSession();
+//        final Session session = MyApplication.create().getSession();
 //        if (session.getBoolean(KEY_FOR_HAS_CHECKED_ON_START, false)) {
 //            return;//已检查过，则无需再次检查
 //        }

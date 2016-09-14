@@ -1,6 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.base;
 
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 
 /**
  * 消息分发器。接收来自sdk层的事件消息，主要方法有

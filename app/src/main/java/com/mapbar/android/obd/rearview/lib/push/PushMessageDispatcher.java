@@ -25,7 +25,7 @@ public class PushMessageDispatcher {
             EventBusManager.post(new ChangePhoneEvent_ScanOK(type, state, userId, token));
         } else if (type == PushType.SCAN_REGISTER && state == PushState.SUCCESS) {
             //更新本地用户信息
-//            UserCenterManager.getInstance().updateUserInfoByRemoteLogin(userId, null, token, "zs");
+//            UserCenterManager.create().updateUserInfoByRemoteLogin(userId, null, token, "zs");
 
             //收到推送 填写并注册成功
             //在修改手机号，会订阅 ChangePhoneEvent_ScanOK 类型的 eventbus消息

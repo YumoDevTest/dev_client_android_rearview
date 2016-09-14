@@ -30,7 +30,7 @@ public class VinPushDispatcher {
             if (state == PushState.SUCCESS) {
                 LogUtil.d("PUSH", "## 收到推送：绑定VIN成功");
                 EventBusManager.post(new VinChangeSucccessEvent(type,state,userId,token));
-//                Manager.getInstance().queryRemoteUserCar();//更新车辆信息
+//                Manager.create().queryRemoteUserCar();//更新车辆信息
             } else {
                 LogUtil.d("PUSH", "## 收到推送：绑定VIN失败");
                 EventBusManager.post(new VinChangeFailureEvent(type,state,userId,token));

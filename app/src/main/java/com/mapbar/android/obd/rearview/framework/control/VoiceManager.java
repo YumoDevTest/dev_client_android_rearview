@@ -1,8 +1,9 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
+import android.content.Context;
 import android.content.Intent;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 
 /**
  * 文本转语音TTS功能
@@ -11,6 +12,7 @@ public class VoiceManager {
     private static VoiceManager voiceManager;
     //    private final String ACTION_TTS = "ime.service.intent.action.TTS_SPEACK";//艾米
     private final String ACTION_TTS = "mapbar.obd.action.ACTION_TTS";//达讯
+
     private VoiceManager() {
 
     }
@@ -31,13 +33,14 @@ public class VoiceManager {
     /**
      * @param msg 待转为语音的文本
      */
-    public void sendBroadcastTTS(String msg) {
+    public void sendBroadcastTTS(Context context, String msg) {
+        if (context == null) throw new NullPointerException();
         Intent mIntent = new Intent(ACTION_TTS);
         String[] result = new String[2];
         result[0] = "navigate";
         result[1] = msg;
         mIntent.putExtra("param", result);
-        MainActivity.getInstance().sendBroadcast(mIntent);
+        context.sendBroadcast(mIntent);
     }
 
 

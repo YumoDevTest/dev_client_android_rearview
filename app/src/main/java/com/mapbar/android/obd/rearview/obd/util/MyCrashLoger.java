@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.obd.util;
 
 import android.os.Environment;
 
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class MyCrashLoger implements UncaughtExceptionHandler {
         //打印异常
         exception.printStackTrace();
         //上报umeng
-        MobclickAgentEx.reportError(Application.getInstance(), exception);
+        MobclickAgentEx.reportError(MyApplication.getInstance(), exception);
         //保存到本地日志
         String str = getExceptionString(exception);
         android.util.Log.e(TAG, "## uncaughtException: " + str);

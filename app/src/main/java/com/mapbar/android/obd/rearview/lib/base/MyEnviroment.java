@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.io.File;
@@ -36,7 +36,7 @@ public class MyEnviroment {
 
     public static String getPackageName() {
         if (TextUtils.isEmpty(PACKAGE_NAME)) {
-            PACKAGE_NAME = Application.getInstance().getPackageName();
+            PACKAGE_NAME = MyApplication.getInstance().getPackageName();
         }
         return PACKAGE_NAME;
     }

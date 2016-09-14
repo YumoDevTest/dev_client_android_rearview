@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 import com.mapbar.obd.ConnectManager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.serial.comond.ReadTimeoutException;

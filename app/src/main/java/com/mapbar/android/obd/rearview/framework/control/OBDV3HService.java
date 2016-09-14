@@ -19,8 +19,9 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
@@ -91,10 +92,7 @@ public class OBDV3HService extends Service {
             android.util.Log.d("OBDV3HService", "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
             Manager.getInstance().stopTrip(true);
-            Manager.getInstance().cleanup();
-            //umeng统计，在杀死进程是需要调用用来保存统计数据。
-            MobclickAgentEx.onKillProcess(OBDV3HService.this);
-            System.exit(0);
+            MyApplication.getInstance().exitApplication();
         }
     };
     private Manager manager;
@@ -112,7 +110,7 @@ public class OBDV3HService extends Service {
         super.onCreate();
         manager = Manager.getInstance();
         //捕捉异常注册
-//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        CrashHandler crashHandler = CrashHandler.create();
 //        crashHandler.init(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
 
@@ -324,7 +322,7 @@ public class OBDV3HService extends Service {
 //                if (mDebug) {
 //                    Logger.d(TAG, "In *DEBUG MODE*");
 //                    Logger.d(TAG, "open demo device");
-//                    Manager.getInstance().openDemoDevice();
+//                    Manager.create().openDemoDevice();
 //                } else {
 //                    if (mNeedConnect) {
 //                        connectDevice();
@@ -365,8 +363,8 @@ public class OBDV3HService extends Service {
         // If current status is disconnected, attempt to connect the device
         // immediately.
         if (mCurrentStatus == CONNECTION_STATE_DISCONNECTED) {
-//            if (!DeviceService.getInstance().isAdapterEnabled()) {
-//                DeviceService.getInstance().enableAdapter(true);
+//            if (!DeviceService.create().isAdapterEnabled()) {
+//                DeviceService.create().enableAdapter(true);
 //                mConnectHandler.sendEmptyMessageDelayed(EVENT_WAIT_FOR_ADAPTER,
 //                        CONNECT_DELAY);
 //            } else {
@@ -378,15 +376,15 @@ public class OBDV3HService extends Service {
     private void doConnect() {
         openDevice();
         /*
-        mCandidateDeviceInfo = Manager.getInstance().getCandidateDeviceInfo();
+        mCandidateDeviceInfo = Manager.create().getCandidateDeviceInfo();
         if (mCandidateDeviceInfo != null && !TextUtils.isEmpty(mCandidateDeviceInfo.mac)) {
             // Attempt to connect the last device.
             mCurrentStatus = CONNECTION_STATE_CONNECTING;
-            if (!Manager.getInstance().openDevice(mCandidateDeviceInfo.mac)) {
+            if (!Manager.create().openDevice(mCandidateDeviceInfo.mac)) {
                 mConnectHandler.sendEmptyMessageDelayed(EVENT_DELAY_TO_CONNECT,
                         CONNECT_DELAY);
             } else {
-                boolean b = Manager.getInstance().setExtraTripInfo(new ExtraTripInfo(COLLECT_TYPE, mObdChannel));
+                boolean b = Manager.create().setExtraTripInfo(new ExtraTripInfo(COLLECT_TYPE, mObdChannel));
             }
         } else {
             resetAdapterStatus();
@@ -398,11 +396,7 @@ public class OBDV3HService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopLoopGetCarStatus();
-        Manager.getInstance().cleanup();
-
-        //umeng统计，在杀死进程是需要调用用来保存统计数据。
-        MobclickAgentEx.onKillProcess(this);
-        System.exit(0);
+        MyApplication.getInstance().exitApplication();
     }
 
 
@@ -415,7 +409,7 @@ public class OBDV3HService extends Service {
             public void run() {
                 Intent startIntent = new Intent();
                 startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.DeclareActivity");
+                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.LauncherActivity");
                 startIntent.setComponent(cName);
                 startActivity(startIntent);
             }

@@ -60,38 +60,38 @@ public class CommandControl {
         if (command >= 200000) {//控制类指令
             executeCommand2(command);
         } else {//非控制类指令
-            MobclickAgentEx.onEvent(UmengConfigs.VOICE_REALTIMEDATA);
+            MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_REALTIMEDATA);
             final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
             switch (command) {
                 case 102000://车速
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.speed) + "千米每小时");
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.speed) + "千米每小时");
                     break;
                 case 102001://转速
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.rpm) + "转每分钟");
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.rpm) + "转每分钟");
                     break;
                 case 102002://电压
-                    voiceManager.sendBroadcastTTS(DecFormatUtil.format2dot1(realTimeData.voltage) + "伏");
+                    voiceManager.sendBroadcastTTS(context, DecFormatUtil.format2dot1(realTimeData.voltage) + "伏");
                     break;
                 case 102003://水温
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.engineCoolantTemperature));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.engineCoolantTemperature));
                     break;
                 case 102004://瞬时油耗
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.gasConsum));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.gasConsum));
                     break;
                 case 102005://平均油耗
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.averageGasConsum));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.averageGasConsum));
                     break;
                 case 102006://本次时间
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.tripTime));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.tripTime));
                     break;
                 case 102007://本次行程
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.tripLength));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.tripLength));
                     break;
                 case 102008://本次花费
-                    voiceManager.sendBroadcastTTS(String.valueOf(realTimeData.driveCost));
+                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.driveCost));
                     break;
                 case 103000://开始体检
-                    VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+                    VoiceManager.getInstance().sendBroadcastTTS(context, "体检开始请稍等");
                     ReportHead head = PhysicalManager.getInstance().getReportHead();
                     if (head != null) {
                         StringBuffer checkupVoiceResut = new StringBuffer();
@@ -105,11 +105,11 @@ public class CommandControl {
                         } else {
                             checkupVoiceResut.append("健康级别");
                         }
-                        VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+                        VoiceManager.getInstance().sendBroadcastTTS(context, "体检开始请稍等");
                     } else {
                         Intent startIntent = new Intent();
                         startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.MainActivity");
                         startIntent.setComponent(cName);
                         context.startActivity(startIntent);
                         PhysicalManager.getInstance().startExam();
@@ -166,18 +166,18 @@ public class CommandControl {
                         maintenanceVoice.append("公里,");
                     case MaintenanceState.Tag.nextMaintenanceDateEstimatedByTime:
                         maintenanceVoice.append("距离下次保养时间还有").append(nextDay).append("天");
-                        VoiceManager.getInstance().sendBroadcastTTS(maintenanceVoice.toString());
+                        VoiceManager.getInstance().sendBroadcastTTS(context, maintenanceVoice.toString());
                         break;
                     default:
                         break;
                 }
                 break;
             case MaintenanceResult.carGenerationNotSpecified:
-                VoiceManager.getInstance().sendBroadcastTTS("尚未指定车型");
+                VoiceManager.getInstance().sendBroadcastTTS(context, "尚未指定车型");
                 break;
 
             default:
-                VoiceManager.getInstance().sendBroadcastTTS("网络请求失败");
+                VoiceManager.getInstance().sendBroadcastTTS(context, "网络请求失败");
                 break;
         }
     }
@@ -209,22 +209,22 @@ public class CommandControl {
     private void uMeng(int command) {
         switch (command) {
             case 201001:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_LOCK1);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_LOCK1);
                 break;
             case 201000:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_LOCK0);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_LOCK0);
                 break;
             case 202000:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_WINDOW0);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_WINDOW0);
                 break;
             case 202001:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_WINDOW1);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_WINDOW1);
                 break;
             case 207001:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_SKY_LIGHT1);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_SKY_LIGHT1);
                 break;
             case 207000:
-                MobclickAgentEx.onEvent(UmengConfigs.VOICE_SKY_LIGHT0);
+                MobclickAgentEx.onEvent(context, UmengConfigs.VOICE_SKY_LIGHT0);
                 break;
 
 

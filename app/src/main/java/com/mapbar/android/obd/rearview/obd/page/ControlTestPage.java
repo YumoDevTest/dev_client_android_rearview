@@ -46,12 +46,12 @@ public class ControlTestPage extends AppPage {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                CommandControl.getInstance().executeCommand(controlCmds[position]);
-                Toast.makeText(getContext(), "点击" + position + "  " + controlCmds[position], Toast.LENGTH_SHORT).show();
+//                CommandControl.create().executeCommand(controlCmds[position]);
+                Toast.makeText(getActivity(), "点击" + position + "  " + controlCmds[position], Toast.LENGTH_SHORT).show();
                 final Intent intent = new Intent();
                 intent.setAction(VoiceReceiver.VOICE_ACTION);
                 intent.putExtra("command", controlCmds[position]);
-                getContext().sendBroadcast(intent);
+                getActivity().sendBroadcast(intent);
             }
         });
 
@@ -78,7 +78,7 @@ public class ControlTestPage extends AppPage {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                convertView = View.inflate(getContext(), R.layout.layout_test, null);
+                convertView = View.inflate(getActivity(), R.layout.layout_test, null);
                 holder = new ViewHolder();
                 holder.tv = (TextView) convertView.findViewById(R.id.item_test);
                 convertView.setTag(holder);

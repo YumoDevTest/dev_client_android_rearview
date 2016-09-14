@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.tts;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.mapbar.obd.Manager;
@@ -10,7 +11,7 @@ import com.mapbar.obd.Manager;
  */
 class ObdSdkTextToSpeechPlayer implements ITextToSpeechPlayer {
     @Override
-    public void play(String word) {
+    public void play(Context context, String word) {
         if (TextUtils.isEmpty(word))
             return;
         Manager.getInstance().speak(word);

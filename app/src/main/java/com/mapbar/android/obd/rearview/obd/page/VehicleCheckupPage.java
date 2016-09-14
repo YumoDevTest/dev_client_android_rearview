@@ -29,8 +29,8 @@ import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
 import com.mapbar.android.obd.rearview.modules.checkup.contract.IVehicleCheckupView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
@@ -134,12 +134,12 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
         checkupVoiceResut = new StringBuffer();
         checkupVoiceResut.append("体检结果");
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
-        recyclerAdapter = new VehicleCheckupAdapter1(MainActivity.getInstance(), physicalList);
+        recyclerAdapter = new VehicleCheckupAdapter1(getActivity(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
-        checkupGridAdapter = new CheckupGridAdapter(getContext(), physicalList);
+        checkupGridAdapter = new CheckupGridAdapter(getActivity(), physicalList);
         initPage();
-        circleDrawable = new CircleDrawable(getContext());
-        circleDrawable.setCricleProgressColor(getContext().getResources().getColor(R.color.upkeep_progress));
+        circleDrawable = new CircleDrawable(getActivity());
+        circleDrawable.setCricleProgressColor(getActivity().getResources().getColor(R.color.upkeep_progress));
         circleDrawable.setCircleWidth(9);
         view_upkeep_time.setImageDrawable(circleDrawable);
 
@@ -217,7 +217,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
 
                 switch (event) {
                     case Manager.Event.obdPhysicalConditionFailed:
-                        MobclickAgentEx.onEvent(UmengConfigs.CHECKFAILED);
+                        MobclickAgentEx.onEvent(getActivity(), UmengConfigs.CHECKFAILED);
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                             Log.v(LogTag.TEMP, "obdPhysicalConditionFailed -->>");
@@ -254,7 +254,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
 
                         break;
                     case Manager.Event.obdPhysicalCheckEnd:
-                        MobclickAgentEx.onEvent(UmengConfigs.CHECKSUCC);
+                        MobclickAgentEx.onEvent(getActivity(),UmengConfigs.CHECKSUCC);
                         isCheckupFinish = true;
                         // 日志
                         if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
@@ -299,7 +299,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                                 }
                                 CarDataManager.getInstance().restartTrip();
                                 //语音播报
-                                VoiceManager.getInstance().sendBroadcastTTS(checkupVoiceResut.toString());
+                                VoiceManager.getInstance().sendBroadcastTTS(getActivity(),checkupVoiceResut.toString());
                             }
                         });
 
@@ -331,7 +331,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                 }
 
                 PhysicalManager.getInstance().startExam();
-                MobclickAgentEx.onEvent(UmengConfigs.STARTEXAM);
+                MobclickAgentEx.onEvent(getActivity(),UmengConfigs.STARTEXAM);
                 // 日志
                 if (Log.isLoggable(LogTag.TEMP, Log.VERBOSE)) {
                     Log.v(LogTag.TEMP, "btn_start_physical -->>");

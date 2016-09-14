@@ -28,7 +28,7 @@
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        init(getContext());
+//        init(getActivity());
 //    }
 //
 //    private void init(Context context) {

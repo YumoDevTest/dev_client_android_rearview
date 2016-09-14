@@ -1,6 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.ixintui;
 
-import com.mapbar.android.obd.rearview.obd.Application;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.Config;
 
@@ -23,11 +23,11 @@ public class AixintuiConfigs {
     private static final String TAG = "PUSh";
 
     public static String getPushToken() {
-        return Application.getInstance().getSession().getString(KEY_AIXINTUI_PUSH_TOKEN, null);
+        return MyApplication.getInstance().getSession().getString(KEY_AIXINTUI_PUSH_TOKEN, null);
     }
 
     public static void setPushToken(String push_token) {
-        Application.getInstance().getSession().put(KEY_AIXINTUI_PUSH_TOKEN, push_token);
+        MyApplication.getInstance().getSession().put(KEY_AIXINTUI_PUSH_TOKEN, push_token);
         LogUtil.d(TAG, "## 记录 push token=" + push_token);
     }
 }

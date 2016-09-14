@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.lib.umeng;
 
 import android.content.Context;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 
@@ -12,8 +12,8 @@ import com.umeng.analytics.MobclickAgent;
 public class MobclickAgentEx {
     private static final String TAG = "MobclickAgentEx";
 
-    public static void onEvent(String eventId) {
-        MobclickAgent.onEvent(MainActivity.getInstance(), eventId);
+    public static void onEvent(Context context,String eventId) {
+        MobclickAgent.onEvent(context, eventId);
     }
 
 

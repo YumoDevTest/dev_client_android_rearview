@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +14,9 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
+
+import java.lang.ref.WeakReference;
 
 
 public abstract class AppPage extends Fragment implements IMvpView {
@@ -22,13 +24,9 @@ public abstract class AppPage extends Fragment implements IMvpView {
     protected OBDSDKListenerManager.SDKListener sdkListener;
     protected View contentView;
     private Bundle data;
-    private Context context;
+    private WeakReference<Activity> activityWeakReference;
     private int contentViewResource;
     private boolean isInited;
-
-    public AppPage() {
-        context = MainActivity.getInstance();
-    }
 
     @Nullable
     @Override
@@ -48,6 +46,12 @@ public abstract class AppPage extends Fragment implements IMvpView {
             }
         }
         return contentView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        activityWeakReference = new WeakReference<>(activity);
+        super.onAttach(activity);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,11 +87,11 @@ public abstract class AppPage extends Fragment implements IMvpView {
     }
 
     public Context getContext() {
-        return context;
+        return activityWeakReference == null ? null : activityWeakReference.get();
     }
 
-    public void initByCustom(int layoutId) {
-        contentView = View.inflate(MainActivity.getInstance(), layoutId, null);
+    public void initByCustom(Context context, int layoutId) {
+        contentView = View.inflate(context, layoutId, null);
         ViewInjectTool.inject(this, this.contentView);
         initView();
         setListener();

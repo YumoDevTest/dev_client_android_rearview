@@ -33,11 +33,12 @@ import com.mapbar.android.obd.rearview.framework.widget.CarStateView;
 import com.mapbar.android.obd.rearview.modules.carstate.CarStatePresenter;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
+import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
@@ -99,13 +100,13 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void initView() {
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_state);
-        WindowManager windowManager = (WindowManager) getContext()
+        WindowManager windowManager = (WindowManager) getActivity()
                 .getSystemService(Context.WINDOW_SERVICE);
         screenWidth = windowManager.getDefaultDisplay().getWidth();
         screenHeight = windowManager.getDefaultDisplay().getHeight();
-        carStateView = new CarStateView(getContentView(), R.id.v_carstate);
+        carStateView = new CarStateView(getActivity(), getContentView(), R.id.v_carstate);
         carStateView.setData(data);
-        stateNames = getContext().getResources().getStringArray(R.array.state_names);
+        stateNames = getActivity().getResources().getStringArray(R.array.state_names);
         gvState.setSelector(new ColorDrawable(Color.TRANSPARENT));
         adapter = new StateAdapter();
         gvState.setAdapter(adapter);
@@ -131,7 +132,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                         adapter.updateData();
                         adapter.notifyDataSetChanged();
                         //发送外部消息广播
-                        ExternalManager.postCarStatus(getContext(), data);
+                        ExternalManager.postCarStatus(getActivity(), data);
                         break;
                     case Manager.Event.obdCarStatusgetFailed:
                         break;
@@ -268,7 +269,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                 if (tv_ota_alert_text.getText().toString().equals(getString(R.string.firmware_can_upgrade))) {
                     persenter.beginCheckFirmwareVersion();
                 } else if (Configs.TEST_SERIALPORT) {
-                    MainActivity.getInstance().restartApp();
+                    MyApplication.getInstance().restartApplication();
                 }
                 break;
 
@@ -323,9 +324,9 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void showPopupWindow() {
         final View popupView = View.inflate(Global.getAppContext(), R.layout.layout_state_pop, null);
         ListView lv_state_pop_content = (ListView) popupView.findViewById(R.id.lv_state_pop_content);
-        lv_state_pop_content.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.item_state_pop, R.id.tv_item_state, state_list));
+        lv_state_pop_content.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.item_state_pop, R.id.tv_item_state, state_list));
         lv_state_pop_content.setScrollbarFadingEnabled(false);
-        TextView textView = new TextView(getContext());
+        TextView textView = new TextView(getActivity());
         textView.setText("有" + state_list.size() + "个预警信息");
         textView.setTextColor(Color.WHITE);
         textView.setTextSize(22);
@@ -364,11 +365,11 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         }
         //判断有无故障
         if (state_list.size() > 0) {
-            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.check_red));
+            tv_state_record.setTextColor(getActivity().getResources().getColor(R.color.check_red));
             tv_state_record.setText("车辆存在故障码");
             iv_state_safe.setBackgroundResource(R.drawable.trouble);
         } else {
-            tv_state_record.setTextColor(MainActivity.getInstance().getResources().getColor(R.color.white));
+            tv_state_record.setTextColor(getActivity().getResources().getColor(R.color.white));
             tv_state_record.setText("车辆无不良状态");
             iv_state_safe.setBackgroundResource(R.drawable.car_state_safe);
         }
@@ -404,7 +405,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
             ViewHolder holder = null;
             if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = View.inflate(getContext(), R.layout.item_grid_state, null);
+                convertView = View.inflate(getActivity(), R.layout.item_grid_state, null);
                 holder.iv = (ImageView) convertView.findViewById(R.id.iv_item_state);
                 holder.tv = (TextView) convertView.findViewById(R.id.tv_item_state);
                 convertView.setTag(holder);
@@ -412,25 +413,25 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                 holder = (ViewHolder) convertView.getTag();
             }
             if (data == null) {
-                holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResNoneIds[position]));
+                holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResNoneIds[position]));
             } else {
                 switch (dataStates[position]) {
                     case -1:
                     case 0:
-                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResNoneIds[position]));
+                        holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResNoneIds[position]));
                         break;
                     case 1:
-                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResOpenIds[position]));
+                        holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResOpenIds[position]));
                         break;
                     case 2:
                         if (position == 3 || position == 4) {
-                            holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResCloseIds[position]));
+                            holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResCloseIds[position]));
                         } else {
-                            holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResOpenIds[position]));
+                            holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResOpenIds[position]));
                         }
                         break;
                     case 3:
-                        holder.iv.setImageDrawable(getContext().getResources().getDrawable(stateResCloseIds[position]));
+                        holder.iv.setImageDrawable(getActivity().getResources().getDrawable(stateResCloseIds[position]));
                         break;
                 }
             }

@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import android.content.Intent;
 
@@ -43,6 +43,7 @@ public class OBDSDKListenerManager {
             @Override
             public void onEvent(int event, Object o) {
                 {
+                    android.util.Log.d("TT","*********************************");
                     Log.e("rrrrrrr", event + "");
 
                     // 日志
@@ -160,11 +161,11 @@ public class OBDSDKListenerManager {
 
 //            if (o != null && o instanceof ObdSDKResult) {
 //                ObdSDKResult obdSDKResult = (ObdSDKResult) o;
-//                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.getInstance().getCurrentPageName().equals(LoginPage.class.getName())
+//                if ((Constants.USER_INVALID == obdSDKResult.code || Constants.TOKEN_INVALID == obdSDKResult.code) && !sdkListenerManager.flag_token && !PageManager.create().getCurrentPageName().equals(LoginPage.class.getName())
 //                        ) {
 //                    sdkListenerManager.flag_token = true;
 //
-//                    PageManager.getInstance().goPage(LoginPage.class);
+//                    PageManager.create().goPage(LoginPage.class);
 //                    return;
 //                }
 //            }
