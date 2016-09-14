@@ -7,8 +7,12 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -36,6 +40,8 @@ import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4V
 import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
 import com.mapbar.android.obd.rearview.views.TirePressureViewSimple;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
@@ -51,6 +57,7 @@ import java.util.Locale;
  * Created by THINKPAD on 2016/5/6.
  */
 public class CarDataPage extends AppPage implements View.OnClickListener, ICarDataView, ITirePressureView {
+    private static final int MSG_GET_A_CAR_DATA = 2;//当获得一个车辆数据
     private final int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
 
@@ -93,7 +100,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
     private int number = -1;//显示数据空间的编号
     private PopupWindow popupWindow;
-    private RealTimeData realTimeData;
     private String[] dataNames;// = getActivity().getResources().getStringArray(R.array.data_names);
     private String[] units;// = getActivity().getResources().getStringArray(R.array.units);
     private boolean isFirst = true;
@@ -107,6 +113,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private TirePressureViewDigital[] tirePressureForeViewArray;//4胎压指示视图
 
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
+    private MyHandler myHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,9 +122,9 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
 
         dataNames = getActivity().getResources().getStringArray(R.array.data_names);
         units = getActivity().getResources().getStringArray(R.array.units);
+        myHandler = new MyHandler(this);
     }
 
-    @Override
     public void initView() {
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
@@ -156,50 +163,61 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
         tirePressurePresenter = new TirePressurePresenter(this);
         getPopData();
         upDataView();
+
+        setListener();
     }
 
-    @Override
     public void setListener() {
         ll_car_data_1.setOnClickListener(this);
         ll_car_data_2.setOnClickListener(this);
         ll_car_data_3.setOnClickListener(this);
         ll_car_data_4.setOnClickListener(this);
-
-        sdkListener = new OBDSDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
-                // 日志
-                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                    Log.v(LogTag.FRAMEWORK, "event:" + event);
-                }
-                super.onEvent(event, o);
-                switch (event) {
-                    case Manager.Event.dataUpdate:
-                        realTimeData = (RealTimeData) o;
-                        if (realTimeData != null) {
-                            upData();
-                            //发送广播，传出实时数据
-                            ExternalManager.postRealTimeData(getActivity(), realTimeData);
-                        }
-                        break;
-                }
-            }
-        };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
     }
+
+    private OBDSDKListenerManager.SDKListener sdkListener = new OBDSDKListenerManager.SDKListener() {
+        @Override
+        public void onEvent(int event, Object o) {
+            // 日志
+            if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                Log.v(LogTag.FRAMEWORK, "event:" + event);
+            }
+            super.onEvent(event, o);
+            if (event == Manager.Event.dataUpdate) {
+                LogUtil.d("TAG", "## when realTimeData :" + event);
+                RealTimeData realTimeData = (RealTimeData) o;
+                if (realTimeData != null) {
+                    myHandler.obtainMessage(MSG_GET_A_CAR_DATA, realTimeData).sendToTarget();
+                    //发送广播，传出实时数据
+                    ExternalManager.postRealTimeData(getActivity(), realTimeData);
+                }
+
+            }
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
         if (cardataPresenter != null) cardataPresenter.checkPermission();
         if (tirePressurePresenter != null) tirePressurePresenter.checkPermission();
-        MobclickAgentEx.onPageStart("CarDataPage"); //统计页面
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            //fragment可见时执行加载数据或者进度条等
+            OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
+        } else {
+            //不可见时不执行操作
+            OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgentEx.onPageEnd("CarDataPage");
     }
 
     @Override
@@ -259,17 +277,14 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
 
     /**
      * 设置时实数据
+     *
+     * @param realTimeData
      */
-    public void upData() {// 日志
-        if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-            Log.v(LogTag.FRAMEWORK, "upData+++++++");
-            Log.v(LogTag.FRAMEWORK, "ThreadId:" + Thread.currentThread().getId());
-            Log.v(LogTag.FRAMEWORK, "speed:" + realTimeData.rpm);
-        }
-        tv_carData_value_1.setText(transform(spv0));
-        tv_carData_value_2.setText(transform(spv1));
-        tv_carData_value_3.setText(transform(spv2));
-        tv_carData_value_4.setText(transform(spv3));
+    public void bindCardataToView(RealTimeData realTimeData) {// 日志
+        tv_carData_value_1.setText(transform(spv0, realTimeData));
+        tv_carData_value_2.setText(transform(spv1, realTimeData));
+        tv_carData_value_3.setText(transform(spv2, realTimeData));
+        tv_carData_value_4.setText(transform(spv3, realTimeData));
         //当车速低于10时,更改瞬时油耗单位,每次更新数据的时候都检测更新这个数据
         if (realTimeData != null && realTimeData.speed <= 10) {
             if (spv0 == 0) tv_carData_unit_1.setText("L/H");
@@ -287,10 +302,11 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     /**
      * 通过数组索引获取时实数据
      *
-     * @param index {@link #dataNames} 数组索引
+     * @param index        {@link #dataNames} 数组索引
+     * @param realTimeData
      * @return 时实数据
      */
-    public String transform(int index) {
+    public String transform(int index, RealTimeData realTimeData) {
         switch (index) {
             case 0:
                 //如果车速小于10获取小时单位的瞬时油耗,反之获取100KM油耗;
@@ -501,5 +517,24 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     public void hidePermissionAlertView_FreeTrial() {
         if (permissionAlertAbleAdapter != null)
             permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
+    }
+
+
+    private static class MyHandler extends SafeHandler<CarDataPage> {
+
+        public MyHandler(CarDataPage object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_GET_A_CAR_DATA) {
+                RealTimeData realTimeData = (RealTimeData) msg.obj;
+                if (realTimeData != null) {
+                    getInnerObject().bindCardataToView(realTimeData);
+                }
+            }
+            super.handleMessage(msg);
+        }
     }
 }

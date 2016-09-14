@@ -18,7 +18,7 @@ public class SDKConnection {
             if (isConnected)//双检查
                 return null;
             this.listener = sdkListener;
-            OBDSDKListenerManager.getInstance().setSdkListener(listener);
+            OBDSDKListenerManager.getInstance().addSdkListener(listener);
             isConnected = true;
             return this;
         }

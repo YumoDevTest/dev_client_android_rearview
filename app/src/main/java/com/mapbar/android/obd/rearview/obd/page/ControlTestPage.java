@@ -39,9 +39,10 @@ public class ControlTestPage extends AppPage {
         cmdStrs = CommandControl.getInstance().getCommadStrs();
         cmdNames = CommandControl.getInstance().getCommadNames();
         lv.setAdapter(new TestAdapter());
+
+        setListener();
     }
 
-    @Override
     public void setListener() {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

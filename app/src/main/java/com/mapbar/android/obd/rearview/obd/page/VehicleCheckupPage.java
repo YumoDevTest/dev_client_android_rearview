@@ -29,7 +29,6 @@ import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPresenter;
 import com.mapbar.android.obd.rearview.modules.checkup.contract.IVehicleCheckupView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.CheckupGridAdapter;
 import com.mapbar.android.obd.rearview.obd.adapter.VehicleCheckupAdapter1;
@@ -119,6 +118,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     private StringBuffer checkupVoiceResut;
     private boolean isCheckupFinish;
     private TitleBarView titlebarview1;
+    private OBDSDKListenerManager.SDKListener sdkListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,15 +144,14 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
         view_upkeep_time.setImageDrawable(circleDrawable);
 
         presenter = new VehicleCheckupPresenter(this);
+
+        setListener();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (presenter != null) presenter.checkPermission();
-        if (isUmenngWorking) {
-            MobclickAgentEx.onPageStart("VehicleCheckupPage");
-        }
         if (isCheckupFinish) {
             initPage();
             isCheckupFinish = false;
@@ -163,9 +162,6 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     @Override
     public void onPause() {
         super.onPause();
-        if (isUmenngWorking) {
-            MobclickAgentEx.onPageEnd("VehicleCheckupPage");
-        }
     }
 
     @Override
@@ -208,7 +204,6 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
         }
     }
 
-    @Override
     public void setListener() {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
@@ -316,7 +311,7 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
                 }
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
         btn_start_physical.setOnClickListener(this);
         btnLastCheck.setOnClickListener(this);
     }

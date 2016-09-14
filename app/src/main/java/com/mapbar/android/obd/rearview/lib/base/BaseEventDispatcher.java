@@ -30,7 +30,7 @@ public abstract class BaseEventDispatcher<CALLBACK extends Object> {
                 raiseOnSDKEvent(event, o);
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
 
     }
 

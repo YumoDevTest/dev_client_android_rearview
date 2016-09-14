@@ -22,10 +22,9 @@ public class LoginPage extends AppPage {
 
     @Override
     public void initView() {
-
+        setListener();
     }
 
-    @Override
     public void setListener() {
         tv_goPage.setOnClickListener(new View.OnClickListener() {
             @Override

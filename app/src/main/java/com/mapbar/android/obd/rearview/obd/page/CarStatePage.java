@@ -36,10 +36,9 @@ import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
-import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
 import com.mapbar.obd.CarStatusData;
@@ -88,6 +87,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 
     private int screenWidth;
     private int screenHeight;
+    private OBDSDKListenerManager.SDKListener sdkListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,9 +112,10 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 
 //        firmwareDialogHandler = new FirmwareDialogHandler();
         persenter = new CarStatePresenter(this);
+
+        setListener();
     }
 
-    @Override
     public void setListener() {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
@@ -126,6 +127,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                 }
                 switch (event) {
                     case Manager.Event.obdCarStatusgetSucc:
+                        LogUtil.d("TAG", "## when CarStatusData :" + event);
                         data = (CarStatusData) o;
                         carStateView.setData(data);
                         adapter.updateData();
@@ -165,7 +167,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
                 }
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
         tv_state_record.setOnClickListener(this);
         tv_ota_alert_text.setOnClickListener(this);
 
@@ -282,28 +284,22 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         if (persenter != null)
             persenter.checkPermission();
         getPopContent();
-        if (isUmenngWorking) {
-            CarStateManager.getInstance().startRefreshCarState();//保证在当前界面时,刷新车辆状态界面
-            MobclickAgentEx.onPageStart("CarStatePage"); //统计页面
-        }
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
-
-        CarStateManager.getInstance().stopRefreshCarState();
-        if (isUmenngWorking) {
-            MobclickAgentEx.onPageEnd("CarStatePage");
-        }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            CarStateManager.getInstance().startRefreshCarState();//保证在当前界面时,刷新车辆状态界面
             myHandler.sendEmptyMessageDelayed(0, 10000);
         } else {
+            CarStateManager.getInstance().stopRefreshCarState();
             myHandler.removeCallbacksAndMessages(null);
         }
     }

@@ -1,7 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -69,7 +68,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -201,7 +199,7 @@ public class MainActivity extends BaseActivity {
 
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
         handler = new MyHandler(this);
         EventBusManager.register(this);
     }

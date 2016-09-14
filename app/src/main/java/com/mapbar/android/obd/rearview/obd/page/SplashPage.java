@@ -23,9 +23,5 @@ public class SplashPage extends AppPage {
 
     }
 
-    @Override
-    public void setListener() {
-
-    }
 
 }

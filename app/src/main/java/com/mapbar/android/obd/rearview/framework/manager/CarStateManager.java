@@ -34,7 +34,7 @@ public class CarStateManager extends OBDManager {
 //                onSDKEvent(event, o);
 //            }
 //        };
-//        SDKListenerManager.create().setSdkListener(sdkListener);
+//        SDKListenerManager.create().addSdkListener(sdkListener);
         //初始化预警纪录数据
         alarmDatas.add("水温");
         alarmDatas.add("电压");

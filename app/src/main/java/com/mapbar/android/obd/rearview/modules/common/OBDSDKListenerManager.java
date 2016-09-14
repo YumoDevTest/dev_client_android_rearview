@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
 import android.content.Intent;
+
 import com.mapbar.android.obd.rearview.framework.control.OBDV3HService;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -41,7 +42,7 @@ public class OBDSDKListenerManager {
             @Override
             public void onEvent(int event, Object o) {
                 {
-                    android.util.Log.d("TT","*********************************");
+                    android.util.Log.d("TT", "*********************************");
                     Log.e("rrrrrrr", event + "");
 
                     // 日志
@@ -93,9 +94,25 @@ public class OBDSDKListenerManager {
      *
      * @param listener
      */
-    public void setSdkListener(SDKListener listener) {
+    public void addSdkListener(SDKListener listener) {
         WeakReference<SDKListener> weakListener = new WeakReference<>(listener);
         regListeners.add(weakListener);
+    }
+
+    /**
+     * 删除 一个监听SDK回调的listener
+     *
+     * @param listener
+     */
+    public void removeSdkListener(SDKListener listener) {
+        int index = -1;
+        for (int i = 0; i < regListeners.size(); i++) {
+            if (regListeners.get(i) != null && regListeners.get(i).get() == listener) {
+                index = i;
+            }
+        }
+        if (index > -1)
+            regListeners.remove(index);
     }
 
     /**

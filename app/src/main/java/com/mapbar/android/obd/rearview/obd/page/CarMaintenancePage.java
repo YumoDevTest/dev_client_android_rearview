@@ -27,7 +27,6 @@ import com.mapbar.android.obd.rearview.modules.maintenance.MaintenancePresenter;
 import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenanceView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.adapter.UpkeepItemAdapter;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
@@ -147,6 +146,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
 
         }
     };
+    private OBDSDKListenerManager.SDKListener sdkListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -201,6 +201,8 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         }
 
         presenter = new MaintenancePresenter(this);
+
+        setListener();
     }
 
     private void setButtonRightVisiable(boolean visiable) {
@@ -303,19 +305,11 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         super.onResume();
 
         if (presenter != null) presenter.checkPermission();
-        if (isUmenngWorking) {
-            MobclickAgentEx.onPageStart("CarMaintenancePage"); //统计页面
-        }
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (isUmenngWorking) {
-            MobclickAgentEx.onPageEnd("CarMaintenancePage");
-        }
-
     }
 
     @Override
@@ -327,7 +321,6 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         super.onDestroy();
     }
 
-    @Override
     public void setListener() {
         et_purchaseDate.setOnClickListener(this);
         btn_alreadyUpkeep.setOnClickListener(this);
@@ -410,7 +403,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
                 super.onEvent(event, o);
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
     }
 
     @Override

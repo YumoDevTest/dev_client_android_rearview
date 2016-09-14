@@ -15,14 +15,24 @@ import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 public class MyBaseFragment extends Fragment {
     private static final String TAG = MyBaseActivity.class.getSimpleName();
     private MyBaseFragmentActivity myBaseActivity;
-    private static String ThisClassName;
+    private String ThisClassName;
 
-    public void alert(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    public void alert(final String msg) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void alert(int sourceID) {
-        Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
+    public void alert(final int sourceID) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -44,7 +54,6 @@ public class MyBaseFragment extends Fragment {
     public MyBaseFragmentActivity getParentActivity() {
         return myBaseActivity;
     }
-
 
     @Override
     public void onStop() {

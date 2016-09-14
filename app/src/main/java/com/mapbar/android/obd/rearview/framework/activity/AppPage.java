@@ -13,20 +13,23 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
+import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.lang.ref.WeakReference;
 
 
 public abstract class AppPage extends Fragment implements IMvpView {
-    public boolean isUmenngWorking = false;
-    protected OBDSDKListenerManager.SDKListener sdkListener;
+    private static final String TAG = MyBaseActivity.class.getSimpleName();
+    private   String ThisClassName;
     protected View contentView;
     private Bundle data;
     private WeakReference<Activity> activityWeakReference;
     private int contentViewResource;
-    private boolean isInited;
 
     @Nullable
     @Override
@@ -35,26 +38,27 @@ public abstract class AppPage extends Fragment implements IMvpView {
             contentView = inflater.inflate(contentViewResource, container, false);
             ViewInjectTool.inject(this, this.contentView);
             initView();
-            setListener();
         } else {
             ViewGroup parent = (ViewGroup) contentView.getParent();
             if (parent != null) {
                 parent.removeView(contentView);
             }
-            if (sdkListener != null) {
-                OBDSDKListenerManager.getInstance().registSdkListener(sdkListener);
-            }
         }
         return contentView;
+    }
+
+    protected String getThisClassName() {
+        if (ThisClassName == null) {
+            ThisClassName = getClass().getSimpleName();
+        }
+        return ThisClassName;
     }
 
     @Override
     public void onAttach(Activity activity) {
         activityWeakReference = new WeakReference<>(activity);
+        LogUtil.d(TAG, String.format("## %s onAttach", getThisClassName()));
         super.onAttach(activity);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     public View getContentView() {
@@ -75,17 +79,6 @@ public abstract class AppPage extends Fragment implements IMvpView {
 
     public abstract void initView();
 
-    public abstract void setListener();
-
-
-    public OBDSDKListenerManager.SDKListener getSdkListener() {
-        return sdkListener;
-    }
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return false;
-    }
-
     public Context getContext() {
         return activityWeakReference == null ? null : activityWeakReference.get();
     }
@@ -94,17 +87,7 @@ public abstract class AppPage extends Fragment implements IMvpView {
         contentView = View.inflate(context, layoutId, null);
         ViewInjectTool.inject(this, this.contentView);
         initView();
-        setListener();
     }
-
-    public boolean isInited() {
-        return isInited;
-    }
-
-    public void setIsInited(boolean isInited) {
-        this.isInited = isInited;
-    }
-
 
     public void alert(final String msg) {
         getActivity().runOnUiThread(new Runnable() {
@@ -122,5 +105,44 @@ public abstract class AppPage extends Fragment implements IMvpView {
                 Toast.makeText(getActivity(), sourceID, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogUtil.d(TAG, String.format("## %s onDestroy", getThisClassName()));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogUtil.d(TAG, String.format("## %s onStart", getThisClassName()));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogUtil.d(TAG, String.format("## %s onStop", getThisClassName()));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgentEx.onPageStart(getThisClassName());
+        LogUtil.d(TAG, String.format("## %s onPause", getThisClassName()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgentEx.onPageEnd(getThisClassName());
+        LogUtil.d(TAG, String.format("## %s onResume", getThisClassName()));
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        LogUtil.d(TAG, String.format("## %s onDetach", getThisClassName()));
     }
 }

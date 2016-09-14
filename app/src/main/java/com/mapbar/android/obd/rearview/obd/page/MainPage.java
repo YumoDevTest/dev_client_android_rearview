@@ -22,7 +22,6 @@ import com.mapbar.android.obd.rearview.lib.tts.TextToSpeechManager;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.common.MainPagePersenter;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -53,7 +52,6 @@ public class MainPage extends AppPage implements IMainPageView {
     private VehicleCheckupPage vehicleCheckupPage;
     private ControlTestPage controlTestPage;
     private ArrayList<Fragment> fragments;
-    private AppPage currentPage;
     private TimerDialog mAlarmTimerDialog;
     /***
      * 报警
@@ -66,6 +64,7 @@ public class MainPage extends AppPage implements IMainPageView {
     private MainPagePersenter persenter;
 
     private FragmentPagerAdapter fragmentPagerAdapter;
+    private OBDSDKListenerManager.SDKListener sdkListener;
 
 
     @Override
@@ -98,9 +97,8 @@ public class MainPage extends AppPage implements IMainPageView {
             fragments.add(controlTestPage);
 
         pager.setAdapter(fragmentPagerAdapter);
-        currentPage = carDataPage;
 
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(0);
         initDialog();
         title = titleBar;
         //默认进入页面为数据页面
@@ -116,6 +114,8 @@ public class MainPage extends AppPage implements IMainPageView {
         permissonCheckerOnStart.downloadPermision(getActivity());
 
         persenter = new MainPagePersenter(this);
+
+        setListener();
     }
 
     /**
@@ -129,7 +129,6 @@ public class MainPage extends AppPage implements IMainPageView {
         MainPage.title.setVisibilitySelf(true);
     }
 
-    @Override
     public void setListener() {
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -139,25 +138,20 @@ public class MainPage extends AppPage implements IMainPageView {
 
             @Override
             public void onPageSelected(int position) {
-                currentPage.isUmenngWorking = true;
-                currentPage.onPause();
                 MainPage.title.setText("", TitleBar.TitleArea.RIGHT);
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
                         titleBar.setText(titles[0], TitleBar.TitleArea.MID);
-                        currentPage = vehicleCheckupPage;
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
                         titleBar.setText(titles[1], TitleBar.TitleArea.MID);
                         hideMainTitlebar();
-                        currentPage = carDataPage;
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
                         titleBar.setText(titles[2], TitleBar.TitleArea.MID);
-                        currentPage = carStatePage;
                         CarStateManager.getInstance().startRefreshCarState();
                         carStatePage.onResume();
                         break;
@@ -165,18 +159,11 @@ public class MainPage extends AppPage implements IMainPageView {
                         rg_tabs.check(R.id.page_tab4);
                         MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
                         titleBar.setText(titles[3], TitleBar.TitleArea.MID);
-                        currentPage = carMaintenancePage;
                         break;
                     case 4:
                         rg_tabs.check(R.id.page_tab4);
                         titleBar.setText(titles[3], TitleBar.TitleArea.MID);
-                        currentPage = controlTestPage;
                         break;
-                }
-                if (!currentPage.isInited()) {
-                    currentPage.setIsInited(true);
-                } else {
-                    currentPage.onResume();
                 }
             }
 
@@ -197,7 +184,7 @@ public class MainPage extends AppPage implements IMainPageView {
                 }
             }
         };
-        OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
+        OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
     }
 
     /**
