@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Notification;
 import android.app.NotificationManager;

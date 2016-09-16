@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
-import com.mapbar.android.obd.rearview.obd.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 
 
 public abstract class AppPage extends Fragment {

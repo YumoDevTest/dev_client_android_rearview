@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.CarStatusData;
 
 /**

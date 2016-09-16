@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -88,6 +88,7 @@ public class MainActivity extends BaseActivity {
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
 
+        showSpalshView();
 
         LayoutUtils_ui.proportional();
         LogManager.getInstance().init(MainActivity.this);
@@ -122,11 +123,6 @@ public class MainActivity extends BaseActivity {
 
         SerialPortManager.getInstance().setPath(Constants.SERIALPORT_PATH);
         OBDSDKListenerManager.getInstance().init();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        final AppPage page = pageManager.createPage(SplashPage.class, null);
-        transaction.replace(R.id.content_view, page);
-        transaction.commit();
-        onFinishedInit();
         //监听登录结果
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
@@ -179,6 +175,14 @@ public class MainActivity extends BaseActivity {
         };
         OBDSDKListenerManager.getInstance().setSdkListener(sdkListener);
         handler = new MyHandler(this);
+    }
+
+    private void showSpalshView() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        final AppPage page = pageManager.createPage(SplashPage.class, null);
+        transaction.replace(R.id.content_view, page);
+        transaction.commit();
+        onFinishedInit();
     }
 
     private void stopBackgroundService() {

@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.framework.control;
 
 import android.content.Intent;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 
 /**
  * 文本转语音TTS功能

@@ -30,7 +30,7 @@ import com.mapbar.android.obd.rearview.framework.control.PageManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.hud.ProgressView;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

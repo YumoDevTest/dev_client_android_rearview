@@ -19,7 +19,7 @@ import com.mapbar.android.obd.rearview.framework.common.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
-import com.mapbar.android.obd.rearview.obd.Constants;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
@@ -414,7 +414,7 @@ public class OBDV3HService extends Service {
             public void run() {
                 Intent startIntent = new Intent();
                 startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.DeclareActivity");
+                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.LauncherActivity");
                 startIntent.setComponent(cName);
                 startActivity(startIntent);
             }

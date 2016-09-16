@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.common.Global;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.PhysicalData;
 
 import java.util.List;

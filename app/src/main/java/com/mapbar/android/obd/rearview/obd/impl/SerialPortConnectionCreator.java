@@ -1,7 +1,7 @@
 package com.mapbar.android.obd.rearview.obd.impl;
 
 
-import com.mapbar.android.obd.rearview.obd.SerialPortConnection;
+import com.mapbar.android.obd.rearview.modules.common.SerialPortConnection;
 
 /**
  * Created by zhangyunfei on 16/8/25.

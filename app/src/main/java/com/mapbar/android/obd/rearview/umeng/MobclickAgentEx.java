@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.umeng;
 
 import android.content.Context;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 /**

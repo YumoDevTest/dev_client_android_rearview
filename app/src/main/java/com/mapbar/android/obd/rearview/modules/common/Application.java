@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.framework.common.Global;

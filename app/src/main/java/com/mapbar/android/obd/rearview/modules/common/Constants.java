@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.obd;
+package com.mapbar.android.obd.rearview.modules.common;
 
 import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
 
@@ -15,7 +15,7 @@ public class Constants {
      */
     public final static boolean IS_OVERSEAS_EDITION = false;
 
-    public static final String SERIALPORT_PATH = "/dev/ttyS4";//"/dev/ttyMT2";
+    public static final String SERIALPORT_PATH = "/dev/ttyMT2";//"/dev/ttyMT2";
     /**
      * 后台服务行程时默认的的channel名称
      */

@@ -1,8 +1,8 @@
 package com.mapbar.android.obd.rearview.obd.impl;
 
 
-import com.mapbar.android.obd.rearview.obd.ReadTimeoutException;
-import com.mapbar.android.obd.rearview.obd.SerialPortConnection;
+import com.mapbar.android.obd.rearview.modules.common.ReadTimeoutException;
+import com.mapbar.android.obd.rearview.modules.common.SerialPortConnection;
 import com.mapbar.android.obd.rearview.obd.util.OutputStringUtil;
 
 import java.io.IOException;

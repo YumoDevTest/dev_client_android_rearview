@@ -109,7 +109,7 @@ public class CommandControl {
                     } else {
                         Intent startIntent = new Intent();
                         startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.MainActivity");
                         startIntent.setComponent(cName);
                         context.startActivity(startIntent);
                         PhysicalManager.getInstance().startExam();

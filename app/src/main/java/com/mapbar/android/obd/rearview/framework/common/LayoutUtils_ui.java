@@ -14,7 +14,7 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mapbar.android.obd.rearview.obd.MainActivity;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 
 /**
  * 布局工具类
