@@ -152,6 +152,7 @@ public class MainActivity extends BaseActivity {
         sdkListener = new OBDSDKListenerManager.SDKListener() {
             @Override
             public void onEvent(int event, Object o) {
+//                LogUtil.d(TAG, "## MainActivity OBDSDKListenerManager event=" + event);
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
 
@@ -187,9 +188,11 @@ public class MainActivity extends BaseActivity {
             }
         };
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
+        LogUtil.d(TAG, "## MainActivity addSdkListener");
     }
 
     private void showQrDialog(QRInfo qrInfo) {
+        LogUtil.d(TAG, "## MainActivity showQrDialog");
         LogUtil.d(TAG, String.format("## 准备生成二维码,url = %s", qrInfo.getUrl()));
         dismissQrPopwindow();
         qrPopupWindow = LayoutUtils.showQrPop(self(), qrInfo.getUrl(), qrInfo.getContent(), new View.OnClickListener() {
@@ -201,6 +204,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showExitAlertDialog() {
+        LogUtil.d(TAG, "## MainActivity showExitAlertDialog");
         dismissExitAlertDialog();
         exitAlertDialog = LayoutUtils.showPopWindow(self(), "退出", "您确定退出吗？", new View.OnClickListener() {
             @Override
@@ -248,6 +252,7 @@ public class MainActivity extends BaseActivity {
      * 应用升级
      */
     private void checkAppVersion() {
+        LogUtil.d(TAG, "## MainActivity checkAppVersion");
 
         HttpHandler http = new OBDHttpHandler(getActivity());
         http.addParamete("package_name", getPackageName());
@@ -382,6 +387,7 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         sdkListener.setActive(false);
+        LogUtil.d(TAG, "## MainActivity sdkListener setActive(false)");
         MobclickAgent.onPause(this);
     }
 

@@ -132,7 +132,7 @@ public class MyApplication extends android.app.Application {
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
             getMainActivity().finish();
         }
-        Manager.getInstance().stopTrip(true);
+//        Manager.getInstance().stopTrip(true);
         Manager.getInstance().cleanup();
         //umeng统计，在杀死进程是需要调用用来保存统计数据。
         MobclickAgentEx.onKillProcess(this);

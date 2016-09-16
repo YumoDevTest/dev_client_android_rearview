@@ -42,7 +42,7 @@ public class MobclickAgentEx {
     }
 
     public static void onKillProcess(Context context) {
-        LogUtil.d(TAG,"## 出发umeng onKillProcess");
+        LogUtil.d(TAG,"## 触发umeng onKillProcess");
         MobclickAgent.onKillProcess(context);
     }
 
