@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
+import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
@@ -57,15 +57,14 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        stopBackgroundService();
         setContentView(R.layout.activity_declare);
 
-        //发送停止延迟启动消息
-        Intent intentDelayStart = new Intent(DelayAutoStartService.ACTION_STOP_DELAY_RUN);
-        sendBroadcast(intentDelayStart);
+        TraceUtil.start();
 
         mHandler = new MyHandler(this);
         initView();
+
+        stopBackgroundService();
         sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
         if (!isGoDeclareActivity) {
@@ -73,6 +72,9 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
             finish();
             return;
         }
+
+        initView();
+
         Log.d(TAG, "onCreate");
 
     }

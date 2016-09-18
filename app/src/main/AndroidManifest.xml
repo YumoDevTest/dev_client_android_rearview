@@ -48,6 +48,8 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- trace需要 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <supports-screens
         android:anyDensity="true"
@@ -159,14 +161,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <!-- 守护程序 receiver，自启动监听 -->
-        <receiver android:name=".lib.daemon.DaemonReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </receiver>
         <!-- 守护程序 service，自启动监听 -->
         <!--<service android:name=".lib.daemon.DaemonService">-->
         <!--<intent-filter>-->
@@ -265,6 +259,7 @@
             android:name=".modules.common.LauncherActivity"
             android:screenOrientation="landscape"
             android:theme="@style/TranslucentTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

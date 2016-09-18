@@ -22,12 +22,12 @@ import com.mapbar.android.obd.rearview.lib.tts.TextToSpeechManager;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.common.MainPagePersenter;
+import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
-import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
 import com.mapbar.android.obd.rearview.obd.widget.TimerDialog;
-
 import java.util.ArrayList;
 
 
@@ -116,6 +116,14 @@ public class MainPage extends AppPage implements IMainPageView {
         persenter = new MainPagePersenter(this);
 
         setListener();
+
+        mHandlerBuy.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TraceUtil.stop();
+
+            }
+        }, 1000);
     }
 
     /**

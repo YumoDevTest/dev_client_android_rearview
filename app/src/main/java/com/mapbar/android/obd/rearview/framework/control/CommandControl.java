@@ -1,28 +1,24 @@
 package com.mapbar.android.obd.rearview.framework.control;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 
 import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
-import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
+import com.mapbar.android.obd.rearview.framework.common.TimeUtils;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.modules.common.Constants;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.MaintenanceInfo;
 import com.mapbar.obd.MaintenanceResult;
 import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
-import com.mapbar.obd.ReportHead;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.mapbar.android.obd.rearview.framework.control.VoiceManager.VoiceManagerHolder.voiceManager;
 
 /**
  * 指令控制执行类
@@ -39,8 +35,10 @@ public class CommandControl {
     private short day;
     private long nextDay;
     private long nextUpkeepDate;
+    private VoiceManager voiceManager;
 
     private CommandControl() {
+        voiceManager = VoiceManager.getInstance();
     }
 
     public static CommandControl getInstance() {
@@ -64,56 +62,60 @@ public class CommandControl {
             final RealTimeData realTimeData = Manager.getInstance().getRealTimeData();
             switch (command) {
                 case 102000://车速
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.speed) + "千米每小时");
+
+                    voiceManager.sendBroadcastTTS(context,realTimeData.speed + "千米每小时");
                     break;
                 case 102001://转速
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.rpm) + "转每分钟");
+                    voiceManager.sendBroadcastTTS(context,realTimeData.rpm + "转每分钟");
                     break;
                 case 102002://电压
                     voiceManager.sendBroadcastTTS(context, DecFormatUtil.format2dot1(realTimeData.voltage) + "伏");
                     break;
                 case 102003://水温
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.engineCoolantTemperature));
+                    voiceManager.sendBroadcastTTS(context,realTimeData.engineCoolantTemperature + "摄氏度");
                     break;
                 case 102004://瞬时油耗
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.gasConsum));
+                    String gasConsum = realTimeData.speed < 10 ? DecFormatUtil.format2dot1(realTimeData.gasConsumInLPerHour) + "升每小时" : DecFormatUtil.format2dot1(realTimeData.gasConsum) + "升每百公里";
+                    voiceManager.sendBroadcastTTS(context,gasConsum);
                     break;
                 case 102005://平均油耗
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.averageGasConsum));
+                    voiceManager.sendBroadcastTTS(context,DecFormatUtil.format2dot1(realTimeData.averageGasConsum) + "升每百公里");
                     break;
                 case 102006://本次时间
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.tripTime));
+                    voiceManager.sendBroadcastTTS(context,TimeUtils.parseTime(realTimeData.tripTime) + "小时");
                     break;
                 case 102007://本次行程
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.tripLength));
+                    voiceManager.sendBroadcastTTS(context,DecFormatUtil.format2dot1(realTimeData.tripLength / 1000) + "公里");
                     break;
                 case 102008://本次花费
-                    voiceManager.sendBroadcastTTS(context, String.valueOf(realTimeData.driveCost));
+                    voiceManager.sendBroadcastTTS(context,DecFormatUtil.format2dot1(realTimeData.driveCost) + "元");
                     break;
                 case 103000://开始体检
-                    VoiceManager.getInstance().sendBroadcastTTS(context, "体检开始请稍等");
-                    ReportHead head = PhysicalManager.getInstance().getReportHead();
-                    if (head != null) {
-                        StringBuffer checkupVoiceResut = new StringBuffer();
-                        int score = head.getScore();
-                        checkupVoiceResut.append("体检结果");
-                        checkupVoiceResut.append("分数" + String.valueOf(score));
-                        if (score >= 0 && score <= 50) {
-                            checkupVoiceResut.append("高危级别");
-                        } else if (score > 50 && score <= 70) {
-                            checkupVoiceResut.append("亚健康级别");
-                        } else {
-                            checkupVoiceResut.append("健康级别");
-                        }
-                        VoiceManager.getInstance().sendBroadcastTTS(context, "体检开始请稍等");
-                    } else {
-                        Intent startIntent = new Intent();
-                        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.MainActivity");
-                        startIntent.setComponent(cName);
-                        context.startActivity(startIntent);
-                        PhysicalManager.getInstance().startExam();
-                    }
+                    Constants.ISRECEIVER = 0;
+//                    VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+//                    ReportHead head = PhysicalManager.getInstance().getReportHead();
+//                    if (head != null) {
+//                        StringBuffer checkupVoiceResut = new StringBuffer();
+//                        int score = head.getScore();
+//                        checkupVoiceResut.append("体检结果");
+//                        checkupVoiceResut.append("分数" + String.valueOf(score));
+//                        if (score >= 0 && score <= 50) {
+//                            checkupVoiceResut.append("高危级别");
+//                        } else if (score > 50 && score <= 70) {
+//                            checkupVoiceResut.append("亚健康级别");
+//                        } else {
+//                            checkupVoiceResut.append("健康级别");
+//                        }
+//                        VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
+//                    } else {
+//                    Log.e("VoiceReceiver", "执行指令:::::");
+//                        Intent startIntent = new Intent();
+//                        startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
+//                        ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.obd.MainActivity");
+//                        startIntent.setComponent(cName);
+//                        context.startActivity(startIntent);
+
+//                    }
                     break;
                 case 104000://播报保养
                     getLocalSchemeCache();
@@ -135,6 +137,9 @@ public class CommandControl {
 
                 break;
             case MaintenanceResult.ok:
+                if (maintenanceVoice.length() > 0) {
+                    maintenanceVoice.delete(0, maintenanceVoice.length() - 1);
+                }
                 DateTime mDate = localSchemeCache.state.getNextMaintenanceDate();
                 year = mDate.year;
                 month = mDate.month;
@@ -197,7 +202,28 @@ public class CommandControl {
         int index = commandList.indexOf(command);//对应的可执行指令数组索引
         if (index != -1) {
             String commandStr = commadStrs[index];
-            Manager.getInstance().exuSpecialCarAction(commandStr);
+            boolean obdOtaSpecialSurpport = Manager.getInstance().getObdOtaSpecialSurpport(commandStr);
+            if (obdOtaSpecialSurpport) {
+                int exuResult = Manager.getInstance().exuSpecialCarAction(commandStr);
+                boolean flag = exuResult == 1;
+                String speekStr = "";
+                if (command == 201001) {
+                    speekStr = flag ? "已解锁" : "解锁失败";
+                } else if (command == 201000) {
+                    speekStr = flag ? "已落锁" : "落锁失败";
+                } else if (command == 202000) {
+                    speekStr = flag ? "已开窗" : "开窗失败";
+                } else if (command == 202001) {
+                    speekStr = flag ? "已关窗" : "关窗失败";
+                } else if (command == 207001) {
+                    speekStr = flag ? "天窗已开启" : "开启天窗失败";
+                } else if (command == 207000) {
+                    speekStr = flag ? "天窗已关闭" : "关闭天窗失败";
+                }
+                Manager.getInstance().speak(speekStr);
+            } else {
+                Manager.getInstance().speak("您的爱车暂不支持该功能");
+            }
         }
     }
 

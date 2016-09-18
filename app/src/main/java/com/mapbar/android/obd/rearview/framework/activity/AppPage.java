@@ -2,11 +2,9 @@ package com.mapbar.android.obd.rearview.framework.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +12,8 @@ import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
 import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
 import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 
 import java.lang.ref.WeakReference;

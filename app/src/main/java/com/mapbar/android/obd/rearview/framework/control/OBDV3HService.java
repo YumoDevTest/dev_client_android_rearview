@@ -99,6 +99,8 @@ public class OBDV3HService extends Service {
     private Handler mHandler;
     private int times;
 
+    private VoiceReceiver mVoiceReceiver;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -108,6 +110,8 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化语音广播接收器
+        mVoiceReceiver = new VoiceReceiver();
         manager = Manager.getInstance();
         //捕捉异常注册
 //        CrashHandler crashHandler = CrashHandler.create();
@@ -279,6 +283,9 @@ public class OBDV3HService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.mapbar.obd.stopservice");
         registerReceiver(receiver, filter);
+        IntentFilter voice_filter = new IntentFilter("mapbar.obd.intent.action.VOICE_CONTROL");
+        registerReceiver(mVoiceReceiver, voice_filter);
+
     }
 
     @Override
@@ -395,8 +402,13 @@ public class OBDV3HService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        unregisterReceiver(receiver);
+        unregisterReceiver(mVoiceReceiver);
+
         stopLoopGetCarStatus();
         MyApplication.getInstance().exitApplication();
+
     }
 
 

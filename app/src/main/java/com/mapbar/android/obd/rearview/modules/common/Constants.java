@@ -17,8 +17,7 @@ public class Constants {
     public final static boolean IS_OVERSEAS_EDITION = false;
 
     public static final String SERIALPORT_PATH = BuildConfig.SERIALPORT_PATH;//"/dev/ttys1";//"/dev/ttyMT1";
-
-    /**
+  /**
      * 后台服务行程时默认的的channel名称
      */
     public static final String COMAPCT_SERVICE_CHANNEL_NAME = "ObdCompactService";
@@ -29,4 +28,11 @@ public class Constants {
      */
 //    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
     public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
+
+    /**
+     * 是否广播跳转进入程序,
+     * 体检广播进入的话直接显示体检界面
+     * 广播进入0,正常进入1
+     */
+    public static int ISRECEIVER = 1;
 }

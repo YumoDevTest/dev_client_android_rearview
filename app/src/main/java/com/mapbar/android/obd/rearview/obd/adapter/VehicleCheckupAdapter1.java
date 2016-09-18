@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.manager.PhysicalManager;
 import com.mapbar.obd.PhysicalData;

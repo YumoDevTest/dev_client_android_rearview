@@ -7,13 +7,10 @@ import com.mapbar.android.obd.rearview.framework.Configs;
 import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
 import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.StringUtil;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.LocalCarModelInfoResult;
@@ -22,7 +19,6 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
-
 
 /**
  * 用户登录中心管理者

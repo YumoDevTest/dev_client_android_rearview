@@ -25,7 +25,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.activity.AppPage;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.widget.hud.ProgressView;
@@ -35,7 +34,6 @@ import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 /**
