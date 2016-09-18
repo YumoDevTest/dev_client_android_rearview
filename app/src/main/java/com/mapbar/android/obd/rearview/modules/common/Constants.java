@@ -27,4 +27,11 @@ public class Constants {
      */
 //    public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
     public static final int CUSTOM_MADE_TYPE = CustomMadeType.CUSTOM_MADE_TYPE_COMMON;
+
+    /**
+     * 是否广播跳转进入程序,
+     * 体检广播进入的话直接显示体检界面
+     * 广播进入0,正常进入1
+     */
+    public static int ISRECEIVER = 1;
 }
