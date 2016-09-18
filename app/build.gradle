@@ -61,7 +61,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT2\"")
+            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS4\"")
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyMT1\"")//串口地址
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS4\"")//串口地址
 //            buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS1\"")
