@@ -24,8 +24,8 @@
         android:layout_below="@id/tv_declare_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:paddingLeft="100dp"
-        android:paddingRight="100dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
         android:text="@string/tv_declare_content"
         android:textColor="@color/white"
         android:textSize="18sp" />
