@@ -168,7 +168,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
             }
         };
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
-        tv_state_record.setOnClickListener(this);
+        viewgrounp_stage_record.setOnClickListener(this);
         tv_ota_alert_text.setOnClickListener(this);
 
     }

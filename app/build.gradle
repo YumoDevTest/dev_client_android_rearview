@@ -69,7 +69,7 @@ android {
             buildConfigField("String", "FAKE_IMEI", "\"77726%%fsdffsdfssdfsdfsdfsd\"")//伪造的IMEI
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")//是否 开启权限管理类
             //是否开启 首页里的提醒对话框，每次都点很麻烦，就做了个开关
-            buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "false")
+            buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
             //是否开启 模拟测试车辆控制的页面
             buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
             buildConfigField("Boolean", "IS_USE_TEST_HOST", "false")//是否 使用内网测试服务器
