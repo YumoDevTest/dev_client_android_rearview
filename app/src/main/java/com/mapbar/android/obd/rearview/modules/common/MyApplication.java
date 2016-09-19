@@ -71,7 +71,6 @@ public class MyApplication extends android.app.Application {
         super.onTerminate();
     }
 
-
     /**
      * 获得会话对象
      * session是一个会话对象,一个会话对象可以在内存中存储一些变量，仅在app启动时有效
@@ -128,10 +127,11 @@ public class MyApplication extends android.app.Application {
     public void exitApplication() {
         android.util.Log.d(TAG, "## [application] exitApplication");
 
-        setMainActivity(null);
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
             getMainActivity().finish();
         }
+        setMainActivity(null);
+
 //        Manager.getInstance().stopTrip(true);
         Manager.getInstance().cleanup();
         //umeng统计，在杀死进程是需要调用用来保存统计数据。

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
@@ -31,7 +32,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LauncherActivity extends Activity implements View.OnClickListener {
+public class LauncherActivity extends MyBaseActivity implements View.OnClickListener {
     public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     public static final int MSG_SHOW_SPEED = 1;
     public static final int MSG_APPEND_TEXT = 2;
@@ -53,16 +54,12 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
     private TextView tv_declare_test;
     private Handler mHandler;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare);
 
         TraceUtil.start();
-
-        mHandler = new MyHandler(this);
-        initView();
 
         stopBackgroundService();
         sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
@@ -73,10 +70,8 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
             return;
         }
 
+        mHandler = new MyHandler(this);
         initView();
-
-        Log.d(TAG, "onCreate");
-
     }
 
 
@@ -189,15 +184,6 @@ public class LauncherActivity extends Activity implements View.OnClickListener {
     private void appendLineText(String str) {
         String msg = String.format(Locale.getDefault(), "[%s] %s", MySimpleDateFormat.format(new Date()), str);
         mHandler.obtainMessage(MSG_APPEND_TEXT, msg).sendToTarget();
-    }
-
-    private void alert(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(LauncherActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
