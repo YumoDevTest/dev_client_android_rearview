@@ -116,7 +116,7 @@ public class MyApplication extends android.app.Application {
 
 
     private void startV3HService() {
-        android.util.Log.d(TAG, "## [application] invoke startV3HService");
+        android.util.Log.d(TAG, "## [application] invoke ServicManager");
         Intent intent = new Intent(this, ServicManager.class);
         startService(intent);
     }

@@ -22,6 +22,7 @@ import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.modules.common.MyApplication;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.common.Constants;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
@@ -76,6 +77,7 @@ public class OBDV3HService extends Service {
     private static final int CONNECTION_STATE_DISCONNECTED = 0;
     private static final int CONNECTION_STATE_CONNECTING = 1;
     private static final int CONNECTION_STATE_CONNECTED = 2;
+    public static final String TAG = "OBDV3HService";
     private static String mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
     private static boolean mNeedWaitForSignal = false;
     private static volatile int mCurrentStatus = CONNECTION_STATE_DISCONNECTED;
@@ -89,7 +91,7 @@ public class OBDV3HService extends Service {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
-            android.util.Log.d("OBDV3HService", "## 关闭V3服务,onReceive action " + intent.getAction());
+            LogUtil.d(TAG, "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
             Manager.getInstance().stopTrip(true);
             MyApplication.getInstance().exitApplication();
@@ -110,6 +112,7 @@ public class OBDV3HService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtil.d(TAG, "## onCreate");
         //初始化语音广播接收器
         mVoiceReceiver = new VoiceReceiver();
         manager = Manager.getInstance();
@@ -290,8 +293,7 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        android.util.Log.d("OBDV3HService", "## 开启了V3服务 onStartCommand");
+        LogUtil.d(TAG, "## V3服务 onStartCommand");
         openDevice();
         Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
 
@@ -402,6 +404,7 @@ public class OBDV3HService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LogUtil.d(TAG, "## V3服务 onDestroy");
 
         unregisterReceiver(receiver);
         unregisterReceiver(mVoiceReceiver);

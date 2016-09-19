@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 
 import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.TripSyncService;
 
@@ -20,6 +21,9 @@ import java.util.List;
  * Created by tianff on 2016/7/25.
  */
 public class ServicManager extends Service {
+    private static final String TAG = "ServicManager";
+    private static final long INTERVAL = 45 * 1000;//延迟启动时长
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -37,22 +41,26 @@ public class ServicManager extends Service {
             Intent intent1 = new Intent(ServicManager.this, TripSyncService.class);
             stopService(intent1);
         }
+        LogUtil.d(TAG, String.format("## 预计延迟 %s秒 后启动OBDV3HService", INTERVAL / 1000));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (!NativeEnv.isServiceRunning(ServicManager.this, "com.mapbar.android.obd.rearview.framework.control.OBDV3HService") && !NativeEnv.isApplicationRunning(ServicManager.this, getPackageName())) {
-                    Intent i = new Intent(ServicManager.this, OBDV3HService.class);
-                    i.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
-                    i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
-                    i.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
-                    i.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
-                    ComponentName cName = startService(i);
+                    Intent intent2 = new Intent(ServicManager.this, OBDV3HService.class);
+                    intent2.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
+                    intent2.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);
+                    intent2.putExtra(OBDV3HService.EXTRA_WAIT_FOR_SIGNAL, false);
+                    intent2.putExtra(OBDV3HService.EXTRA_NEED_CONNECT, true);
+                    intent2.setPackage(getPackageName());
+                    LogUtil.d(TAG, "## 启动OBDV3HService");
+                    startService(intent2);
+
                     stopSelf();
                     MyApplication.getInstance().exitApplication();
 
                 }
             }
-        }, 45 * 1000);
+        }, INTERVAL);
 
         return START_NOT_STICKY;
     }
