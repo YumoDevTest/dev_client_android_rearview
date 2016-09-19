@@ -61,7 +61,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            if (null == rootProject.ext.local_serialport_name || "".equals(rootProject.ext.local_serialport_name))
+            if (!rootProject.hasProperty("local_serialport_name") || null == rootProject.ext.local_serialport_name || "".equals(rootProject.ext.local_serialport_name))
                 buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS4\"")
             else
                 buildConfigField("String", "SERIALPORT_PATH", "\"${local_serialport_name}\"")
