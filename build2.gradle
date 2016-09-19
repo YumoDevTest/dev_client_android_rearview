@@ -289,6 +289,17 @@ def getPara_IS_USE_TEST_HOST = { ->
     return false
 }
 
+def readLocalProperty(String key) {
+    Properties properties = new Properties()
+    File localPropertyFile = project.rootProject.file('local.properties');
+    if (localPropertyFile.exists()) {
+        properties.load(localPropertyFile.newDataInputStream())
+        def var1 = properties.getProperty(key)
+//        println "#从local.properties读取到: " + var1
+        return var1;
+    }
+}
+
 ext {
     SERIALPORT_PATH = getPara_SERIALPORT_PATH()
     IS_FAKE_IMEI = getPara_IS_FAKE_IMEI()
@@ -330,14 +341,17 @@ println '#读取环境参数,指定构建类型 BUILD_TYPE：' + project.BUILD_T
 println '#读取环境参数,是否开启模拟测试车辆控制的页面：' + project.IS_ENABLE_TEST_CAR_DEMO
 println '#读取环境参数,是否使用内网测试服务器：' + project.IS_USE_TEST_HOST
 
-
-println '***************设定图吧obd的sdk的源代码路径**************'
-//读取存储在 local.properties的 参数配置。如果使用这个，
-//你需要在你的 local.properties的 添加：obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
-Properties properties = new Properties()
-File localPropertyFile = project.rootProject.file('local.properties');
-if (localPropertyFile.exists()) {
-    properties.load(localPropertyFile.newDataInputStream())
-    rootProject.ext.obd_sdk_source_dir = properties.getProperty('obd.sdk.source.dir')
+//不是jenins环境，是本地环境时的一些操作
+if (!project.IS_JENKINS) {
+    println "********************* 读取本地配置 start *************************"
+    //读取存储在 local.properties的 参数配置。如果使用这个，
+    //你需要在你的 local.properties的 添加：obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
+    rootProject.ext.obd_sdk_source_dir = readLocalProperty('obd.sdk.source.dir')
     println "#读取到图吧obd的sdk的源代码路径: " + rootProject.ext.obd_sdk_source_dir
+
+    println "****** 要设定本地串口号，请在你的local.properties文件中添加： local.serialport.name=/dev/ttyS4"
+    rootProject.ext.local_serialport_name = readLocalProperty('local.serialport.name')
+    println "#读取到本地配置里的串口号路径: " + rootProject.ext.local_serialport_name
+
+    println "********************* 读取本地配置 end ***************************"
 }
