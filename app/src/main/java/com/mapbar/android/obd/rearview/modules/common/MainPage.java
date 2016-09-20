@@ -16,7 +16,6 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.lib.base.AppPage;
-import com.mapbar.android.obd.rearview.views.TitleBar;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.modules.carstate.CarStatePage;
@@ -40,9 +39,6 @@ import java.util.ArrayList;
 public class MainPage extends AppPage implements IMainPageView {
     private static final String TAG = MainPage.class.getSimpleName();
 
-    public static TitleBar title;
-
-    private TitleBar titleBar;
     @ViewInject(R.id.pager_main)
     private ViewPager pager;
     @ViewInject(R.id.rg_tabs)
@@ -79,8 +75,6 @@ public class MainPage extends AppPage implements IMainPageView {
     @Override
     public void initView() {
         titles = getResources().getStringArray(R.array.page_titles);
-        titleBar = new TitleBar(this, R.id.title_main);
-        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
 
         vehicleCheckupPage = new VehicleCheckupPage();
         carDataPage = new CarDataPage();
@@ -102,13 +96,11 @@ public class MainPage extends AppPage implements IMainPageView {
 
         pager.setOffscreenPageLimit(0);
         initDialog();
-        title = titleBar;
         //默认进入页面为数据页面
         pager.setCurrentItem(1);
 
         rg_tabs.check(R.id.page_tab2);
 
-        hideMainTitlebar();
         permissionManager = LogicFactory.createPermissionManager(getActivity());
 
         //下载权限
@@ -128,17 +120,6 @@ public class MainPage extends AppPage implements IMainPageView {
         }, 1000);
     }
 
-    /**
-     * 是否让 主fragment 的titlebar不可见。让子fragment的 titlebar 可见
-     */
-    private void hideMainTitlebar() {
-        MainPage.title.setVisibilitySelf(false);
-    }
-
-    private void showMainTitlebar() {
-        MainPage.title.setVisibilitySelf(true);
-    }
-
     public void setListener() {
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -148,31 +129,23 @@ public class MainPage extends AppPage implements IMainPageView {
 
             @Override
             public void onPageSelected(int position) {
-                MainPage.title.setText("", TitleBar.TitleArea.RIGHT);
                 switch (position) {
                     case 0:
                         rg_tabs.check(R.id.page_tab1);
-                        titleBar.setText(titles[0], TitleBar.TitleArea.MID);
                         break;
                     case 1:
                         rg_tabs.check(R.id.page_tab2);
-                        titleBar.setText(titles[1], TitleBar.TitleArea.MID);
-                        hideMainTitlebar();
                         break;
                     case 2:
                         rg_tabs.check(R.id.page_tab3);
-                        titleBar.setText(titles[2], TitleBar.TitleArea.MID);
                         CarStateManager.getInstance().startRefreshCarState();
                         carStatePage.onResume();
                         break;
                     case 3:
                         rg_tabs.check(R.id.page_tab4);
-                        MainPage.title.setText("保养校正", TitleBar.TitleArea.RIGHT);
-                        titleBar.setText(titles[3], TitleBar.TitleArea.MID);
                         break;
                     case 4:
                         rg_tabs.check(R.id.page_tab4);
-                        titleBar.setText(titles[3], TitleBar.TitleArea.MID);
                         break;
                 }
             }
