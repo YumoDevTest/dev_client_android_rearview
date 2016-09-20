@@ -36,7 +36,7 @@ public class Serialport010CActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo2);
+        setContentView(R.layout.serialport010_cactivity);
         textView2 = (EditText) findViewById(R.id.textView2);
         //设置串口
         ObdContext.setSerialPortPath(SERIALPORT_PATH);

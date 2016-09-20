@@ -40,7 +40,7 @@ public class SerialportToolsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.serialport_tool);
+        setContentView(R.layout.serialporttools_activity);
         txt_content = (EditText) findViewById(R.id.txt_content);
         edittext_input = (EditText) findViewById(R.id.edittext_input);
         btnSend = (Button) findViewById(R.id.btnSend);
