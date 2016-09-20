@@ -163,8 +163,7 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
             @Override
             public void onClick(View v) {
                 MobclickAgentEx.onEvent(getActivity(), UmengConfigs.SETMAINTENANCE);
-                line_upkeep_revise.setVisibility(View.VISIBLE);
-                line_upkeep.setVisibility(View.GONE);
+                showMainternanceSettingView();
                 setButtonRightVisiable(false);
             }
         });
@@ -204,9 +203,36 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
         setListener();
     }
 
+
+    /**
+     * 显示保养页
+     */
+    private void showMainternanceView() {
+        line_upkeep_revise.setVisibility(View.GONE);
+        line_upkeep.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 显示保养设置页
+     */
+    private void showMainternanceSettingView() {
+        line_upkeep_revise.setVisibility(View.VISIBLE);
+        line_upkeep.setVisibility(View.GONE);
+    }
+
+    /**
+     * 是否显示了保养设置页
+     *
+     * @return 是否
+     */
+    private boolean isMainternanceSettingShowing() {
+        return line_upkeep_revise.getVisibility() == View.VISIBLE;
+    }
+
     private void setButtonRightVisiable(boolean visiable) {
         titlebarview1.setButtonRightVisibility(visiable);
     }
+
 
     /**
      * 获取本地保养信息

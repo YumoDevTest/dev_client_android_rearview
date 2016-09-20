@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 
@@ -19,6 +20,7 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
+import com.mapbar.obd.foundation.utils.ErrorTextUtil;
 
 /**
  * 用户登录中心管理者
@@ -364,12 +366,9 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
-
                 Integer c = (Integer) o;
-                if (c == null) {
-                    StringUtil.toastStringShort("错误码为空了");
-                }
-                StringUtil.toastStringShort(c + "");
+                String errorMsg = ErrorTextUtil.DataCollectFailure.parseToText(c);
+                StringUtil.toastStringShort(errorMsg + "");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

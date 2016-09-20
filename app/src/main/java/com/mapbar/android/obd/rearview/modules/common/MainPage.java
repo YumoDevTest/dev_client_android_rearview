@@ -64,7 +64,6 @@ public class MainPage extends AppPage implements IMainPageView {
     private FragmentPagerAdapter fragmentPagerAdapter;
     private OBDSDKListenerManager.SDKListener sdkListener;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
