@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
-import com.mapbar.android.obd.rearview.obd.util.QrBarcodeUtils;
-import com.mapbar.android.obd.rearview.obd.util.Urls;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.util.QrBarcodeUtils;
+import com.mapbar.android.obd.rearview.lib.config.Urls;
 import com.mapbar.obd.CarDetail;
 import com.mapbar.obd.LocalUserCarResult;
 import com.mapbar.obd.Manager;

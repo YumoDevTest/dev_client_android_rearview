@@ -1,6 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.carstate.contract;
 
-import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
+import com.mapbar.obd.foundation.mvp.IMvpView;
 
 /**
  * 修改vin的视图

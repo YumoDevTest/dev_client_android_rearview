@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.common.QRUtils;
-import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
+import com.mapbar.obd.foundation.base.MyBaseFragment;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
+import com.mapbar.android.obd.rearview.util.QRUtils;
+import com.mapbar.android.obd.rearview.modules.push.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragment;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.obd.UserCenter;
 
 /**

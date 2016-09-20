@@ -1,8 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.ota;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
 import com.mapbar.android.obd.rearview.views.CountDownTextViewWrapper;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 提示用户升级，确定或者取消

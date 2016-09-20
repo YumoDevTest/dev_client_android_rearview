@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
-import com.mapbar.android.obd.rearview.obd.util.FactoryTest;
-import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
-import com.mapbar.android.obd.rearview.obd.util.TraceUtil;
+import com.mapbar.obd.foundation.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.config.Constants;
+import com.mapbar.android.obd.rearview.util.FactoryTest;
+import com.mapbar.android.obd.rearview.util.SafeHandler;
+import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;

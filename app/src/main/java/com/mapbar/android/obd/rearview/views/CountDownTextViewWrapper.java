@@ -3,7 +3,7 @@ package com.mapbar.android.obd.rearview.views;
 import android.os.Message;
 import android.widget.TextView;
 
-import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
+import com.mapbar.android.obd.rearview.util.SafeHandler;
 
 /**
  * 到计时的textview

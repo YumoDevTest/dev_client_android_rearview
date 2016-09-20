@@ -9,24 +9,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.joanzapata.android.BaseAdapterHelper;
-import com.joanzapata.android.QuickAdapter;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragment;
+import com.mapbar.android.obd.rearview.lib.base.AppPage;
 import com.mapbar.obd.Manager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 关于 页
  * Created by zhangyunfei on 16/7/25.
  */
-public class AboutFragment extends MyBaseFragment {
+public class AboutFragment extends AppPage {
     private View rootView;
 
     @Nullable
@@ -44,6 +37,11 @@ public class AboutFragment extends MyBaseFragment {
             txt_hard_version.setText(hardVersion);
         }
         return rootView;
+    }
+
+    @Override
+    public void initView() {
+
     }
 
     @Override

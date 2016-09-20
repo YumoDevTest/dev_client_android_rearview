@@ -1,9 +1,8 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
-import java.io.InvalidObjectException;
 import java.util.List;
 
 /**

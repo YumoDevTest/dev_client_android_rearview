@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.obd.RealTimeData;
-
 /**
  * 外部消息管理器。发送实时数据，车辆状态给外部的app使用
  * Created by zhangyunfei on 16/9/5.

@@ -1,7 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.carstate.contract;
 
-import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
+import com.mapbar.obd.foundation.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
 
 /**

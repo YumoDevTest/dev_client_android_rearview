@@ -7,7 +7,7 @@
 //import android.widget.Toast;
 //
 //import com.mapbar.android.obd.rearview.lib.daemon.delaystart.contract.DelayAutoStartService;
-//import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
+//import com.mapbar.android.obd.rearview.util.SafeHandler;
 //
 ///**
 // * 迪瑞特，开机自启管理器

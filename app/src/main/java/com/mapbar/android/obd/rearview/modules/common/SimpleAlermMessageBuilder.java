@@ -4,8 +4,9 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.config.Constants;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.Manager;
 

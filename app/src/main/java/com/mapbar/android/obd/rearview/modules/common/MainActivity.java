@@ -22,35 +22,35 @@ import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.activity.AppPage;
-import com.mapbar.android.obd.rearview.framework.activity.BaseActivity;
-import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
+import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.obd.foundation.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.lib.services.UpdateService;
+import com.mapbar.android.obd.rearview.model.QRInfo;
+import com.mapbar.android.obd.rearview.util.LayoutUtils;
+import com.mapbar.android.obd.rearview.util.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
-import com.mapbar.android.obd.rearview.framework.common.StringUtil;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.util.StringUtil;
+import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
-import com.mapbar.android.obd.rearview.lib.net.PBHttpErrorEvent;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.net.HttpErrorEvent;
+import com.mapbar.obd.foundation.net.PBHttpErrorEvent;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
-import com.mapbar.android.obd.rearview.obd.bean.AppInfo;
-import com.mapbar.android.obd.rearview.obd.page.MainPage;
-import com.mapbar.android.obd.rearview.obd.page.SplashPage;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.android.obd.rearview.obd.util.SafeHandler;
-import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.android.obd.rearview.modules.push.events.PermissionBuyEvent;
+import com.mapbar.android.obd.rearview.model.AppInfo;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.util.SafeHandler;
+import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
 import com.umeng.analytics.MobclickAgent;
@@ -67,7 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends MyBaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEW_CONTAINER_ID = R.id.content_view;
     private RelativeLayout contentView;
@@ -233,10 +233,6 @@ public class MainActivity extends BaseActivity {
 
     private MainActivity self() {
         return this;
-    }
-
-    private void alert(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void stopBackgroundService() {

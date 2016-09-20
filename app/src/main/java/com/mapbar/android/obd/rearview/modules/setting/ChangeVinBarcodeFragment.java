@@ -8,17 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarFragment;
+import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragment;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
 import com.mapbar.android.obd.rearview.modules.vin.VinManager;
-import com.mapbar.android.obd.rearview.modules.vin.events.VinChangeFailureEvent;
-import com.mapbar.android.obd.rearview.modules.vin.events.VinChangeSucccessEvent;
-import com.mapbar.android.obd.rearview.modules.vin.events.VinScanEvent;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.android.obd.rearview.modules.push.events.VinChangeFailureEvent;
+import com.mapbar.android.obd.rearview.modules.push.events.VinChangeSucccessEvent;
+import com.mapbar.android.obd.rearview.modules.push.events.VinScanEvent;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
-import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenter;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +30,7 @@ import java.util.TimerTask;
  * 更改VIN - 扫码页
  * Created by zhangyh on 2016/9/8.
  */
-public class ChangeVinBarcodeFragment extends MyBaseFragment {
+public class ChangeVinBarcodeFragment extends TitlebarFragment {
     VinBarcodeView vinBarcodeView;
     private static final int TIMEOUT = 300000;
     private Handler handler;

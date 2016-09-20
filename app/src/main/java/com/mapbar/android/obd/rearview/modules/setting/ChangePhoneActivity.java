@@ -4,15 +4,15 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
+import com.mapbar.android.obd.rearview.util.LayoutUtils_ui;
+import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterFailure;
-import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_RegisterOK;
-import com.mapbar.android.obd.rearview.modules.setting.events.ChangePhoneEvent_ScanOK;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.modules.push.events.ChangePhoneEvent_RegisterFailure;
+import com.mapbar.android.obd.rearview.modules.push.events.ChangePhoneEvent_RegisterOK;
+import com.mapbar.android.obd.rearview.modules.push.events.ChangePhoneEvent_ScanOK;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenter;
 
@@ -26,7 +26,7 @@ import java.util.TimerTask;
  * 更改手机号
  * Created by zhangyunfei on 16/7/26.
  */
-public class ChangePhoneActivity extends MyBaseFragmentActivity {
+public class ChangePhoneActivity extends TitlebarActivity {
     private static final String TAG = ChangePhoneActivity.class.getSimpleName();
     private static final int TIMEOUT = 300000;
     private ChangePhoneFragment changePhoneFragment;

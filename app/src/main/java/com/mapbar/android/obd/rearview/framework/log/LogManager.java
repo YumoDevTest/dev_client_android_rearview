@@ -3,7 +3,7 @@ package com.mapbar.android.obd.rearview.framework.log;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.framework.common.StringUtil;
+import com.mapbar.android.obd.rearview.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

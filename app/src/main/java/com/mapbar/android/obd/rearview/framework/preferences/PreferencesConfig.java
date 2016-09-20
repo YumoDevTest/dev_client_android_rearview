@@ -6,7 +6,7 @@ import com.mapbar.android.obd.rearview.framework.preferences.item.BooleanPrefere
 import com.mapbar.android.obd.rearview.framework.preferences.item.IntPreferences;
 import com.mapbar.android.obd.rearview.framework.preferences.item.LongPreferences;
 import com.mapbar.android.obd.rearview.framework.preferences.item.StringPreferences;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 
 
 /**

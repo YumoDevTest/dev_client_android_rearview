@@ -3,13 +3,13 @@ package com.mapbar.android.obd.rearview.lib.notify;
 import android.content.Context;
 
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.common.SimpleAlermEventDispatcher;
+import com.mapbar.android.obd.rearview.modules.push.SimpleAlermEventDispatcher;
 import com.mapbar.android.obd.rearview.modules.common.SimpleAlermMessageBuilder;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TireAlermMessageBuilder;
-import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressureAlermEventDispatcher;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.modules.push.TirePressureAlermEventDispatcher;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.obd.AlarmData;
 import com.mapbar.obd.TPMSAlarmData;
 

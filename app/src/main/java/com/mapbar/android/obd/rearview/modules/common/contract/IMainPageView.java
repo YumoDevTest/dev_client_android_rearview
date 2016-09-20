@@ -1,9 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.common.contract;
 
-import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
+import com.mapbar.obd.foundation.mvp.IMvpView;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
-import com.mapbar.map.MapView;
-import com.mapbar.obd.TPMSAlarmData;
 
 /**
  * Created by zhangyunfei on 16/8/18.

@@ -5,16 +5,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
-import com.mapbar.android.obd.rearview.framework.common.Utils;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.net.HttpPBCallback;
-import com.mapbar.android.obd.rearview.lib.net.PBErrorCode;
-import com.mapbar.android.obd.rearview.lib.net.HttpPBUtil;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
+import com.mapbar.android.obd.rearview.util.Utils;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionStatus;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.net.HttpPBCallback;
+import com.mapbar.obd.foundation.net.PBErrorCode;
+import com.mapbar.obd.foundation.net.HttpPBUtil;
+import com.mapbar.android.obd.rearview.modules.push.events.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.android.obd.rearview.obd.util.Urls;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.lib.config.Urls;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
 import java.text.ParseException;

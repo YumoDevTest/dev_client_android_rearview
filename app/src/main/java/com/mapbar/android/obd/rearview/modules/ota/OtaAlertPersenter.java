@@ -2,11 +2,10 @@ package com.mapbar.android.obd.rearview.modules.ota;
 
 import android.os.Bundle;
 
-import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.ota.FirmwareWriter;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.modules.ota.contract.IOtaAlertView;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 
 import java.io.File;
