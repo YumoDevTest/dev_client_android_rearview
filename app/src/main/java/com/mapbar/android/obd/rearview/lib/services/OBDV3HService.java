@@ -23,7 +23,6 @@ import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
 import com.mapbar.obd.foundation.log.LogUtil;
-import com.mapbar.android.obd.rearview.util.SafeHandler;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
@@ -35,6 +34,7 @@ import com.mapbar.obd.RealTimeData;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
+import com.mapbar.obd.foundation.utils.SafeHandler;
 
 import java.io.IOException;
 

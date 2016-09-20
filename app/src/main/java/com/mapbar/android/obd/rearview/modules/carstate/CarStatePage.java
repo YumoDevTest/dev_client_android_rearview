@@ -36,11 +36,11 @@ import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.util.SafeHandler;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.foundation.utils.SafeHandler;
 
 import java.util.ArrayList;
 import java.util.List;

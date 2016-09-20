@@ -79,7 +79,7 @@
         <activity android:name="com.mapbar.demo.DemoOtaSerialActivity">
 
         </activity>
-        <activity android:name="com.mapbar.demo.DemoSerialportTestActivity">
+        <activity android:name="com.mapbar.demo.SerialportToolsActivity">
 
         </activity>
 

@@ -37,12 +37,12 @@ import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4V
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.util.SafeHandler;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
 import com.mapbar.android.obd.rearview.views.TirePressureViewSimple;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
+import com.mapbar.obd.foundation.utils.SafeHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
