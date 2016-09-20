@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.Timer;
 
-public class MainDemoActivity extends Activity {
+public class VoiceControlDemoActivity extends Activity {
     public static final String VOICE_ACTION = "mapbar.obd.intent.action.VOICE_CONTROL";
 //    private int[] commands = {201001, 201000, 202000, 202001, 207001, 207000};
     private Timer timer;
