@@ -295,7 +295,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             CarStateManager.getInstance().startRefreshCarState();//保证在当前界面时,刷新车辆状态界面
-            myHandler.sendEmptyMessageDelayed(0, 10000);
+            myHandler.sendEmptyMessage(0);
         } else {
             CarStateManager.getInstance().stopRefreshCarState();
             myHandler.removeCallbacksAndMessages(null);
