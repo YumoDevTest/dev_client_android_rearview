@@ -45,7 +45,6 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStar
 import com.mapbar.android.obd.rearview.modules.push.events.PermissionBuyEvent;
 import com.mapbar.android.obd.rearview.model.AppInfo;
 import com.mapbar.obd.foundation.log.LogUtil;
-import com.mapbar.android.obd.rearview.util.SafeHandler;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.mapdal.NativeEnv;
@@ -53,6 +52,7 @@ import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
+import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;

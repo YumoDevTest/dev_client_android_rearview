@@ -15,7 +15,9 @@ public class Main2Activity extends Activity {
     }
 
     public void onClickView1(View view) {
-        if (view.getId() == R.id.btn1_ota) {
+        if (view.getId() == R.id.btn_serialport) {
+            startActivity(new Intent(self(), SerialportToolsActivity.class));
+        } else if (view.getId() == R.id.btn1_ota) {
             startActivity(new Intent(self(), DemoOtaSerialActivity.class));
         } else if (view.getId() == R.id.btn_external_realtime) {
             startActivity(new Intent(self(), External_broadcast_realtime2Activity.class));
@@ -23,6 +25,8 @@ public class Main2Activity extends Activity {
             startActivity(new Intent(self(), External_broadcast_car_statusActivity.class));
         } else if (view.getId() == R.id.btn_voice) {
             startActivity(new Intent(self(), VoiceControlDemoActivity.class));
+        }else   if (view.getId() == R.id.btn_010c) {
+            startActivity(new Intent(self(), Serialport010CActivity.class));
         }
     }
 

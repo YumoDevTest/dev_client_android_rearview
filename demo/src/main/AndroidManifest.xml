@@ -13,6 +13,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Serialport010CActivity"></activity>
+        <activity android:name=".SerialportToolsActivity"></activity>
         <activity android:name=".DemoOtaSerialActivity"></activity>
         <activity android:name=".External_broadcast_car_statusActivity"></activity>
         <activity android:name=".External_broadcast_realtime2Activity"></activity>

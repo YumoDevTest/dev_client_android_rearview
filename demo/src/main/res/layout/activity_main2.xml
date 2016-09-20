@@ -12,6 +12,19 @@
 
 
     <Button
+        android:id="@+id/btn_serialport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickView1"
+        android:text="串口连接工具演示" />
+    <Button
+        android:id="@+id/btn_010c"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickView1"
+        android:text="串口连接连续发010C" />
+
+    <Button
         android:id="@+id/btn1_ota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
