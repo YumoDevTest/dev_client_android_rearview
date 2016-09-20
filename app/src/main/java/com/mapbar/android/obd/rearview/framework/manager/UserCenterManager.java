@@ -1,17 +1,18 @@
 package com.mapbar.android.obd.rearview.framework.manager;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.bean.QRInfo;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils;
-import com.mapbar.android.obd.rearview.framework.common.StringUtil;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
+import com.mapbar.android.obd.rearview.model.QRInfo;
+import com.mapbar.android.obd.rearview.util.LayoutUtils;
+import com.mapbar.android.obd.rearview.util.StringUtil;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.lib.umeng.MobclickAgentEx;
+import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -19,6 +20,7 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
+import com.mapbar.obd.foundation.utils.ErrorTextUtil;
 
 /**
  * 用户登录中心管理者
@@ -364,12 +366,9 @@ public class UserCenterManager extends OBDManager {
                 break;
             case Manager.Event.dataCollectFailed:
                 isDataPrepare = false;
-
                 Integer c = (Integer) o;
-                if (c == null) {
-                    StringUtil.toastStringShort("错误码为空了");
-                }
-                StringUtil.toastStringShort(c + "");
+                String errorMsg = ErrorTextUtil.DataCollectFailure.parseToText(c);
+                StringUtil.toastStringShort(errorMsg + "");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

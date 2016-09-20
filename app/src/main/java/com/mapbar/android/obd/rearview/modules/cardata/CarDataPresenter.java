@@ -1,14 +1,14 @@
 package com.mapbar.android.obd.rearview.modules.cardata;
 
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
-import com.mapbar.android.obd.rearview.modules.common.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.modules.push.events.PermissionChangedEvent;
+import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.modules.common.BaseDao;
+import com.mapbar.android.obd.rearview.lib.dao.BaseDao;
 import com.mapbar.android.obd.rearview.modules.permission.model.MyPermissionInfo;
-import com.mapbar.android.obd.rearview.obd.util.Cache;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.android.obd.rearview.obd.util.MemoryCache;
+import com.mapbar.android.obd.rearview.util.Cache;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.util.MemoryCache;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
 import java.lang.ref.WeakReference;

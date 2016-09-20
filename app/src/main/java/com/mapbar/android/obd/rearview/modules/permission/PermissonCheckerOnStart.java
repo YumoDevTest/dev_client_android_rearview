@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
 
 import java.util.List;

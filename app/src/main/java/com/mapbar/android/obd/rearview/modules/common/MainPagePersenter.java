@@ -2,14 +2,10 @@ package com.mapbar.android.obd.rearview.modules.common;
 
 import android.os.Handler;
 
-import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
 import com.mapbar.android.obd.rearview.lib.notify.NotificationManager;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
-import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressureAlermEventDispatcher;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.obd.AlarmData;
-import com.mapbar.obd.TPMSAlarmData;
 
 /**
  * MainPage persenter

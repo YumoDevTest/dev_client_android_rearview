@@ -59,7 +59,7 @@
         android:smallScreens="true" />
 
     <application
-        android:name=".modules.common.MyApplication"
+        android:name=".lib.config.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
@@ -76,14 +76,14 @@
 
 
         </activity>
-        <activity android:name=".demo.DemoOtaSerialActivity">
+        <activity android:name="com.mapbar.demo.DemoOtaSerialActivity">
 
         </activity>
-        <activity android:name=".demo.DemoSerialportTestActivity">
+        <activity android:name="com.mapbar.demo.DemoSerialportTestActivity">
 
         </activity>
 
-        <activity android:name=".modules.common.Demo1Activity" />
+        <activity android:name="com.mapbar.demo.Demo1Activity" />
 
         <activity
             android:name=".modules.setting.SettingActivity"
@@ -99,7 +99,7 @@
             android:name=".modules.permission.PermissionBuySuccess"
             android:label="购买成功" />
 
-        <receiver android:name=".framework.control.VoiceReceiver">
+        <receiver android:name=".framework.manager.VoiceReceiver">
             <intent-filter>
                 <action android:name="mapbar.obd.intent.action.VOICE_CONTROL" />
             </intent-filter>
@@ -119,9 +119,9 @@
         <service
             android:name="com.mapbar.obd.SyncService"
             android:process="obd.service.process"></service>
-        <service android:name=".modules.common.UpdateService" />
+        <service android:name=".lib.services.UpdateService" />
         <service
-            android:name=".modules.common.RestartService"
+            android:name=".lib.services.RestartService"
             android:process="obd.service.restart.process" />
         <service android:name="com.mapbar.obd.TripSyncService" />
         <!-- 后台上传进程自动唤醒广播接收器注册 -->
@@ -171,7 +171,7 @@
         <!--</service>-->
         <!-- 爱心推start -->
         <!-- 定义接收器，用来接收透传、api结果以及点击事件 -->
-        <receiver android:name=".framework.ixintui.AixintuiBroadcastReceiver">
+        <receiver android:name=".modules.push.ixintui.AixintuiBroadcastReceiver">
             <intent-filter>
 
                 <!-- 接收透传消息 -->
@@ -230,7 +230,7 @@
         <!-- 爱心推end -->
         <!--后台登录service-->
         <service
-            android:name=".framework.control.OBDV3HService"
+            android:name=".lib.services.OBDV3HService"
             android:process="obd.service.login">
             <intent-filter>
                 <action android:name="com.mapbar.obd.LOGIN_SERVICE" />
@@ -239,7 +239,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".framework.control.ServicManager"
+            android:name=".lib.services.ServicManager"
             android:process="obd.service.servicmanager">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseActivity;
+import com.mapbar.obd.foundation.base.MyBaseActivity;
 
 /**
  * 购买成功

@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.framework.manager;
 
 import android.os.Handler;
 
-import com.mapbar.android.obd.rearview.framework.common.DecFormatUtil;
+import com.mapbar.android.obd.rearview.util.DecFormatUtil;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.AlarmData;

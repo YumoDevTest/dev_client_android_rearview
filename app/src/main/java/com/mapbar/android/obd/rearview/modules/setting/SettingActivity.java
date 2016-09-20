@@ -2,14 +2,14 @@ package com.mapbar.android.obd.rearview.modules.setting;
 
 import android.os.Bundle;
 
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
+import com.mapbar.android.obd.rearview.util.LayoutUtils_ui;
 
 /**
  * 设置 页
  * Created by zhangyunfei on 16/7/25.
  */
-public class SettingActivity extends MyBaseFragmentActivity {
+public class SettingActivity extends TitlebarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

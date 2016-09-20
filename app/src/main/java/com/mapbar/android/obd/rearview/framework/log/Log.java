@@ -129,7 +129,7 @@ public class Log {
         } else {
             sb.append(className);
         }
-        sb.append(".").append(methodName).append("(").append(fileName).append(":").append(lineNumber).append(")");
+        sb.append("").append(methodName).append("(").append(fileName).append(":").append(lineNumber).append(")");
         return sb;
     }
 

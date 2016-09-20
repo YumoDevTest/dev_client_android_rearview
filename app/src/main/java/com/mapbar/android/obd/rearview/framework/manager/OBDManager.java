@@ -2,8 +2,7 @@ package com.mapbar.android.obd.rearview.framework.manager;
 
 import android.os.Handler;
 
-import com.mapbar.android.obd.rearview.framework.Configs;
-import com.mapbar.android.obd.rearview.framework.control.SDKListenerManager;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.Firmware;

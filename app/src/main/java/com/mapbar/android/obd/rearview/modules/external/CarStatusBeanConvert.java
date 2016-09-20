@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.modules.external;
 
 import android.os.Bundle;
 
-import com.mapbar.android.obd.rearview.obd.util.IntegerToBooleanParser;
+import com.mapbar.android.obd.rearview.util.IntegerToBooleanParser;
 import com.mapbar.obd.CarStatusData;
 
 /**

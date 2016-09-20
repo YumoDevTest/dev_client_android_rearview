@@ -1,8 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.ota.contract;
 
-import android.view.View;
-
-import com.mapbar.android.obd.rearview.lib.mvp.IMvpView;
+import com.mapbar.obd.foundation.mvp.IMvpView;
 
 /**
  * Created by zhangyunfei on 16/8/27.

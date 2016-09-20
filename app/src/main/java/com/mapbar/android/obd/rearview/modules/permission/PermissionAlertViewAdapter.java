@@ -1,11 +1,10 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.mapbar.android.obd.rearview.framework.activity.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 
 import java.lang.ref.WeakReference;

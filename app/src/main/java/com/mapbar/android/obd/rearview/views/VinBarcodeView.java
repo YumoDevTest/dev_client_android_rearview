@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.QRUtils;
-import com.mapbar.android.obd.rearview.framework.ixintui.AixintuiConfigs;
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
-import com.mapbar.android.obd.rearview.obd.util.Urls;
+import com.mapbar.android.obd.rearview.util.QRUtils;
+import com.mapbar.android.obd.rearview.modules.push.ixintui.AixintuiConfigs;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.lib.config.Urls;
 
 /**
  * Vin 二维码的 view

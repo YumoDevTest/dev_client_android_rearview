@@ -2,7 +2,6 @@ package com.mapbar.android.obd.rearview.modules.external;
 
 import android.content.Context;
 
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.RealTimeData;
 

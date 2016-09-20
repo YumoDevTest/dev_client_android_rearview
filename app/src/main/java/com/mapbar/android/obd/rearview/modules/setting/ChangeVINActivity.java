@@ -3,15 +3,15 @@ package com.mapbar.android.obd.rearview.modules.setting;
 import android.os.Bundle;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.LayoutUtils_ui;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragmentActivity;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
+import com.mapbar.android.obd.rearview.util.LayoutUtils_ui;
 
 /**
  *
  * 修改VIN页面
  *  Created by zhangyh on 2016/9/8.
  */
-public class ChangeVINActivity extends MyBaseFragmentActivity {
+public class ChangeVINActivity extends TitlebarActivity {
     private ChangeVinBarcodeFragment changeVinBarcodeFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

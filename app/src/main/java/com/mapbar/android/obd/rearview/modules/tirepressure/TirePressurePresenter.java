@@ -1,17 +1,16 @@
 package com.mapbar.android.obd.rearview.modules.tirepressure;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.lib.mvp.BasePresenter;
+import com.mapbar.android.obd.rearview.modules.push.TirePressureDataEventDispatcher;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
-import com.mapbar.android.obd.rearview.modules.permission.PermissionKey;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionChangedEvent;
+import com.mapbar.android.obd.rearview.modules.push.events.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
 import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
 import com.mapbar.obd.RealTimeDataTPMS;
 import com.mapbar.obd.RealTimeDataTPMSAll;
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.MyBaseFragment;
+import com.mapbar.obd.foundation.base.MyBaseFragment;
 
 /**
  * 更改手机号 - 扫码完成后 - 扫码成功，等待填写

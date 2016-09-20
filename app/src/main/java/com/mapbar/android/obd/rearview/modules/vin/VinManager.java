@@ -2,7 +2,7 @@ package com.mapbar.android.obd.rearview.modules.vin;
 
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.OtaSpecial;
 

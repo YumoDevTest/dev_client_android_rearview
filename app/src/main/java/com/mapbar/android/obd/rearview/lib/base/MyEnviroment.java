@@ -1,11 +1,12 @@
 package com.mapbar.android.obd.rearview.lib.base;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.mapbar.android.obd.rearview.modules.common.MyApplication;
-import com.mapbar.android.obd.rearview.obd.util.LogUtil;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.io.File;
 
@@ -24,7 +25,8 @@ public class MyEnviroment {
      */
     @NonNull
     public static File getOTAFilesDir() {
-        File dir = new File(Environment.getExternalStorageDirectory(), getPackageName() + "/binfile");//Environment.getExternalStorageDirectory().getAbsolutePath();
+        Context context = MyApplication.getInstance();
+        File dir = new File(Environment.getExternalStorageDirectory(), getPackageName(context) + "/binfile");//Environment.getExternalStorageDirectory().getAbsolutePath();
         if (!dir.exists()) {
             boolean isOk = dir.mkdirs();
             if (!isOk)
@@ -34,9 +36,9 @@ public class MyEnviroment {
         return dir;
     }
 
-    public static String getPackageName() {
+    private static String getPackageName(Context context) {
         if (TextUtils.isEmpty(PACKAGE_NAME)) {
-            PACKAGE_NAME = MyApplication.getInstance().getPackageName();
+            PACKAGE_NAME = context.getPackageName();
         }
         return PACKAGE_NAME;
     }

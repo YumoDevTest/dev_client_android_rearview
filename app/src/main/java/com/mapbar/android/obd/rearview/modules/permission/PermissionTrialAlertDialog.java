@@ -1,15 +1,12 @@
 package com.mapbar.android.obd.rearview.modules.permission;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
-import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.eventbus.EventBusManager;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionBuyEvent;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.modules.push.events.PermissionBuyEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

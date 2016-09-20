@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_page"
-              android:orientation="vertical">
-
-    <include
-        android:id="@+id/title_main"
-        layout="@layout/layout_title"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page"
+    android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <RadioGroup
         android:id="@+id/rg_tabs"
@@ -22,8 +18,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/page_tab1"
@@ -33,7 +28,7 @@
             android:background="@drawable/sl_page_check"
             android:button="@null"
             android:checked="true"
-            android:text="@null"/>
+            android:text="@null" />
 
 
         <RadioButton
@@ -43,7 +38,7 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/sl_page_check"
             android:button="@null"
-            android:text="@null"/>
+            android:text="@null" />
 
         <RadioButton
             android:id="@+id/page_tab3"
@@ -52,7 +47,7 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/sl_page_check"
             android:button="@null"
-            android:text="@null"/>
+            android:text="@null" />
 
         <RadioButton
             android:id="@+id/page_tab4"
@@ -60,7 +55,7 @@
             android:layout_height="4dp"
             android:background="@drawable/sl_page_check"
             android:button="@null"
-            android:text="@null"/>
+            android:text="@null" />
 
     </RadioGroup>
 

@@ -61,7 +61,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            if (null == rootProject.ext.local_serialport_name || "".equals(rootProject.ext.local_serialport_name))
+            if (!rootProject.hasProperty("local_serialport_name") || null == rootProject.ext.local_serialport_name || "".equals(rootProject.ext.local_serialport_name))
                 buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS4\"")
             else
                 buildConfigField("String", "SERIALPORT_PATH", "\"${local_serialport_name}\"")
@@ -145,20 +145,14 @@ def flavors() {
 
 
 dependencies {
-    compile 'com.umeng.analytics:analytics:latest.integration'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:recyclerview-v7:22.1.0'
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okio:okio:1.5.0'
-    compile files('libs/OBDDecodeHelper-1.1.jar')
-    compile files('libs/protobuf-java-2.5.0.jar')
-    compile files('libs/protobuf-java-2.5.0-sources.jar')
-    compile files('libs/protobuf-java-format-1.2.jar')
+
     //    compile files('libs/apache-httpcomponents-httpcore.jar')
-    compile 'com.google.code.gson:gson:2.7'
+
+    compile project(':foundation')
 }
 
 android.applicationVariants.all { variant ->

@@ -2,7 +2,6 @@ package com.mapbar.android.obd.rearview.views;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

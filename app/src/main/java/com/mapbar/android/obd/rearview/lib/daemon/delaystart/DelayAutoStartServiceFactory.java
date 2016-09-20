@@ -1,6 +1,6 @@
 //package com.mapbar.android.obd.rearview.lib.daemon.delaystart;
 //
-//import com.mapbar.android.obd.rearview.lib.base.CustomMadeType;
+//import com.mapbar.android.obd.rearview.lib.config.CustomMadeType;
 //import com.mapbar.android.obd.rearview.modules.common.Constants;
 //
 ///**

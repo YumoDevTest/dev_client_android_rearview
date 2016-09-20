@@ -1,9 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.ota;
 
-import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
-import com.mapbar.obd.SessionInfo;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
 
