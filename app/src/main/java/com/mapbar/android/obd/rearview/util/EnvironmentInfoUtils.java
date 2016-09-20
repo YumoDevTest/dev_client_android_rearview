@@ -12,50 +12,75 @@ import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
+import com.mapbar.obd.foundation.log.LogUtil;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
+ * 环境信息 打印
  * Created by Administrator on 2016/9/20 0020.
  */
-public class EnvironmentMsgUtils {
-    public static LinkedHashMap<String, String> environmentMsgMap;
-    private static Activity context;
+public class EnvironmentInfoUtils {
+    private static final String TAG = "EnvironmentInfoUtils";
 
-    public static LinkedHashMap<String, String> getBasicMsg(Activity activity){
-        context = activity;
-        if(environmentMsgMap == null){
-            environmentMsgMap = new LinkedHashMap<String, String>();
-        }
-        putScreenMsg();
-        putMemoryMsg();
-        putExternalMemoryMsg();
-        putReaviewMsg();
-        putAndroidMsg();
-        putAppMsg();
+    /**
+     * 获得基本信息
+     *
+     * @param context
+     * @return
+     */
+    public static HashMap<String, String> getBasicMsg(Activity context) {
+        if (context == null)
+            throw new NullPointerException();
+        HashMap<String, String> environmentMsgMap = new LinkedHashMap<>();
+        putScreenMsg(environmentMsgMap, context);
+        putMemoryMsg(environmentMsgMap, context);
+        putExternalMemoryMsg(environmentMsgMap, context);
+        putReaviewMsg(environmentMsgMap, context);
+        putAndroidMsg(environmentMsgMap, context);
+        putAppMsg(environmentMsgMap, context);
         return environmentMsgMap;
+    }
+
+    /**
+     * 打印
+     */
+    public static void print(Activity context) {
+        if (context == null)
+            throw new NullPointerException();
+        HashMap<String, String> basicMsg = getBasicMsg(context);
+        Set<String> keys = basicMsg.keySet();
+        LogUtil.d(TAG, "##############################");
+        for (String key : keys) {
+            LogUtil.d(TAG, String.format("## %s: %s", key, basicMsg.get(key)));
+        }
+        LogUtil.d(TAG, "##############################");
     }
 
     /**
      * 获取屏幕分辨率和密度
      */
-    public static void putScreenMsg(){
+    private static void putScreenMsg(HashMap<String, String> environmentMsgMap, Activity context) {
         DisplayMetrics dm = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         int dpi = dm.densityDpi;
-        environmentMsgMap.put("宽:", width + "");
-        environmentMsgMap.put("高:", height + "");
-        environmentMsgMap.put("DPI:", dpi + "");
+        environmentMsgMap.put("屏幕宽度", width + "");
+        environmentMsgMap.put("屏幕高度", height + "");
+        environmentMsgMap.put("屏幕DPI", dpi + "");
+        environmentMsgMap.put("屏幕密度", dm.density + "");
     }
 
     /**
      * 获取运行内存情况
      */
-    public static void putMemoryMsg(){
+    private static void putMemoryMsg(HashMap<String, String> environmentMsgMap, Activity context) {
         //获取总运行内存
         // /proc/meminfo读出的内核信息进行解释
         String path = "/proc/meminfo";
@@ -85,59 +110,63 @@ public class EnvironmentMsgUtils {
         // 截取字符串信息
         content = content.substring(begin + 1, end).trim();
         long totalMem = Long.parseLong(content) * 1024;
-        environmentMsgMap.put("内存总大小:", Formatter.formatFileSize(context,totalMem));
+        environmentMsgMap.put("内存总大小", Formatter.formatFileSize(context, totalMem));
 
         //获取可用内存
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
-        environmentMsgMap.put("内存可用大小:", Formatter.formatFileSize(context,memoryInfo.availMem));
+        environmentMsgMap.put("内存可用大小", Formatter.formatFileSize(context, memoryInfo.availMem));
     }
+
     /**
      * 获取储存情况
      */
-    public static void putExternalMemoryMsg(){
+    private static void putExternalMemoryMsg(HashMap<String, String> environmentMsgMap, Activity context) {
         File path = Environment.getExternalStorageDirectory(); //获取SDCard根目录
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long totalBlocks = stat.getBlockCount();
         long availableBlocks = stat.getAvailableBlocks();
-        environmentMsgMap.put("储存总大小:", Formatter.formatFileSize(context,totalBlocks * blockSize));
-        environmentMsgMap.put("储存可用大小:", Formatter.formatFileSize(context,availableBlocks * blockSize));
+        environmentMsgMap.put("储存总大小", Formatter.formatFileSize(context, totalBlocks * blockSize));
+        environmentMsgMap.put("储存可用大小", Formatter.formatFileSize(context, availableBlocks * blockSize));
     }
+
     /**
      * 获取固件信息
      */
-    public static void putReaviewMsg(){
-        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+    private static void putReaviewMsg(HashMap<String, String> environmentMsgMap, Activity context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String imei = telephonyManager.getDeviceId();
-        environmentMsgMap.put("IMEI:", imei);
+        environmentMsgMap.put("手机IMEI", imei);
 
         //获取手机型号
         String model = Build.MODEL;
-        environmentMsgMap.put("型号:", model);
+        environmentMsgMap.put("手机型号", model);
         //获取手机品牌
         String brand = Build.BRAND;
-        environmentMsgMap.put("品牌:", brand);
+        environmentMsgMap.put("手机品牌", brand);
     }
+
     /**
      * 获取Android信息
      */
-    public static void putAndroidMsg(){
+    private static void putAndroidMsg(HashMap<String, String> environmentMsgMap, Activity context) {
         String release = Build.VERSION.RELEASE;
-        environmentMsgMap.put("Android版本:", release);
+        environmentMsgMap.put("Android系统版本", release);
     }
+
     /**
      * 获取app信息
      */
-    public static void putAppMsg(){
+    private static void putAppMsg(HashMap<String, String> environmentMsgMap, Activity context) {
         PackageManager packageManager = context.getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo("com.mapbar.android.obd.rearview", 0);
             int versionCode = packageInfo.versionCode;
             String versionName = packageInfo.versionName;
-            environmentMsgMap.put("App版本号:", versionCode + "");
-            environmentMsgMap.put("App版本名称:", versionName);
+            environmentMsgMap.put("当前App版本号", versionCode + "");
+            environmentMsgMap.put("当前App版本名称", versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
