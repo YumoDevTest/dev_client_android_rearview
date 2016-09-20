@@ -16,7 +16,7 @@ public class VoiceControlDemoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.voice_control_demo_activity);
         timer = new Timer();
     }
     public void startExamination(View view){
