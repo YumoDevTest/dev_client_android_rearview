@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.util.EnvironmentMsgUtils;
 import com.mapbar.obd.foundation.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
 import com.mapbar.android.obd.rearview.util.FactoryTest;
@@ -27,7 +28,9 @@ import com.ta.utdid2.android.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,9 +60,8 @@ public class LauncherActivity extends MyBaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare);
-
+        printBaiscMsg();
         TraceUtil.start();
-
         stopBackgroundService();
         sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
@@ -71,6 +73,15 @@ public class LauncherActivity extends MyBaseActivity implements View.OnClickList
 
         mHandler = new MyHandler(this);
         initView();
+    }
+
+    private void printBaiscMsg() {
+        LinkedHashMap<String, String> basicMsg = EnvironmentMsgUtils.getBasicMsg(this);
+        Set<String> keys = basicMsg.keySet();
+        for (String key :
+                keys) {
+            Log.e(TAG, key + basicMsg.get(key));
+        }
     }
 
 
