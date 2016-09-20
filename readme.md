@@ -2,6 +2,11 @@
 
 
 =============================
+配置sdk源代码路径
+在 local.properties 文件里添加：
+obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
+
+=============================
 
 模拟器VIN：     1A1JC5444R7252367
 张磊给的VIN:    1A1JC5444R7252367

@@ -90,9 +90,6 @@ android {
             res.srcDirs = ['src/main/res']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
-//            java.srcDirs = ['src']
-            if (rootProject.hasProperty('obd_sdk_source_dir') && rootProject.ext.obd_sdk_source_dir)
-                java.srcDirs += [rootProject.ext.obd_sdk_source_dir]
         }
 
         // Move the tests to tests/java, tests/res, etc...
