@@ -52,8 +52,8 @@ public class CarStatusBeanConvert {
         bean.is_on_left_front_door = parseBoolean(data.doorsdetail, 12);//是否打开 左前门
         bean.is_support_right_front_door = parseBoolean(data.doorsdetail, 9);//是否支持 右前开关状态
         bean.is_on_righ_front_door = parseBoolean(data.doorsdetail, 8);//是否打开 右前门
-        bean.is_support_left_back_door = parseBoolean(data.doorsdetail, 4);//是否支持 左后门开关状态
-        bean.is_on_left_back_door = parseBoolean(data.doorsdetail, 5);//是否打开 左后门
+        bean.is_support_left_back_door = parseBoolean(data.doorsdetail, 5);//是否支持 左后门开关状态
+        bean.is_on_left_back_door = parseBoolean(data.doorsdetail, 4);//是否打开 左后门
         bean.is_support_right_back_door = parseBoolean(data.doorsdetail, 1);//是否支持 右后门开关状态
         bean.is_on_right_back_door = parseBoolean(data.doorsdetail, 0);//是否打开 右后门
 
