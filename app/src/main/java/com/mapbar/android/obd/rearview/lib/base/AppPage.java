@@ -7,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
 import com.mapbar.obd.foundation.mvp.IMvpView;
 
 
 public abstract class AppPage extends TitlebarFragment implements IMvpView {
-    private static final String TAG = MyBaseActivity.class.getSimpleName();
+    private static final String TAG = AppPage.class.getSimpleName();
     protected View contentView;
     private Bundle data;
     private int contentViewResource;

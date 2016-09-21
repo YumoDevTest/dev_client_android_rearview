@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
 import com.mapbar.android.obd.rearview.modules.ota.contract.IOtaAlertView;
 
 /**
  * 刷新固件 的视图
  * Created by zhangyunfei on 16/8/27.
  */
-public class OtaAlertActivity extends MyBaseActivity implements IOtaAlertView {
+public class OtaAlertActivity extends SimpleActivity implements IOtaAlertView {
     private ViewGroup container1;
 
     private OtaAlertUpgradeView otaAlertUpgradeView;

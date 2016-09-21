@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
 import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 
 /**
+ * 接触类
  * Created by zhangyunfei on 16/7/26.
  */
-public class MyBaseFragment extends Fragment {
-    private static final String TAG = MyBaseActivity.class.getSimpleName();
+public class BaseFragment extends Fragment {
+    private static final String TAG = BaseFragmentActivity.class.getSimpleName();
     private String ThisClassName;
 
     public void alert(final String msg) {

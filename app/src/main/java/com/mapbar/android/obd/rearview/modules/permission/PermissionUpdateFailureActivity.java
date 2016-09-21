@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
 import com.mapbar.android.obd.rearview.modules.push.events.PermissionBuyEvent;
-import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
+import com.mapbar.obd.foundation.log.LogUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -22,7 +22,7 @@ import java.util.List;
  * 权限失败dialog
  * Created by zhangyunfei on 16/8/4.
  */
-public class PermissionUpdateFailureActivity extends MyBaseActivity {
+public class PermissionUpdateFailureActivity extends SimpleActivity {
     public static final String TAG = PermissionUpdateFailureActivity.class.getSimpleName();
 
     private View contentView;

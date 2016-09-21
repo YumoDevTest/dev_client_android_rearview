@@ -12,12 +12,12 @@ import com.mapbar.obd.foundation.mvp.IMvpView;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 
 /**
- * Activity 基础类
+ * Activity 基础类 FragmentActivity
  * Created by zhangyunfei on 16/7/26.
  */
-public class MyBaseActivity extends FragmentActivity implements IMvpView {
-    private static final String TAG = MyBaseActivity.class.getSimpleName();
-    private static String ThisClassName;
+public class BaseFragmentActivity extends FragmentActivity implements IMvpView {
+    private static final String TAG = BaseFragmentActivity.class.getSimpleName();
+    private String ThisClassName;
 
     public void alert(final String msg) {
         if (isFinishing()) return;

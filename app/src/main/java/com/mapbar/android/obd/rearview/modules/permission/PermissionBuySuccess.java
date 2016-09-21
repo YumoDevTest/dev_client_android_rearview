@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
+import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
 
 /**
  * 购买成功
  * Created by zhangyunfei on 16/8/25.
  */
-public class PermissionBuySuccess extends MyBaseActivity {
+public class PermissionBuySuccess extends SimpleActivity {
     View btn_start;
 
     @Override

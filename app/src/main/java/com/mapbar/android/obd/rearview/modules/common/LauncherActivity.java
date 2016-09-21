@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
+import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
 import com.mapbar.android.obd.rearview.util.EnvironmentInfoUtils;
 import com.mapbar.android.obd.rearview.util.FactoryTest;
@@ -20,7 +22,6 @@ import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.SerialPortConnection;
 import com.mapbar.obd.serial.comond.impl.SerialPortConnectionCreator;
@@ -32,10 +33,14 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LauncherActivity extends MyBaseActivity implements View.OnClickListener {
+
+/**
+ * 启动页
+ */
+public class LauncherActivity extends SimpleActivity implements View.OnClickListener {
+    public static final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     public static final int MSG_SHOW_SPEED = 1;
     public static final int MSG_APPEND_TEXT = 2;
-    public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     private final int DEFAULT_CLICK_NUM = 5;
     private final String TAG = LauncherActivity.class.getSimpleName();
     private final SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
