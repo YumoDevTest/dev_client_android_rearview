@@ -17,7 +17,6 @@ public class SettingActivity extends TitlebarActivity {
 
         if (savedInstanceState == null)
             showFragment(new SettingFragment(), false);
-        LayoutUtils_ui.proportional();
         getTitlebarview().setEnableBackButton(true);
     }
 

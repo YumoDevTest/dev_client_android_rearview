@@ -48,7 +48,6 @@ public class ChangePhoneActivity extends TitlebarActivity {
         if (savedInstanceState == null) {
             showPage_barcode();
             //ui调整
-            LayoutUtils_ui.proportional();
             //启动UserCenterManager事件接收
             UserCenterManager.getInstance().sdkListener.setActive(true);
             //停止采集线程

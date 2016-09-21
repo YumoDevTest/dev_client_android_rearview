@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.obd.foundation.base.MyBaseFragment;
+import com.mapbar.obd.foundation.base.BaseFragment;
 import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.util.QRUtils;
 import com.mapbar.android.obd.rearview.modules.push.ixintui.AixintuiConfigs;
@@ -22,7 +22,7 @@ import com.mapbar.obd.UserCenter;
  * 更改手机号 - 扫码页
  * Created by zhangyunfei on 16/7/26.
  */
-public class ChangePhoneFragment extends MyBaseFragment {
+public class ChangePhoneFragment extends BaseFragment {
     private View rootView;
     private ImageView imagevie1;
 

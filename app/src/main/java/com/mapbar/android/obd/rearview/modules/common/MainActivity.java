@@ -23,15 +23,14 @@ import android.widget.Toast;
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
 import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
-import com.mapbar.obd.foundation.base.MyBaseActivity;
 import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.lib.services.UpdateService;
 import com.mapbar.android.obd.rearview.model.QRInfo;
 import com.mapbar.android.obd.rearview.util.LayoutUtils;
-import com.mapbar.android.obd.rearview.util.LayoutUtils_ui;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.util.StringUtil;
 import com.mapbar.android.obd.rearview.util.Utils;
@@ -66,8 +65,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
-public class MainActivity extends MyBaseActivity {
+/**
+ * 首页
+ */
+public class MainActivity extends TitlebarActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int VIEW_CONTAINER_ID = R.id.content_view;
     private RelativeLayout contentView;
@@ -82,7 +83,6 @@ public class MainActivity extends MyBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
 
@@ -94,7 +94,6 @@ public class MainActivity extends MyBaseActivity {
         //停止后台服务
         stopBackgroundService();
 
-        LayoutUtils_ui.proportional();
         LogManager.getInstance().init(MainActivity.this);
         initLogFile();
 

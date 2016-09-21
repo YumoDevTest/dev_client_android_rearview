@@ -13,7 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
-import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+
 import com.mapbar.obd.foundation.log.LogUtil;
 
 /**
@@ -21,17 +21,17 @@ import com.mapbar.obd.foundation.log.LogUtil;
  */
 public class LayoutUtils_ui {
 
-    public static final int CENTER = 0;
-    public static final int CENTER_VERTICAL = 2;
-    public static final int CENTER_HORIZONTAL = 1;
+    private static final int CENTER = 0;
+    private static final int CENTER_VERTICAL = 2;
+    private static final int CENTER_HORIZONTAL = 1;
 
-    public static final int WIDTH = 0;
-    public static final int HEIGHT = 1;
+    private static final int WIDTH = 0;
+    private static final int HEIGHT = 1;
 
     /**
      * 横屏补充用 FLAG
      */
-    public static final int ITEM_TYPE_LANDSCAPE_FLAG = 1;
+    private static final int ITEM_TYPE_LANDSCAPE_FLAG = 1;
 
     /**
      * 屏幕宽度所对应的dp个数
@@ -53,19 +53,20 @@ public class LayoutUtils_ui {
      * 也就是说 36dp 将含义将变为屏幕宽度的三百六十分之三十六，也就是十分之一<br>
      * UI 线程限定
      */
-    public static void proportional() {
-
-        float currentEnvironmentDensity = MyApplication.getInstance().getResources().getDisplayMetrics().density;// 当前环境密度
-        LogUtil.d("proportional", MyApplication.getInstance().getResources().getDisplayMetrics().toString());
+    public static void proportional(Activity activity) {
+        if (activity == null)
+            throw new NullPointerException();
+        float currentEnvironmentDensity = activity.getResources().getDisplayMetrics().density;// 当前环境密度
+        LogUtil.d("proportional", activity.getResources().getDisplayMetrics().toString());
         if (adjustedDensity == currentEnvironmentDensity) {// 如果已经正确
             return;
         }
 
-        int width = getScreenWH()[WIDTH];
+        int width = getScreenWH(activity)[WIDTH];
 
         width = correctWidth(width, currentEnvironmentDensity);// 纠正宽度（未来觉得不合适时再考虑使用）
 
-        changeDensity(width / WIDTH_DP_COUNT);
+        changeDensity(activity, width / WIDTH_DP_COUNT);
     }
 
     /**
@@ -97,9 +98,9 @@ public class LayoutUtils_ui {
      *
      * @param density 目标密度
      */
-    private static void changeDensity(float density) {
+    private static void changeDensity(Activity activity, float density) {
 
-        DisplayMetrics displayMetrics = MyApplication.getInstance().getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
 
         if (density == displayMetrics.density) {// 如果已经正确
             adjustedDensity = density;
@@ -122,7 +123,7 @@ public class LayoutUtils_ui {
      * @param isLandscape    是否横屏
      * @return 含横竖屏信息的 item type
      */
-    public static int landPortItemType(int sourceItemType, boolean isLandscape) {
+    private static int landPortItemType(int sourceItemType, boolean isLandscape) {
         int landPortType = sourceItemType << 1;
         if (isLandscape) {
             landPortType |= ITEM_TYPE_LANDSCAPE_FLAG;
@@ -138,20 +139,20 @@ public class LayoutUtils_ui {
      * @param landPortItemType 含横竖屏信息的 item type
      * @return 原 item type
      */
-    public static int sourceItemType(int landPortItemType) {
+    private static int sourceItemType(int landPortItemType) {
         int sourceType = landPortItemType >> 1;
         return sourceType;
     }
 
-    public static int dp2px(float dipValue) {
+    private static int dp2px(Activity activity, float dipValue) {
         // INFO 工具/dip转px
-        final float scale = MyApplication.getInstance().getResources().getDisplayMetrics().density;
+        final float scale = activity.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
-    public static int px2dp(float pxValue) {
+    private static int px2dp(Activity activity, float pxValue) {
         // INFO 工具/px转dip
-        final float scale = MyApplication.getInstance().getResources().getDisplayMetrics().density;
+        final float scale = activity.getResources().getDisplayMetrics().density;
 
         return (int) (pxValue / scale + 0.5f);
     }
@@ -162,8 +163,8 @@ public class LayoutUtils_ui {
      * @param pxValue （DisplayMetrics类中属性scaledDensity）
      * @return
      */
-    public static int px2sp(float pxValue) {
-        final float fontScale = MyApplication.getInstance().getResources().getDisplayMetrics().scaledDensity;
+    private static int px2sp(Activity activity, float pxValue) {
+        final float fontScale = activity.getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
@@ -173,8 +174,8 @@ public class LayoutUtils_ui {
      * @param spValue （DisplayMetrics类中属性scaledDensity）
      * @return
      */
-    public static int sp2px(float spValue) {
-        final float fontScale = MyApplication.getInstance().getResources().getDisplayMetrics().scaledDensity;
+    private static int sp2px(Activity activity, float spValue) {
+        final float fontScale = activity.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -183,8 +184,7 @@ public class LayoutUtils_ui {
      *
      * @return 宽总是短的，高总是长的
      */
-    public static synchronized int[] getScreenWH() {
-        Activity context = MyApplication.getInstance().getMainActivity();
+    private static synchronized int[] getScreenWH(Activity context) {
         if (context == null) throw new NullPointerException();
         if (null != wh) {
             return wh;
@@ -244,7 +244,7 @@ public class LayoutUtils_ui {
      *
      * @param centerType 1:水平居中 2:垂直居中 0:全部居中
      */
-    public static Rect getCenter(Rect outer, Rect inner, int centerType) {
+    private static Rect getCenter(Rect outer, Rect inner, int centerType) {
         int w = inner.width();
         int h = inner.height();
         switch (centerType) {
@@ -269,8 +269,8 @@ public class LayoutUtils_ui {
      * @param id
      * @return 像素值
      */
-    public static int getPxByDimens(int id) {
-        return MyApplication.getInstance().getResources().getDimensionPixelSize(id);
+    private static int getPxByDimens(Activity activity, int id) {
+        return activity.getResources().getDimensionPixelSize(id);
     }
 
     /**
@@ -280,7 +280,7 @@ public class LayoutUtils_ui {
      * @param id
      * @return 像素值
      */
-    public static int getPxByDimens(Resources res, int id) {
+    private static int getPxByDimens(Resources res, int id) {
         return res.getDimensionPixelSize(id);
     }
 
@@ -290,8 +290,8 @@ public class LayoutUtils_ui {
      * @param id
      * @return 颜色值
      */
-    public static int getColorById(int id) {
-        return MyApplication.getInstance().getResources().getColor(id);
+    private static int getColorById(Activity activity, int id) {
+        return activity.getResources().getColor(id);
     }
 
     /**
@@ -300,7 +300,7 @@ public class LayoutUtils_ui {
      * @param p 文字画笔
      * @return baseline 和 top 之间的距离
      */
-    public static int distanceOfBaselineAndTop(TextPaint p) {
+    private static int distanceOfBaselineAndTop(TextPaint p) {
         Paint.FontMetricsInt fontMetrics = p.getFontMetricsInt();
         return -fontMetrics.ascent;
     }
@@ -311,7 +311,7 @@ public class LayoutUtils_ui {
      * @param p 文字画笔
      * @return baseline 和 centerY 之间的距离
      */
-    public static int distanceOfBaselineAndCenterY(TextPaint p) {
+    private static int distanceOfBaselineAndCenterY(TextPaint p) {
         Paint.FontMetricsInt fontMetrics = p.getFontMetricsInt();
         return (fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.descent;
     }
@@ -322,7 +322,7 @@ public class LayoutUtils_ui {
      * @param p 文字画笔
      * @return baseline 和 bottom 之间的距离
      */
-    public static int distanceOfBaselineAndBottom(TextPaint p) {
+    private static int distanceOfBaselineAndBottom(TextPaint p) {
         Paint.FontMetricsInt fontMetrics = p.getFontMetricsInt();
         return fontMetrics.descent;
     }
@@ -331,7 +331,7 @@ public class LayoutUtils_ui {
      * @param p 文字画笔
      * @return 文字高度
      */
-    public static int textHeight(TextPaint p) {
+    private static int textHeight(TextPaint p) {
         Paint.FontMetricsInt fontMetrics = p.getFontMetricsInt();
         return fontMetrics.descent - fontMetrics.ascent;
     }
@@ -341,8 +341,8 @@ public class LayoutUtils_ui {
      *
      * @return
      */
-    public static boolean isLandscape() {
-        return MyApplication.getInstance().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    private static boolean isLandscape(Activity activity) {
+        return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -351,7 +351,7 @@ public class LayoutUtils_ui {
      * @param context
      * @return
      */
-    public static int getLandscapeAnnotationWdith(Context context) {
+    private static int getLandscapeAnnotationWdith(Context context) {
         return (int) (context.getResources().getDisplayMetrics().widthPixels * 0.46);
     }
 
@@ -360,7 +360,7 @@ public class LayoutUtils_ui {
      *
      * @param isFull
      */
-    public static void setFullScreen(Activity activity, boolean isFull) {
+    private static void setFullScreen(Activity activity, boolean isFull) {
         Window window = activity.getWindow();
         if (isFull) {
             WindowManager.LayoutParams lp = window.getAttributes();

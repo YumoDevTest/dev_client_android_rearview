@@ -18,7 +18,6 @@ public class ChangeVINActivity extends TitlebarActivity {
         super.onCreate(savedInstanceState);
         changeVinBarcodeFragment = new ChangeVinBarcodeFragment();
         showPage_barcode();
-        LayoutUtils_ui.proportional();
     }
 
     @Override

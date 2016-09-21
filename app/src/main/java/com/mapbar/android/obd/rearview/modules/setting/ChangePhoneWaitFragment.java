@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.obd.foundation.base.MyBaseFragment;
+import com.mapbar.obd.foundation.base.BaseFragment;
 
 /**
  * 更改手机号 - 扫码完成后 - 扫码成功，等待填写
  * Created by zhangyunfei on 16/7/26.
  */
-public class ChangePhoneWaitFragment extends MyBaseFragment {
+public class ChangePhoneWaitFragment extends BaseFragment {
     private View rootView;
 
     @Nullable

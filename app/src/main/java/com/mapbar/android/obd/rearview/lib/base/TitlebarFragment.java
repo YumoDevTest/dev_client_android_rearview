@@ -2,15 +2,16 @@ package com.mapbar.android.obd.rearview.lib.base;
 
 import android.app.Activity;
 
-import com.mapbar.obd.foundation.base.MyBaseFragment;
+import com.mapbar.obd.foundation.base.BaseFragment;
 import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.lang.ref.WeakReference;
 
 /**
+ * 具有 titlebar 的 fragment
  * Created by zhangyunfei on 16/9/20.
  */
-public class TitlebarFragment extends MyBaseFragment {
+public class TitlebarFragment extends BaseFragment {
     private static final String TAG = TitlebarFragment.class.getSimpleName();
     private WeakReference<TitlebarActivity> activityWeakReference;
 
