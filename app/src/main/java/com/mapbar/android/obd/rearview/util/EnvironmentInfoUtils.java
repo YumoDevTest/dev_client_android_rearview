@@ -12,6 +12,8 @@ import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
+import com.mapbar.android.obd.rearview.BuildConfig;
+import com.mapbar.android.obd.rearview.lib.config.Urls;
 import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.io.BufferedReader;
@@ -44,6 +46,8 @@ public class EnvironmentInfoUtils {
         putReaviewMsg(environmentMsgMap, context);
         putAndroidMsg(environmentMsgMap, context);
         putAppMsg(environmentMsgMap, context);
+        putDebugMsg(environmentMsgMap, context);
+        putUrlsMsg(environmentMsgMap, context);
         return environmentMsgMap;
     }
 
@@ -171,4 +175,27 @@ public class EnvironmentInfoUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 获取gradle中debug配置参数
+     */
+    private static void putDebugMsg(HashMap<String, String> environmentMsgMap, Activity context) {
+        environmentMsgMap.put("串口号", BuildConfig.SERIALPORT_PATH);
+        environmentMsgMap.put("是否伪造IMEI", BuildConfig.IS_FAKE_IMEI + "");
+        environmentMsgMap.put("伪造的IMEI", BuildConfig.FAKE_IMEI);
+        environmentMsgMap.put("是否开启权限管理", BuildConfig.IS_ENABLE_PERMISSION + "");
+        environmentMsgMap.put("是否开启首页提示", BuildConfig.IS_ENABLE_ALERM_ON_MAIN_PAGE + "");
+        environmentMsgMap.put("是否开启模拟控制页", BuildConfig.IS_ENABLE_TEST_CAR_DEMO + "");
+        environmentMsgMap.put("是否使用内网", BuildConfig.IS_USE_TEST_HOST + "");
+    }
+
+    /**
+     * 获取URL信息
+     */
+    private static void putUrlsMsg(HashMap<String, String> environmentMsgMap, Activity context) {
+        environmentMsgMap.put("权限接口地址", Urls.PERMISSION_BASE_URL);
+        environmentMsgMap.put("微信服务地址", Urls.WEIXIN_BASE_URL);
+        environmentMsgMap.put("OTA基础地址", Urls.OTA_BASE_URL);
+    }
+
 }

@@ -25,6 +25,7 @@ import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.SerialPortConnection;
 import com.mapbar.obd.serial.comond.impl.SerialPortConnectionCreator;
 import com.ta.utdid2.android.utils.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -32,13 +33,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LauncherActivity extends MyBaseActivity implements View.OnClickListener {
-    public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     public static final int MSG_SHOW_SPEED = 1;
     public static final int MSG_APPEND_TEXT = 2;
+    public final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     private final int DEFAULT_CLICK_NUM = 5;
     private final String TAG = LauncherActivity.class.getSimpleName();
-    private long firstTime = 0;
     private final SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+    private long firstTime = 0;
     /**
      * 点击次数
      */
@@ -51,6 +52,8 @@ public class LauncherActivity extends MyBaseActivity implements View.OnClickList
     private Timer timer;
     private RelativeLayout rl_declare_containt;
     private TextView tv_declare_test;
+
+
     private Handler mHandler;
 
     @Override
