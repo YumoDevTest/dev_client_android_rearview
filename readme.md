@@ -2,16 +2,35 @@
 
 
 =============================
-配置sdk源代码路径
-在 local.properties 文件里添加：
-obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
+##类库module描述
+
+    应用级别
+        app         应用。从这里启动。
+        foundation  App基础组件库，包括： activity基类，友盟，eventbus,mvp页面框架，tts等
+    
+    开发包
+        obddevelopkit   在sdk组提供的5个jar包之上的扩展。增加了ota相关功能。依赖 loglibrary，oknet
+    
+    类库级别
+        oknet       网络访问库，依赖okhttp,gson,logLibrary等
+        oknetpb     PB协议的网络访问库，依赖 oknet，logLibrary等
+        loglibrary  日志操作类，日志打印操作
+      
+
+=============================
+##配置sdk源代码路径
+    
+    在 local.properties 文件里添加：
+    obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
 
 =============================
 
-模拟器VIN：     1A1JC5444R7252367
-张磊给的VIN:    1A1JC5444R7252367
+    模拟器VIN：     1A1JC5444R7252367
+    张磊给的VIN:    1A1JC5444R7252367
 
 =============================
+#session
+
 在自定义的Application 中定义一个 session，概念如下：
 
     构建一个session，即会话，该 session有以下特点：
@@ -23,15 +42,14 @@ obd.sdk.source.dir=/Users/zhangyunfei/git/dev_sdk/java/core
 
 =============================
 #模块划分
-
-*车辆体检
-*车辆信息
-*车辆状态
-*保养
-*设置
-    更改vin
-    更改手机号
-    关于
+    * 车辆体检
+    * 车辆信息
+    * 车辆状态
+    * 保养
+    * 设置
+    * 更改vin
+    * 更改手机号
+    #关于
 
 =====================================
 #引用或依赖
@@ -69,17 +87,15 @@ http://weixin.mapbar.com/obd/userRegister?imei=77726%%fsdffsdfssdfsdfsdfsd&pushT
 3. 固件会启动 booloader.
 4. bootloader的响应不再是普通指令，以回车符结束，本次和后续指令都以回车符结束
 5. 再次发 atboot, 固件在1.5内再次收到 atboot,会进入刷固件模式，第二次响应 nakb，整数15
-
-如果需要验证权限，发  AT@AUTH+密码
-
 6. 多次数据请求和应答。。。 升级过程中有进度事件
 7. 最后，抛出升级成功事件
 8. 升级完成后 重启
 =======
-权限判断注意事项：
-    在app启动后，进行一次判断，需要判断是否具有权限以显示 “使用中，过期 等对话框提醒”，判断逻辑如下：
+##权限判断注意事项：
 
-   收到的权限列表是： 若干个 收费功能，有状态： 试用，免费，付费，根据数量和状态判断如下：
+        在app启动后，进行一次判断，需要判断是否具有权限以显示 “使用中，过期 等对话框提醒”，判断逻辑如下：
+
+        收到的权限列表是： 若干个 收费功能，有状态： 试用，免费，付费，根据数量和状态判断如下：
         1.如果一个都没有，则认为 都过期，这是 弹窗显示 无使用权限
         2.只要有一个 是 购买的，则认为，已买过，这时 不弹窗。
         3.遍历集合， 只要有一个处于 试用，则取第一个 剩余天数， 弹窗提示 试用是剩余多少天，继续试用

@@ -1,20 +1,31 @@
 package com.mapbar.android.obd.rearview.lib.config;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.ixintui.pushsdk.PushSdkApi;
+import com.mapbar.android.obd.rearview.lib.net.DefalutHttpExceptionHandler;
+import com.mapbar.android.obd.rearview.lib.net.MyRequestIntercepter;
+import com.mapbar.android.obd.rearview.lib.tts.ObdSdkTextToSpeechPlayer;
 import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.lib.services.ServicManager;
 import com.mapbar.android.obd.rearview.modules.push.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.services.RestartService;
 import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.Session;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.net.HttpUtil;
+import com.mapbar.obd.foundation.net.MyHttpContext;
+import com.mapbar.obd.foundation.net.RequestIntercepter;
+import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.util.MyCrashLoger;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.UserCenter;
+import com.squareup.okhttp.Headers;
+
+import java.util.HashMap;
 
 
 /**
@@ -49,7 +60,14 @@ public class MyApplication extends android.app.Application {
         android.util.Log.d(TAG, "## [application] 启动");
         CustomMadeType.printLog();
 
+        //设置http失败时的默认处理器
+        MyHttpContext.setDefaultExceptionHandler(new DefalutHttpExceptionHandler());
+        MyHttpContext.setRequestIntercepter(new MyRequestIntercepter());
+        //设置串口
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
+        //配置语音播放者
+        TextToSpeechManager.setTextToSpeechPlayer(new ObdSdkTextToSpeechPlayer());
+
         Manager.onApplicationonCreate(this);
         //配置umeng统计分析
         MobclickAgentEx.onStart();

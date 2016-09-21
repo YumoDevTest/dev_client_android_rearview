@@ -3,11 +3,11 @@ package com.mapbar.android.obd.rearview.modules.carstate;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.mapbar.obd.developkit.ota.CheckVersionBean;
+import com.mapbar.obd.developkit.ota.FirmwareVersionChecker;
+import com.mapbar.obd.developkit.vin.VinManager;
 import com.mapbar.obd.foundation.eventbus.EventBusManager;
 import com.mapbar.obd.foundation.mvp.BasePresenter;
-import com.mapbar.android.obd.rearview.lib.ota.CheckVersionBean;
-import com.mapbar.android.obd.rearview.lib.ota.FirmwareVersionChecker;
-import com.mapbar.android.obd.rearview.modules.vin.VinManager;
 import com.mapbar.android.obd.rearview.modules.push.events.VinChangeFailureEvent;
 import com.mapbar.android.obd.rearview.modules.push.events.VinChangeSucccessEvent;
 import com.mapbar.android.obd.rearview.modules.push.events.VinScanEvent;
@@ -125,7 +125,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     public void onEvent(VinChangeSucccessEvent event) {
         Manager.getInstance().queryRemoteUserCar();
         beginCheckFirmwareVersion();
-//        getView().alert("VIN修改成功");
+        //        getView().alert("VIN修改成功");
         if (vinChangeView != null) vinChangeView.hideVinInputDialog();
     }
 
@@ -158,32 +158,37 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     public void beginCheckFirmwareVersion() {
         LogUtil.d("OTA", "## 准备检查固件版本");
         //发送请求，检查版本，如果有新版本则默默下载，并通知 。如果已下载过，则通知
-        firmwareVersionChecker.checkVersion(new FirmwareVersionChecker.VersionCheckCallback() {
-            @Override
-            public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
-                LogUtil.d(TAG, "## 页面跳转：发现新的固件版本");
-                Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
-                intent.putExtra("firewware_bin_file", binFile.getPath());
-                intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
-                getView().getContext().startActivity(intent);
+        try {
+            firmwareVersionChecker.checkVersion(getView().getContext(), new FirmwareVersionChecker.VersionCheckCallback() {
+                @Override
+                public void onFoundNewVersion(File binFile, CheckVersionBean versionBean) {
+                    LogUtil.d(TAG, "## 页面跳转：发现新的固件版本");
+                    Intent intent = new Intent(getView().getContext(), OtaAlertActivity.class);
+                    intent.putExtra("firewware_bin_file", binFile.getPath());
+                    intent.putExtra("is_fouce_upgreade", versionBean.bin_must_update == 1);
+                    getView().getContext().startActivity(intent);
 
-                hasCheckedVersion = true;
-                hasNewVersionLastCheck = true;
-                showOtaAlertText();
-            }
+                    hasCheckedVersion = true;
+                    hasNewVersionLastCheck = true;
+                    showOtaAlertText();
+                }
 
-            @Override
-            public void noNothing() {
-                hasCheckedVersion = true;
-                hasNewVersionLastCheck = false;
-            }
+                @Override
+                public void noNothing() {
+                    hasCheckedVersion = true;
+                    hasNewVersionLastCheck = false;
+                }
 
-            @Override
-            public void onError(Exception e) {
-                getView().alert(e.getMessage());
-                hasNewVersionLastCheck = false;
-            }
-        });
+                @Override
+                public void onError(Exception e) {
+                    getView().alert(e.getMessage());
+                    hasNewVersionLastCheck = false;
+                }
+            });
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            getView().alert(e.getMessage());
+        }
     }
 
 }

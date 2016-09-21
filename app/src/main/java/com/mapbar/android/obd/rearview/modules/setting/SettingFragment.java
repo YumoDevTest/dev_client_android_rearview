@@ -14,7 +14,7 @@ import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.TitlebarFragment;
-import com.mapbar.android.obd.rearview.modules.vin.VinManager;
+import com.mapbar.obd.developkit.vin.VinManager;
 
 import java.util.ArrayList;
 import java.util.List;

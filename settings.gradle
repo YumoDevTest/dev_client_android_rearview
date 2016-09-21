@@ -1,1 +1,2 @@
-include ':app', ':demo', ':foundation'
+include ':app', ':demo', ':foundation', ':oknet', ':oknetpb', ':obddevelopkit'
+include ':loglibrary'

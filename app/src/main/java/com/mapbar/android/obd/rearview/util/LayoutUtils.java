@@ -30,6 +30,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.views.ProgressView;
 import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -371,7 +372,8 @@ public class LayoutUtils {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("bitmap is NULL !");
+            LogUtil.d("LyoutUtils","bitmap is NULL !");
+
 
         }
     }

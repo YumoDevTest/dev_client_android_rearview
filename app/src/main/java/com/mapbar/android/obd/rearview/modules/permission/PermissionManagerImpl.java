@@ -8,15 +8,15 @@ import com.google.protobuf.ByteString;
 import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.modules.permission.model.PermissionStatus;
 import com.mapbar.obd.foundation.eventbus.EventBusManager;
-import com.mapbar.obd.foundation.net.HttpPBCallback;
-import com.mapbar.obd.foundation.net.PBErrorCode;
-import com.mapbar.obd.foundation.net.HttpPBUtil;
 import com.mapbar.android.obd.rearview.modules.push.events.PermissionChangedEvent;
 import com.mapbar.android.obd.rearview.modules.permission.repo.PermissionRepository;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.android.obd.rearview.lib.config.Urls;
 import com.mapbar.box.protobuf.bean.ObdRightBean;
+import com.mapbar.obd.foundation.oknetpb.HttpPBCallback;
+import com.mapbar.obd.foundation.oknetpb.HttpPBUtil;
+import com.mapbar.obd.foundation.oknetpb.PBErrorCode;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

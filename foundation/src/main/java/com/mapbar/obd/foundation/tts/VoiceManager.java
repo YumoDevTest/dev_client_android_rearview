@@ -2,8 +2,6 @@ package com.mapbar.obd.foundation.tts;
 
 import android.content.Context;
 
-import com.mapbar.obd.Manager;
-
 /**
  * 文本转语音TTS功能
  */
@@ -34,20 +32,6 @@ public class VoiceManager {
      */
 
     public void sendBroadcastTTS(Context context, String msg) {
-//        Intent mIntent = new Intent(ACTION_TTS);
-//        String[] result = new String[2];
-//        result[0] = "navigate";
-//        result[1] = msg;
-//        mIntent.putExtra("param", result);
-//        MainActivity.getInstance().sendBroadcast(mIntent);
-        Manager.getInstance().speak(msg);
-    }
-
-
-    /***
-     * 单例持有类
-     */
-    public static class VoiceManagerHolder {
-        public static VoiceManager voiceManager = getInstance();
+        TextToSpeechManager.speak(context, msg);
     }
 }

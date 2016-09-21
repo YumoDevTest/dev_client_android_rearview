@@ -268,6 +268,7 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
             case R.id.tv_ota_alert_text://提示有固件升级
                 if (tv_ota_alert_text.getText().toString().equals(getString(R.string.firmware_can_upgrade))) {
                     persenter.beginCheckFirmwareVersion();
+
                 } else if (Configs.TEST_SERIALPORT) {
                     MyApplication.getInstance().restartApplication();
                 }
