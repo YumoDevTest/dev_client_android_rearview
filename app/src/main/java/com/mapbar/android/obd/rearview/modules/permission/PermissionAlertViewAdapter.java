@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
 
 import java.lang.ref.WeakReference;
@@ -15,15 +15,15 @@ import java.lang.ref.WeakReference;
  */
 public class PermissionAlertViewAdapter implements IPermissionAlertViewAdatper {
     private PermissionAlertView permissionAlertView;
-    private WeakReference<AppPage> fragmentWeakReference;
+    private WeakReference<AppPage2> fragmentWeakReference;
 
-    public AppPage getFragment() {
+    public AppPage2 getFragment() {
         if (fragmentWeakReference == null || fragmentWeakReference.get() == null)
             return null;
         return fragmentWeakReference.get();
     }
 
-    public PermissionAlertViewAdapter(AppPage fragment) {
+    public PermissionAlertViewAdapter(AppPage2 fragment) {
         this.fragmentWeakReference = new WeakReference<>(fragment);
     }
 

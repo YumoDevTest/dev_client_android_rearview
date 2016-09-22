@@ -156,6 +156,8 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
      * 检查固件版本,是否需要更新固件
      */
     public void beginCheckFirmwareVersion() {
+        if (firmwareVersionChecker == null) return;
+        if (getView() == null) return;
         LogUtil.d("OTA", "## 准备检查固件版本");
         //发送请求，检查版本，如果有新版本则默默下载，并通知 。如果已下载过，则通知
         try {

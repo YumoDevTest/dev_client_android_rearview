@@ -21,17 +21,21 @@ public class MyCrashLoger implements UncaughtExceptionHandler {
     private static final String TAG = "MyCrashLoger";
 
     public void uncaughtException(Thread thread1, Throwable exception) {
+        try {
+            com.mapbar.obd.foundation.log.LogUtil.e(TAG, "## uncaughtException: " + exception.getMessage(), (Exception) exception);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //打印异常
         exception.printStackTrace();
         //上报umeng
         MobclickAgentEx.reportError(MyApplication.getInstance(), exception);
         //保存到本地日志
         String str = getExceptionString(exception);
-        android.util.Log.e(TAG, "## uncaughtException: " + str);
-        logException(str);
+        logExceptionToFile(str);
     }
 
-    private static void logException(String var3) {
+    private static void logExceptionToFile(String var3) {
         String fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/mapbar/obd" + "/client_Log_obdserver/";
         File file = new File(fileName);
         if (!file.exists()) {

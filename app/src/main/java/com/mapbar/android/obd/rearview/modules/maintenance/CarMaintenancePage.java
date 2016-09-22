@@ -4,9 +4,11 @@ package com.mapbar.android.obd.rearview.modules.maintenance;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,10 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.util.LayoutUtils;
 import com.mapbar.android.obd.rearview.util.StringUtil;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.views.CircleDrawable;
 import com.mapbar.android.obd.rearview.modules.maintenance.contract.IMaintenanceView;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
@@ -50,58 +51,25 @@ import java.util.Date;
  * 保养 页
  * Created by liuyy on 2016/5/7.
  */
-public class CarMaintenancePage extends AppPage implements View.OnClickListener, IMaintenanceView {
+public class CarMaintenancePage extends AppPage2 implements View.OnClickListener, IMaintenanceView {
 
     UserCar userCar;
-    @ViewInject(R.id.line_upkeep)
     private LinearLayout line_upkeep;
-
-    @ViewInject(R.id.line_upkeep_revise)
     private RelativeLayout line_upkeep_revise;
-
-    @ViewInject(R.id.et_totalMileage)
     private EditText et_totalMileage;
-
-    @ViewInject(R.id.et_lastMaintenanceMileage)
     private EditText et_lastMaintenanceMileage;
-
-    @ViewInject(R.id.et_purchaseDate)
     private TextView et_purchaseDate;
-
-    @ViewInject(R.id.et_lastMaintenanceDate)
     private TextView et_lastMaintenanceDate;
-
-    @ViewInject(R.id.btn_save)
     private Button btn_save;
-
-    @ViewInject(R.id.btn_alreadyUpkeep)
     private Button btn_alreadyUpkeep;
-
-    @ViewInject(R.id.tv_next_mileage)
     private TextView tv_next_mileage;
-
-    @ViewInject(R.id.tv_next_time)
     private TextView tv_next_time;
-
-    @ViewInject(R.id.tv_upkeep_totle_item)
     private TextView tv_upkeep_totle_item;
-
-    @ViewInject(R.id.view_upkeep)
     private ImageView view_upkeep;
-
-    @ViewInject(R.id.view_upkeep_time)
     private ImageView view_upkeep_time;
-
-    @ViewInject(R.id.tv_upkeep_totle_cost)
     private TextView tv_upkeep_totle_cost;
-
-    @ViewInject(R.id.tv)
     private TextView tv;
-
-    @ViewInject(R.id.tv2)
     private TextView tv2;
-
-    @ViewInject(R.id.rl_view)
     private RecyclerView rl_view;
 
     private Calendar mCalendar;
@@ -121,40 +89,37 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
     private MaintenancePresenter presenter;
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
 
+     private OBDSDKListenerManager.SDKListener sdkListener;
 
-    private DatePickerDialog.OnDateSetListener mBuyDateListener = new DatePickerDialog.OnDateSetListener() {
-
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            et_purchaseDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-            DateTime time_buy = new DateTime();
-            time_buy.year = (short) year;
-            time_buy.month = (short) (monthOfYear + 1);
-            time_buy.day = (short) dayOfMonth;
-            userCar.purchaseDate = time_buy;
-        }
-    };
-    private DatePickerDialog.OnDateSetListener mUpKeepDateListener = new DatePickerDialog.OnDateSetListener() {
-
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            et_lastMaintenanceDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-            DateTime time_buy = new DateTime();
-            time_buy.year = (short) year;
-            time_buy.month = (short) (monthOfYear + 1);
-            time_buy.day = (short) dayOfMonth;
-            userCar.lastMaintenanceDate = time_buy;
-
-        }
-    };
-    private OBDSDKListenerManager.SDKListener sdkListener;
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_upkeep);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContentView() == null) {
+            createContenttView(R.layout.page_upkeep);
+            initView();
+        }
+        return getContentView();
     }
 
-    @Override
     public void initView() {
+        line_upkeep = (LinearLayout)getContentView().findViewById(R.id.line_upkeep);
+        line_upkeep_revise = (RelativeLayout) getContentView().findViewById(R.id.line_upkeep_revise);
+        et_totalMileage = (EditText) getContentView().findViewById(R.id.et_totalMileage);
+        et_lastMaintenanceMileage = (EditText) getContentView().findViewById(R.id.et_lastMaintenanceMileage);
+        et_purchaseDate = (TextView) getContentView().findViewById(R.id.et_purchaseDate);
+        et_lastMaintenanceDate = (TextView) getContentView().findViewById(R.id.et_lastMaintenanceDate);
+        btn_save = (Button) getContentView().findViewById(R.id.btn_save);
+        btn_alreadyUpkeep = (Button) getContentView().findViewById(R.id.btn_alreadyUpkeep);
+        tv_next_mileage = (TextView) getContentView().findViewById(R.id.tv_next_mileage);
+        tv_next_time = (TextView) getContentView().findViewById(R.id.tv_next_time);
+        tv_upkeep_totle_item = (TextView) getContentView().findViewById(R.id.tv_upkeep_totle_item);
+        view_upkeep = (ImageView) getContentView().findViewById(R.id.view_upkeep);
+        view_upkeep_time = (ImageView) getContentView().findViewById(R.id.view_upkeep_time);
+        tv_upkeep_totle_cost = (TextView) getContentView().findViewById(R.id.tv_upkeep_totle_cost);
+        tv = (TextView) getContentView().findViewById(R.id.tv);
+        tv2 = (TextView) getContentView().findViewById(R.id.tv2);
+        rl_view = (RecyclerView) getContentView().findViewById(R.id.rl_view);
+
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_baoyang);
         titlebarview1.setButtonRightText("保养校正");
@@ -202,6 +167,30 @@ public class CarMaintenancePage extends AppPage implements View.OnClickListener,
 
         setListener();
     }
+
+    private DatePickerDialog.OnDateSetListener mBuyDateListener = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            et_purchaseDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            DateTime time_buy = new DateTime();
+            time_buy.year = (short) year;
+            time_buy.month = (short) (monthOfYear + 1);
+            time_buy.day = (short) dayOfMonth;
+            userCar.purchaseDate = time_buy;
+        }
+    };
+    private DatePickerDialog.OnDateSetListener mUpKeepDateListener = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            et_lastMaintenanceDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+            DateTime time_buy = new DateTime();
+            time_buy.year = (short) year;
+            time_buy.month = (short) (monthOfYear + 1);
+            time_buy.day = (short) dayOfMonth;
+            userCar.lastMaintenanceDate = time_buy;
+
+        }
+    };
 
 
     /**

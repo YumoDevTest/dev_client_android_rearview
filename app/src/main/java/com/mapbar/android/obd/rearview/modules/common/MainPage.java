@@ -3,25 +3,28 @@ package com.mapbar.android.obd.rearview.modules.common;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.modules.carstate.CarStatePage;
 import com.mapbar.android.obd.rearview.modules.maintenance.CarMaintenancePage;
 import com.mapbar.android.obd.rearview.modules.controltest.ControlTestPage;
 import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPage;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
@@ -29,19 +32,19 @@ import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.android.obd.rearview.views.TimerDialog;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * 首页
  * 包含1个viewpager,其下有4个子fragment 页
  */
-public class MainPage extends AppPage implements IMainPageView {
+public class MainPage extends AppPage2 implements IMainPageView {
     private static final String TAG = MainPage.class.getSimpleName();
 
-    @ViewInject(R.id.pager_main)
     private ViewPager pager;
-    @ViewInject(R.id.rg_tabs)
     private RadioGroup rg_tabs;
     private String[] titles;
     private CarDataPage carDataPage;
@@ -49,7 +52,7 @@ public class MainPage extends AppPage implements IMainPageView {
     private CarMaintenancePage carMaintenancePage;
     private VehicleCheckupPage vehicleCheckupPage;
     private ControlTestPage controlTestPage;
-    private ArrayList<Fragment> fragments;
+    private List<Fragment> fragments;
     private TimerDialog mAlarmTimerDialog;
     /***
      * 报警
@@ -64,16 +67,21 @@ public class MainPage extends AppPage implements IMainPageView {
     private FragmentPagerAdapter fragmentPagerAdapter;
     private OBDSDKListenerManager.SDKListener sdkListener;
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_main);
-        fragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager());
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LogUtil.d(TAG, String.format("## %s onCreateView", getThisClassName()));
+        if (getContentView() == null) {
+            createContenttView(R.layout.page_main);
+            initView();
+        }
+        return getContentView();
     }
 
-    @Override
     public void initView() {
         titles = getResources().getStringArray(R.array.page_titles);
+        pager = (ViewPager) getContentView().findViewById(R.id.pager_main);
+        rg_tabs = (RadioGroup) getContentView().findViewById(R.id.rg_tabs);
 
         vehicleCheckupPage = new VehicleCheckupPage();
         carDataPage = new CarDataPage();
@@ -81,11 +89,15 @@ public class MainPage extends AppPage implements IMainPageView {
         carMaintenancePage = new CarMaintenancePage();
         controlTestPage = new ControlTestPage();
 
-        fragments = new ArrayList<>();
-        fragments.add(vehicleCheckupPage);
-        fragments.add(carDataPage);
-        fragments.add(carStatePage);
-        fragments.add(carMaintenancePage);
+        if (fragments == null) {
+            fragments = new ArrayList<>();
+            fragments.add(vehicleCheckupPage);
+            fragments.add(carDataPage);
+            fragments.add(carStatePage);
+            fragments.add(carMaintenancePage);
+        }
+        fragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager()
+                , fragments);
 
         //是否开启 模拟测试车辆控制的页面"
         if (BuildConfig.IS_ENABLE_TEST_CAR_DEMO)
@@ -108,8 +120,6 @@ public class MainPage extends AppPage implements IMainPageView {
 
         persenter = new MainPagePersenter(this);
 
-        setListener();
-
         mHandlerBuy.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -119,7 +129,7 @@ public class MainPage extends AppPage implements IMainPageView {
         }, 1000);
     }
 
-    public void setListener() {
+    private void attachListener() {
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -169,6 +179,10 @@ public class MainPage extends AppPage implements IMainPageView {
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
     }
 
+    private void deattachListener() {
+        OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
+    }
+
     /**
      * 初始化通知的对话框
      */
@@ -192,6 +206,18 @@ public class MainPage extends AppPage implements IMainPageView {
             }
         }, true, 5);
         mAlarmTimerDialog.setCancelable(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        deattachListener();
     }
 
     @Override
@@ -239,20 +265,23 @@ public class MainPage extends AppPage implements IMainPageView {
     }
 
 
-    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+    private static class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragmentList;
 
-        public MyFragmentPagerAdapter(FragmentManager fm) {
+        public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> lst) {
             super(fm);
+            fragmentList = new ArrayList<>();
+            fragmentList.addAll(lst);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragments == null ? null : fragments.get(position);
+            return fragmentList == null ? null : fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return fragments == null ? 0 : fragments.size();
+            return fragmentList == null ? 0 : fragmentList.size();
         }
 
         @Override
@@ -261,43 +290,4 @@ public class MainPage extends AppPage implements IMainPageView {
         }
     }
 
-//    /**
-//     * 显示权限验证提醒，试用期，过期等
-//     */
-//    public void showPermissionAlert(){
-//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
-//        dialog.setOnRetryClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //do retry
-//            }
-//        });
-//        dialog.setOnSkipClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-//    }
-
-//    /**
-//     * 显示权限验证失败
-//     */
-//    public void showPermissionFailure(){
-//        final PermissionUpdateFailureDialog dialog = new PermissionUpdateFailureDialog(getActivity());
-//        dialog.setOnRetryClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //do retry
-//            }
-//        });
-//        dialog.setOnSkipClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-//    }
 }

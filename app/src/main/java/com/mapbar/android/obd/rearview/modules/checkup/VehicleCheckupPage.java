@@ -4,7 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -14,11 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.util.StringUtil;
 import com.mapbar.android.obd.rearview.util.TimeUtils;
 import com.mapbar.obd.foundation.tts.VoiceManager;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarDataManager;
@@ -43,53 +45,26 @@ import java.util.List;
  * 体检
  * Created by THINKPAD on 2016/5/9.
  */
-public class VehicleCheckupPage extends AppPage implements View.OnClickListener, IVehicleCheckupView {
+public class VehicleCheckupPage extends AppPage2 implements View.OnClickListener, IVehicleCheckupView {
 
-    @ViewInject(R.id.test_rl)
     private ListView rl_view;
-
-    @ViewInject(R.id.gridv)
     private GridView grid;
-
-    @ViewInject(R.id.tv_score)
     private TextView tv_score;
-
-    @ViewInject(R.id.tv_level)
     private TextView tv_level;
-
-    @ViewInject(R.id.tv_progress)
     private TextView tv_progress;
-
-    @ViewInject(R.id.view_upkeep_time)
     private ImageView view_upkeep_time;
-
     //体检中
-    @ViewInject(R.id.rela_physicaling)
     private RelativeLayout rela_physicaling;
-
     //未体检过
-    @ViewInject(R.id.rela_no_physical)
     private RelativeLayout rela_no_physical;
-
     //上次体检结果
-    @ViewInject(R.id.line_last_result)
     private LinearLayout line_last_result;
-    @ViewInject(R.id.tv_last_check_score)
     private TextView tvLastScore;
-    @ViewInject(R.id.tv_last_check_level)
     private TextView tvLastLevel;
-    @ViewInject(R.id.btn_last_check)
     private Button btnLastCheck;
-    @ViewInject(R.id.tv_last_check_time)
     private TextView tvLastTime;
     //本次体检结果
-    @ViewInject(R.id.rela_result)
     private RelativeLayout rela_result;
-
-//    @ViewInject(R.id.view_upkeep)
-//    private ImageView view_upkeep;
-
-    @ViewInject(R.id.btn_start_physical)
     private Button btn_start_physical;
 
     private List<PhysicalData> physicalList = new ArrayList<PhysicalData>();
@@ -117,14 +92,33 @@ public class VehicleCheckupPage extends AppPage implements View.OnClickListener,
     private TitleBarView titlebarview1;
     private OBDSDKListenerManager.SDKListener sdkListener;
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_physical);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContentView() == null) {
+            createContenttView(R.layout.layout_physical);
+            initView();
+        }
+        return getContentView();
     }
 
-    @Override
     public void initView() {
+        rl_view = (ListView)getContentView().findViewById(R.id.test_rl);
+        grid = (GridView)getContentView().findViewById(R.id.gridv);
+        tv_score = (TextView) getContentView().findViewById(R.id.tv_score);
+        tv_level = (TextView) getContentView().findViewById(R.id.tv_level);
+        tv_progress = (TextView) getContentView().findViewById(R.id.tv_progress);
+        view_upkeep_time = (ImageView) getContentView().findViewById(R.id.view_upkeep_time);
+        rela_physicaling = (RelativeLayout) getContentView().findViewById(R.id.rela_physicaling);
+        rela_no_physical = (RelativeLayout) getContentView().findViewById(R.id.rela_no_physical);
+        line_last_result = (LinearLayout) getContentView().findViewById(R.id.line_last_result);
+        tvLastScore = (TextView) getContentView().findViewById(R.id.tv_last_check_score);
+        tvLastLevel = (TextView) getContentView().findViewById(R.id.tv_last_check_level);
+        tvLastTime = (TextView) getContentView().findViewById(R.id.tv_last_check_time);
+        btnLastCheck = (Button) getContentView().findViewById(R.id.btn_last_check);
+        btn_start_physical = (Button) getContentView().findViewById(R.id.btn_start_physical);
+        rela_result = (RelativeLayout) getContentView().findViewById(R.id.rela_result);
+
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_aiche_tijian);
 

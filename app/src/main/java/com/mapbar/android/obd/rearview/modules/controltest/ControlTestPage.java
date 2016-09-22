@@ -2,6 +2,8 @@ package com.mapbar.android.obd.rearview.modules.controltest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,37 +15,35 @@ import android.widget.Toast;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.manager.CommandControl;
 import com.mapbar.android.obd.rearview.framework.manager.VoiceReceiver;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 
 /**
  * Created by liuyy on 2016/5/15.
  */
-public class ControlTestPage extends AppPage {
+public class ControlTestPage extends AppPage2 {
 
-    @ViewInject(R.id.lv_test)
     private ListView lv;
-
     private int[] controlCmds;
     private String[] cmdStrs, cmdNames;
 
+
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_control_test);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContentView() == null) {
+            createContenttView(R.layout.page_control_test);
+            initView();
+        }
+        return getContentView();
     }
 
-    @Override
     public void initView() {
+        lv = (ListView) getContentView().findViewById(R.id.lv_test);
         controlCmds = CommandControl.getInstance().getCommands();
         cmdStrs = CommandControl.getInstance().getCommadStrs();
         cmdNames = CommandControl.getInstance().getCommadNames();
         lv.setAdapter(new TestAdapter());
 
-        setListener();
-    }
-
-    public void setListener() {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -55,8 +55,8 @@ public class ControlTestPage extends AppPage {
                 getActivity().sendBroadcast(intent);
             }
         });
-
     }
+
 
     class TestAdapter extends BaseAdapter {
 

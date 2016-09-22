@@ -5,8 +5,11 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,10 +23,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.model.QRInfo;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.framework.manager.CarStateManager;
@@ -49,23 +51,18 @@ import java.util.List;
  * 车辆 状态
  * Created by liuyy on 2016/5/7.
  */
-public class CarStatePage extends AppPage implements View.OnClickListener, ICarStateView, IVinChangeView {
+public class CarStatePage extends AppPage2 implements View.OnClickListener, ICarStateView, IVinChangeView {
 
     private CarStateView carStateView;
     private CarStatusData data;
-    @ViewInject(R.id.gv_state)
     private GridView gvState;
-    @ViewInject(R.id.tv_state_record)
     private TextView tv_state_record;
-    @ViewInject(R.id.iv_state_safe)
     private ImageView iv_state_safe;
-    @ViewInject(R.id.tv_ota_alert_text)
     private TextView tv_ota_alert_text;
-
     //车辆不良状态的提示语，点击能有详细故障码，被 体检功能权限控制可见性
-    @ViewInject(R.id.viewgrounp_stage_record)
     private ViewGroup viewgrounp_stage_record;
-    private MyHandler myHandler = new MyHandler(this);
+
+    private Handler myHandler;
     private List<String> state_list;
     private String[] stateNames;
     private int[] stateResCloseIds = {R.drawable.car_light_close, R.drawable.car_window_close, R.drawable.car_lock_close, R.drawable.car_door_close, R.drawable.car_trunk_close, R.drawable.car_sunroof_close};
@@ -87,16 +84,30 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     private int screenHeight;
     private OBDSDKListenerManager.SDKListener sdkListener;
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_car_state);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContentView() == null) {
+            createContenttView(R.layout.page_car_state);
+            initView();
+        }
+        return getContentView();
     }
 
-    @Override
     public void initView() {
+        gvState = (GridView) getContentView().findViewById(R.id.gv_state);
+        tv_state_record = (TextView) getContentView().findViewById(R.id.tv_state_record);
+        iv_state_safe = (ImageView) getContentView().findViewById(R.id.iv_state_safe);
+        tv_ota_alert_text = (TextView) getContentView().findViewById(R.id.tv_ota_alert_text);
+        viewgrounp_stage_record = (ViewGroup) getContentView().findViewById(R.id.viewgrounp_stage_record);
+
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_state);
+
+        myHandler = new MyHandler(this);
+        viewgrounp_stage_record.setOnClickListener(this);
+        tv_ota_alert_text.setOnClickListener(this);
+
         WindowManager windowManager = (WindowManager) getActivity()
                 .getSystemService(Context.WINDOW_SERVICE);
         screenWidth = windowManager.getDefaultDisplay().getWidth();
@@ -110,66 +121,68 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
 
 //        firmwareDialogHandler = new FirmwareDialogHandler();
         persenter = new CarStatePresenter(this);
-
-        setListener();
     }
 
-    public void setListener() {
-        sdkListener = new OBDSDKListenerManager.SDKListener() {
-            @Override
-            public void onEvent(int event, Object o) {
+    public void attachListener() {
+        if (sdkListener == null) {
+            sdkListener = new OBDSDKListenerManager.SDKListener() {
+                @Override
+                public void onEvent(int event, Object o) {
 
-                // 日志
-                if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                    // 日志
+                    if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
 //                    Log.v(LogTag.FRAMEWORK, "whw -->> event:" + event);
-                }
-                switch (event) {
-                    case Manager.Event.obdCarStatusgetSucc:
-                        data = (CarStatusData) o;
-                        carStateView.setData(data);
-                        adapter.updateData();
-                        adapter.notifyDataSetChanged();
-                        if (getActivity() != null && !getActivity().isFinishing()) {
-                            //发送外部消息广播
-                            ExternalManager.postCarStatus(getActivity(), data);
-                        }
-                        break;
-                    case Manager.Event.obdCarStatusgetFailed:
-                        break;
+                    }
+                    switch (event) {
+                        case Manager.Event.obdCarStatusgetSucc:
+                            data = (CarStatusData) o;
+                            carStateView.setData(data);
+                            adapter.updateData();
+                            adapter.notifyDataSetChanged();
+                            if (getActivity() != null && !getActivity().isFinishing()) {
+                                //发送外部消息广播
+                                ExternalManager.postCarStatus(getActivity(), data);
+                            }
+                            break;
+                        case Manager.Event.obdCarStatusgetFailed:
+                            break;
 
-                    case OBDManager.EVENT_OBD_OTA_NEED_VIN:
-                        break;
+                        case OBDManager.EVENT_OBD_OTA_NEED_VIN:
+                            break;
 
-                    case OBDManager.EVENT_OBD_OTA_SCANVIN_SUCC://TODO 扫描成功
-                        if (vinBarcodeView != null) {
-                            QRInfo qrInfo_scan_succ = (QRInfo) o;
-                            vinBarcodeView.setText(qrInfo_scan_succ.getContent());
-                        }
-                        break;
+                        case OBDManager.EVENT_OBD_OTA_SCANVIN_SUCC://TODO 扫描成功
+                            if (vinBarcodeView != null) {
+                                QRInfo qrInfo_scan_succ = (QRInfo) o;
+                                vinBarcodeView.setText(qrInfo_scan_succ.getContent());
+                            }
+                            break;
 
-                    case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
-                        hideVinInputDialog();
-                        break;
+                        case OBDManager.EVENT_OBD_USER_BINDVIN_SUCC:
+                            hideVinInputDialog();
+                            break;
 
-                    case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
+                        case OBDManager.EVENT_OBD_USER_BINDVIN_FAILED:
 //                        showVinInputDialog();
-                        break;
+                            break;
 
-                    case Manager.Event.dataUpdate:
-                        if (!hasCheckedVersion) {
-                            //检查是否有新的固件版本
-                            persenter.beginCheckFirmwareVersion();
-                            hasCheckedVersion = true;
-                        }
-                        break;
+                        case Manager.Event.dataUpdate:
+                            if (!hasCheckedVersion) {
+                                //检查是否有新的固件版本
+                                persenter.beginCheckFirmwareVersion();
+                                hasCheckedVersion = true;
+                            }
+                            break;
 
+                    }
                 }
-            }
-        };
+            };
+        }
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
-        viewgrounp_stage_record.setOnClickListener(this);
-        tv_ota_alert_text.setOnClickListener(this);
+    }
 
+    private void detaichListener() {
+        if (sdkListener != null)
+            OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
     }
 
 
@@ -295,11 +308,13 @@ public class CarStatePage extends AppPage implements View.OnClickListener, ICarS
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            attachListener();
             CarStateManager.getInstance().startRefreshCarState();//保证在当前界面时,刷新车辆状态界面
-            myHandler.sendEmptyMessage(0);
+            if (myHandler != null) myHandler.sendEmptyMessage(0);
         } else {
+            detaichListener();
             CarStateManager.getInstance().stopRefreshCarState();
-            myHandler.removeCallbacksAndMessages(null);
+            if (myHandler != null) myHandler.removeCallbacksAndMessages(null);
         }
     }
 

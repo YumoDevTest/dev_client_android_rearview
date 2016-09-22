@@ -12,7 +12,7 @@ android {
         targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
         versionCode project.VERSION_CODE == null ? 3 : project.VERSION_CODE
-        versionName project.VERSION_NAME == null ? "1.0.3" : project.VERSION_NAME
+        versionName project.VERSION_NAME == null ? "1.0.4" : project.VERSION_NAME
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'mapbar']
     }
     signingConfigs {

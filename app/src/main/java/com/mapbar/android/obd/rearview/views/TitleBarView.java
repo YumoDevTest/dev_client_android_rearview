@@ -11,8 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.inject.ViewInjectTool;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 
 
 /**
@@ -22,20 +20,10 @@ import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 public class TitleBarView extends RelativeLayout {
 
     private View contentView;
-
-    @ViewInject(R.id.textview_mid)
     private TextView textview_mid;
-
-    @ViewInject(R.id.imageview_left)
     private ImageView imageview_left;
-
-    @ViewInject(R.id.right_container)
     private View right_container;
-
-    @ViewInject(R.id.imageview_right)
     private ImageView imageview_right;
-
-    @ViewInject(R.id.textview_right)
     private TextView textview_right;
 
     private View.OnClickListener leftListener;
@@ -58,7 +46,11 @@ public class TitleBarView extends RelativeLayout {
     private void init(Context context, AttributeSet attrs, int defStyle) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         contentView = layoutInflater.inflate(R.layout.titlebar_view, null);
-        ViewInjectTool.inject(this, contentView);
+        textview_mid = (TextView)contentView.findViewById(R.id.textview_mid);
+        textview_right = (TextView)contentView.findViewById(R.id.textview_right);
+        imageview_left = (ImageView)contentView.findViewById(R.id.imageview_left);
+        imageview_right = (ImageView)contentView.findViewById(R.id.imageview_right);
+        right_container =  contentView.findViewById(R.id.right_container);
 
         setTitle(R.string.app_name);
         setEnableBackButton(false);

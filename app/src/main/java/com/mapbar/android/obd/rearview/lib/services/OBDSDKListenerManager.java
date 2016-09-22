@@ -92,8 +92,23 @@ public class OBDSDKListenerManager {
      * @param listener
      */
     public void addSdkListener(SDKListener listener) {
+        if (containSdkListener(listener))
+            removeSdkListener(listener);
         WeakReference<SDKListener> weakListener = new WeakReference<>(listener);
         regListeners.add(weakListener);
+    }
+
+    public boolean containSdkListener(SDKListener listener) {
+        int index = -1;
+        for (int i = 0; i < regListeners.size(); i++) {
+            if (regListeners.get(i) != null && regListeners.get(i).get() == listener) {
+                index = i;
+            }
+        }
+        if (index > -1)
+            return true;
+        else
+            return false;
     }
 
     /**

@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.obd.Manager;
 
 /**
  * 关于 页
  * Created by zhangyunfei on 16/7/25.
  */
-public class AboutFragment extends AppPage {
+public class AboutFragment extends AppPage2 {
     private View rootView;
 
     @Nullable
@@ -39,10 +39,6 @@ public class AboutFragment extends AppPage {
         return rootView;
     }
 
-    @Override
-    public void initView() {
-
-    }
 
     @Override
     public void onStart() {

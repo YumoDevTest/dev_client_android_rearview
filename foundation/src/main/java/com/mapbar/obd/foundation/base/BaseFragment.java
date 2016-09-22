@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mapbar.obd.foundation.log.LogUtil;
@@ -18,6 +21,8 @@ public class BaseFragment extends Fragment {
     private String ThisClassName;
 
     public void alert(final String msg) {
+        if (getActivity() == null || getActivity().isFinishing())
+            return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -27,6 +32,8 @@ public class BaseFragment extends Fragment {
     }
 
     public void alert(final int sourceID) {
+        if (getActivity() == null || getActivity().isFinishing())
+            return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -54,6 +61,13 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         LogUtil.d(TAG, String.format("## %s onCreate", getThisClassName()));
 
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LogUtil.d(TAG, String.format("## %s onCreateView", getThisClassName()));
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

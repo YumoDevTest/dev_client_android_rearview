@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
 import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
 import com.mapbar.android.obd.rearview.lib.config.Configs;
@@ -79,6 +78,7 @@ public class MainActivity extends TitlebarActivity {
     private MainPage mainPage;
     private PopupWindow qrPopupWindow;
     private PopupWindow exitAlertDialog;
+    private AppPage2 currentPage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +113,14 @@ public class MainActivity extends TitlebarActivity {
 
         //执行登录
         login();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                goMainPage();
+            }
+        }, 15000);
     }
 
     private void initLogFile() {
@@ -154,11 +162,13 @@ public class MainActivity extends TitlebarActivity {
 //                LogUtil.d(TAG, "## MainActivity OBDSDKListenerManager event=" + event);
                 switch (event) {
                     case OBDManager.EVENT_OBD_USER_LOGIN_SUCC:
+                        LogUtil.d(TAG, "## 登录成功");
 
-                        goPage(mainPage);
+                        goMainPage();
 
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
+                        LogUtil.d(TAG, "## 登录失败");
                         QRInfo qrInfo = (QRInfo) o;
                         showQrDialog(qrInfo);
                         break;
@@ -167,6 +177,7 @@ public class MainActivity extends TitlebarActivity {
                         dismissQrPopwindow();//关闭二维码
                         break;
                     case OBDManager.EVENT_OBD_TOKEN_LOSE://token失效处理走设备登陆
+                        LogUtil.d(TAG, "## token失效");
                         StringUtil.toastStringShort("token失效");
 
                         UserCenterManager.getInstance().sdkListener.setActive(true);
@@ -180,6 +191,7 @@ public class MainActivity extends TitlebarActivity {
 
                         break;
                     case Manager.Event.dataCollectSucc:
+                        LogUtil.d(TAG, "## 数据准备成功");
 
                         break;
                 }
@@ -188,6 +200,10 @@ public class MainActivity extends TitlebarActivity {
         };
         OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
         LogUtil.d(TAG, "## MainActivity addSdkListener");
+    }
+
+    private void unregisterSDKListener() {
+        OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
     }
 
     private void showQrDialog(QRInfo qrInfo) {
@@ -388,6 +404,8 @@ public class MainActivity extends TitlebarActivity {
 
     @Override
     protected void onDestroy() {
+        currentPage = null;
+        unregisterSDKListener();
         dismissQrPopwindow();
         dismissExitAlertDialog();
         //防止popupwindow泄露
@@ -433,11 +451,13 @@ public class MainActivity extends TitlebarActivity {
         return contentView;
     }
 
-    public void goPage(AppPage page) {
+    public void goPage(AppPage2 page) {
         goPage(page, true);
     }
 
-    public void goPage(AppPage page, boolean useAnimation) {
+    public void goPage(AppPage2 page, boolean useAnimation) {
+        if (currentPage == page) return;
+        currentPage = page;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (useAnimation)
             transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);

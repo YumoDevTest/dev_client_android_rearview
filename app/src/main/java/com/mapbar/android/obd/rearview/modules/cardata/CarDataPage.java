@@ -8,8 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,10 +23,9 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.util.DecFormatUtil;
 import com.mapbar.android.obd.rearview.util.TimeUtils;
-import com.mapbar.android.obd.rearview.framework.inject.annotation.ViewInject;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
@@ -52,45 +54,27 @@ import java.util.Locale;
  * 车辆 数据 页
  * Created by THINKPAD on 2016/5/6.
  */
-public class CarDataPage extends AppPage implements View.OnClickListener, ICarDataView, ITirePressureView {
+public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarDataView, ITirePressureView {
     private static final int MSG_GET_A_CAR_DATA = 2;//当获得一个车辆数据
     private final int[] icons = {R.drawable.car_data_gas_consum, R.drawable.car_data_trip_time, R.drawable.car_data_trip_length, R.drawable.car_data_drive_cost,
             R.drawable.car_data_speed, R.drawable.car_data_rpm, R.drawable.car_data_voltage, R.drawable.car_data_temperature, R.drawable.car_data_average_gas_consum};
 
-    @ViewInject(R.id.ll_car_data_1)
     private LinearLayout ll_car_data_1;
-    @ViewInject(R.id.ll_car_data_2)
     private LinearLayout ll_car_data_2;
-    @ViewInject(R.id.ll_car_data_3)
     private LinearLayout ll_car_data_3;
-    @ViewInject(R.id.ll_car_data_4)
     private LinearLayout ll_car_data_4;
-    /**
-     * ------------------------------------------------------
-     */
-    @ViewInject(R.id.tv_carData_name_1)
+
     private TextView tv_carData_name_1;
-    @ViewInject(R.id.tv_carData_name_2)
     private TextView tv_carData_name_2;
-    @ViewInject(R.id.tv_carData_name_3)
     private TextView tv_carData_name_3;
-    @ViewInject(R.id.tv_carData_name_4)
     private TextView tv_carData_name_4;
-    @ViewInject(R.id.tv_carData_unit_1)
     private TextView tv_carData_unit_1;
-    @ViewInject(R.id.tv_carData_unit_2)
     private TextView tv_carData_unit_2;
-    @ViewInject(R.id.tv_carData_unit_3)
     private TextView tv_carData_unit_3;
-    @ViewInject(R.id.tv_carData_unit_4)
     private TextView tv_carData_unit_4;
-    @ViewInject(R.id.tv_carData_value_1)
     private TextView tv_carData_value_1;
-    @ViewInject(R.id.tv_carData_value_2)
     private TextView tv_carData_value_2;
-    @ViewInject(R.id.tv_carData_value_3)
     private TextView tv_carData_value_3;
-    @ViewInject(R.id.tv_carData_value_4)
     private TextView tv_carData_value_4;
     private SharedPreferences sharedPreferences;
     private ArrayList<HashMap<String, Object>> datas = new ArrayList<>();
@@ -111,17 +95,38 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
     private MyHandler myHandler;
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_car_data);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContentView() == null) {
+            createContenttView(R.layout.page_car_data);
+            initView();
+        }
+        return getContentView();
+    }
+
+    public void initView() {
+        ll_car_data_1 = (LinearLayout) getContentView().findViewById(R.id.ll_car_data_1);
+        ll_car_data_2 = (LinearLayout) getContentView().findViewById(R.id.ll_car_data_2);
+        ll_car_data_3 = (LinearLayout) getContentView().findViewById(R.id.ll_car_data_3);
+        ll_car_data_4 = (LinearLayout) getContentView().findViewById(R.id.ll_car_data_4);
+        tv_carData_name_1 = (TextView) getContentView().findViewById(R.id.tv_carData_name_1);
+        tv_carData_name_2 = (TextView) getContentView().findViewById(R.id.tv_carData_name_2);
+        tv_carData_name_3 = (TextView) getContentView().findViewById(R.id.tv_carData_name_3);
+        tv_carData_name_4 = (TextView) getContentView().findViewById(R.id.tv_carData_name_4);
+        tv_carData_unit_1 = (TextView) getContentView().findViewById(R.id.tv_carData_unit_1);
+        tv_carData_unit_2 = (TextView) getContentView().findViewById(R.id.tv_carData_unit_2);
+        tv_carData_unit_3 = (TextView) getContentView().findViewById(R.id.tv_carData_unit_3);
+        tv_carData_unit_4 = (TextView) getContentView().findViewById(R.id.tv_carData_unit_4);
+        tv_carData_value_1 = (TextView) getContentView().findViewById(R.id.tv_carData_value_1);
+        tv_carData_value_2 = (TextView) getContentView().findViewById(R.id.tv_carData_value_2);
+        tv_carData_value_3 = (TextView) getContentView().findViewById(R.id.tv_carData_value_3);
+        tv_carData_value_4 = (TextView) getContentView().findViewById(R.id.tv_carData_value_4);
 
         dataNames = getActivity().getResources().getStringArray(R.array.data_names);
         units = getActivity().getResources().getStringArray(R.array.units);
         myHandler = new MyHandler(this);
-    }
 
-    public void initView() {
         titlebarview1 = (TitleBarView) getContentView().findViewById(R.id.titlebarview1);
         titlebarview1.setTitle(R.string.page_title_car_data);
         titlebarview1.setButtonRightVisibility(true);
@@ -201,6 +206,7 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //fragment可见时执行加载数据或者进度条等
             OBDSDKListenerManager.getInstance().addSdkListener(sdkListener);
@@ -208,8 +214,6 @@ public class CarDataPage extends AppPage implements View.OnClickListener, ICarDa
             //不可见时不执行操作
             OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
         }
-        super.setUserVisibleHint(isVisibleToUser);
-
     }
 
     @Override
