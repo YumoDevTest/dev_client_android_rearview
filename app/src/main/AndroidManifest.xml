@@ -76,14 +76,6 @@
 
 
         </activity>
-        <activity android:name="com.mapbar.demo.DemoOtaSerialActivity">
-
-        </activity>
-        <activity android:name="com.mapbar.demo.SerialportToolsActivity">
-
-        </activity>
-
-        <activity android:name="com.mapbar.demo.Demo1Activity" />
 
         <activity
             android:name=".modules.setting.SettingActivity"
