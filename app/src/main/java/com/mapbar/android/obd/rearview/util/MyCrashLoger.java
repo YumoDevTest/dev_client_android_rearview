@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.util;
 
+import android.content.Context;
 import android.os.Environment;
 
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
@@ -28,8 +29,11 @@ public class MyCrashLoger implements UncaughtExceptionHandler {
         }
         //打印异常
         exception.printStackTrace();
+        Context context = MyApplication.getInstance().getMainActivity();
+        if (context == null)
+            context = MyApplication.getInstance();
         //上报umeng
-        MobclickAgentEx.reportError(MyApplication.getInstance(), exception);
+        MobclickAgentEx.reportError(context, exception);
         //保存到本地日志
         String str = getExceptionString(exception);
         logExceptionToFile(str);

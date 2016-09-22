@@ -10,6 +10,7 @@ import com.mapbar.android.obd.rearview.util.LayoutUtils;
 import com.mapbar.android.obd.rearview.util.StringUtil;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
@@ -584,8 +585,12 @@ public class UserCenterManager extends OBDManager {
             Log.d(LogTag.OBD, "连接设备openDevice -->> ");
         }
         StringUtil.toastStringLong("数据准备中,请稍后");
+        String imei = MyApplication.getInstance().getImei();
+        if (TextUtils.isEmpty(imei))
+            throw new NullPointerException();
+        LogUtil.d("USER_CENTER", "## 在设备连接时，传入imei=" + imei);
         //注意，这个参数本应传入mac（兼容蓝牙），实际传入imei，必须不能为空，否则异常
-        Manager.getInstance().openDevice(MyApplication.getInstance().getImei());
+        Manager.getInstance().openDevice(imei);
     }
 
     /**

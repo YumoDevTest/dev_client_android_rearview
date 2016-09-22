@@ -114,13 +114,6 @@ public class MainActivity extends TitlebarActivity {
         //执行登录
         login();
 
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goMainPage();
-            }
-        }, 15000);
     }
 
     private void initLogFile() {

@@ -64,9 +64,9 @@ public class MyApplication extends android.app.Application {
         MyHttpContext.setDefaultExceptionHandler(new DefalutHttpExceptionHandler());
         MyHttpContext.setRequestIntercepter(new MyRequestIntercepter());
         //设置串口
-        ObdContext.DEBUG_SERIALPORT = true;
+        ObdContext.DEBUG_SERIALPORT = false;
         ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
-        ObdContext.setTimeout(30000);
+        ObdContext.setTimeout(15000);
         //配置语音播放者
         TextToSpeechManager.setTextToSpeechPlayer(new ObdSdkTextToSpeechPlayer());
 
@@ -74,7 +74,7 @@ public class MyApplication extends android.app.Application {
         //配置umeng统计分析
         MobclickAgentEx.onStart();
 //        捕捉异常注册
-//        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
 
