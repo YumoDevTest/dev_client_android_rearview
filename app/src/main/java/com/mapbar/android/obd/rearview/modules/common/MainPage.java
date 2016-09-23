@@ -95,13 +95,12 @@ public class MainPage extends AppPage2 implements IMainPageView {
             fragments.add(carDataPage);
             fragments.add(carStatePage);
             fragments.add(carMaintenancePage);
+            //是否开启 模拟测试车辆控制的页面"
+            if (BuildConfig.IS_ENABLE_TEST_CAR_DEMO)
+                fragments.add(controlTestPage);
         }
         fragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager()
                 , fragments);
-
-        //是否开启 模拟测试车辆控制的页面"
-        if (BuildConfig.IS_ENABLE_TEST_CAR_DEMO)
-            fragments.add(controlTestPage);
 
         pager.setAdapter(fragmentPagerAdapter);
 

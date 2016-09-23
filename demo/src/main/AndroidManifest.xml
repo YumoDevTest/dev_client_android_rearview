@@ -7,18 +7,25 @@
     <!-- 声明权限，接收车辆状态广播 -->
     <uses-permission android:name="com.mapbar.android.obd.rearview.permission.CARSTATE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Serialport010CActivity"></activity>
-        <activity android:name=".SerialportToolsActivity"></activity>
-        <activity android:name=".DemoOtaSerialActivity"></activity>
+        <activity
+            android:name=".serial.ChooseSerialPortActivity"
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".serial.Serialport010CActivity"></activity>
+        <activity android:name=".serial.SerialportToolsActivity"></activity>
+        <activity android:name=".serial.OtaFlushActivity"></activity>
         <activity android:name=".External_broadcast_car_statusActivity"></activity>
         <activity android:name=".External_broadcast_realtime2Activity"></activity>
         <activity android:name=".VoiceControlDemoActivity"></activity>
+        <activity android:name=".serial.OtaChooseBinFileActivity"></activity>
         <activity android:name=".Main2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -51,6 +51,7 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.foundation.utils.SafeHandler;
+import com.mapbar.obd.serial.comond.IOSecurityException;
 import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.HttpStatus;
@@ -101,7 +102,12 @@ public class MainActivity extends TitlebarActivity {
             OBDSDKListenerManager.getInstance().init();
         } catch (IOException e) {
             e.printStackTrace();
-            alert("初始化串口失败");
+            alert("初始化串口失败," + e.getMessage());
+            return;
+        } catch (IOSecurityException e) {
+            e.printStackTrace();
+            alert("初始化串口失败," + e.getMessage());
+            return;
         }
 
         //构建mainpage

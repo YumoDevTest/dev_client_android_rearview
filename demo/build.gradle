@@ -13,8 +13,12 @@ android {
     }
     buildTypes {
         release {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            debuggable true
         }
     }
     lintOptions {
@@ -41,5 +45,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':foundation')
+    compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     compile project(':obddevelopkit')
 }
