@@ -281,11 +281,10 @@ public class OBDV3HService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("### 初始化串口异常");
+        } catch (IOSecurityException e) {
+            e.printStackTrace();
+            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
         }
-//        catch (IOSecurityException e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
-//        }
         //
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.mapbar.obd.stopservice");

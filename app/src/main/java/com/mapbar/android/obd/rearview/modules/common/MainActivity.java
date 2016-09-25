@@ -100,11 +100,7 @@ public class MainActivity extends TitlebarActivity {
 
         try {
             OBDSDKListenerManager.getInstance().init();
-        } catch (IOException e) {
-            e.printStackTrace();
-            alert("初始化串口失败," + e.getMessage());
-            return;
-        } catch (IOSecurityException e) {
+        } catch (IOException | IOSecurityException e) {
             e.printStackTrace();
             alert("初始化串口失败," + e.getMessage());
             return;
