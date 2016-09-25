@@ -119,11 +119,10 @@ public class OBDV3HService extends Service {
         manager = Manager.getInstance();
         //捕捉异常注册
 //        CrashHandler crashHandler = CrashHandler.create();
-//        crashHandler.init(getApplication(), 2);
+//        crashHandler.configSerialport(getApplication(), 2);
 //        Log.e(LogTag.OBD, object.toString());
 
         mHandler = new MyHandler(this);
-        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         sdkListener = new Manager.Listener() {
 
             @Override
@@ -282,10 +281,11 @@ public class OBDV3HService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("### 初始化串口异常");
-        } catch (IOSecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
         }
+//        catch (IOSecurityException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
+//        }
         //
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.mapbar.obd.stopservice");

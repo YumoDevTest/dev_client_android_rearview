@@ -16,6 +16,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
 import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.util.EnvironmentInfoUtils;
 import com.mapbar.android.obd.rearview.util.FactoryTest;
 import com.mapbar.android.obd.rearview.util.TraceUtil;
@@ -159,11 +160,10 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
             }
         });
 
-        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
         //打开串口
         if (connection == null) {
             try {
-                connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, 115200);
+                connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, MyApplication.BAUDRATE_DEFAULT, 10000);
                 connection.start();
                 appendLineText("串口打开成功,串口名称=" + Constants.SERIALPORT_PATH);
             } catch (Exception e) {

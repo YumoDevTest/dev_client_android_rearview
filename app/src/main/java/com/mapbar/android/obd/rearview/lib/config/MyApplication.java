@@ -1,7 +1,6 @@
 package com.mapbar.android.obd.rearview.lib.config;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.lib.net.DefalutHttpExceptionHandler;
@@ -13,19 +12,14 @@ import com.mapbar.android.obd.rearview.modules.push.ixintui.AixintuiConfigs;
 import com.mapbar.android.obd.rearview.lib.services.RestartService;
 import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.modules.common.Session;
-import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.net.HttpUtil;
 import com.mapbar.obd.foundation.net.MyHttpContext;
-import com.mapbar.obd.foundation.net.RequestIntercepter;
 import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.android.obd.rearview.util.MyCrashLoger;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.UserCenter;
-import com.squareup.okhttp.Headers;
-
-import java.util.HashMap;
 
 
 /**
@@ -33,7 +27,11 @@ import java.util.HashMap;
  * Created by yun on 16/1/7.
  */
 public class MyApplication extends android.app.Application {
+    public static final int BAUDRATE_DEFAULT = 115200;//波特率
+    public static final int TIMEOUT_DEFAULT = 15000;//默认 串口超时时长
+    public static final boolean IS_DEBUG_SERIALPORT = false;//是否debug串口
     private static final String TAG = "MyApplication";
+
     private static MyApplication instance;
     //构建一个session，会话概念，该 session仅仅在app启动后有效，在app停止后销毁。
     // 用于临时在内存防止一些变量.仅建议存放 数据载体模型(model,entity,基础数据类型）
@@ -63,10 +61,8 @@ public class MyApplication extends android.app.Application {
         //设置http失败时的默认处理器
         MyHttpContext.setDefaultExceptionHandler(new DefalutHttpExceptionHandler());
         MyHttpContext.setRequestIntercepter(new MyRequestIntercepter());
-        //设置串口
-        ObdContext.DEBUG_SERIALPORT = false;
-        ObdContext.setSerialPortPath(Constants.SERIALPORT_PATH);
-        ObdContext.setTimeout(15000);
+        //设置串口上下文
+        ObdContext.configSerialport(Constants.SERIALPORT_PATH, BAUDRATE_DEFAULT, TIMEOUT_DEFAULT, IS_DEBUG_SERIALPORT);
         //配置语音播放者
         TextToSpeechManager.setTextToSpeechPlayer(new ObdSdkTextToSpeechPlayer());
 
