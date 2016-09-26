@@ -65,7 +65,7 @@ public class OtaFlushActivity extends Activity {
         }
 //        binFile = path + "/obdv3h_v1.6.1039.bin";
 
-        ObdContext.setSerialPortPath(serialPort);
+        ObdContext.configSerialport(serialPort, 115200, 10000, false);
 
         runOTA();
     }

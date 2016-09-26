@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.mapbar.demo.R;
 import com.mapbar.obd.ConnectManager;
-import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.serial.comond.CommondSerialPortManager;
 import com.mapbar.obd.serial.comond.IOSecurityException;
 import com.mapbar.obd.serial.comond.ReadTimeoutException;
+import com.mapbar.obd.serial.comond.SerialPortManagerFactory;
 import com.mapbar.obd.serial.utils.OutputStringUtil;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class Serialport010CActivity extends Activity {
     private static final int SEND = 2;
     private static final long LOOP_TIME = 100;
     private static final long INTERVAL = 300;
-    private CommondSerialPortManager mSerialPortManager;
+    private ConnectManager mSerialPortManager;
     private EditText textView2;
 
     private static final String CMD_03 = "03\r";
@@ -73,10 +73,14 @@ public class Serialport010CActivity extends Activity {
         cmds.add("ATI\r");
         cmds.add("ATE0\r");
         //设置串口
-        ObdContext.setSerialPortPath(serialPort);
-
+        mSerialPortManager = SerialPortManagerFactory.create(serialPort, 115200, 10000);
         try {
-            start();
+            mSerialPortManager.init(this, new ConnectManager.Listener() {
+                @Override
+                public void onEvent(int event, Object data, Object userData) {
+
+                }
+            }, null);
         } catch (IOSecurityException ex) {
             ex.printStackTrace();
             alert("SecurityException:" + ex.getMessage());
@@ -114,7 +118,7 @@ public class Serialport010CActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(Serialport010CActivity.this, " " + str, 0).show();
+                Toast.makeText(Serialport010CActivity.this, " " + str, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -134,16 +138,6 @@ public class Serialport010CActivity extends Activity {
 //        Message msg = handler.obtainMessage(SEND);
 //        handler.sendMessageDelayed(msg, LOOP_TIME);
 //    }
-
-    private void start() throws IOException, IOSecurityException {
-        mSerialPortManager = ObdContext.getInstance().getSerialPortManager();
-        mSerialPortManager.init(this, new ConnectManager.Listener() {
-            @Override
-            public void onEvent(int event, Object data, Object userData) {
-
-            }
-        }, null);
-    }
 
 
     public void onClick1(View v) {

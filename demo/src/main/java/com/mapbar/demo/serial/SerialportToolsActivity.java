@@ -31,7 +31,7 @@ public class SerialportToolsActivity extends Activity {
     private static final int MSG_LOOP = 3;
     private SerialPortConnection connection;
 
-//    public static final String SERIALPORT_PATH = "/dev/ttyMT2";
+    //    public static final String SERIALPORT_PATH = "/dev/ttyMT2";
     private Button btnSend;
     private EditText edittext_input;
     private EditText txt_content;
@@ -67,7 +67,7 @@ public class SerialportToolsActivity extends Activity {
         mHandler = new MyHandler(this);
 
         //设置串口
-        ObdContext.setSerialPortPath(serialPort);
+        ObdContext.configSerialport(serialPort, 115200, 10000, false);
         openSerialport();
 
 
@@ -80,7 +80,7 @@ public class SerialportToolsActivity extends Activity {
         //打开串口
         if (connection == null) {
             try {
-                connection = SerialPortConnectionCreator.create(serialPort, 115200);
+                connection = SerialPortConnectionCreator.create(serialPort, 115200, 10000);
                 connection.start();
                 appendLineText("串口打开成功,串口名称=" + serialPort);
 
@@ -118,7 +118,7 @@ public class SerialportToolsActivity extends Activity {
     SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("ss.SSS");
 
     private void alert(String str) {
-        Toast.makeText(this, " " + str, 0).show();
+        Toast.makeText(this, " " + str, Toast.LENGTH_SHORT).show();
 
     }
 
