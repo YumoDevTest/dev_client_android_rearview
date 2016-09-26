@@ -277,7 +277,7 @@ def getPara_IS_ENABLE_TEST_CAR_DEMO = { ->
     if (var1) {
         return Boolean.parseBoolean(var1)
     }
-    return null
+    return false
 }
 
 //是否使用内网测试服务器

@@ -8,6 +8,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.UserCenterError;
+import com.mapbar.obd.serial.comond.IOSecurityException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -79,7 +80,7 @@ public class OBDManager {
      *
      * @param obdListener {@link OBDListener}事件回调接口
      */
-    public static void init(OBDListener obdListener) throws IOException {
+    public static void init(OBDListener obdListener) throws IOException, IOSecurityException {
         SDKListenerManager.getInstance().init();
         baseObdListener = obdListener;
     }

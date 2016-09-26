@@ -35,6 +35,7 @@ import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
 import com.mapbar.obd.foundation.utils.SafeHandler;
+import com.mapbar.obd.serial.comond.IOSecurityException;
 
 import java.io.IOException;
 
@@ -281,6 +282,9 @@ public class OBDV3HService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("### 初始化串口异常");
+        } catch (IOSecurityException e) {
+            e.printStackTrace();
+            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
         }
         //
         IntentFilter filter = new IntentFilter();
