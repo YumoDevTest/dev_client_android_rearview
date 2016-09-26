@@ -139,7 +139,7 @@ public class CommandControl {
                 break;
             case MaintenanceResult.ok:
                 if (maintenanceVoice.length() > 0) {
-                    maintenanceVoice.delete(0, maintenanceVoice.length() - 1);
+                    maintenanceVoice.delete(0, maintenanceVoice.length());
                 }
                 DateTime mDate = localSchemeCache.state.getNextMaintenanceDate();
                 year = mDate.year;
