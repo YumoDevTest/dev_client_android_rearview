@@ -375,7 +375,7 @@ public class CarStatePage extends AppPage2 implements View.OnClickListener, ICar
         //判断有无故障
         if (state_list.size() > 0) {
             tv_state_record.setTextColor(getActivity().getResources().getColor(R.color.check_red));
-            tv_state_record.setText("车辆存在故障码");
+            tv_state_record.setText("车辆存在故障");
             iv_state_safe.setBackgroundResource(R.drawable.trouble);
         } else {
             tv_state_record.setTextColor(getActivity().getResources().getColor(R.color.white));

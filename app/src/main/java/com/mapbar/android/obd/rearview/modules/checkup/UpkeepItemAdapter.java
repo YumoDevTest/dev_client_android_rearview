@@ -66,7 +66,7 @@ public class UpkeepItemAdapter<VH extends RecyclerView.ViewHolder> extends Recyc
         Holder holder = (Holder) arg0;
         int i = nameList.indexOf(tasks[position].name);
         if (i == -1)
-            holder.img_icon.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), icons[0]));
+            holder.img_icon.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), R.drawable.img_upkeep_nol));
         else
             holder.img_icon.setImageBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), icons[i]));
         holder.tv_name.setText(String.valueOf(tasks[position].name));

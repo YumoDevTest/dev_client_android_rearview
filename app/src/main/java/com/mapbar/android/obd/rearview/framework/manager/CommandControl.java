@@ -91,8 +91,8 @@ public class CommandControl {
                 case 102008://本次花费
                     voiceManager.sendBroadcastTTS(context,DecFormatUtil.format2dot1(realTimeData.driveCost) + "元");
                     break;
-                case 103000://开始体检
-                    Constants.ISRECEIVER = 0;
+//                case 103000://开始体检
+//                    Constants.ISRECEIVER = 0;
 //                    VoiceManager.getInstance().sendBroadcastTTS("体检开始请稍等");
 //                    ReportHead head = PhysicalManager.getInstance().getReportHead();
 //                    if (head != null) {
@@ -117,7 +117,7 @@ public class CommandControl {
 //                        context.startActivity(startIntent);
 
 //                    }
-                    break;
+//                    break;
                 case 104000://播报保养
                     getLocalSchemeCache();
                     break;

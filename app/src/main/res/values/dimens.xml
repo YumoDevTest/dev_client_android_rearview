@@ -20,4 +20,7 @@
     <!-- 胎压，4胎压指示器样式 -->
     <dimen name="tire_pressture_text_size">18sp</dimen>
     <dimen name="tire_pressture_unit_text_size">12sp</dimen>
+
+    <dimen name="cardata_value_text">40sp</dimen>
+    <dimen name="physical_result_dimen">70dp</dimen>
 </resources>

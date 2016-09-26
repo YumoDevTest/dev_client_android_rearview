@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="230dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="70dp">
     <ImageView
         android:id="@+id/iv"
         android:layout_width="fill_parent"
@@ -67,10 +67,10 @@
 
     <ListView
         android:id="@+id/test_rl"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginLeft="@dimen/physical_result_dimen"
+        android:layout_marginRight="40dp"
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/rela"
         android:divider="#00000000"

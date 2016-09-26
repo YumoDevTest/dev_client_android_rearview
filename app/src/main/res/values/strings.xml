@@ -322,4 +322,8 @@
 
     <!--声明页-->
     <string name="tv_declare_content">在汽车驾驶过程中操作后视镜软件系统，可能会导致严重的交通事故。为了避免事故发生，请在停车后进行操作。由于具体车型的车载电脑协议和车辆状况的变化，检测结果仅供参考，如有疑问请咨询专业检测机构。</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="maintenance_title">保养校正</string>
 </resources>
