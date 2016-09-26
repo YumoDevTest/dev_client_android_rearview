@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="220dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="80dp"
+        android:layout_marginLeft="70dp"
         android:background="@drawable/img_physical_result_normal"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="74dp"
+        android:layout_marginLeft="@dimen/physical_result_dimen"
         android:layout_toRightOf="@+id/line"
         android:numColumns="3"
         android:verticalSpacing="5dp"
