@@ -261,7 +261,7 @@ public class VehicleCheckupPage extends AppPage2 implements View.OnClickListener
                                     PreferencesConfig.PHYSICAL_CHECKEND_DATE.set(TimeUtils.getmDateYYYYMMDD2(getContext(), System.currentTimeMillis()));
                                     int score = reportHead.getScore();
                                     if (checkupVoiceResut.length() > 4) {
-                                        checkupVoiceResut.delete(4, checkupVoiceResut.length() - 1);
+                                        checkupVoiceResut.delete(4, checkupVoiceResut.length());
                                     }
                                     checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {

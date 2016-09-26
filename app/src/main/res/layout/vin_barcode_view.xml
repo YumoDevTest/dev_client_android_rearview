@@ -7,18 +7,18 @@
 
     <LinearLayout
         android:id="@+id/ll_pop"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/qr_bg"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
         android:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_qr"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:visibility="visible" />
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="请扫描填写车辆识别号来扩展此页\r的车辆状态和控制功能"
         android:textColor="@color/white"

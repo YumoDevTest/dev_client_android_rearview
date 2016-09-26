@@ -1,26 +1,28 @@
 package com.mapbar.android.obd.rearview.modules.carstate;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.mapbar.obd.developkit.ota.CheckVersionBean;
-import com.mapbar.obd.developkit.ota.FirmwareVersionChecker;
-import com.mapbar.obd.developkit.vin.VinManager;
-import com.mapbar.obd.foundation.eventbus.EventBusManager;
-import com.mapbar.obd.foundation.mvp.BasePresenter;
-import com.mapbar.android.obd.rearview.modules.push.events.VinChangeFailureEvent;
-import com.mapbar.android.obd.rearview.modules.push.events.VinChangeSucccessEvent;
-import com.mapbar.android.obd.rearview.modules.push.events.VinScanEvent;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.ICarStateView;
 import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
 import com.mapbar.android.obd.rearview.modules.common.LogicFactory;
 import com.mapbar.android.obd.rearview.modules.ota.OtaAlertActivity;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
-import com.mapbar.android.obd.rearview.modules.permission.model.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAble;
+import com.mapbar.android.obd.rearview.modules.permission.model.PermissionKey;
 import com.mapbar.android.obd.rearview.modules.push.events.PermissionChangedEvent;
-import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.modules.push.events.VinChangeFailureEvent;
+import com.mapbar.android.obd.rearview.modules.push.events.VinChangeSucccessEvent;
+import com.mapbar.android.obd.rearview.modules.push.events.VinScanEvent;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.developkit.ota.CheckVersionBean;
+import com.mapbar.obd.developkit.ota.FirmwareVersionChecker;
+import com.mapbar.obd.developkit.vin.VinManager;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -39,7 +41,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
     private FirmwareVersionChecker firmwareVersionChecker;
     private boolean hasNewVersionLastCheck = false;//是否有新版,上次检查的结果
     private boolean hasCheckedVersion = false;//是否检查过版本
-
+    private Handler handler = new Handler();
     public CarStatePresenter(ICarStateView view) {
         super(view);
         if (view instanceof IVinChangeView) {
@@ -72,12 +74,19 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
      * 检查vin,如果为空，则弹出输入vin的二维码对话框
      */
     private void checkVinIsNull() {
-        VinManager vinManager = new VinManager();
-        //如果 vin为空，则弹窗给用户促使用户录入vin。否则开始启动检测version
-        if (TextUtils.isEmpty(vinManager.getVin())) {
-            if (vinChangeView != null)
-                vinChangeView.showVinInputDialog();
-        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("VinManager", "## 检查二维码");
+                VinManager vinManager = new VinManager();
+                //如果 vin为空，则弹窗给用户促使用户录入vin。否则开始启动检测version
+                if (TextUtils.isEmpty(vinManager.getVin())) {
+                    if (vinChangeView != null)
+                        vinChangeView.showVinInputDialog();
+                }
+            }
+        }, 2000);
+
     }
 
     /**
@@ -148,7 +157,10 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VinScanEvent event) {
-        if (vinChangeView != null) vinChangeView.showVinScanOK();
+        VinManager vinManager = new VinManager();
+        if (TextUtils.isEmpty(vinManager.getVin())) {
+            if (vinChangeView != null) vinChangeView.showVinScanOK();
+        }
     }
 
 
