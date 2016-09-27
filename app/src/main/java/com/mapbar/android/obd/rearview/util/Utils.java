@@ -128,8 +128,8 @@ public class Utils {
         if (!BuildConfig.IS_FAKE_IMEI) {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             final String realReviceId = tm.getDeviceId();
-            LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
             deviceId = realReviceId;
+            LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
         } else {
             LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
             deviceId = BuildConfig.FAKE_IMEI;
