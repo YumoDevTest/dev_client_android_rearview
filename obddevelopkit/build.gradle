@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 
+boolean isUseSDKSource = (rootProject.ext.obd_sdk_source_dir != null);
+println "是否使用sdk源代码编译 = " + isUseSDKSource
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -31,7 +34,7 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
 //            java.srcDirs = ['src']
-            if (rootProject.hasProperty('obd_sdk_source_dir') && rootProject.ext.obd_sdk_source_dir)
+            if (isUseSDKSource)
                 java.srcDirs += [rootProject.ext.obd_sdk_source_dir]
         }
 
@@ -43,8 +46,11 @@ android {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/com.mapbar.obd.deps.jar')
-    if (!rootProject.hasProperty('obd_sdk_source_dir'))//如果指定了源代码文件夹就不再加jar
+
+    //如果指定了源代码文件夹就不再加jar
+    if (!isUseSDKSource)
         compile files('libs/com.mapbar.obd.jar')
+
     compile files('libs/com_mapbar_jnavicore_resources.jar')
     compile files('libs/com_mapbar_obd_data_resources.jar')
     compile files('libs/com_mapbar_obd_resources.jar')
