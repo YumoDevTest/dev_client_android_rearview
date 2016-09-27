@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-boolean isUseSDKSource = (rootProject.ext.obd_sdk_source_dir != null);
+boolean isUseSDKSource = rootProject.hasProperty('obd.sdk.source.dir') && (rootProject.ext.obd_sdk_source_dir != null);
 println "是否使用sdk源代码编译 = " + isUseSDKSource
 
 android {

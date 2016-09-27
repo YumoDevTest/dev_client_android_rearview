@@ -6,6 +6,7 @@ import com.mapbar.obd.Manager;
 import com.mapbar.obd.Physical;
 import com.mapbar.obd.PhysicalData;
 import com.mapbar.obd.ReportHead;
+import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class PhysicalManager extends OBDManager {
     public static final int EVENT_OBD_PHYSICAL_CHECK_PROGRESS = 0xF00004;
+    private static final String TAG = PhysicalManager.class.getSimpleName();
     private List<PhysicalData> physicalList = new ArrayList<>();
     private HashMap<String, Integer> statuses;
     /**
@@ -168,6 +170,7 @@ public class PhysicalManager extends OBDManager {
      * @return 报告列表
      */
     public ReportHead getReportHead() {
+        LogUtil.d(TAG, "## 获得体检结果列表数据");
         ArrayList<ReportHead> heads = Physical.getInstance().getPhysicalReportByMonth(1970, 1);
         if (heads != null && heads.size() > 0) {
             return heads.get(0);
