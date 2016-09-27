@@ -2,18 +2,17 @@ package com.mapbar.android.obd.rearview.framework.manager;
 
 import android.content.Context;
 
+import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.android.obd.rearview.util.DecFormatUtil;
 import com.mapbar.android.obd.rearview.util.TimeUtils;
-import com.mapbar.obd.foundation.tts.VoiceManager;
-import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.lib.config.Constants;
 import com.mapbar.mapdal.DateTime;
 import com.mapbar.obd.MaintenanceInfo;
 import com.mapbar.obd.MaintenanceResult;
 import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
+import com.mapbar.obd.foundation.tts.VoiceManager;
+import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,9 +26,9 @@ import java.util.Date;
 public class CommandControl {
     private static CommandControl mCommandControl;
     public StringBuffer maintenanceVoice = new StringBuffer();
-    private int[] commands = new int[]{201001, 201000, 202000, 202001, 207001, 207000};
-    private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502"};
-    private String[] commadNames = new String[]{"开锁", "落锁", "降窗", "升窗", "开天窗", "关天窗"};
+    private int[] commands = new int[]{201001, 201000, 202001, 202000, 207001, 207000, 203001, 203000};
+    private String[] commadStrs = new String[]{"AT@STS020101", "AT@STS020102", "AT@STS010101", "AT@STS010102", "AT@STS010501", "AT@STS010502", "AT@STS020501", "AT@STS020502"};
+    private String[] commadNames = new String[]{"开锁", "落锁", "开窗", "关窗", "开天窗", "关天窗", "开后备箱", "关后备箱"};
     private Context context;
     private short year;
     private short month;
@@ -209,17 +208,21 @@ public class CommandControl {
                 boolean flag = exuResult == 1;
                 String speekStr = "";
                 if (command == 201001) {
-                    speekStr = flag ? "已解锁" : "解锁失败";
+                    speekStr = flag ? "正在执行解锁" : "解锁失败";
                 } else if (command == 201000) {
-                    speekStr = flag ? "已落锁" : "落锁失败";
-                } else if (command == 202000) {
-                    speekStr = flag ? "已开窗" : "开窗失败";
+                    speekStr = flag ? "正在执行落锁" : "落锁失败";
                 } else if (command == 202001) {
-                    speekStr = flag ? "已关窗" : "关窗失败";
+                    speekStr = flag ? "正在执行开窗" : "开窗失败";
+                } else if (command == 202000) {
+                    speekStr = flag ? "正在执行关窗" : "关窗失败";
                 } else if (command == 207001) {
-                    speekStr = flag ? "天窗已开启" : "开启天窗失败";
+                    speekStr = flag ? "正在开启天窗" : "开启天窗失败";
                 } else if (command == 207000) {
-                    speekStr = flag ? "天窗已关闭" : "关闭天窗失败";
+                    speekStr = flag ? "正在关闭天窗" : "关闭天窗失败";
+                } else if (command == 203001) {
+                    speekStr = flag ? "正在打开后备箱" : "打开后备箱失败";
+                } else if (command == 203000) {
+                    speekStr = flag ? "正在关闭后备箱" : "关闭后备箱失败";
                 }
                 Manager.getInstance().speak(speekStr);
             } else {
