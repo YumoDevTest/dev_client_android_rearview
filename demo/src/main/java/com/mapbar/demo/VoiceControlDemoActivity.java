@@ -21,6 +21,44 @@ public class VoiceControlDemoActivity extends Activity {
         timer = new Timer();
     }
     public void startExamination(View view){
+        Intent intent = new Intent(VOICE_ACTION);
+        switch (view.getId()) {
+            case R.id.button1:
+                intent.putExtra("command", 103000);
+                break;
+            case R.id.button3:
+                intent.putExtra("command", 201001);
+                break;
+            case R.id.button4:
+                intent.putExtra("command", 201000);
+                break;
+            case R.id.button5:
+                intent.putExtra("command", 202001);
+                break;
+            case R.id.button6:
+                intent.putExtra("command", 202000);
+                break;
+            case R.id.button7:
+                intent.putExtra("command", 207001);
+                break;
+            case R.id.button8:
+                intent.putExtra("command", 207000);
+                break;
+            case R.id.button9:
+                intent.putExtra("command", 203001);
+                break;
+            case R.id.button10:
+                intent.putExtra("command", 203000);
+                break;
+
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 12) {
+            intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);//3.1以后的版本需要设置Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+        }
+        sendBroadcast(intent);
+    }
+
+    public void nowdata(View view) {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -33,13 +71,6 @@ public class VoiceControlDemoActivity extends Activity {
                 count++;
             }
         }, 0, 2000);
-//        Intent intent = new Intent(VOICE_ACTION);
-//        intent.putExtra("command", 103000);
-//        if (android.os.Build.VERSION.SDK_INT >= 12) {
-//            intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);//3.1以后的版本需要设置Intent.FLAG_INCLUDE_STOPPED_PACKAGES
-//        }
-//        sendBroadcast(intent);
-//        System.exit(0);
-//        Toast.makeText(getApplicationContext(), "发送广播成功", Toast.LENGTH_SHORT).show();
+
     }
 }
