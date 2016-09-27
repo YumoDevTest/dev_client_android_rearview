@@ -44,6 +44,7 @@ public class ServicManager extends Service {
             @Override
             public void run() {
                 if (!NativeEnv.isServiceRunning(ServicManager.this, "com.mapbar.android.obd.rearview.lib.services.OBDV3HService") && !NativeEnv.isApplicationRunning(ServicManager.this, getPackageName())) {
+                    LogUtil.d("DEBUG","## 准备启动 OBDV3HService");
                     Intent intent2 = new Intent(ServicManager.this, OBDV3HService.class);
                     intent2.setAction(OBDV3HService.ACTION_COMPACT_SERVICE);
                     intent2.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, true);

@@ -9,6 +9,7 @@ import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ExtraTripInfo;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.serial.comond.IOSecurityException;
 
 import java.io.IOException;
@@ -75,6 +76,7 @@ public class OBDSDKListenerManager {
 
 
         if (NativeEnv.isServiceRunning(OBDV3HService.class.getName())) {
+            LogUtil.d("DEBUG","## 准备启动 OBDV3HService");
             Intent i = new Intent(OBDV3HService.ACTION_COMPACT_SERVICE);
 
             i.putExtra(OBDV3HService.EXTRA_AUTO_RESTART, false);

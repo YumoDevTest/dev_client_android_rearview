@@ -41,10 +41,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile files('libs/com.mapbar.obd.deps.jar')
-    compile files('libs/com.mapbar.obd.jar')
+    if (!rootProject.hasProperty('obd_sdk_source_dir'))//如果指定了源代码文件夹就不再加jar
+        compile files('libs/com.mapbar.obd.jar')
+    compile files('libs/com_mapbar_jnavicore_resources.jar')
+    compile files('libs/com_mapbar_obd_data_resources.jar')
+    compile files('libs/com_mapbar_obd_resources.jar')
     compile project(':loglibrary')
     compile project(':oknet')
     compile project(':oknetpb')

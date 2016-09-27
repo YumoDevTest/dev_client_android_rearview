@@ -22,6 +22,7 @@ import com.mapbar.android.obd.rearview.framework.log.LogTag;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
+import com.mapbar.obd.CrashHandler;
 import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
@@ -48,6 +49,7 @@ import java.io.IOException;
 public class OBDV3HService extends Service {
     private static final int MSG_GET_CAR_STATUS_DATA = 1;
     private static final long INTERVAL_GET_CAR_STATUS = 3000;
+    public static final String OBDV3SERVICE_CLASS_NAME = "com.mapbar.android.obd.rearview.lib.services.OBDV3HService";
 
     /**
      * 精简版后台服务ACTION名称
@@ -118,9 +120,8 @@ public class OBDV3HService extends Service {
         mVoiceReceiver = new VoiceReceiver();
         manager = Manager.getInstance();
         //捕捉异常注册
-//        CrashHandler crashHandler = CrashHandler.create();
-//        crashHandler.configSerialport(getApplication(), 2);
-//        Log.e(LogTag.OBD, object.toString());
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(OBDV3HService.this, 0);
 
         mHandler = new MyHandler(this);
         sdkListener = new Manager.Listener() {
@@ -278,12 +279,9 @@ public class OBDV3HService extends Service {
         String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
         try {
             manager.init(this, sdkListener, sdPath, null);
-        } catch (IOException e) {
+        } catch (IOException | IOSecurityException e) {
             e.printStackTrace();
-            throw new RuntimeException("### 初始化串口异常");
-        } catch (IOSecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException("### 初始化串口异常," + e.getMessage());
+            LogUtil.d(TAG, "## V3服务 初始化串口异常" + e.getMessage());
         }
         //
         IntentFilter filter = new IntentFilter();
@@ -296,40 +294,42 @@ public class OBDV3HService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtil.d(TAG, "## V3服务 onStartCommand");
-        openDevice();
-        Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
+        LogUtil.d(TAG, "## onStartCommand");
+        try {
+            LogUtil.d(TAG, "## V3服务 onStartCommand");
+            openDevice();
+            Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
 
-        // Reset the options to default.
-        mNeedWaitForSignal = false;
-        mNeedConnect = false;
-        mNeedAutoRestart = true;
-        mDelay = 0L;
+            // Reset the options to default.
+            mNeedWaitForSignal = false;
+            mNeedConnect = false;
+            mNeedAutoRestart = true;
+            mDelay = 0L;
 
-        if (intent != null) {
-            mNeedAutoRestart = intent.getBooleanExtra(EXTRA_AUTO_RESTART, true);
-            mNeedWaitForSignal = intent.getBooleanExtra(EXTRA_WAIT_FOR_SIGNAL,
-                    false);
-            mNeedConnect = intent.getBooleanExtra(EXTRA_NEED_CONNECT, true);
-            mDelay = intent.getLongExtra(EXTRA_DELAY, 0L);
+            if (intent != null) {
+                mNeedAutoRestart = intent.getBooleanExtra(EXTRA_AUTO_RESTART, true);
+                mNeedWaitForSignal = intent.getBooleanExtra(EXTRA_WAIT_FOR_SIGNAL,
+                        false);
+                mNeedConnect = intent.getBooleanExtra(EXTRA_NEED_CONNECT, true);
+                mDelay = intent.getLongExtra(EXTRA_DELAY, 0L);
 //            if (Config.DEBUG) {
 //                mDebug = intent.getBooleanExtra(EXTRA_DEBUG, false);
 //            }
-        }
+            }
 
-        if (mDelay > 0L) {
-            try {
-                Thread.sleep(mDelay);
-            } catch (InterruptedException e) {
+            if (mDelay > 0L) {
+                try {
+                    Thread.sleep(mDelay);
+                } catch (InterruptedException e) {
 //                if (Config.DEBUG) {
 //                    e.printStackTrace();
 //                }
+                }
             }
-        }
 
-        // If the service startup and need to downloadPermision in the background
-        // Attempt to connect the device automatically.
-        if (!mNeedWaitForSignal) {
+            // If the service startup and need to downloadPermision in the background
+            // Attempt to connect the device automatically.
+            if (!mNeedWaitForSignal) {
 //            if (Config.DEBUG) {
 //                if (mDebug) {
 //                    Logger.d(TAG, "In *DEBUG MODE*");
@@ -341,34 +341,39 @@ public class OBDV3HService extends Service {
 //                    }
 //                }
 //            } else {
-            if (mNeedConnect) {
-                mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
-                if (intent != null) {
-                    mObdChannel = intent.getStringExtra(EXTRA_CHANNEL);
-                    if (mObdChannel == null) {
-                        mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
+                if (mNeedConnect) {
+                    mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
+                    if (intent != null) {
+                        mObdChannel = intent.getStringExtra(EXTRA_CHANNEL);
+                        if (mObdChannel == null) {
+                            mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
+                        }
                     }
-                }
 //                connectDevice();
-            }
+                }
 //            }
-        } else {
-            // If need wait for signal to connect the device
-            // check whether the status is connecting now, if true, close device
-            // immediately.
-            // Disconnect and hand over the device to other applications.
-            if (mCurrentStatus != CONNECTION_STATE_DISCONNECTED) {
-                Manager.getInstance().closeDevice();
+            } else {
+                // If need wait for signal to connect the device
+                // check whether the status is connecting now, if true, close device
+                // immediately.
+                // Disconnect and hand over the device to other applications.
+                if (mCurrentStatus != CONNECTION_STATE_DISCONNECTED) {
+                    Manager.getInstance().closeDevice();
+                }
             }
-        }
 
-        // Need restart automatically.
-        if (!mNeedAutoRestart) {
+            // Need restart automatically.
+            if (!mNeedAutoRestart) {
+                return Service.START_NOT_STICKY;
+            } else {
+                return Service.START_STICKY;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LogUtil.d(TAG, "## V3服务 error: " + ex.getMessage());
             return Service.START_NOT_STICKY;
-        } else {
-            return Service.START_STICKY;
         }
-
     }
 
     private void connectDevice() {
@@ -427,7 +432,7 @@ public class OBDV3HService extends Service {
             public void run() {
                 Intent startIntent = new Intent();
                 startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//必须加上
-                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", "com.mapbar.android.obd.rearview.modules.common.LauncherActivity");
+                ComponentName cName = new ComponentName("com.mapbar.android.obd.rearview", OBDV3SERVICE_CLASS_NAME);
                 startIntent.setComponent(cName);
                 startActivity(startIntent);
             }
