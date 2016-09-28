@@ -74,6 +74,7 @@ public class CarStatePresenter extends BasePresenter<ICarStateView> {
      * 检查vin,如果为空，则弹出输入vin的二维码对话框
      */
     private void checkVinIsNull() {
+        //因为首次安装在vin写入数据库之前获取不到,所以这里进行延迟2m,等写入数据库之后进行检查vin
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
