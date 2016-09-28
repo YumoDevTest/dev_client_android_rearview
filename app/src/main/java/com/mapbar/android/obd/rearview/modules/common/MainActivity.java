@@ -21,35 +21,35 @@ import android.widget.Toast;
 
 import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage2;
-import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
-import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
-import com.mapbar.android.obd.rearview.lib.config.Configs;
-import com.mapbar.android.obd.rearview.lib.config.MyApplication;
-import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
-import com.mapbar.android.obd.rearview.lib.services.UpdateService;
-import com.mapbar.android.obd.rearview.model.QRInfo;
-import com.mapbar.android.obd.rearview.util.LayoutUtils;
 import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
-import com.mapbar.android.obd.rearview.util.StringUtil;
-import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
-import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
+import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
+import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.lib.services.UpdateService;
+import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.model.AppInfo;
+import com.mapbar.android.obd.rearview.model.QRInfo;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.modules.push.events.PermissionBuyEvent;
-import com.mapbar.android.obd.rearview.model.AppInfo;
-import com.mapbar.obd.foundation.log.LogUtil;
-import com.mapbar.obd.foundation.oknetpb.PBHttpErrorEvent;
-import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.util.LayoutUtils;
+import com.mapbar.android.obd.rearview.util.StringUtil;
+import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
+import com.mapbar.obd.foundation.eventbus.EventBusManager;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.obd.foundation.oknetpb.PBHttpErrorEvent;
+import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.IOSecurityException;
 import com.umeng.analytics.MobclickAgent;
@@ -392,7 +392,8 @@ public class MainActivity extends TitlebarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        sdkListener.setActive(false);
+        if (sdkListener != null)
+            sdkListener.setActive(false);
         LogUtil.d(TAG, "## MainActivity sdkListener setActive(false)");
         MobclickAgent.onPause(this);
     }
@@ -464,20 +465,6 @@ public class MainActivity extends TitlebarActivity {
         goPage(mainPage);
     }
 
-    private static class MyHandler extends SafeHandler<MainActivity> {
-
-        public MyHandler(MainActivity object) {
-            super(object);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (getInnerObject() == null || getInnerObject().isFinishing())
-                return;
-            getInnerObject().showAppUpdate((AppInfo) msg.obj);
-        }
-    }
-
     /**
      * 收到推送事件：购买功能成功或失败
      *
@@ -497,7 +484,6 @@ public class MainActivity extends TitlebarActivity {
         return this;
     }
 
-
     /**
      * 当遇到 http的错误消息时
      *
@@ -510,10 +496,23 @@ public class MainActivity extends TitlebarActivity {
         Toast.makeText(getActivity(), pbHttpErrorEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HttpErrorEvent httpErrorEvent) {
         Toast.makeText(getActivity(), httpErrorEvent.getErrorMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    private static class MyHandler extends SafeHandler<MainActivity> {
+
+        public MyHandler(MainActivity object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (getInnerObject() == null || getInnerObject().isFinishing())
+                return;
+            getInnerObject().showAppUpdate((AppInfo) msg.obj);
+        }
     }
 
 }
