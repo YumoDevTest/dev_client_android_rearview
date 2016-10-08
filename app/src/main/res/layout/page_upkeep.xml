@@ -22,13 +22,7 @@
 
             <include
                 android:id="@+id/line_upkeep"
-                layout="@layout/layout_upkeep_page"
-                android:visibility="visible" />
-
-            <include
-                android:id="@+id/line_upkeep_revise"
-                layout="@layout/layout_upkeep_revise"
-                android:visibility="gone" />
+                layout="@layout/layout_upkeep_page" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

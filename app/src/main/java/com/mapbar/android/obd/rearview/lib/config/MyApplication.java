@@ -28,8 +28,8 @@ import com.mapbar.obd.UserCenter;
  */
 public class MyApplication extends android.app.Application {
     public static final int BAUDRATE_DEFAULT = 115200;//波特率
-    public static final int TIMEOUT_DEFAULT = 15000;//默认 串口超时时长
-    public static final boolean IS_DEBUG_SERIALPORT = false;//是否debug串口
+    public static final int TIMEOUT_DEFAULT = 30000;//默认 串口超时时长
+    public static final boolean IS_DEBUG_SERIALPORT = true;//是否debug串口
     private static final String TAG = "MyApplication";
 
     private static MyApplication instance;

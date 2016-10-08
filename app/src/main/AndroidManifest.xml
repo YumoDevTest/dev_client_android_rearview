@@ -262,6 +262,9 @@
         <!--<activity android:name=".lib.demon.DemoAutoActivity">-->
         <!---->
         <!--</activity>-->
+        <activity
+            android:name=".modules.maintenance.CarMaintenanceReviseActivity"
+            android:label="@string/maintenance_title" />
 
     </application>
 
