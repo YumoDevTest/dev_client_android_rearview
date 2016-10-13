@@ -13,5 +13,5 @@ public interface IMaintenanceReviseView extends IMvpView {
 
     void setMaintenanceData(MaintenanceData maintenanceData);
 
-    void finishView();
+    void onSaveDataSuccess();
 }

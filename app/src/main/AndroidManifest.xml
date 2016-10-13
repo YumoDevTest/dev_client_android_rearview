@@ -264,7 +264,9 @@
         <!--</activity>-->
         <activity
             android:name=".modules.maintenance.CarMaintenanceReviseActivity"
-            android:label="@string/maintenance_title" />
+            android:label="@string/maintenance_title"
+            android:launchMode="singleTop"
+            />
 
     </application>
 

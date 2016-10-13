@@ -19,8 +19,4 @@ public class CarMaintenanceReviseActivity extends TitlebarActivity {
         getTitlebarview().setTitle(getTitle().toString());
         getTitlebarview().setEnableBackButton(true);
     }
-
-    public void finishView() {
-        finish();
-    }
 }
