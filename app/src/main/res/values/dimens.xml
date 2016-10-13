@@ -23,4 +23,10 @@
 
     <dimen name="cardata_value_text">40sp</dimen>
     <dimen name="physical_result_dimen">70dp</dimen>
+    <dimen name="physical_result_line_dimen">70dp</dimen>
+    <dimen name="cardata_name_text">12sp</dimen>
+    <dimen name="cardata_unit_text">10sp</dimen>
+    <dimen name="carstate_ota_alert_text">12sp</dimen>
+    <dimen name="carstate_record_text">12sp</dimen>
+    <dimen name="maintenance_rl_item_name">10sp</dimen>
 </resources>

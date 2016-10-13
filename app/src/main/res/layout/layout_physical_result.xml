@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="220dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="@dimen/physical_result_line_dimen"
         android:background="@drawable/img_physical_result_normal"
         android:gravity="center_horizontal"
         android:orientation="vertical">

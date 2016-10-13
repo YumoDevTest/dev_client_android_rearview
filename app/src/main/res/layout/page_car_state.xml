@@ -42,7 +42,7 @@
                         android:layout_height="wrap_content"
                         android:text="当前车型支持宝马车辆控制功能"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/carstate_ota_alert_text" />
 
                     <GridView
                         android:id="@+id/gv_state"
@@ -73,7 +73,7 @@
                             android:text="车辆无不良状态"
                             android:textColor="@color/white"
                             android:layout_marginLeft="5dp"
-                            android:textSize="12sp" />
+                            android:textSize="@dimen/carstate_record_text" />
                     </LinearLayout>
 
                 </RelativeLayout>

@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="#00d4b9"
-        android:textSize="10sp"
+        android:textSize="@dimen/maintenance_rl_item_name"
         />
 </LinearLayout>

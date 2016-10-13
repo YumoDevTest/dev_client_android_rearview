@@ -2,4 +2,6 @@
 <resources>
     <dimen name="cardata_value_text">30sp</dimen>
     <dimen name="physical_result_dimen">60dp</dimen>
+    <dimen name="cardata_name_text">12sp</dimen>
+    <dimen name="cardata_unit_text">10sp</dimen>
 </resources>

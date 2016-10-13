@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="230dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="70dp">
+        android:layout_marginLeft="@dimen/physical_result_line_dimen">
     <ImageView
         android:id="@+id/iv"
         android:layout_width="fill_parent"

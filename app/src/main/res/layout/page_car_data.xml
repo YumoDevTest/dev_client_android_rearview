@@ -48,7 +48,7 @@
                         android:layout_marginTop="1dp"
                         android:text="@string/string_current_gasConsum"
                         android:textColor="#ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/cardata_name_text" />
 
 
                     <TextView
@@ -65,10 +65,9 @@
                         android:id="@+id/tv_carData_unit_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:text="L/100KM"
                         android:textColor="#ffffff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/cardata_unit_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -88,7 +87,7 @@
                         android:layout_marginTop="1dp"
                         android:text="@string/string_current_tripLength"
                         android:textColor="#ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/cardata_name_text" />
 
 
                     <TextView
@@ -107,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:text="L/100KM"
                         android:textColor="#ffffff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/cardata_unit_text" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -228,7 +227,7 @@
                         android:layout_marginTop="1dp"
                         android:text="@string/string_current_tripTime"
                         android:textColor="#ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/cardata_name_text" />
 
 
                     <TextView
@@ -246,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:text="L/100KM"
                         android:textColor="#ffffff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/cardata_unit_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -266,7 +265,7 @@
                         android:layout_marginTop="1dp"
                         android:text="@string/string_current_driveCost"
                         android:textColor="#ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/cardata_name_text" />
 
 
                     <TextView
@@ -284,7 +283,7 @@
                         android:layout_height="wrap_content"
                         android:text="L/100KM"
                         android:textColor="#ffffff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/cardata_unit_text" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

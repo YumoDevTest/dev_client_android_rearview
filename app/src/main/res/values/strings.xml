@@ -314,6 +314,30 @@
     <string name="connect_tireDialog">传感器连接:</string>
     <string name="power_low_tireDialog">低</string>
 
+    <!-- 保养校正错误码 -->
+    <string-array name="maintenance_errorcode" >
+        <item>无结果</item>
+        <item>拒绝访问</item>
+        <item>JSON解析失败</item>
+        <item>数据库存储失败</item>
+        <item>输入参数有误</item>
+        <item>网络错误</item>
+        <item>无网络</item>
+        <item>用户未登录</item>
+        <item>用户不存在</item>
+        <item>用户取消操作</item>
+        <item>无设备</item>
+        <item>未授权</item>
+        <item>未知错误</item>
+        <item>没有carId</item>
+        <item>匿名用户车辆数目受限</item>
+        <item>部分数据上传失败</item>
+        <item>模拟体验模式下不允许设置车辆信息</item>
+        <item>车型ID不能为空</item>
+        <item>车辆信息中的保养参数不完整</item>
+        <item>车辆信息中的保养参数有错误</item>
+    </string-array>
+
     <!-- vin填写对话框提示文字 -->
     <string name="vin_alert_dialog_info">请扫描填写信息，绑定激活后才能使用汽车卫士功能\n如：爱车体检、故障预警、语音升窗落锁等</string>
     <string name="vin_alert_dialog_scan_success">扫描成功\n请等待绑定激活成功</string>
