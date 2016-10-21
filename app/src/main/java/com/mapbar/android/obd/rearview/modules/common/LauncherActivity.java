@@ -1,28 +1,38 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
+import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.SimpleActivity;
-import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
-import com.mapbar.android.obd.rearview.lib.config.Constants;
-import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportConstants;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportFinderService;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
 import com.mapbar.android.obd.rearview.util.EnvironmentInfoUtils;
 import com.mapbar.android.obd.rearview.util.FactoryTest;
 import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.SerialPortConnection;
 import com.mapbar.obd.serial.comond.impl.SerialPortConnectionCreator;
@@ -42,8 +52,8 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
     public static final String IS_GO_DECLARE_ACTIVITY = "isGoDeclareActivity";
     public static final int MSG_SHOW_SPEED = 1;
     public static final int MSG_APPEND_TEXT = 2;
+    private final static String TAG = LauncherActivity.class.getSimpleName();
     private final int DEFAULT_CLICK_NUM = 5;
-    private final String TAG = LauncherActivity.class.getSimpleName();
     private final SimpleDateFormat MySimpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     private long firstTime = 0;
     /**
@@ -58,32 +68,76 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
     private Timer timer;
     private RelativeLayout rl_declare_containt;
     private TextView tv_declare_test;
-
-
     private Handler mHandler;
+    private ServiceConnection serialportFinderconn;
+    private Messenger launcherMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declare);
-
         //打印环境变量信息
         EnvironmentInfoUtils.print(this);
-
         TraceUtil.start();
         stopBackgroundService();
-        sp = LauncherActivity.this.getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
+        //是否首次启动,显示声明页面
+        sp = getContext().getSharedPreferences("LauncherActivity", Context.MODE_PRIVATE);
         isGoDeclareActivity = sp.getBoolean("isGoDeclareActivity", true);
-        if (!isGoDeclareActivity) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-            return;
-        }
-
         mHandler = new MyHandler(this);
+        if (!isGoDeclareActivity) {
+            //首先检测串口
+            configSerialport();
+        }
         initView();
     }
 
+    /**
+     * 首先检测sp中是否有已保存的串口,有则配置串口,跳转
+     * 没有,绑定查找串口的服务,如果查找到串口通过handler发送过来数据,进行配置
+     */
+    private void configSerialport() {
+        String serialport = SerialportSPUtils.getSerialport(this);
+        if (!TextUtils.isEmpty(serialport)) {
+            LogUtil.d(TAG, "获取到原来保存的串口号::" + serialport);
+            ObdContext.configSerialport(serialport, SerialportConstants.BAUDRATE_DEFAULT, SerialportConstants.TIMEOUT_DEFAULT, SerialportConstants.IS_DEBUG_SERIALPORT);
+            jumpMainActivity();
+        } else {
+            Intent intent = new Intent(this, SerialportFinderService.class);
+            bindService(intent, serialportFinderconn = new ServiceConnection() {
+
+                @Override
+                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                    LogUtil.d(TAG, "绑定成功");
+                    launcherMessenger = new Messenger(mHandler);
+                    Messenger messenger = new Messenger(iBinder);
+                    Message msg = Message.obtain();
+                    msg.what = SerialportConstants.CONNECTIONSUCCESS;
+                    msg.replyTo = launcherMessenger;
+                    try {
+                        messenger.send(msg);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName componentName) {
+                    LogUtil.d(TAG, "解除绑定");
+                }
+            }, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    /**
+     * 跳转到MainActivity
+     */
+    private void jumpMainActivity() {
+        if (isGoDeclareActivity) {
+            sp.edit().putBoolean(IS_GO_DECLARE_ACTIVITY, false).commit();
+        }
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
+    }
 
     private void stopBackgroundService() {
         Intent intent = new Intent("com.mapbar.obd.stopservice");
@@ -118,14 +172,9 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
                     test();
                     break;
                 case R.id.btn_declare_known:
-                    startActivity(new Intent(this, MainActivity.class));
-                    //记录是否进入声明页
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putBoolean(IS_GO_DECLARE_ACTIVITY, false);
-                    editor.commit();
-                    finish();
+                    configSerialport();
+                    break;
             }
-
         }
     }
 
@@ -141,15 +190,21 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
             clickNum++;
             if (clickNum == DEFAULT_CLICK_NUM - 1) {
                 clickNum = 0;
-                entryFactoryMode();
-
-
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setTitle("请选择串口");
+                dialog.setItems(SerialportConstants.SERIALPORT_PATHS, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        entryFactoryMode(SerialportConstants.SERIALPORT_PATHS[i]);
+                    }
+                });
+                dialog.show();
             }
         }
     }
 
 
-    private void entryFactoryMode() {
+    private void entryFactoryMode(String serialport) {
         alert("进入工厂测试模式");
         appendLineText("进入工厂测试模式");
         runOnUiThread(new Runnable() {
@@ -159,16 +214,15 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
                 btn_declare_known.setVisibility(View.GONE);
             }
         });
-
-        //打开串口
+//        打开串口
         if (connection == null) {
             try {
-                connection = SerialPortConnectionCreator.create(Constants.SERIALPORT_PATH, MyApplication.BAUDRATE_DEFAULT, 10000);
+                connection = SerialPortConnectionCreator.create(serialport, 115200, 10000);
                 connection.start();
-                appendLineText("串口打开成功,串口名称=" + Constants.SERIALPORT_PATH);
+                appendLineText("串口打开成功,串口名称=" + serialport);
             } catch (Exception e) {
                 e.printStackTrace();
-                appendLineText("串口打开失败,串口名称=" + Constants.SERIALPORT_PATH + ", 异常=" + e.getMessage());
+                appendLineText("串口打开失败,串口名称=" + serialport + ", 异常=" + e.getMessage());
                 return;
             }
         }
@@ -204,6 +258,9 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (serialportFinderconn != null) {
+            unbindService(serialportFinderconn);
+        }
         if (connection != null)
             connection.stop();
         if (timer != null) {
@@ -242,9 +299,17 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
                     getInnerObject().tv_declare_result.append(str + "\r\n");
                 }
             }
-
+            //串口服务发送过来的消息
+            else if (msg.what == SerialportConstants.SERIALPORT_FIND_SUCCESS) {
+                LogUtil.d(TAG, "从服务获取串口号成功");
+                Bundle bundle = msg.getData();
+                String serialport = bundle.getString("serialport");
+                //获取串口之后
+                ObdContext.configSerialport(serialport, SerialportConstants.BAUDRATE_DEFAULT, SerialportConstants.TIMEOUT_DEFAULT, SerialportConstants.IS_DEBUG_SERIALPORT);
+                getInnerObject().jumpMainActivity();
+            } else if (msg.what == SerialportConstants.SERIALPORT_FIND_FAILURE) {
+                Toast.makeText(getInnerObject(), "查找串口失败", Toast.LENGTH_LONG).show();
+            }
         }
     }
-
-    ;
 }

@@ -6,24 +6,28 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.mapbar.android.obd.rearview.framework.manager.VoiceReceiver;
-import com.mapbar.android.obd.rearview.lib.config.Configs;
-import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.lib.config.MyApplication;
-import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
+import com.mapbar.android.obd.rearview.framework.manager.VoiceReceiver;
+import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.lib.config.Constants;
-import com.mapbar.obd.CrashHandler;
-import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportConstants;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportFinderService;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
+import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.obd.CarStatusData;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
@@ -35,6 +39,7 @@ import com.mapbar.obd.RealTimeData;
 import com.mapbar.obd.UserCar;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.UserCenterError;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.IOSecurityException;
 
@@ -47,10 +52,7 @@ import java.io.IOException;
  * Created by liuyy on 2016/5/26.
  */
 public class OBDV3HService extends Service {
-    private static final int MSG_GET_CAR_STATUS_DATA = 1;
-    private static final long INTERVAL_GET_CAR_STATUS = 3000;
     public static final String OBDV3SERVICE_CLASS_NAME = "com.mapbar.android.obd.rearview.lib.services.OBDV3HService";
-
     /**
      * 精简版后台服务ACTION名称
      */
@@ -77,10 +79,12 @@ public class OBDV3HService extends Service {
      * 设置行程上传时使用的渠道
      */
     public static final String EXTRA_CHANNEL = "channel";
+    public static final String TAG = "OBDV3HService";
+    private static final int MSG_GET_CAR_STATUS_DATA = 1;
+    private static final long INTERVAL_GET_CAR_STATUS = 3000;
     private static final int CONNECTION_STATE_DISCONNECTED = 0;
     private static final int CONNECTION_STATE_CONNECTING = 1;
     private static final int CONNECTION_STATE_CONNECTED = 2;
-    public static final String TAG = "OBDV3HService";
     private static String mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
     private static boolean mNeedWaitForSignal = false;
     private static volatile int mCurrentStatus = CONNECTION_STATE_DISCONNECTED;
@@ -101,17 +105,19 @@ public class OBDV3HService extends Service {
         }
     };
     private Manager manager;
-    private Handler mHandler;
+    private MyHandler mHandler = new MyHandler(this);
     private int times;
 
     private VoiceReceiver mVoiceReceiver;
+    private ServiceConnection serialportFinderconn;
+    private Intent startCommandIntent;
+    private Messenger V3HMessenger = new Messenger(mHandler);
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -123,7 +129,6 @@ public class OBDV3HService extends Service {
 //        CrashHandler crashHandler = CrashHandler.getInstance();
 //        crashHandler.init(OBDV3HService.this, 0);
 
-        mHandler = new MyHandler(this);
         sdkListener = new Manager.Listener() {
 
             @Override
@@ -273,9 +278,64 @@ public class OBDV3HService extends Service {
                     break;
                 }
             }
-
-
         };
+        //
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.mapbar.obd.stopservice");
+        registerReceiver(receiver, filter);
+        IntentFilter voice_filter = new IntentFilter("mapbar.obd.intent.action.VOICE_CONTROL");
+        registerReceiver(mVoiceReceiver, voice_filter);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        startCommandIntent = intent;
+        //设置串口
+        String serialport = SerialportSPUtils.getSerialport(this);
+        if (!TextUtils.isEmpty(serialport)) {
+            //配置串口,初始化
+            readyStartCommond(serialport);
+            return onInitSueess();
+        } else {
+            configSerialport();
+            return Service.START_STICKY;
+        }
+    }
+
+    /**
+     * 开启服务查找串口,通过handler接收
+     */
+    private void configSerialport() {
+        Intent intent = new Intent(this, SerialportFinderService.class);
+        bindService(intent, serialportFinderconn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                LogUtil.d(TAG, "绑定成功");
+                Messenger messenger = new Messenger(iBinder);
+                Message msg = Message.obtain();
+                msg.what = SerialportConstants.CONNECTIONSUCCESS;
+                msg.replyTo = V3HMessenger;
+                try {
+                    messenger.send(msg);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                LogUtil.d(TAG, "解除绑定");
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 配置串口,初始化
+     *
+     * @param serialport
+     */
+    private void readyStartCommond(String serialport) {
+        ObdContext.configSerialport(serialport, SerialportConstants.BAUDRATE_DEFAULT, SerialportConstants.TIMEOUT_DEFAULT, SerialportConstants.IS_DEBUG_SERIALPORT);
         String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH;
         try {
             manager.init(this, sdkListener, sdPath, null);
@@ -283,17 +343,14 @@ public class OBDV3HService extends Service {
             e.printStackTrace();
             LogUtil.d(TAG, "## V3服务 初始化串口异常" + e.getMessage());
         }
-        //
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.mapbar.obd.stopservice");
-        registerReceiver(receiver, filter);
-        IntentFilter voice_filter = new IntentFilter("mapbar.obd.intent.action.VOICE_CONTROL");
-        registerReceiver(mVoiceReceiver, voice_filter);
-
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    /**
+     * 初始化成功之后的操作
+     *
+     * @return
+     */
+    private int onInitSueess() {
         LogUtil.d(TAG, "## onStartCommand");
         try {
             LogUtil.d(TAG, "## V3服务 onStartCommand");
@@ -306,12 +363,12 @@ public class OBDV3HService extends Service {
             mNeedAutoRestart = true;
             mDelay = 0L;
 
-            if (intent != null) {
-                mNeedAutoRestart = intent.getBooleanExtra(EXTRA_AUTO_RESTART, true);
-                mNeedWaitForSignal = intent.getBooleanExtra(EXTRA_WAIT_FOR_SIGNAL,
+            if (startCommandIntent != null) {
+                mNeedAutoRestart = startCommandIntent.getBooleanExtra(EXTRA_AUTO_RESTART, true);
+                mNeedWaitForSignal = startCommandIntent.getBooleanExtra(EXTRA_WAIT_FOR_SIGNAL,
                         false);
-                mNeedConnect = intent.getBooleanExtra(EXTRA_NEED_CONNECT, true);
-                mDelay = intent.getLongExtra(EXTRA_DELAY, 0L);
+                mNeedConnect = startCommandIntent.getBooleanExtra(EXTRA_NEED_CONNECT, true);
+                mDelay = startCommandIntent.getLongExtra(EXTRA_DELAY, 0L);
 //            if (Config.DEBUG) {
 //                mDebug = intent.getBooleanExtra(EXTRA_DEBUG, false);
 //            }
@@ -343,8 +400,8 @@ public class OBDV3HService extends Service {
 //            } else {
                 if (mNeedConnect) {
                     mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
-                    if (intent != null) {
-                        mObdChannel = intent.getStringExtra(EXTRA_CHANNEL);
+                    if (startCommandIntent != null) {
+                        mObdChannel = startCommandIntent.getStringExtra(EXTRA_CHANNEL);
                         if (mObdChannel == null) {
                             mObdChannel = Constants.COMAPCT_SERVICE_CHANNEL_NAME;
                         }
@@ -413,7 +470,9 @@ public class OBDV3HService extends Service {
     public void onDestroy() {
         super.onDestroy();
         LogUtil.d(TAG, "## V3服务 onDestroy");
-
+        if (serialportFinderconn != null) {
+            unbindService(serialportFinderconn);
+        }
         unregisterReceiver(receiver);
         unregisterReceiver(mVoiceReceiver);
 
@@ -421,7 +480,6 @@ public class OBDV3HService extends Service {
         MyApplication.getInstance().exitApplication();
 
     }
-
 
     /**
      * 当需要(微信注册)弹出二维码时，启动应用
@@ -439,7 +497,6 @@ public class OBDV3HService extends Service {
         }, 2 * 60 * 1000);
 
     }
-
 
     /**
      * 自动登录、设备登录
@@ -550,11 +607,9 @@ public class OBDV3HService extends Service {
         return false;
     }
 
-
     private OBDV3HService self() {
         return this;
     }
-
 
     private void startLoopGetCarStatus() {
         if (mHandler == null) return;
@@ -568,8 +623,6 @@ public class OBDV3HService extends Service {
 
     private static class MyHandler extends SafeHandler<OBDV3HService> {
         private static final String CMD_GET_STATUS_DATA = "AT@STG0001\r";
-
-
         public MyHandler(OBDV3HService object) {
             super(object);
         }
@@ -582,7 +635,16 @@ public class OBDV3HService extends Service {
                 Manager.getInstance().sendCustomCommandRequest(CMD_GET_STATUS_DATA);
                 removeMessages(MSG_GET_CAR_STATUS_DATA);
                 sendMessageDelayed(obtainMessage(MSG_GET_CAR_STATUS_DATA), INTERVAL_GET_CAR_STATUS);
+            } else if (msg.what == SerialportConstants.SERIALPORT_FIND_SUCCESS) {
+                Bundle bundle = msg.getData();
+                String serialport = bundle.getString("serialport");
+                LogUtil.d(TAG, "接收过来的串口号:::::" + serialport);
+                getInnerObject().readyStartCommond(serialport);
+                getInnerObject().onInitSueess();
+            } else if (msg.what == SerialportConstants.SERIALPORT_FIND_FAILURE) {
+                Toast.makeText(getInnerObject(), "查找串口失败", Toast.LENGTH_LONG).show();
             }
         }
     }
+
 }

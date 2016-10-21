@@ -86,7 +86,7 @@ public class MainActivity extends TitlebarActivity {
         super.onCreate(savedInstanceState);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
-
+        LogUtil.d("SSSS", "这里是MainActivity:::::");
         handler = new MyHandler(this);
         //构建闪屏页
         goPage(new SplashPage(), false);
@@ -105,18 +105,16 @@ public class MainActivity extends TitlebarActivity {
             alert("初始化串口失败," + e.getMessage());
             return;
         }
-
         //构建mainpage
         mainPage = new MainPage();
-
         //监听登录结果
         registerSDKListener();
         EventBusManager.register(this);
-
         //执行登录
         login();
 
     }
+
 
     private void initLogFile() {
         String logFilePath = "";
@@ -514,5 +512,4 @@ public class MainActivity extends TitlebarActivity {
             getInnerObject().showAppUpdate((AppInfo) msg.obj);
         }
     }
-
 }

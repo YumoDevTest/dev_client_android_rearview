@@ -72,11 +72,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-
-
-        </activity>
-
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".modules.setting.SettingActivity"
             android:label="@string/page_title_setting" />
@@ -110,7 +106,7 @@
         <!-- </service> -->
         <service
             android:name="com.mapbar.obd.SyncService"
-            android:process="obd.service.process"></service>
+            android:process="obd.service.process" />
         <service android:name=".lib.services.UpdateService" />
         <service
             android:name=".lib.services.RestartService"
@@ -154,13 +150,14 @@
             </intent-filter>
         </receiver>
         <!-- 守护程序 service，自启动监听 -->
-        <!--<service android:name=".lib.daemon.DaemonService">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="com.mapbar.android.obd.rearview.action.DEAMON" />-->
+        <!-- <service android:name=".lib.daemon.DaemonService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.mapbar.android.obd.rearview.action.DEAMON" /> -->
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--</intent-filter>-->
-        <!--</service>-->
+
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
         <!-- 爱心推start -->
         <!-- 定义接收器，用来接收透传、api结果以及点击事件 -->
         <receiver android:name=".modules.push.ixintui.AixintuiBroadcastReceiver">
@@ -220,7 +217,7 @@
         </receiver>
 
         <!-- 爱心推end -->
-        <!--后台登录service-->
+        <!-- 后台登录service -->
         <service
             android:name=".lib.services.OBDV3HService"
             android:process="obd.service.login">
@@ -251,7 +248,6 @@
             android:name=".modules.common.LauncherActivity"
             android:screenOrientation="landscape"
             android:theme="@style/TranslucentTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -259,15 +255,15 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".lib.demon.DemoAutoActivity">-->
-        <!---->
-        <!--</activity>-->
+        <!-- <activity android:name=".lib.demon.DemoAutoActivity"> -->
+        <!--  -->
+        <!-- </activity> -->
         <activity
             android:name=".modules.maintenance.CarMaintenanceReviseActivity"
             android:label="@string/maintenance_title"
-            android:launchMode="singleTop"
-            />
+            android:launchMode="singleTop" />
 
+        <service android:name=".lib.serialportsearch.SerialportFinderService" />
     </application>
 
 </manifest>
