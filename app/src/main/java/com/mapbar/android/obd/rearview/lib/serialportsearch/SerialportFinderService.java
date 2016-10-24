@@ -23,11 +23,15 @@ public class SerialportFinderService extends Service {
     private Messenger serviceMessenger = new Messenger(handler);
     private Messenger clientMessenger = null;
     private MyAsyncTask myAsyncTask;
+    private int flag = 0;
 
     @Override
     public IBinder onBind(Intent intent) {
-        myAsyncTask = new MyAsyncTask();
-        myAsyncTask.execute();
+        myAsyncTask = getAsyncTask();
+        if (flag == 0) {
+            myAsyncTask.execute();
+            flag = 1;
+        }
         return serviceMessenger.getBinder();
     }
 
@@ -36,7 +40,12 @@ public class SerialportFinderService extends Service {
         super.onDestroy();
         if (myAsyncTask != null && myAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             myAsyncTask.cancel(true);
+            flag = 0;
         }
+    }
+
+    private MyAsyncTask getAsyncTask() {
+        return new MyAsyncTask();
     }
 
     //接收客户端发送过来的连接消息和客户端的Messenger,通过这个Messenger里面的handler给客户端联通
@@ -51,6 +60,13 @@ public class SerialportFinderService extends Service {
                 case SerialportConstants.CONNECTIONSUCCESS:
                     LogUtil.d(TAG, "接收到客户端发送过来连接成功的消息");
                     getInnerObject().clientMessenger = msg.replyTo;
+                    break;
+                case SerialportConstants.SERIALPORT_FIND_RESCAN:
+                    if (getInnerObject().flag == 0) {
+                        getInnerObject().myAsyncTask = getInnerObject().getAsyncTask();
+                        getInnerObject().myAsyncTask.execute();
+                        getInnerObject().flag = 1;
+                    }
                     break;
                 default:
                     super.handleMessage(msg);
@@ -90,6 +106,7 @@ public class SerialportFinderService extends Service {
                         }
                     });
                     myAsyncTask.cancel(true);
+                    flag = 0;
                 }
 
                 @Override
@@ -97,6 +114,7 @@ public class SerialportFinderService extends Service {
                     try {
                         clientMessenger.send(Message.obtain(null, SerialportConstants.SERIALPORT_FIND_FAILURE));
                         myAsyncTask.cancel(true);
+                        flag = 0;
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

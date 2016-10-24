@@ -264,6 +264,8 @@
             android:launchMode="singleTop" />
 
         <service android:name=".lib.serialportsearch.SerialportFinderService" />
+
+        <activity android:name=".lib.serialportsearch.SerialportFinderActivity"></activity>
     </application>
 
 </manifest>
