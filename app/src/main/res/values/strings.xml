@@ -315,7 +315,7 @@
     <string name="power_low_tireDialog">低</string>
 
     <!-- 保养校正错误码 -->
-    <string-array name="maintenance_errorcode" >
+    <string-array name="maintenance_errorcode">
         <item>无结果</item>
         <item>拒绝访问</item>
         <item>JSON解析失败</item>

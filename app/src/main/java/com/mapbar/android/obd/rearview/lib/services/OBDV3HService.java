@@ -107,7 +107,6 @@ public class OBDV3HService extends Service {
     private Manager manager;
     private MyHandler mHandler = new MyHandler(this);
     private int times;
-
     private VoiceReceiver mVoiceReceiver;
     private ServiceConnection serialportFinderconn;
     private Intent startCommandIntent;

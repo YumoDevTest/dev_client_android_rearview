@@ -23,27 +23,27 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.lib.base.AppPage2;
-import com.mapbar.android.obd.rearview.util.DecFormatUtil;
-import com.mapbar.android.obd.rearview.util.TimeUtils;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
+import com.mapbar.android.obd.rearview.lib.base.AppPage2;
+import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
+import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
 import com.mapbar.android.obd.rearview.modules.cardata.contract.ICarDataView;
+import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
-import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.setting.SettingActivity;
 import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressurePresenter;
 import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
 import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
-import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
-import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
-import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
+import com.mapbar.android.obd.rearview.util.DecFormatUtil;
+import com.mapbar.android.obd.rearview.util.TimeUtils;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
 import com.mapbar.android.obd.rearview.views.TirePressureViewSimple;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.obd.Manager;
 import com.mapbar.obd.RealTimeData;
+import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 
 import java.util.ArrayList;
@@ -94,6 +94,27 @@ public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarD
 
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
     private MyHandler myHandler;
+    private OBDSDKListenerManager.SDKListener sdkListener = new OBDSDKListenerManager.SDKListener() {
+        @Override
+        public void onEvent(int event, Object o) {
+            // 日志
+            if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
+                Log.v(LogTag.FRAMEWORK, "event:" + event);
+            }
+            super.onEvent(event, o);
+            if (event == Manager.Event.dataUpdate) {
+                RealTimeData realTimeData = (RealTimeData) o;
+                if (realTimeData != null) {
+                    myHandler.obtainMessage(MSG_GET_A_CAR_DATA, realTimeData).sendToTarget();
+                    if (getActivity() != null && !getActivity().isFinishing()) {
+                        //发送广播，传出实时数据
+                        ExternalManager.postRealTimeData(getActivity(), realTimeData);
+                    }
+                }
+
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -174,28 +195,6 @@ public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarD
         ll_car_data_3.setOnClickListener(this);
         ll_car_data_4.setOnClickListener(this);
     }
-
-    private OBDSDKListenerManager.SDKListener sdkListener = new OBDSDKListenerManager.SDKListener() {
-        @Override
-        public void onEvent(int event, Object o) {
-            // 日志
-            if (Log.isLoggable(LogTag.FRAMEWORK, Log.VERBOSE)) {
-                Log.v(LogTag.FRAMEWORK, "event:" + event);
-            }
-            super.onEvent(event, o);
-            if (event == Manager.Event.dataUpdate) {
-                RealTimeData realTimeData = (RealTimeData) o;
-                if (realTimeData != null) {
-                    myHandler.obtainMessage(MSG_GET_A_CAR_DATA, realTimeData).sendToTarget();
-                    if (getActivity() != null && !getActivity().isFinishing()) {
-                        //发送广播，传出实时数据
-                        ExternalManager.postRealTimeData(getActivity(), realTimeData);
-                    }
-                }
-
-            }
-        }
-    };
 
     @Override
     public void onResume() {
@@ -315,7 +314,7 @@ public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarD
             case 1:
                 return TimeUtils.parseTime(realTimeData.tripTime);
             case 2:
-                return DecFormatUtil.format2dot1(realTimeData.tripLength / 1000);
+                return DecFormatUtil.format2dot1(((float) realTimeData.tripLength) / 1000);
             case 3:
                 return DecFormatUtil.format2dot1(realTimeData.driveCost);
             case 4:

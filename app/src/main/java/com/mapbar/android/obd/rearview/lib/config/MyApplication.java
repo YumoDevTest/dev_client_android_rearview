@@ -27,9 +27,6 @@ import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
  * Created by yun on 16/1/7.
  */
 public class MyApplication extends android.app.Application {
-    public static final int BAUDRATE_DEFAULT = 115200;//波特率
-    public static final int TIMEOUT_DEFAULT = 30000;//默认 串口超时时长
-    public static final boolean IS_DEBUG_SERIALPORT = true;//是否debug串口
     private static final String TAG = "MyApplication";
     private static MyApplication instance;
     //构建一个session，会话概念，该 session仅仅在app启动后有效，在app停止后销毁。
