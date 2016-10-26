@@ -19,18 +19,21 @@ import com.mapbar.obd.foundation.utils.SafeHandler;
 public class SerialportFinderService extends Service {
 
     private static final String TAG = "SerialportFinderService";
+    //确保有一个aysnctask运行,主要用于扫描失败重试
+    private final int SCANNING = 1;
+    private final int NO_SCANNING = 0;
     private SerialportFinderHandler handler = new SerialportFinderHandler(this);
     private Messenger serviceMessenger = new Messenger(handler);
     private Messenger clientMessenger = null;
     private MyAsyncTask myAsyncTask;
-    private int flag = 0;
+    private int flag;
 
     @Override
     public IBinder onBind(Intent intent) {
         myAsyncTask = getAsyncTask();
-        if (flag == 0) {
+        if (flag == NO_SCANNING) {
             myAsyncTask.execute();
-            flag = 1;
+            flag = SCANNING;
         }
         return serviceMessenger.getBinder();
     }
@@ -40,7 +43,7 @@ public class SerialportFinderService extends Service {
         super.onDestroy();
         if (myAsyncTask != null && myAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             myAsyncTask.cancel(true);
-            flag = 0;
+            flag = NO_SCANNING;
         }
     }
 
@@ -48,7 +51,9 @@ public class SerialportFinderService extends Service {
         return new MyAsyncTask();
     }
 
-    //接收客户端发送过来的连接消息和客户端的Messenger,通过这个Messenger里面的handler给客户端联通
+    /**
+     * 接收客户端发送过来的连接消息和客户端的Messenger,通过这个Messenger里面的handler给客户端联通
+     */
     private static class SerialportFinderHandler extends SafeHandler<SerialportFinderService> {
         public SerialportFinderHandler(SerialportFinderService object) {
             super(object);
@@ -62,10 +67,10 @@ public class SerialportFinderService extends Service {
                     getInnerObject().clientMessenger = msg.replyTo;
                     break;
                 case SerialportConstants.SERIALPORT_FIND_RESCAN:
-                    if (getInnerObject().flag == 0) {
+                    if (getInnerObject().flag == getInnerObject().NO_SCANNING) {
                         getInnerObject().myAsyncTask = getInnerObject().getAsyncTask();
                         getInnerObject().myAsyncTask.execute();
-                        getInnerObject().flag = 1;
+                        getInnerObject().flag = getInnerObject().SCANNING;
                     }
                     break;
                 default:
@@ -74,6 +79,9 @@ public class SerialportFinderService extends Service {
         }
     }
 
+    /**
+     * 异步执行打开串口
+     */
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -106,15 +114,16 @@ public class SerialportFinderService extends Service {
                         }
                     });
                     myAsyncTask.cancel(true);
-                    flag = 0;
+                    flag = NO_SCANNING;
                 }
 
                 @Override
                 public void onOpenSerialPortFailure(String result) {
+                    LogUtil.d(TAG, "打开串口失败");
                     try {
                         clientMessenger.send(Message.obtain(null, SerialportConstants.SERIALPORT_FIND_FAILURE));
                         myAsyncTask.cancel(true);
-                        flag = 0;
+                        flag = NO_SCANNING;
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

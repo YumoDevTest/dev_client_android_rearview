@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,8 @@ import com.mapbar.android.obd.rearview.lib.base.TitlebarActivity;
 import com.mapbar.android.obd.rearview.lib.config.Configs;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportConstants;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
 import com.mapbar.android.obd.rearview.lib.services.UpdateService;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
@@ -44,6 +47,7 @@ import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.Config;
 import com.mapbar.obd.Manager;
+import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
 import com.mapbar.obd.UserCenter;
 import com.mapbar.obd.foundation.eventbus.EventBusManager;
@@ -86,25 +90,29 @@ public class MainActivity extends TitlebarActivity {
         super.onCreate(savedInstanceState);
         contentView = (RelativeLayout) View.inflate(this, R.layout.main, null);
         setContentView(contentView);
-        LogUtil.d("SSSS", "这里是MainActivity:::::");
         handler = new MyHandler(this);
         //构建闪屏页
         goPage(new SplashPage(), false);
 
         MyApplication.getInstance().setMainActivity(this);
         //停止后台服务
-        stopBackgroundService();
+//        stopBackgroundService();
 
         LogManager.getInstance().init(MainActivity.this);
         initLogFile();
 
         try {
+            if (TextUtils.isEmpty(ObdContext.getSerialPortPath())) {
+                String serialport = SerialportSPUtils.getSerialport(this);
+                ObdContext.configSerialport(serialport, SerialportConstants.BAUDRATE_DEFAULT, SerialportConstants.TIMEOUT_DEFAULT, SerialportConstants.IS_DEBUG_SERIALPORT);
+            }
             OBDSDKListenerManager.getInstance().init();
         } catch (IOException | IOSecurityException e) {
             e.printStackTrace();
             alert("初始化串口失败," + e.getMessage());
             return;
         }
+
         //构建mainpage
         mainPage = new MainPage();
         //监听登录结果
@@ -158,7 +166,8 @@ public class MainActivity extends TitlebarActivity {
                         LogUtil.d(TAG, "## 登录成功");
 
                         goMainPage();
-
+                        String currentUserToken = UserCenter.getInstance().getCurrentUserToken();
+                        LogUtil.d(TAG, "##  当前token::::" + currentUserToken);
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         LogUtil.d(TAG, "## 登录失败");

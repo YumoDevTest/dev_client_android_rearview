@@ -26,7 +26,6 @@ import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.ObdContext;
 import com.mapbar.obd.TripSyncService;
-import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.SerialPortConnection;
 import com.mapbar.obd.serial.comond.impl.SerialPortConnectionCreator;
@@ -94,7 +93,6 @@ public class LauncherActivity extends SimpleActivity implements View.OnClickList
         }
         String serialport = SerialportSPUtils.getSerialport(this);
         if (!TextUtils.isEmpty(serialport)) {
-            LogUtil.d(TAG, "获取到原来保存的串口号::" + serialport);
             ObdContext.configSerialport(serialport, SerialportConstants.BAUDRATE_DEFAULT, SerialportConstants.TIMEOUT_DEFAULT, SerialportConstants.IS_DEBUG_SERIALPORT);
             startActivity(new Intent(getContext(), MainActivity.class));
             finish();

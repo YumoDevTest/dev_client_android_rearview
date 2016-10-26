@@ -1,6 +1,5 @@
 package com.mapbar.android.obd.rearview.lib.serialportsearch;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,15 +21,16 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.obd.ObdContext;
+import com.mapbar.obd.foundation.base.BaseActivity;
 import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.utils.SafeHandler;
 
 
 /**
  * Created by zhangyh on 2016/10/18.
- * 串口扫描的类
+ * 串口扫描的Activity
  */
-public class SerialportFinderActivity extends Activity {
+public class SerialportFinderActivity extends BaseActivity {
     private final static String TAG = "SerialportFinderActivity";
     private ServiceConnection serialportFinderconn;
     private Messenger serialportMessenger;
@@ -48,8 +48,13 @@ public class SerialportFinderActivity extends Activity {
         setContentView(contentView);
         initView();
         mHandler = new MyHandler(this);
+        bindService();
+    }
 
-        //绑定服务
+    /**
+     * 绑定服务
+     */
+    private void bindService() {
         Intent intent = new Intent(this, SerialportFinderService.class);
         bindService(intent, serialportFinderconn = new ServiceConnection() {
 
@@ -89,6 +94,9 @@ public class SerialportFinderActivity extends Activity {
         }
     }
 
+    /**
+     * 通过handler进行传递消息
+     */
     private static class MyHandler extends SafeHandler<SerialportFinderActivity> {
 
         public MyHandler(SerialportFinderActivity object) {
