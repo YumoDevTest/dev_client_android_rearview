@@ -107,7 +107,7 @@
         <service
             android:name="com.mapbar.obd.SyncService"
             android:process="obd.service.process" />
-        <service android:name=".lib.services.UpdateService" />
+        <service android:name=".lib.versionUpdate.BreakpointLoadService" />
         <service
             android:name=".lib.services.RestartService"
             android:process="obd.service.restart.process" />

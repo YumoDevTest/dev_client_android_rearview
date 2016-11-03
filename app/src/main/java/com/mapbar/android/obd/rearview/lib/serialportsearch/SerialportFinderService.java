@@ -31,10 +31,6 @@ public class SerialportFinderService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         myAsyncTask = getAsyncTask();
-        if (flag == NO_SCANNING) {
-            myAsyncTask.execute();
-            flag = SCANNING;
-        }
         return serviceMessenger.getBinder();
     }
 
@@ -65,6 +61,10 @@ public class SerialportFinderService extends Service {
                 case SerialportConstants.CONNECTIONSUCCESS:
                     LogUtil.d(TAG, "接收到客户端发送过来连接成功的消息");
                     getInnerObject().clientMessenger = msg.replyTo;
+                    if (getInnerObject().flag == getInnerObject().NO_SCANNING) {
+                        getInnerObject().myAsyncTask.execute();
+                        getInnerObject().flag = getInnerObject().SCANNING;
+                    }
                     break;
                 case SerialportConstants.SERIALPORT_FIND_RESCAN:
                     if (getInnerObject().flag == getInnerObject().NO_SCANNING) {

@@ -11,8 +11,8 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         applicationId "com.mapbar.android.obd.rearview"
-        versionCode project.VERSION_CODE == null ? 3 : project.VERSION_CODE
-        versionName project.VERSION_NAME == null ? "1.0.4" : project.VERSION_NAME
+        versionCode project.VERSION_CODE == null ? 1 : project.VERSION_CODE
+        versionName project.VERSION_NAME == null ? "1.0.0" : project.VERSION_NAME
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'mapbar']
     }
     signingConfigs {
@@ -36,8 +36,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttys1\"")
-            buildConfigField("Boolean", "IS_FAKE_IMEI", "false")
-            buildConfigField("String", "FAKE_IMEI", "\"\"")
+            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")
+            buildConfigField("String", "FAKE_IMEI", "\"352273017386340\"")
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")
             buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
             buildConfigField("Boolean", "IS_ENABLE_TEST_CAR_DEMO", "false")//是否开启 模拟测试车辆控制的页面
@@ -65,8 +65,8 @@ android {
                 buildConfigField("String", "SERIALPORT_PATH", "\"/dev/ttyS4\"")
             else
                 buildConfigField("String", "SERIALPORT_PATH", "\"${local_serialport_name}\"")
-            buildConfigField("Boolean", "IS_FAKE_IMEI", "true")//是否伪造IMEI
-            buildConfigField("String", "FAKE_IMEI", "\"77726%%fsdffsdfssdfsdfsdfsd\"")//伪造的IMEI
+            buildConfigField("Boolean", "IS_FAKE_IMEI", "false")//是否伪造IMEI
+            buildConfigField("String", "FAKE_IMEI", "\"352273017386340\"")//伪造的IMEI
             buildConfigField("Boolean", "IS_ENABLE_PERMISSION", "false")//是否 开启权限管理类
             //是否开启 首页里的提醒对话框，每次都点很麻烦，就做了个开关
             buildConfigField("Boolean", "IS_ENABLE_ALERM_ON_MAIN_PAGE", "true")
@@ -143,12 +143,13 @@ def flavors() {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:recyclerview-v7:22.1.0'
-    compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     //    compile files('libs/apache-httpcomponents-httpcore.jar')
     compile project(':foundation')
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    testCompile 'junit:junit:4.12'
     compile project(':obddevelopkit')
 }
 
@@ -210,4 +211,5 @@ android.applicationVariants.all { variant ->
 def getBuildTimeStr() {
     return new Date().format('MMddHHmm')
 }
+
 

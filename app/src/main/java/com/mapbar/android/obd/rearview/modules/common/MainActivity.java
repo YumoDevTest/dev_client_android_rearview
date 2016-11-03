@@ -2,10 +2,7 @@ package com.mapbar.android.obd.rearview.modules.common;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,9 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbar.android.net.HttpHandler;
 import com.mapbar.android.obd.rearview.R;
-import com.mapbar.android.obd.rearview.framework.common.OBDHttpHandler;
 import com.mapbar.android.obd.rearview.framework.log.LogManager;
 import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.framework.manager.UserCenterManager;
@@ -34,9 +29,9 @@ import com.mapbar.android.obd.rearview.lib.net.HttpErrorEvent;
 import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportConstants;
 import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
-import com.mapbar.android.obd.rearview.lib.services.UpdateService;
 import com.mapbar.android.obd.rearview.lib.umeng.UmengConfigs;
-import com.mapbar.android.obd.rearview.model.AppInfo;
+import com.mapbar.android.obd.rearview.lib.versionUpdate.AppInfo;
+import com.mapbar.android.obd.rearview.lib.versionUpdate.FileBreakpointLoadManager;
 import com.mapbar.android.obd.rearview.model.QRInfo;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionBuySuccess;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
@@ -58,11 +53,8 @@ import com.mapbar.obd.foundation.utils.SafeHandler;
 import com.mapbar.obd.serial.comond.IOSecurityException;
 import com.umeng.analytics.MobclickAgent;
 
-import org.apache.http.HttpStatus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,6 +76,7 @@ public class MainActivity extends TitlebarActivity {
     private PopupWindow qrPopupWindow;
     private PopupWindow exitAlertDialog;
     private AppPage2 currentPage;
+    private FileBreakpointLoadManager fileBreakpointLoadManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +161,16 @@ public class MainActivity extends TitlebarActivity {
                         goMainPage();
                         String currentUserToken = UserCenter.getInstance().getCurrentUserToken();
                         LogUtil.d(TAG, "##  当前token::::" + currentUserToken);
+                        fileBreakpointLoadManager = new FileBreakpointLoadManager(getContext());
+                        //检测是否有新版本,有新版本则通过handler发送消息,弹出对话框
+                        fileBreakpointLoadManager.checkAppVersion(new FileBreakpointLoadManager.OnCheckAppVersionLinstener() {
+                            @Override
+                            public void prepareUpdate(AppInfo info) {
+                                Message msg = Message.obtain();
+                                msg.obj = info;
+                                handler.sendMessage(msg);
+                            }
+                        });
                         break;
                     case OBDManager.EVENT_OBD_USER_LOGIN_FAILED:
                         LogUtil.d(TAG, "## 登录失败");
@@ -194,7 +197,6 @@ public class MainActivity extends TitlebarActivity {
                         break;
                     case Manager.Event.dataCollectSucc:
                         LogUtil.d(TAG, "## 数据准备成功");
-
                         break;
                 }
 
@@ -262,101 +264,13 @@ public class MainActivity extends TitlebarActivity {
     }
 
     /**
-     * 应用升级
-     */
-    private void checkAppVersion() {
-        LogUtil.d(TAG, "## MainActivity checkAppVersion");
-
-        HttpHandler http = new OBDHttpHandler(getActivity());
-        http.addParamete("package_name", getPackageName());
-
-        String url = "http://wdservice.mapbar.com/appstorewsapi/checkexistlist/" + Build.VERSION.SDK_INT;//接口14.1
-
-        http.setRequest(url, HttpHandler.HttpRequestType.GET);
-        http.setCache(HttpHandler.CacheType.NOCACHE);
-        http.setHeader("ck", "a7dc3b0377b14a6cb96ed3d18b5ed117");
-
-        HttpHandler.HttpHandlerListener listener = new HttpHandler.HttpHandlerListener() {
-            @Override
-            public void onResponse(int httpCode, String str, byte[] responseData) {
-                if (httpCode == HttpStatus.SC_OK) {
-                    JSONObject object = null;
-                    try {
-                        object = new JSONObject(new String(responseData));
-                        int code = object.getInt("status");
-                        switch (code) {
-                            case 200:
-                                AppInfo info = parseAppInfo((JSONObject) object.getJSONArray("data").get(0));
-                                if ((info != null && hasNewAppVersion(info)) || testAppUpdate) {
-                                    Message msg = Message.obtain();
-                                    msg.obj = info;
-                                    handler.sendMessage(msg);
-                                }
-                                break;
-
-                            default:
-                                break;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-        };
-        http.setHttpHandlerListener(listener);
-        http.execute();
-    }
-
-    private boolean hasNewAppVersion(AppInfo info) {
-        int versionCode = -1;
-        try {
-            PackageManager manager = getPackageManager();
-            PackageInfo packageInfo = manager.getPackageInfo(getPackageName(), 0);
-            versionCode = packageInfo.versionCode;
-        } catch (Exception e) {
-        }
-        return (info.getVersion_no() > versionCode && versionCode != -1) ? true : false;
-    }
-
-    private AppInfo parseAppInfo(JSONObject data) {
-        AppInfo info = new AppInfo();
-        try {
-            info.setDescription(data.getString("description"));
-            info.setVersion_no(data.getInt("version_no"));
-            info.setApk_path(data.getString("apk_path"));
-            info.setName(data.getString("name"));
-            info.setPackage_name(data.getString("package_name"));
-            info.setIcon_path(data.getString("icon_path"));
-            info.setApp_id(data.getString("app_id"));
-            info.setVersion_id(data.getString("version_id"));
-            info.setSize(data.getInt("size"));
-        } catch (JSONException e) {
-            info = null;
-            e.printStackTrace();
-        }
-        return info;
-    }
-
-    /**
      * 点击下载,则开启service,并通知栏同步下载进度
-     *
      * @param info
      */
     private void showAppUpdate(final AppInfo info) {
-        String versionName = "unknow";
-        try {
-            String pkName = getPackageName();
-            versionName = getPackageManager().getPackageInfo(pkName, 0).versionName;
-        } catch (Exception e) {
-        }
         View popupView = View.inflate(this, R.layout.layout_app_update_pop, null);
-
-        TextView tv_update_pop_content = (TextView) popupView.findViewById(R.id.tv_update_pop_content);
         TextView tv_update_app_info = (TextView) popupView.findViewById(R.id.tv_update_app_info);
-        tv_update_pop_content.setText(info.getDescription());
-        tv_update_app_info.setText("最新版本 " + versionName + "      " + "新版本大小:" + info.getSize() + "M");
+        tv_update_app_info.setText(info.getDescription() + "      " + "新版本大小:" + info.getSize() + "M");
         View tv_update_confirm = popupView.findViewById(R.id.tv_update_confirm);
         View tv_update_cancle = popupView.findViewById(R.id.tv_update_cancle);
 
@@ -365,7 +279,8 @@ public class MainActivity extends TitlebarActivity {
             public void onClick(View v) {
                 if (updatePopu != null)
                     updatePopu.dismiss();
-                startAppDownload(info);
+                //如果需要更新的话,通过升级管理类,
+                fileBreakpointLoadManager.startUpdate(info);
             }
         });
 
@@ -383,17 +298,12 @@ public class MainActivity extends TitlebarActivity {
         updatePopu.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
     }
 
-    private void startAppDownload(AppInfo info) {
-        Intent updateIntent = new Intent(this, UpdateService.class);
-        updateIntent.putExtra("app_info", info);
-        startService(updateIntent);
-    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        checkAppVersion();
     }
 
     @Override
@@ -409,6 +319,7 @@ public class MainActivity extends TitlebarActivity {
     protected void onDestroy() {
         currentPage = null;
         unregisterSDKListener();
+        fileBreakpointLoadManager.unregisterReceiver();
         dismissQrPopwindow();
         dismissExitAlertDialog();
         //防止popupwindow泄露

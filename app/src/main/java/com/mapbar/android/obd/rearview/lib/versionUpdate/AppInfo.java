@@ -1,4 +1,4 @@
-package com.mapbar.android.obd.rearview.model;
+package com.mapbar.android.obd.rearview.lib.versionUpdate;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class AppInfo implements Serializable {
     private String icon_path;
     private String app_id;
     private String version_id;
-    private int size;
+    private double size;
 
     public String getDescription() {
         return description;
@@ -81,11 +81,26 @@ public class AppInfo implements Serializable {
         this.version_id = version_id;
     }
 
-    public int getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(double size) {
         this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "AppInfo{" +
+                "description='" + description + '\'' +
+                ", version_no=" + version_no +
+                ", apk_path='" + apk_path + '\'' +
+                ", name='" + name + '\'' +
+                ", package_name='" + package_name + '\'' +
+                ", icon_path='" + icon_path + '\'' +
+                ", app_id='" + app_id + '\'' +
+                ", version_id='" + version_id + '\'' +
+                ", size=" + size +
+                '}';
     }
 }

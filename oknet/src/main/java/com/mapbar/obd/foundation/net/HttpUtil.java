@@ -1,8 +1,8 @@
 package com.mapbar.obd.foundation.net;
 
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.mapbar.obd.foundation.log.OutputStringUtil;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mapbar.obd.foundation.log.LogUtil;
 
 /**
  * 发送和接收请求
@@ -26,8 +25,8 @@ import com.mapbar.obd.foundation.log.LogUtil;
  * Created by zhangyunfei on 16/8/9.
  */
 public final class HttpUtil {
-    private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
     public static final String TAG = "HTTP";
+    private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
     private static final Object DEFAULT_TAG = "DEFAULT_TAG";
 
     /**
@@ -36,7 +35,7 @@ public final class HttpUtil {
     public static void clear() {
         MyHttpContext.getOkHttpClient().cancel(DEFAULT_TAG);
         MyHttpContext.getOkHttpClient().cancel(null);
-        android.util.Log.d(TAG, "## [HTTP] 清理全部HTTP请求");
+        Log.d(TAG, "## [HTTP] 清理全部HTTP请求");
     }
 
     /**
@@ -46,7 +45,30 @@ public final class HttpUtil {
      * @param para
      * @param callback
      */
+    public static void post(String url, HashMap<String, String> para, final HttpCallback callback) {
+        post(url, null, para, callback, null);
+    }
+
+
+    /**
+     * 发送请求
+     *
+     * @param url
+     * @param para
+     * @param callback
+     */
     public static void post(String url, HashMap<String, String> para, final HttpCallback callback, final ProgressIndicator progressIndicator) {
+        post(url, null, para, callback, progressIndicator);
+    }
+
+    /**
+     * 发送请求
+     *
+     * @param url
+     * @param para
+     * @param callback
+     */
+    public static void post(String url, HashMap<String, String> headers, HashMap<String, String> para, final HttpCallback callback, final ProgressIndicator progressIndicator) {
         if (TextUtils.isEmpty(url))
             throw new NullPointerException("url 不能为空");
         try {
@@ -55,14 +77,20 @@ public final class HttpUtil {
             RequestIntercepter requestParaIntercepter = MyHttpContext.getRequestIntercepter();
 
             //加密构建消息体
-            HashMap<String, String> headPara = new HashMap<>();
+            HashMap<String, String> headsGloble = new HashMap<>();
             if (requestParaIntercepter != null) {
-                requestParaIntercepter.onHandleParameter(url, para, headPara);
+                requestParaIntercepter.onHandleParameter(url, para, headsGloble);
             }
             Headers.Builder headersBuilder = new Headers.Builder();
-            for (Map.Entry<String, String> item : headPara.entrySet()) {
+            for (Map.Entry<String, String> item : headsGloble.entrySet()) {
                 if (TextUtils.isEmpty(item.getKey())) continue;
                 headersBuilder.add(item.getKey(), item.getValue() == null ? "" : item.getValue());
+            }
+
+            if (headers != null) {
+                for (Map.Entry<String, String> item : headers.entrySet()) {
+                    headersBuilder.add(item.getKey(), item.getValue() == null ? "" : item.getValue());
+                }
             }
 
             StringBuilder sb = new StringBuilder();
@@ -76,14 +104,22 @@ public final class HttpUtil {
                     sb.append(item.getKey()).append(" = ").append(item.getValue()).append(", ");
                 }
             }
-            LogUtil.d(TAG, OutputStringUtil.transferForPrint(sb.toString()));
             //构建请求
-            final Request request = new Request.Builder()
-                    .headers(headersBuilder.build())
-                    .url(url)
-                    .post(formEncodingBuilder.build())
-                    .tag(DEFAULT_TAG)
-                    .build();
+            Request request = null;
+            if (para == null) {
+                request = new Request.Builder()
+                        .headers(headersBuilder.build())
+                        .url(url)
+                        .tag(DEFAULT_TAG)
+                        .build();
+            } else {
+                request = new Request.Builder()
+                        .headers(headersBuilder.build())
+                        .url(url)
+                        .post(formEncodingBuilder.build())
+                        .tag(DEFAULT_TAG)
+                        .build();
+            }
             //new call
             Call call = MyHttpContext.getOkHttpClient().newCall(request);
             //请求加入调度
@@ -91,7 +127,7 @@ public final class HttpUtil {
 
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    LogUtil.e(TAG, String.format("## [HTTP]onFailure exception type = %s, msg = %s", e.getClass(), e.getMessage()), e);
+                    Log.e(TAG, String.format("## [HTTP]onFailure exception type = %s, msg = %s", e.getClass(), e.getMessage()), e);
                     if (callback != null)
                         callback.onFailure(0, e, null);
                     if (progressIndicator != null)
@@ -103,7 +139,7 @@ public final class HttpUtil {
                     final long bodyLength = response.body().contentLength();
                     final String bodyString = response.body().string();
                     final int httpCode = response.code();
-                    LogUtil.d(TAG, "## [HTTP] 收到响应,HTTP Code=" + httpCode + ", content length=" + bodyLength + ", content=" + bodyString);
+                    Log.d(TAG, "## [HTTP] 收到响应,HTTP Code=" + httpCode + ", content length=" + bodyLength + ", content=" + bodyString);
                     if (!response.isSuccessful()) {
                         if (callback != null) {
                             String errStr = "HTTP异常，http code=" + response.code();
@@ -117,7 +153,7 @@ public final class HttpUtil {
                     HttpResponse httpResponse1 = null;
                     try {
                         json = new JSONObject(bodyString);
-                        int code = json.getInt("code");
+                        int code = json.getInt("status");
                         String msg = json.getString("msg");
                         String data = json.isNull("data") ? null : json.getString("data");
                         httpResponse1 = new HttpResponse(code, msg, data);
@@ -127,7 +163,7 @@ public final class HttpUtil {
                             progressIndicator.onFinish();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        LogUtil.e(TAG, "## [HTTP]解析ERROR:" + e.getMessage(), e);
+                        Log.e(TAG, "## [HTTP]解析ERROR:" + e.getMessage(), e);
                         if (callback != null)
                             callback.onFailure(httpCode, e, httpResponse1);
                         if (progressIndicator != null)
