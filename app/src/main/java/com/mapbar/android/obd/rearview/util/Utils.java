@@ -140,7 +140,7 @@ public class Utils {
             android.util.Log.e("IMEI", "## 无IMEI，无法启动！");
             android.util.Log.e("IMEI", "## *************************************");
         }
-        return "20160913zhy0709";
+        return deviceId;
         //9231777770048302
 //        return deviceId;
 //        return "20160815weishite";
