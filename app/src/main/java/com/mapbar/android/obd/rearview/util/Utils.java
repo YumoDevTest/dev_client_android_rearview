@@ -132,8 +132,7 @@ public class Utils {
             LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
         } else {
             LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
-//            deviceId = BuildConfig.FAKE_IMEI;
-            deviceId = "20160913zhy0709";
+            deviceId = BuildConfig.FAKE_IMEI;
         }
 
         if (TextUtils.isEmpty("deviceId")) {
@@ -141,7 +140,7 @@ public class Utils {
             android.util.Log.e("IMEI", "## 无IMEI，无法启动！");
             android.util.Log.e("IMEI", "## *************************************");
         }
-        return deviceId;
+        return "20160913zhy0709";
         //9231777770048302
 //        return deviceId;
 //        return "20160815weishite";
