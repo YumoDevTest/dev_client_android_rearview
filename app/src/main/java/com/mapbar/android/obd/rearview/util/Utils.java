@@ -132,7 +132,8 @@ public class Utils {
             LogUtil.d(TAG, "## 准备返回真实的IMEI: " + deviceId);
         } else {
             LogUtil.d(TAG, "## 准备返回模拟的IMEI: " + BuildConfig.FAKE_IMEI);
-            deviceId = BuildConfig.FAKE_IMEI;
+//            deviceId = BuildConfig.FAKE_IMEI;
+            deviceId = "20160913zhy0709";
         }
 
         if (TextUtils.isEmpty("deviceId")) {
