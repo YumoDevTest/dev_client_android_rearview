@@ -153,7 +153,13 @@ public final class HttpUtil {
                     HttpResponse httpResponse1 = null;
                     try {
                         json = new JSONObject(bodyString);
-                        int code = json.getInt("status");
+                        String strCode = bodyString.substring(2,8);
+                        int code;
+                        if ("status".equalsIgnoreCase(strCode)){
+                            code = json.getInt("status");
+                        }else{
+                            code = json.getInt("code");
+                        }
                         String msg = json.getString("msg");
                         String data = json.isNull("data") ? null : json.getString("data");
                         httpResponse1 = new HttpResponse(code, msg, data);
