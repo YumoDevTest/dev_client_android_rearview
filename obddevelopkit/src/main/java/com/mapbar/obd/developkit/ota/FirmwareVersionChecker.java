@@ -17,6 +17,8 @@ import com.mapbar.obd.foundation.net.GsonHttpCallback;
 import com.mapbar.obd.foundation.net.HttpParameter;
 import com.mapbar.obd.foundation.net.HttpResponse;
 import com.mapbar.obd.foundation.net.HttpUtil;
+import com.mapbar.obd.serial.ota.OtaCacheDirectory;
+import com.mapbar.obd.serial.utils.LogHelper;
 import com.mapbar.obd.serial.utils.OutputStringUtil;
 
 import java.io.File;
@@ -56,7 +58,7 @@ public class FirmwareVersionChecker {
         if (conext == null)
             throw new NullPointerException();
         //配置缓存dir
-        otaFileCacheDir = ensureExistOTAFilesDir(conext);
+        otaFileCacheDir = OtaCacheDirectory.ensureExistOTAFilesDir(conext);
         boolean isV3SpecialOta = isV3SpecialOta();
         VinManager vinManager = new VinManager();
         String vin = vinManager.getVin();
@@ -76,7 +78,7 @@ public class FirmwareVersionChecker {
     }
 
     private static void print(String msg) {
-        android.util.Log.d(TAG, msg);
+        LogHelper.d(TAG, msg);
     }
 
     /**
@@ -319,24 +321,5 @@ public class FirmwareVersionChecker {
         void onError(Exception e);
     }
 
-    /**
-     * 获得 OTA 升级时，bin文件的下载，解压路径
-     *
-     * @return dir
-     */
-    private static File ensureExistOTAFilesDir(Context context) throws IllegalAccessException {
-        if (context == null)
-            throw new NullPointerException();
-        String packagename = context.getPackageName();
-        File dir = new File(Environment.getExternalStorageDirectory(), packagename + "/binfile");//Environment.getExternalStorageDirectory().getAbsolutePath();
-        if (!dir.exists()) {
-            boolean isOk = dir.mkdirs();
-            if (!isOk)
-                print("## 创建bin缓存文件夹异常");
-        }
-        print("## OTA文件夹基础路径 = " + dir.getPath());
-        if (!dir.exists())
-            throw new IllegalAccessException("无法访问缓存目录" + dir.getPath());
-        return dir;
-    }
+
 }

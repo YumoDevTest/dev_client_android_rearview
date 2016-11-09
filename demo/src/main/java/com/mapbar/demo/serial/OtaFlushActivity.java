@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.mapbar.demo.R;
 import com.mapbar.obd.ObdContext;
+import com.mapbar.obd.developkit.ota.FirmwareVersionChecker;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
 import com.mapbar.obd.serial.ota.FirmwareUpdateManager;
+import com.mapbar.obd.serial.ota.OtaCacheDirectory;
 
 import java.io.File;
 
@@ -102,8 +104,7 @@ public class OtaFlushActivity extends Activity {
             return;
         }
         //刷固件的业务类
-        FirmwareUpdateManager firmwareUpdateManager;
-        firmwareUpdateManager = ObdContext.getInstance().getFirmwareUpdateManager();
+        final FirmwareUpdateManager firmwareUpdateManager = ObdContext.getInstance().getFirmwareUpdateManager();
         firmwareUpdateManager.updateFirware(file, new FirmwareUpdateCallback() {
             @Override
             public void onStart(File filePath) {
@@ -143,6 +144,7 @@ public class OtaFlushActivity extends Activity {
                         alert("成功");
                     }
                 });
+                OtaCacheDirectory.clearCache(getActivity());
             }
         });
     }
@@ -160,5 +162,10 @@ public class OtaFlushActivity extends Activity {
 
             }
         });
+    }
+
+
+    private Activity getActivity() {
+        return this;
     }
 }
