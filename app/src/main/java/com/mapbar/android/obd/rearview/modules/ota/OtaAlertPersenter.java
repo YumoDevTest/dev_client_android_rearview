@@ -7,6 +7,7 @@ import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
 import com.mapbar.android.obd.rearview.modules.ota.contract.IOtaAlertView;
 import com.mapbar.obd.serial.ota.FirmwareUpdateCallback;
+import com.mapbar.obd.serial.ota.OtaCacheDirectory;
 
 import java.io.File;
 
@@ -17,6 +18,7 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
     private String firewware_bin_file;
     private boolean is_fouce_upgreade;
     private FirmwareWriter firmwareWriter;
+    private static final String TAG = "OtaAlertPersenter";
 
     public OtaAlertPersenter(IOtaAlertView view, Bundle bundle) {
         super(view, bundle);
@@ -50,27 +52,28 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
 
             @Override
             public void onStart(File filePath) {
-                android.util.Log.i("TAG", "### ============ start!   " + filePath);
+                android.util.Log.i(TAG, "### ============ start!   " + filePath);
                 getView().showView_alertProgress(0);
             }
 
             @Override
             public void onProgress(int progress) {
-                android.util.Log.i("TAG", "### ============ " + progress);
+                android.util.Log.i(TAG, "### ============ " + progress);
                 getView().showView_alertProgress(progress);
             }
 
             @Override
             public void onError(Exception exception) {
-                android.util.Log.e("TAG", "### ============ERROR: " + exception.getMessage());
+                android.util.Log.e(TAG, "### ============ERROR: " + exception.getMessage());
 //                getView().alert(exception.getMessage());
                 getView().showView_alertFailure();
             }
 
             @Override
             public void onComplete() {
-                android.util.Log.i("TAG", "### ============ complete");
+                android.util.Log.i(TAG, "### ============ complete");
                 getView().showView_alertSuccess();
+                OtaCacheDirectory.clearCache(getView().getContext());
             }
         });
     }

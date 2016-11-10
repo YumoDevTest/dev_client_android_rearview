@@ -117,7 +117,7 @@ public class FileBreakpointLoadManager {
      * @param onCheckAppVersionLinstener
      */
     public void checkAppVersion(final OnCheckAppVersionLinstener onCheckAppVersionLinstener) {
-        Toast.makeText(context, "开始查询最新信息", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "开始查询最新信息", Toast.LENGTH_SHORT).show();
         Type type = new TypeToken<List<AppInfo>>() {
         }.getType();
         HashMap<String, String> headers = new HashMap<>();
