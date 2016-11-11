@@ -36,7 +36,6 @@ import com.mapbar.obd.MaintenanceResult;
 import com.mapbar.obd.MaintenanceState;
 import com.mapbar.obd.MaintenanceTask;
 import com.mapbar.obd.Manager;
-import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.umeng.MobclickAgentEx;
 
 import java.text.ParseException;
@@ -73,6 +72,8 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
     private IPermissionAlertViewAdatper permissionAlertAbleAdapter;
     private OBDSDKListenerManager.SDKListener sdkListener;
     private static final int REQUEST_CARMAINTENANCEREVISE = 1;
+    //是否跳转保养校正页面
+    private boolean isJumpCarMaintenanceReviseActivity = false;
 
     @Nullable
     @Override
@@ -104,7 +105,7 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 MobclickAgentEx.onEvent(getActivity(), UmengConfigs.SETMAINTENANCE);
-                startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+                jumpCarMaintenanceReviseActivity();
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -112,6 +113,22 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
         rl_view.setLayoutManager(layoutManager);
         presenter = new MaintenancePresenter(this);
         setListener();
+    }
+
+    private void jumpCarMaintenanceReviseActivity() {
+        startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+    }
+
+    /**
+     * 如果没有填写保养数据,或者数据有误则划入保养页时跳转到保养校正页面进行更改
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isJumpCarMaintenanceReviseActivity) {
+            jumpCarMaintenanceReviseActivity();
+        }
     }
 
     /**
@@ -187,11 +204,11 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
                 StringUtil.toastStringShort("行驶里程超出了该车保养范围");
                 break;
             case MaintenanceResult.parameterError:
-                startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+                isJumpCarMaintenanceReviseActivity = true;
                 StringUtil.toastStringShort("保养参数有误");
                 break;
             case MaintenanceResult.parameterIncomplete:
-                startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+                isJumpCarMaintenanceReviseActivity = true;
                 StringUtil.toastStringShort("保养参数不完整");
                 break;
             default:
@@ -274,7 +291,7 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
                         MaintenanceError error = (MaintenanceError) o;
                         if (10 == error.errCode) {
                             //未填信息
-                            startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+                            isJumpCarMaintenanceReviseActivity = true;
                         } else {
                             StringUtil.toastStringShort(error.errMsg);
                         }
@@ -293,7 +310,7 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btn_alreadyUpkeep:
                 MobclickAgentEx.onEvent(getActivity(), UmengConfigs.MAINTENANCED);
-                startActivityForResult(new Intent(getActivity(), CarMaintenanceReviseActivity.class),REQUEST_CARMAINTENANCEREVISE);
+                jumpCarMaintenanceReviseActivity();
                 break;
         }
     }
@@ -382,6 +399,7 @@ public class CarMaintenancePage extends AppPage2 implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(REQUEST_CARMAINTENANCEREVISE == requestCode){
             if( resultCode == Activity.RESULT_OK){
+                isJumpCarMaintenanceReviseActivity = false;
                 getLocalSchemeCache();
             }
         }

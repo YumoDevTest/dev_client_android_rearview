@@ -29,7 +29,6 @@ import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.util.Utils;
 import com.mapbar.obd.CarStatusData;
-import com.mapbar.obd.Config;
 import com.mapbar.obd.Firmware;
 import com.mapbar.obd.LocalCarModelInfoResult;
 import com.mapbar.obd.LocalUserCarResult;
@@ -93,10 +92,13 @@ public class OBDV3HService extends Service {
     private static long mDelay = 0L;
     public Manager.Listener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
+    private static boolean isShowToast = false;
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
+            if(isShowToast)
+                Toast.makeText(OBDV3HService.this, "关闭V3服务", Toast.LENGTH_SHORT).show();
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
             LogUtil.d(TAG, "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
@@ -246,7 +248,7 @@ public class OBDV3HService extends Service {
 
                     case Manager.Event.dataUpdate:
                         RealTimeData data = (RealTimeData) o;
-                        if (Config.DEBUG)
+                        if (isShowToast)
                             Toast.makeText(OBDV3HService.this, "有数据", Toast.LENGTH_SHORT).show();
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData speed:" + data.speed);
                         Log.v(LogTag.FRAMEWORK, "whw OBDV3HService RealtimeData gasConsumInLPerHour:" + data.gasConsumInLPerHour);
@@ -354,7 +356,8 @@ public class OBDV3HService extends Service {
         try {
             LogUtil.d(TAG, "## V3服务 onStartCommand");
             openDevice();
-            Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
+            if (isShowToast)
+                Toast.makeText(OBDV3HService.this, "开启了V3服务", Toast.LENGTH_SHORT).show();
 
             // Reset the options to default.
             mNeedWaitForSignal = false;
@@ -641,7 +644,9 @@ public class OBDV3HService extends Service {
                 getInnerObject().readyStartCommond(serialport);
                 getInnerObject().onInitSueess();
             } else if (msg.what == SerialportConstants.SERIALPORT_FIND_FAILURE) {
-                Toast.makeText(getInnerObject(), "查找串口失败", Toast.LENGTH_LONG).show();
+                if (isShowToast)
+                    Toast.makeText(getInnerObject(), "查找串口失败", Toast.LENGTH_LONG).show();
+                LogUtil.d(TAG,"查找串口失败");
             }
         }
     }
