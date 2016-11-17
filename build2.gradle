@@ -163,14 +163,15 @@ String latestBuildToolsAvailable(String defaultBuildTools) {
     }
 }
 
+//2016-11-17 张云飞：串口名改为自搜索，无需再配置
 //获得 jenkins里配置的环境变量，串口名
-def getPara_SERIALPORT_PATH = {
-    def var1 = System.getenv('SERIALPORT_PATH')
-    if (var1) {
-        return var1
-    }
-    return null
-}
+//def getPara_SERIALPORT_PATH = {
+//    def var1 = System.getenv('SERIALPORT_PATH')
+//    if (var1) {
+//        return var1
+//    }
+//    return null
+//}
 
 //获得 是否伪造IMEI
 def getPara_IS_FAKE_IMEI = {
@@ -301,7 +302,7 @@ def readLocalProperty(String key) {
 }
 
 ext {
-    SERIALPORT_PATH = getPara_SERIALPORT_PATH()
+//    SERIALPORT_PATH = getPara_SERIALPORT_PATH()
     IS_FAKE_IMEI = getPara_IS_FAKE_IMEI()
     FAKE_IMEI = getPara_FAKE_IMEI()
 
@@ -331,7 +332,7 @@ println "#读取环境参数,BRANCH_NAME is ${BRANCH_NAME}"
 println '#读取环境参数,GET_VERSION is ' + project.GET_VERSION
 //println '#读取环境参数,compileSdkVersion = ' + project.compileSdkVersion
 //println '#读取环境参数,buildToolsVersion =' + project.buildToolsVersion
-println '#读取环境参数,串口名：' + project.SERIALPORT_PATH
+//println '#读取环境参数,串口名：' + project.SERIALPORT_PATH
 println '#读取环境参数,是否伪造IMEI：' + project.IS_FAKE_IMEI
 println '#读取环境参数,伪造的IMEI：' + project.FAKE_IMEI
 println '#读取环境参数,版本号(编号)：' + project.VERSION_CODE
