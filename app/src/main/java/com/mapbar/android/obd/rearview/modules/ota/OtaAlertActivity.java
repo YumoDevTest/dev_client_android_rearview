@@ -1,5 +1,6 @@
 package com.mapbar.android.obd.rearview.modules.ota;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -41,8 +42,14 @@ public class OtaAlertActivity extends SimpleActivity implements IOtaAlertView {
 
             @Override
             public void onClick(View view) {
-                //更新按钮 点击
-                otaAlertPersenter.beginUpgrade();
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        //更新按钮 点击
+                        otaAlertPersenter.beginUpgrade();
+                        return null;
+                    }
+                }.execute();
             }
         });
         otaAlertUpgradeView.setCancelButtonClick(new View.OnClickListener() {

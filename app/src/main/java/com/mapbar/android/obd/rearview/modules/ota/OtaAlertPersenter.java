@@ -48,6 +48,8 @@ public class OtaAlertPersenter extends BasePresenter<IOtaAlertView> {
      * 开始更新固,写固件的过程
      */
     public void beginUpgrade() {
+        getView().showView_alertProgress(0);
+
         firmwareWriter.writeFirmware(new File(firewware_bin_file), new FirmwareUpdateCallback() {
 
             @Override
