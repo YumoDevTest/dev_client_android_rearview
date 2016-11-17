@@ -9,11 +9,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.lib.config.Urls;
+import com.mapbar.android.obd.rearview.lib.serialportsearch.SerialportSPUtils;
 import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.io.BufferedReader;
@@ -180,7 +182,11 @@ public class EnvironmentInfoUtils {
      * 获取gradle中debug配置参数
      */
     private static void putDebugMsg(HashMap<String, String> environmentMsgMap, Activity context) {
-        environmentMsgMap.put("串口号", BuildConfig.SERIALPORT_PATH);
+        String serialport = SerialportSPUtils.getSerialport(context);
+        if (TextUtils.isEmpty(serialport))
+            environmentMsgMap.put("串口号", "等待扫描");
+        else
+            environmentMsgMap.put("串口号", serialport);
         environmentMsgMap.put("是否伪造IMEI", BuildConfig.IS_FAKE_IMEI + "");
         environmentMsgMap.put("伪造的IMEI", BuildConfig.FAKE_IMEI);
         environmentMsgMap.put("是否开启权限管理", BuildConfig.IS_ENABLE_PERMISSION + "");
