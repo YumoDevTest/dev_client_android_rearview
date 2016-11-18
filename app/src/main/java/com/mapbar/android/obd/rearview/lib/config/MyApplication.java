@@ -3,6 +3,7 @@ package com.mapbar.android.obd.rearview.lib.config;
 import android.content.Intent;
 
 import com.ixintui.pushsdk.PushSdkApi;
+import com.mapbar.android.obd.rearview.BuildConfig;
 import com.mapbar.android.obd.rearview.lib.net.DefalutHttpExceptionHandler;
 import com.mapbar.android.obd.rearview.lib.net.MyRequestIntercepter;
 import com.mapbar.android.obd.rearview.lib.services.RestartService;
@@ -64,7 +65,9 @@ public class MyApplication extends android.app.Application {
         //配置umeng统计分析
         MobclickAgentEx.onStart();
 //        捕捉异常注册
-        Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        if(BuildConfig.DEBUG){
+            Thread.setDefaultUncaughtExceptionHandler(new MyCrashLoger());
+        }
         //注册爱心推
         PushSdkApi.register(this, AixintuiConfigs.AIXINTUI_APPKEY, Utils.getChannel(this), Utils.getVersion(this) + "");
 

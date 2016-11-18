@@ -118,25 +118,25 @@ public class MainActivity extends TitlebarActivity {
 
 
     private void initLogFile() {
-        String logFilePath = "";
-        logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
-        String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
-
-        File file = new File(logFilePath);
-        File file1 = new File(logFilePath1);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        if (!file1.exists()) {
-            file1.mkdirs();
-        }
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat(
-                "yyyy_MM_dd_HH_mm_ss");
-        String fileName = "/log_" + format.format(c.getTime())
-                + ".txt";
-        File logFile = new File(logFilePath + fileName);
         if (Config.DEBUG) {
+            String logFilePath = "";
+            logFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/client_Log1/";
+            String logFilePath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + Configs.FILE_PATH + "/log/";
+
+            File file = new File(logFilePath);
+            File file1 = new File(logFilePath1);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            if (!file1.exists()) {
+                file1.mkdirs();
+            }
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat(
+                    "yyyy_MM_dd_HH_mm_ss");
+            String fileName = "/log_" + format.format(c.getTime())
+                    + ".txt";
+            File logFile = new File(logFilePath + fileName);
             com.mapbar.android.log.LogManager.getInstance().setLog(true);
             com.mapbar.android.log.LogManager.getInstance().setLogFile(true);
             if (!logFile.exists())
