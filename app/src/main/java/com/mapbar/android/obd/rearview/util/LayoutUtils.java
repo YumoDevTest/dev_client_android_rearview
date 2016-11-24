@@ -27,9 +27,9 @@ import android.widget.TextView;
 import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
-import com.mapbar.android.obd.rearview.views.ProgressView;
-import com.mapbar.android.obd.rearview.modules.common.MainActivity;
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
+import com.mapbar.android.obd.rearview.modules.common.MainActivity;
+import com.mapbar.android.obd.rearview.views.ProgressView;
 import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.io.FileNotFoundException;
@@ -183,12 +183,12 @@ public class LayoutUtils {
                 v_mid.setVisibility(View.GONE);
                 break;
         }
-        final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
+        final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        int removeW = getScreenArea().width() / 2 - activity.getContentView().getWidth() / 2 - getViewLocationOnScreen(activity)[0];
         if (containt == null) {
-            popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
+            popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, -removeW, 0);
         } else {
-            popupWindow.showAtLocation(containt, Gravity.CENTER, 0, 0);
+            popupWindow.showAtLocation(containt, Gravity.CENTER, -removeW, 0);
         }
 
 //        }
@@ -220,15 +220,16 @@ public class LayoutUtils {
         iv.setImageBitmap(bmQR);
         tv = (TextView) view.findViewById(R.id.tv_qr_info);
         tv.setText(info);
-        PopupWindow popupQR = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-//            ArrayList<AppPage> pages = PageManager.create().getPages();
-//            if (pages.size() > 0) {
-        popupQR.showAtLocation(activity.getContentView(), Gravity.CENTER, 0, 0);
-
-//            }
-
+        PopupWindow popupQR = new PopupWindow(view, activity.getContentView().getWidth(), activity.getContentView().getHeight(), true);
+        popupQR.showAtLocation(activity.getContentView(), Gravity.LEFT, getViewLocationOnScreen(activity)[0], 0);
         return popupQR;
+    }
 
+    private static int[] getViewLocationOnScreen(MainActivity activity) {
+        int[] ints = new int[2];
+        //获取控件所在位置
+        activity.getContentView().getLocationOnScreen(ints);
+        return ints;
     }
 
     /**

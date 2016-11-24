@@ -11,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
@@ -20,21 +22,23 @@ import com.mapbar.android.obd.rearview.framework.manager.OBDManager;
 import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
 import com.mapbar.android.obd.rearview.lib.services.OBDSDKListenerManager;
-import com.mapbar.android.obd.rearview.modules.carstate.CarStatePage;
-import com.mapbar.android.obd.rearview.modules.maintenance.CarMaintenancePage;
-import com.mapbar.android.obd.rearview.modules.controltest.ControlTestPage;
-import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPage;
-import com.mapbar.obd.foundation.log.LogUtil;
-import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 import com.mapbar.android.obd.rearview.modules.cardata.CarDataPage;
+import com.mapbar.android.obd.rearview.modules.carstate.CarStatePage;
+import com.mapbar.android.obd.rearview.modules.checkup.VehicleCheckupPage;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
+import com.mapbar.android.obd.rearview.modules.controltest.ControlTestPage;
+import com.mapbar.android.obd.rearview.modules.maintenance.CarMaintenancePage;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.util.TraceUtil;
 import com.mapbar.android.obd.rearview.views.TimerDialog;
+import com.mapbar.obd.foundation.log.LogUtil;
+import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
 
 
 /**
@@ -239,10 +243,22 @@ public class MainPage extends AppPage2 implements IMainPageView {
         if (mAlarmTimerDialog == null || mAlarmTimerDialog.isShowing())
             return;
         if (notification == null) return;
+        setDialogLocation();
         //弹窗
         mAlarmTimerDialog.showAlerm(notification.getText());
         //语音播报
         TextToSpeechManager.speak(getActivity(), notification.getWord());
+    }
+
+    private void setDialogLocation() {
+        int[] ints = new int[2];
+        //获取控件所在位置
+        getContentView().getLocationOnScreen(ints);
+        Window dialogWindow = mAlarmTimerDialog.getWindow();
+        WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
+        int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
+        layoutParams.x = -removeW;
+        dialogWindow.setAttributes(layoutParams);
     }
 
     /**
