@@ -9,9 +9,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.mapbar.android.obd.rearview.lib.config.MyApplication;
-import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.mapdal.NativeEnv;
 import com.mapbar.obd.TripSyncService;
+import com.mapbar.obd.foundation.log.LogUtil;
 
 import java.util.List;
 
@@ -35,6 +35,7 @@ public class ServicManager extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        LogUtil.d(TAG, "## 启动ServicManager");
         if (!NativeEnv.isServiceRunning(TripSyncService.class.getName())) {
             Intent intent1 = new Intent(ServicManager.this, TripSyncService.class);
             stopService(intent1);

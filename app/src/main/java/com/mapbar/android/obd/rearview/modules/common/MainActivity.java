@@ -319,7 +319,8 @@ public class MainActivity extends TitlebarActivity {
     protected void onDestroy() {
         currentPage = null;
         unregisterSDKListener();
-        fileBreakpointLoadManager.unregisterReceiver();
+        if (fileBreakpointLoadManager != null)
+            fileBreakpointLoadManager.unregisterReceiver();
         dismissQrPopwindow();
         dismissExitAlertDialog();
         //防止popupwindow泄露

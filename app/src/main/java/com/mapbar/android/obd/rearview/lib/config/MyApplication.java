@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.lib.config;
 
 import android.content.Intent;
+import android.os.Handler;
 
 import com.ixintui.pushsdk.PushSdkApi;
 import com.mapbar.android.obd.rearview.BuildConfig;
@@ -37,6 +38,7 @@ public class MyApplication extends android.app.Application {
     private Session mSession;
     private boolean imei;
     private MainActivity mainActivity;//主页面
+    private Handler handler = new Handler();
 
     public MyApplication() {
         instance = this;
@@ -141,21 +143,25 @@ public class MyApplication extends android.app.Application {
      */
     public void exitApplication() {
         android.util.Log.d(TAG, "## [application] exitApplication");
-
+        //启动后台服务
+        startV3HService();
+//        Manager.getInstance().stopReadThreadForUpgrage();
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
             getMainActivity().finish();
         }
         setMainActivity(null);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Manager.getInstance().cleanup();
+                //umeng统计，在杀死进程是需要调用用来保存统计数据。
+                MobclickAgentEx.onKillProcess(MyApplication.this);
+                //启动后台服务
+//                startV3HService();
+                System.exit(0);
+            }
+        }, 1000);
 
-//        Manager.getInstance().stopTrip(true);
-        Manager.getInstance().cleanup();
-        //umeng统计，在杀死进程是需要调用用来保存统计数据。
-        MobclickAgentEx.onKillProcess(this);
-
-        //启动后台服务
-        startV3HService();
-
-        System.exit(0);
     }
 
     /**

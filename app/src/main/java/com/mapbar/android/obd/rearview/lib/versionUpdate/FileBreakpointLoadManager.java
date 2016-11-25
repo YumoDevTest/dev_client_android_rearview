@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.mapbar.obd.foundation.net.GsonHttpCallback;
@@ -31,6 +30,7 @@ public class FileBreakpointLoadManager {
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
     private AppInfo info;
+    private boolean isUnregisterReceiver;
     /**
      * 创建广播对象
      */
@@ -91,13 +91,15 @@ public class FileBreakpointLoadManager {
         //注册网络监听广播,如果有网进行下载,没网停止
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         context.registerReceiver(myReceiver, filter);
+        isUnregisterReceiver = true;
         //如果下载完成就会关闭网络监听
         IntentFilter closeNetLinstenerFilter = new IntentFilter("mapbar.obd.intent.action.CLOSE_NETLINSTENER");
         context.registerReceiver(closeNetLinstenerReceiver, closeNetLinstenerFilter);
     }
 
     public void unregisterReceiver() {
-        context.unregisterReceiver(closeNetLinstenerReceiver);
+        if (isUnregisterReceiver)
+            context.unregisterReceiver(closeNetLinstenerReceiver);
     }
 
     /**
