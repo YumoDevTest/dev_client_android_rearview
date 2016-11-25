@@ -90,10 +90,9 @@ public class OBDV3HService extends Service {
     private static boolean mNeedAutoRestart = true;
     private static boolean mNeedConnect = true;
     private static long mDelay = 0L;
+    private static boolean isShowToast = false;
     public Manager.Listener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
-    private static boolean isShowToast = false;
-
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -103,7 +102,7 @@ public class OBDV3HService extends Service {
             LogUtil.d(TAG, "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
             Manager.getInstance().stopTrip(true);
-            MyApplication.getInstance().exitApplication();
+            MyApplication.getInstance().exitApplication(false);
         }
     };
     private Manager manager;
@@ -479,7 +478,7 @@ public class OBDV3HService extends Service {
         unregisterReceiver(mVoiceReceiver);
 
         stopLoopGetCarStatus();
-        MyApplication.getInstance().exitApplication();
+        MyApplication.getInstance().exitApplication(false);
 
     }
 

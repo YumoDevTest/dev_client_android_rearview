@@ -127,7 +127,7 @@ public class SerialportFinderActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
                         getInnerObject().finish();
-                        MyApplication.getInstance().exitApplication();
+                        MyApplication.getInstance().exitApplication(false);
                     }
                 });
                 dialog.setPositiveButton("重试", new DialogInterface.OnClickListener() {

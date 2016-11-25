@@ -231,7 +231,7 @@ public class MainActivity extends TitlebarActivity {
                 if (exitAlertDialog != null)
                     exitAlertDialog.dismiss();
                 finish();
-                MyApplication.getInstance().exitApplication();
+                MyApplication.getInstance().exitApplication(true);
             }
         });
     }

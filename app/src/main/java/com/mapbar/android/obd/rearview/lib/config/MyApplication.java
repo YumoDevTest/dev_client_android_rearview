@@ -141,11 +141,12 @@ public class MyApplication extends android.app.Application {
     /**
      * 退出当前app
      */
-    public void exitApplication() {
+    public void exitApplication(boolean isStartV3H) {
         android.util.Log.d(TAG, "## [application] exitApplication");
         //启动后台服务
-        startV3HService();
-//        Manager.getInstance().stopReadThreadForUpgrage();
+        if (isStartV3H) {
+            startV3HService();
+        }
         if (getMainActivity() != null && !getMainActivity().isFinishing()) {
             getMainActivity().finish();
         }
@@ -170,7 +171,15 @@ public class MyApplication extends android.app.Application {
     public void restartApplication() {
         android.util.Log.d(TAG, "## [application] 重启");
         startService(new Intent(getMainActivity(), RestartService.class));
-        exitApplication();
+//        exitApplication(false);
+        if (getMainActivity() != null && !getMainActivity().isFinishing()) {
+            getMainActivity().finish();
+        }
+        setMainActivity(null);
+        Manager.getInstance().cleanup();
+        //umeng统计，在杀死进程是需要调用用来保存统计数据。
+        MobclickAgentEx.onKillProcess(MyApplication.this);
+        System.exit(0);
     }
 
     /**

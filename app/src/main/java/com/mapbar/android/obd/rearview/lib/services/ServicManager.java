@@ -56,7 +56,7 @@ public class ServicManager extends Service {
                     startService(intent2);
 
                     stopSelf();
-                    MyApplication.getInstance().exitApplication();
+                    MyApplication.getInstance().exitApplication(false);
 
                 }
             }
