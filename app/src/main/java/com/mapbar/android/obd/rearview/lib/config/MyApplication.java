@@ -151,17 +151,18 @@ public class MyApplication extends android.app.Application {
             getMainActivity().finish();
         }
         setMainActivity(null);
+        Manager.getInstance().cleanup();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Manager.getInstance().cleanup();
+
                 //umeng统计，在杀死进程是需要调用用来保存统计数据。
                 MobclickAgentEx.onKillProcess(MyApplication.this);
                 //启动后台服务
 //                startV3HService();
                 System.exit(0);
             }
-        }, 1000);
+        }, 2000);
 
     }
 
