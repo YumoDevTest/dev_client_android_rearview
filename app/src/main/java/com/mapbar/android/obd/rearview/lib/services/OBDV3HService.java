@@ -101,7 +101,8 @@ public class OBDV3HService extends Service {
             Log.e(LogTag.OBD, "whw OBDV3HService receiver stopservice");
             LogUtil.d(TAG, "## 关闭V3服务,onReceive action " + intent.getAction());
             stopSelf();
-            Manager.getInstance().stopTrip(true);
+            //手动关闭行程,false:保留当前行程
+            Manager.getInstance().stopTrip(false);
             MyApplication.getInstance().exitApplication(false);
         }
     };
