@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,6 @@ import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
 
 
 /**
@@ -251,13 +250,13 @@ public class MainPage extends AppPage2 implements IMainPageView {
     }
 
     private void setDialogLocation() {
+        Window dialogWindow = mAlarmTimerDialog.getWindow();
+        dialogWindow.setGravity(Gravity.LEFT);
         int[] ints = new int[2];
         //获取控件所在位置
         getContentView().getLocationOnScreen(ints);
-        Window dialogWindow = mAlarmTimerDialog.getWindow();
         WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
-        int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
-        layoutParams.x = -removeW;
+        layoutParams.x = ints[0] + getContentView().getWidth() / 2 - 145;
         dialogWindow.setAttributes(layoutParams);
     }
 

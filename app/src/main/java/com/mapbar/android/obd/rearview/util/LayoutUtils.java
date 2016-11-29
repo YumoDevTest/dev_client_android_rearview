@@ -184,7 +184,10 @@ public class LayoutUtils {
                 break;
         }
         final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        int removeW = getScreenArea().width() / 2 - activity.getContentView().getWidth() / 2 - getViewLocationOnScreen(activity)[0];
+        int removeW = 0;
+        if (getScreenArea().width() != activity.getContentView().getWidth()) {
+            removeW = getScreenArea().width() / 2 - activity.getContentView().getWidth() / 2 - getViewLocationOnScreen(activity)[0];
+        }
         if (containt == null) {
             popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, -removeW, 0);
         } else {

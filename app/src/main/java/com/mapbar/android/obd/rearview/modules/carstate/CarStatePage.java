@@ -47,6 +47,8 @@ import com.mapbar.obd.foundation.utils.SafeHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
+
 /**
  * 车辆 状态
  * Created by liuyy on 2016/5/7.
@@ -346,7 +348,16 @@ public class CarStatePage extends AppPage2 implements View.OnClickListener, ICar
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+        if (getScreenArea().width() != getContentView().getWidth()) {
+            int[] ints = new int[2];
+            //获取控件所在位置
+            getContentView().getLocationOnScreen(ints);
+            int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
+            popupWindow.showAtLocation(getContentView(), Gravity.CENTER, -removeW, 0);
+        } else {
+            popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+        }
+
     }
 
     public void getPopContent() {
@@ -384,6 +395,45 @@ public class CarStatePage extends AppPage2 implements View.OnClickListener, ICar
         }
     }
 
+    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
+        if (permissionAlertAbleAdapter == null)
+            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
+        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
+    }
+
+    public void hidePermissionAlertView_FreeTrial() {
+        if (permissionAlertAbleAdapter != null)
+            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
+    }
+
+    /**
+     * 是否显示 车辆状态错误码 的提示语
+     *
+     * @param isVisiable
+     */
+    @Override
+    public void setCarStateRecordVisiable(boolean isVisiable) {
+        if (viewgrounp_stage_record != null)
+            viewgrounp_stage_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
+    }
+
+    public static class MyHandler extends SafeHandler<CarStatePage> {
+
+        public MyHandler(CarStatePage object) {
+            super(object);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            CarStatePage innerObject = getInnerObject();
+            if (getInnerObject() == null)
+                return;
+            if (msg.what == 0) {
+                innerObject.getPopContent();
+                innerObject.myHandler.sendEmptyMessageDelayed(0, 10000);
+            }
+        }
+    }
 
     class StateAdapter extends BaseAdapter {
         private int[] dataStates;
@@ -457,47 +507,6 @@ public class CarStatePage extends AppPage2 implements View.OnClickListener, ICar
         class ViewHolder {
             ImageView iv;
             TextView tv;
-        }
-    }
-
-
-    public void showPermissionAlertView_FreeTrial(boolean isExpired, int numberOfDay) {
-        if (permissionAlertAbleAdapter == null)
-            permissionAlertAbleAdapter = new PermissionAlertViewAdapter(this);
-        permissionAlertAbleAdapter.showPermissionAlertView_FreeTrial(isExpired, numberOfDay);
-    }
-
-    public void hidePermissionAlertView_FreeTrial() {
-        if (permissionAlertAbleAdapter != null)
-            permissionAlertAbleAdapter.hidePermissionAlertView_FreeTrial();
-    }
-
-    /**
-     * 是否显示 车辆状态错误码 的提示语
-     *
-     * @param isVisiable
-     */
-    @Override
-    public void setCarStateRecordVisiable(boolean isVisiable) {
-        if (viewgrounp_stage_record != null)
-            viewgrounp_stage_record.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
-    }
-
-    public static class MyHandler extends SafeHandler<CarStatePage> {
-
-        public MyHandler(CarStatePage object) {
-            super(object);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            CarStatePage innerObject = getInnerObject();
-            if (getInnerObject() == null)
-                return;
-            if (msg.what == 0) {
-                innerObject.getPopContent();
-                innerObject.myHandler.sendEmptyMessageDelayed(0, 10000);
-            }
         }
     }
 }
