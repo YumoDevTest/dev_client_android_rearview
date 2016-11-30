@@ -39,6 +39,8 @@ import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
+
 
 /**
  * 首页
@@ -242,7 +244,9 @@ public class MainPage extends AppPage2 implements IMainPageView {
         if (mAlarmTimerDialog == null || mAlarmTimerDialog.isShowing())
             return;
         if (notification == null) return;
-        setDialogLocation();
+        if(getContentView().getWidth() != getScreenArea().width()){
+            setDialogLocation();
+        }
         //弹窗
         mAlarmTimerDialog.showAlerm(notification.getText());
         //语音播报
