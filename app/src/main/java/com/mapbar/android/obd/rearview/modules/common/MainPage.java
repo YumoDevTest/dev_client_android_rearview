@@ -255,12 +255,13 @@ public class MainPage extends AppPage2 implements IMainPageView {
 
     private void setDialogLocation() {
         Window dialogWindow = mAlarmTimerDialog.getWindow();
-        dialogWindow.setGravity(Gravity.LEFT);
+        dialogWindow.setGravity(Gravity.CENTER);
         int[] ints = new int[2];
         //获取控件所在位置
         getContentView().getLocationOnScreen(ints);
         WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
-        layoutParams.x = ints[0] + getContentView().getWidth() / 2 - 145;
+        int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
+        layoutParams.x = -removeW;
         dialogWindow.setAttributes(layoutParams);
     }
 
