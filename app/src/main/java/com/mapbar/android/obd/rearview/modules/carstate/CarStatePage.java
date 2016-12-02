@@ -37,6 +37,7 @@ import com.mapbar.android.obd.rearview.modules.carstate.contract.IVinChangeView;
 import com.mapbar.android.obd.rearview.modules.external.ExternalManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionAlertViewAdapter;
 import com.mapbar.android.obd.rearview.modules.permission.contract.IPermissionAlertViewAdatper;
+import com.mapbar.android.obd.rearview.util.LayoutUtils;
 import com.mapbar.android.obd.rearview.views.CarStateView;
 import com.mapbar.android.obd.rearview.views.TitleBarView;
 import com.mapbar.android.obd.rearview.views.VinBarcodeView;
@@ -349,9 +350,7 @@ public class CarStatePage extends AppPage2 implements View.OnClickListener, ICar
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         if (getScreenArea().width() != getContentView().getWidth()) {
-            int[] ints = new int[2];
-            //获取控件所在位置
-            getContentView().getLocationOnScreen(ints);
+            int[] ints = LayoutUtils.getViewLocationOnScreen(getContentView());
             int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
             popupWindow.showAtLocation(getContentView(), Gravity.CENTER, -removeW, 0);
         } else {

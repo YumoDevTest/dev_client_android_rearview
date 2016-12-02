@@ -1,6 +1,7 @@
 package com.mapbar.android.obd.rearview.modules.common;
 
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,12 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.mapbar.android.obd.rearview.BuildConfig;
@@ -32,14 +30,11 @@ import com.mapbar.android.obd.rearview.modules.maintenance.CarMaintenancePage;
 import com.mapbar.android.obd.rearview.modules.permission.PermissionManager;
 import com.mapbar.android.obd.rearview.modules.permission.PermissonCheckerOnStart;
 import com.mapbar.android.obd.rearview.util.TraceUtil;
-import com.mapbar.android.obd.rearview.views.TimerDialog;
 import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.tts.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
 
 
 /**
@@ -48,7 +43,7 @@ import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
  */
 public class MainPage extends AppPage2 implements IMainPageView {
     private static final String TAG = MainPage.class.getSimpleName();
-
+    private static final int SHOWALARM_REQUESTCODE = 100;
     private ViewPager pager;
     private RadioGroup rg_tabs;
     private String[] titles;
@@ -58,19 +53,13 @@ public class MainPage extends AppPage2 implements IMainPageView {
     private VehicleCheckupPage vehicleCheckupPage;
     private ControlTestPage controlTestPage;
     private List<Fragment> fragments;
-    private TimerDialog mAlarmTimerDialog;
-    /***
-     * 报警
-     */
-    private boolean mAlarmOn = false;
     private Handler mHandlerBuy = new Handler();
-    private boolean isPush = true;
     private PermissonCheckerOnStart permissonCheckerOnStart;
     private PermissionManager permissionManager;
     private MainPagePersenter persenter;
-
     private FragmentPagerAdapter fragmentPagerAdapter;
     private OBDSDKListenerManager.SDKListener sdkListener;
+    private Intent alarmIntent;
 
     @Nullable
     @Override
@@ -110,7 +99,7 @@ public class MainPage extends AppPage2 implements IMainPageView {
         pager.setAdapter(fragmentPagerAdapter);
 
         pager.setOffscreenPageLimit(0);
-        initDialog();
+//        initDialog();
         //默认进入页面为数据页面
         pager.setCurrentItem(1);
 
@@ -123,7 +112,7 @@ public class MainPage extends AppPage2 implements IMainPageView {
         permissonCheckerOnStart.downloadPermision(getActivity());
 
         persenter = new MainPagePersenter(this);
-
+        alarmIntent = new Intent(getActivity(), AlarmDialogActivity.class);
         mHandlerBuy.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -187,31 +176,6 @@ public class MainPage extends AppPage2 implements IMainPageView {
         OBDSDKListenerManager.getInstance().removeSdkListener(sdkListener);
     }
 
-    /**
-     * 初始化通知的对话框
-     */
-    private void initDialog() {
-        mAlarmTimerDialog = new TimerDialog(getActivity(), new TimerDialog.Listener() {
-
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.rela_close:
-                        if (mAlarmTimerDialog != null && mAlarmTimerDialog.isShowing()) {
-                            mAlarmTimerDialog.cancel();
-                        }
-                }
-            }
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                //对话框被关闭，表示这个 通知完成了
-                onNotificationFinished();
-            }
-        }, true, 5);
-        mAlarmTimerDialog.setCancelable(false);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -241,28 +205,23 @@ public class MainPage extends AppPage2 implements IMainPageView {
         //是否 开始首页里的提醒对话框，开发人员每次都点很麻烦，就做了个开关
         if (!BuildConfig.IS_ENABLE_ALERM_ON_MAIN_PAGE)//
             return;
-        if (mAlarmTimerDialog == null || mAlarmTimerDialog.isShowing())
+        if (persenter.isShowAlarm) {
             return;
-        if (notification == null) return;
-        if(getContentView().getWidth() != getScreenArea().width()){
-            setDialogLocation();
         }
-        //弹窗
-        mAlarmTimerDialog.showAlerm(notification.getText());
-        //语音播报
+        if (notification == null) return;
+        persenter.isShowAlarm = true;
+        alarmIntent.putExtra("alarmContent", notification.getText());
+        startActivityForResult(alarmIntent, SHOWALARM_REQUESTCODE);
         TextToSpeechManager.speak(getActivity(), notification.getWord());
     }
 
-    private void setDialogLocation() {
-        Window dialogWindow = mAlarmTimerDialog.getWindow();
-        dialogWindow.setGravity(Gravity.CENTER);
-        int[] ints = new int[2];
-        //获取控件所在位置
-        getContentView().getLocationOnScreen(ints);
-        WindowManager.LayoutParams layoutParams = dialogWindow.getAttributes();
-        int removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - ints[0];
-        layoutParams.x = -removeW;
-        dialogWindow.setAttributes(layoutParams);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SHOWALARM_REQUESTCODE && resultCode == Activity.RESULT_OK) {
+            persenter.isShowAlarm = false;
+            onNotificationFinished();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -280,7 +239,7 @@ public class MainPage extends AppPage2 implements IMainPageView {
      */
     @Override
     public boolean isShowingNotification() {
-        return mAlarmTimerDialog.isShowing();
+        return persenter.isShowAlarm;
     }
 
 

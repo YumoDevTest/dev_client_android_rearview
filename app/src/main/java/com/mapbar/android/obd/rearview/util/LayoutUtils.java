@@ -186,7 +186,7 @@ public class LayoutUtils {
         final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         int removeW = 0;
         if (getScreenArea().width() != activity.getContentView().getWidth()) {
-            removeW = getScreenArea().width() / 2 - activity.getContentView().getWidth() / 2 - getViewLocationOnScreen(activity)[0];
+            removeW = getScreenArea().width() / 2 - activity.getContentView().getWidth() / 2 - getViewLocationOnScreen(activity.getContentView())[0];
         }
         if (containt == null) {
             popupWindow.showAtLocation(activity.getContentView(), Gravity.CENTER, -removeW, 0);
@@ -224,14 +224,14 @@ public class LayoutUtils {
         tv = (TextView) view.findViewById(R.id.tv_qr_info);
         tv.setText(info);
         PopupWindow popupQR = new PopupWindow(view, activity.getContentView().getWidth(), activity.getContentView().getHeight(), true);
-        popupQR.showAtLocation(activity.getContentView(), Gravity.LEFT, getViewLocationOnScreen(activity)[0], 0);
+        popupQR.showAtLocation(activity.getContentView(), Gravity.LEFT, getViewLocationOnScreen(activity.getContentView())[0], 0);
         return popupQR;
     }
 
-    private static int[] getViewLocationOnScreen(MainActivity activity) {
+    public static int[] getViewLocationOnScreen(View view) {
         int[] ints = new int[2];
         //获取控件所在位置
-        activity.getContentView().getLocationOnScreen(ints);
+        view.getLocationOnScreen(ints);
         return ints;
     }
 

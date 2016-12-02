@@ -18,7 +18,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -37,6 +36,7 @@ import com.mapbar.android.obd.rearview.modules.tirepressure.TirePressurePresente
 import com.mapbar.android.obd.rearview.modules.tirepressure.contract.ITirePressureView;
 import com.mapbar.android.obd.rearview.modules.tirepressure.model.TirePressure4ViewModel;
 import com.mapbar.android.obd.rearview.util.DecFormatUtil;
+import com.mapbar.android.obd.rearview.util.LayoutUtils;
 import com.mapbar.android.obd.rearview.util.TimeUtils;
 import com.mapbar.android.obd.rearview.views.TirePressureViewDigital;
 import com.mapbar.android.obd.rearview.views.TirePressureViewSimple;
@@ -49,6 +49,8 @@ import com.mapbar.obd.foundation.utils.SafeHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+
+import static com.mapbar.android.obd.rearview.util.LayoutUtils.getScreenArea;
 
 /**
  * 车辆 数据 页
@@ -354,7 +356,7 @@ public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarD
 
     public void showPopupWindow(Context context) {
         final View popupView = View.inflate(context, R.layout.layout_car_data_pop, null);
-        popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //设置点击PopupWindow以外的区域取消PopupWindow的显示
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -384,8 +386,11 @@ public class CarDataPage extends AppPage2 implements View.OnClickListener, ICarD
                 popupWindow.dismiss();
             }
         });
-
-        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, 0, 0);
+        int removeW = 0;
+        if (getScreenArea().width() != getContentView().getWidth()) {
+            removeW = getScreenArea().width() / 2 - getContentView().getWidth() / 2 - LayoutUtils.getViewLocationOnScreen(getContentView())[0];
+        }
+        popupWindow.showAtLocation(getContentView(), Gravity.CENTER, -removeW, 0);
     }
 
     /**

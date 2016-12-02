@@ -2,10 +2,10 @@ package com.mapbar.android.obd.rearview.modules.common;
 
 import android.os.Handler;
 
-import com.mapbar.obd.foundation.mvp.BasePresenter;
 import com.mapbar.android.obd.rearview.lib.notify.Notification;
 import com.mapbar.android.obd.rearview.lib.notify.NotificationManager;
 import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
+import com.mapbar.obd.foundation.mvp.BasePresenter;
 
 /**
  * MainPage persenter
@@ -13,9 +13,28 @@ import com.mapbar.android.obd.rearview.modules.common.contract.IMainPageView;
  */
 public class MainPagePersenter extends BasePresenter<IMainPageView> {
     private static final String TAG = MainPagePersenter.class.getSimpleName();
-
+    public static boolean isShowAlarm = false;
     private NotificationManager notificationManager;
     private Handler mHandler = new Handler();
+    private Runnable runnableShowNotification = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (this) {
+                if (!notificationManager.hasMore())
+                    return;
+                if (!getView().isShowingNotification()) {
+                    Notification notification = notificationManager.poll();
+                    if (notification != null) {
+//                        LogUtil.d(TAG, "## 检查是否有通知 - 显示通知");
+                        getView().showNotification(notification);
+                    }
+                }
+                //防止中断
+                mHandler.postDelayed(runnableShowNotification, 500);
+            }
+        }
+    };
+
 
     public MainPagePersenter(final IMainPageView view) {
         super(view);
@@ -27,7 +46,6 @@ public class MainPagePersenter extends BasePresenter<IMainPageView> {
             }
         });
     }
-
 
     public void clear() {
         if (notificationManager != null)
@@ -49,23 +67,4 @@ public class MainPagePersenter extends BasePresenter<IMainPageView> {
         }
         mHandler.postDelayed(runnableShowNotification, 100);
     }
-
-    private Runnable runnableShowNotification = new Runnable() {
-        @Override
-        public void run() {
-            synchronized (this) {
-                if (!notificationManager.hasMore())
-                    return;
-                if (!getView().isShowingNotification()) {
-                    Notification notification = notificationManager.poll();
-                    if (notification != null) {
-//                        LogUtil.d(TAG, "## 检查是否有通知 - 显示通知");
-                        getView().showNotification(notification);
-                    }
-                }
-                //防止中断
-                mHandler.postDelayed(runnableShowNotification, 500);
-            }
-        }
-    };
 }

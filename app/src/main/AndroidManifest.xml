@@ -265,7 +265,13 @@
 
         <service android:name=".lib.serialportsearch.SerialportFinderService" />
 
-        <activity android:name=".lib.serialportsearch.SerialportFinderActivity"></activity>
+        <activity android:name=".lib.serialportsearch.SerialportFinderActivity" />
+        <activity
+            android:name=".modules.common.AlarmDialogActivity"
+            android:label="@string/title_activity_alarm_dialog"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            >
+        </activity>
     </application>
 
 </manifest>
