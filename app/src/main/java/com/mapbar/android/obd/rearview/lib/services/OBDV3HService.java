@@ -90,7 +90,7 @@ public class OBDV3HService extends Service {
     private static boolean mNeedAutoRestart = true;
     private static boolean mNeedConnect = true;
     private static long mDelay = 0L;
-    private static boolean isShowToast = false;
+    private static boolean isShowToast = true;
     public Manager.Listener sdkListener;
     public LocalCarModelInfoResult localCarModelInfoResult;
     BroadcastReceiver receiver = new BroadcastReceiver() {
