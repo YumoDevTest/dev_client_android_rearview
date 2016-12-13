@@ -34,7 +34,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="36"
+            android:text="0"
             android:textColor="#35bdb2"
             android:textSize="50sp"/>
         <TextView
@@ -43,7 +43,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="亚健康"
+            android:text="未知"
             android:textColor="#35bdb2"
             android:textSize="30sp"
             android:layout_marginBottom="30dp"

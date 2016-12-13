@@ -20,6 +20,7 @@ import com.mapbar.android.obd.rearview.R;
 import com.mapbar.android.obd.rearview.lib.base.AppPage2;
 import com.mapbar.android.obd.rearview.util.StringUtil;
 import com.mapbar.android.obd.rearview.util.TimeUtils;
+import com.mapbar.obd.foundation.log.LogUtil;
 import com.mapbar.obd.foundation.tts.VoiceManager;
 import com.mapbar.android.obd.rearview.framework.log.Log;
 import com.mapbar.android.obd.rearview.framework.log.LogTag;
@@ -123,7 +124,7 @@ public class VehicleCheckupPage extends AppPage2 implements View.OnClickListener
         titlebarview1.setTitle(R.string.page_title_aiche_tijian);
 
         checkupVoiceResut = new StringBuffer();
-        checkupVoiceResut.append("体检结果");
+//        checkupVoiceResut.append("体检结果");
         physicalList = PhysicalManager.getInstance().getPhysicalSystem();
         recyclerAdapter = new VehicleCheckupAdapter1(getActivity(), physicalList);
         rl_view.setAdapter(recyclerAdapter);
@@ -257,12 +258,14 @@ public class VehicleCheckupPage extends AppPage2 implements View.OnClickListener
                                 rela_result.setVisibility(View.VISIBLE);
                                 grid.setAdapter(checkupGridAdapter);
                                 ReportHead reportHead = PhysicalManager.getInstance().getReportHead();
+                                LogUtil.d("SSSS","reportHead::"+reportHead);
                                 if (reportHead != null) {
                                     PreferencesConfig.PHYSICAL_CHECKEND_DATE.set(TimeUtils.getmDateYYYYMMDD2(getContext(), System.currentTimeMillis()));
                                     int score = reportHead.getScore();
-                                    if (checkupVoiceResut.length() > 4) {
-                                        checkupVoiceResut.delete(4, checkupVoiceResut.length());
+                                    if (checkupVoiceResut.length() > 0) {
+                                        checkupVoiceResut.delete(0, checkupVoiceResut.length());
                                     }
+                                    checkupVoiceResut.append("体检结果");
                                     checkupVoiceResut.append("分数").append(String.valueOf(score));
                                     if (score >= 0 && score <= 50) {
                                         tv_score.setTextColor(Color.RED);
